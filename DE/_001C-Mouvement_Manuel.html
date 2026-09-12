@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - 1. Das Handaufzugswerk</title>
+  
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+  
+  <style>
+    /* Allineamento forzato per sincronizzare Header e Notebook durante lo zoom */
+    .header-card, .notebook-container {
+      max-width: 1100px !important;
+      margin: 0 auto !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Stili per le Lingue */
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(255,255,255,0.3); }
+    .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    /* Menu a Tendina */
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- ================= HEADER A DUE COLONNE ================= -->
+  <div class="header-card">
+    
+    <div class="header-left-block">
+      <div class="badge">Haute Horlogerie — Eidgenössisches Diplom</div>
+      <h1>1. Das Handaufzugswerk</h1>
+      <p class="subtitle">Uhrmachergutachten-Kurs — Verteilung & Regulierung</p>
+      
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Hauptmenü</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. Das Handaufzugswerk</a>
+            <a href="_002-la-montre-automatique.html">2. Die Automatikuhr</a>
+            <a href="_003-Horloge_Electronique.html">3. Die Elektronische Uhr & Quarz</a>
+            <a href="_004-Complications.html">4. Komplikationen</a>
+            <a href="_005-Familles_Matieres.html">5. Die Werkstofffamilien</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen und -technologien</a>
+            <a href="_007-Habillage.html">7. Das Äußere der Uhr</a>
+            <a href="_008-Histoire_Mesure_Temps.html">8. Geschichte der Zeitmessung</a>
+          </div>
+        </div>
+
+        <div class="lang-switcher">
+          <a href="../FR/_001C-Mouvement_Manuel.html" class="lang-btn">FR</a>
+          <a href="../EN/_001C-Mouvement_Manuel.html" class="lang-btn">EN</a>
+          <a href="#" class="lang-btn active">DE</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right-block">
+      <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+    </div>
+
+  </div>
+
+  <!-- ================= NOTEBOOK ================= -->
+  <div class="notebook-container" id="notebook-main">
+    
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Modul 01 : Hemmung & Regulierorgan</h2>
+      </div>
+      <div class="tag-chic">✍️ Kursnotizen & Schemata</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <!-- KAPITEL 7 -->
+      <h2 id="p7">7. Verteilung: Die Schweizer Ankerhemmung</h2>
+      <ul>
+        <li><strong>Hauptkomponenten:</strong> Steigrad, Schweizer Anker mit Palettensteinen (Rubinen), Doppelrolle mit Hebelstein (Ellipse).</li>
+        <li><strong>Funktion:</strong> Umwandlung der Drehbewegung in Schwingungen und Verteilung der Energie.</li>
+      </ul>
+      <div class="img-always-visible">
+        <div class="interactive-wrapper" style="max-width: 480px;">
+          <img src="../echappement-ancre.jpg" alt="Hemmung">
+          <div class="pin-marker" style="top: 52%; left: 50%;">1</div>
+          <div class="pin-marker" style="top: 65%; left: 40%;">2</div>
+          <div class="pin-marker" style="top: 65%; left: 60%;">3</div>
+          <div class="pin-marker" style="top: 80%; left: 50%;">4</div>
+          <div class="pin-marker" style="top: 55%; left: 55%; background: #1b365d;">5</div>
+          <div class="pin-marker" style="top: 48%; left: 45%;">6</div>
+          <div class="pin-marker" style="top: 44%; left: 50%; background: #1b365d;">7</div>
+          <div class="pin-marker" style="top: 30%; left: 50%;">8</div>
+        </div>
+        <div class="legend-grid">
+          <div class="legend-item"><span class="badge-mini">1</span> Ankerkörper</div>
+          <div class="legend-item"><span class="badge-mini">2</span> Eingangspalette</div>
+          <div class="legend-item"><span class="badge-mini">3</span> Ausgangspalette</div>
+          <div class="legend-item"><span class="badge-mini">4</span> Steigrad</div>
+          <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">5</span> Sicherungsstift (Dard)</div>
+          <div class="legend-item"><span class="badge-mini">6</span> Ankergabel</div>
+          <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">7</span> Hebelscheibenstift</div>
+          <div class="legend-item"><span class="badge-mini">8</span> Doppelrolle</div>
+        </div>
+      </div>
+      <details class="image-popover">
+        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL (01-07) — Schweizer Ankerhemmung</summary>
+        <div class="img-container"><img src="../01-07 Regulation-l echappement.jpg" alt="Blatt 01-07"></div>
+      </details>
+      
+      <!-- 7B. VERTIEFUNG -->
+      <h2 id="f7b">7B. Technische Vertiefung: Funktionelle Anatomie des Regulierorgans</h2>
+      <p>
+        Das Regulierorgan ist das isochrone Herz der mechanischen Uhr. Es sorgt durch seine gleichmäßigen Schwingungen für eine präzise Zeiteinteilung. Die Beherrschung seiner Baugruppen (Verbindungen, Führungen und Impuls) ist für das Verständnis der Chronometrie unerlässlich.
+      </p>
+
+      <div class="img-always-visible">
+        <img src="../Balancier-spiral_parties_2.jpg" alt="Detaillierte Anatomie von Unruh-Spirale und Komponenten">
+        <div class="img-caption">📷 WERKSTATT-TAFEL — Funktionelle Anatomie des Regulierorgans und der Unruh-Spirale-Einheit.</div>
+      </div>
+
+      <p><strong>Detaillierte Beschreibung der Hauptkomponenten der Unruh-Spirale-Einheit:</strong></p>
+      <ul>
+        <li>
+          <strong>1° Die Spiralklammer (Piton):</strong> Der feste Ankerstift, der das äußere Ende der Spirale auf dem Unruhkolben fixiert. Er bildet den festen äußeren Verankerungspunkt der elastischen Baugruppe.
+        </li>
+        <li>
+          <strong>2° Die Rolle (Virole):</strong> Ein kleiner zentraler Metallring, der mikrometrisch auf der Unruhwelle befestigt ist und in dem das innere Ende der Spirale fixiert ist. Sie sorgt für die direkte Verbindung zwischen Spiralfeder und beweglicher Welle.
+        </li>
+        <li>
+          <strong>3° Der Zapfen (Pivot):</strong> Das extrem feine und polierte Ende der Unruhwelle. Die Zapfen laufen in Rubinen (Lochsteinen) und sind bei Stößen extremen mechanischen Belastungen ausgesetzt, weshalb Schutzsysteme (wie Incabloc) lebenswichtig sind.
+        </li>
+        <li>
+          <strong>4° Die Spiralfeder (Spiral):</strong> Eine elastische Feder, die nach einer präzisen mathematischen Kurve gewickelt ist (meist aus antimagnetischer Nickel- oder Siliziumlegierung). Sie liefert das permanente elastische Rückstellmoment, das die Unruh konstant in ihre neutrale Gleichgewichtslage zurückführt.
+        </li>
+        <li>
+          <strong>5° Der Unruhreif (Serge du Balancier):</strong> Der kreisförmige äußere Ring der Unruh. Seine Masse und sein Durchmesser bestimmen das <i>Trägheitsmoment</i> des Teils. Auf dem Reif erfolgt die dynamische Auswuchtung (durch Regulierschrauben oder Gewichte).
+        </li>
+        <li>
+          <strong>6° Die Unruhstege (Bras):</strong> Die starren Speichen, die die zentrale Nabe (oder Welle) mit dem äußeren Reif verbinden und für maximale Steifigkeit bei minimalem Luftwiderstand und Gewicht sorgen.
+        </li>
+        <li>
+          <strong>7° Der Rücker (Raquette):</strong> Ein bewegliches Regulierorgan mit zwei Stiften, zwischen denen die Spirale gleitet. Durch Verschieben des Rückers verändert der Uhrmacher die <i>aktive Länge</i> der Spirale, wodurch der Gang präzise eingestellt werden kann (Vor- oder Nachgehen der Uhr).
+        </li>
+        <li>
+          <strong>8° Die Doppelrolle:</strong> Eine Doppelscheibe auf der Unruhwelle, die die Sicherungsaussparung enthält und als direkte Halterung für den Hebelstein dient.
+        </li>
+        <li>
+          <strong>9° Der Hebelstein / Die Ellipse (Ellipse):</strong> Ein kleiner, starrer Zylinder aus rotem synthetischem Rubin, der fest auf der Doppelrolle sitzt. Dies ist der entscheidende kinematische Kontaktpunkt: Die Ellipse erhält bei jeder Schwingung den Impuls von der Ankergabel (zum Antrieb der Bewegung) und gibt den Auslöseimpuls an den Anker ab.
+        </li>
+      </ul>
+
+      <div class="formula-box">
+        ⏱️ <strong>Isochronismus-Prinzip:</strong> Die Schwingungsdauer der Unruh-Spirale hängt von ihrem Trägheitsmoment und der Federsteifigkeit ab. Jede Änderung der aktiven Spirallänge (über den Rücker) verändert sofort die Frequenz der Uhr.
+      </div>
+      
+      <!-- KAPITEL 8 -->
+      <h2 id="p8">8. Regulierung: Unruh-Spirale & Schwingungsfrequenzen</h2>
+      <table class="table-custom">
+        <thead><tr><th>Frequenz (A/h)</th><th>Kalibertyp</th><th>Beispiel</th><th>(Hz)</th><th>Schwingungen/Sek.</th></tr></thead>
+        <tbody>
+          <tr><td><strong>18'000 A/h</strong></td><td>Historisch / Taschenuhr</td><td>ETA 6497-1</td><td>2.5 Hz</td><td>5 Ticks/Sek.</td></tr>
+          <tr><td><strong>21'600 A/h</strong></td><td>Mittelhoch</td><td>ETA 6497-2</td><td>3.0 Hz</td><td>6 Ticks/Sek.</td></tr>
+          <tr><td><strong>28'800 A/h</strong></td><td>Moderner Standard</td><td>ETA 2824-2</td><td>4.0 Hz</td><td>8 Ticks/Sek.</td></tr>
+          <tr><td><strong>36'000 A/h</strong></td><td>Hochfrequenz</td><td>Zenith El Primero</td><td>5.0 Hz</td><td>10 Ticks/Sek.</td></tr>
+        </tbody>
+      </table>
+      <div class="img-always-visible">
+        <img src="../balancier-spiral.jpg" alt="Unruh-Spirale" style="max-height: 380px;">
+      </div>
+      <details class="image-popover">
+        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL (01-08) — Unruh-Spirale</summary>
+        <div class="img-container"><img src="../01-08 Regulation-Le balancier Spiral.jpg" alt="Blatt 01-08"></div>
+      </details>
+      
+      <!-- SKALIERUNGSBILD UNRUH / STREICHHOLZ -->
+      <div class="img-always-visible">
+        <img src="../Balance_wheels.jfif" alt="Größenvergleich einer Unruh-Spirale mit einem Streichholzkopf">
+        <div class="img-caption">📷 GRÖSSENVERGLEICH — Das Regulierorgan (Brücke, Unruh und Spirale) neben einem Streichholzkopf, was die extreme Miniaturisierung der uhrmacherischen Mikromechanik verdeutlicht.</div>
+      </div>
+
+      <!-- KAPITEL 9 -->
+      <h2 id="p9">9. Anatomie der Unruh & Stoßsicherung</h2>
+      <p>Die wesentliche Weiterentwicklung liegt im Schutz der Zapfen (0.07 mm) vor mechanischen Stößen.</p>
+      <div class="img-always-visible"><img src="../Incabloc_01.jpg" alt="Incabloc Anatomie"></div>
+      <div class="img-always-visible"><img src="../Incabloc_02.jpg" alt="Incabloc Montage"></div>
+      <div class="img-always-visible"><img src="../Incabloc_03.jpg" alt="Incabloc Dynamik"></div>
+      <ul>
+        <li><strong>Verbindungskomponenten:</strong> Rolle, Spiralklammer, Rücker.</li>
+      </ul>
+      <details class="image-popover">
+        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL (01-09) — Unruhteile</summary>
+        <div class="img-container"><img src="../01-09 Regulation-Le balancier Spiral.jpg" alt="Blatt 01-09"></div>
+      </details>
+
+    </div>
+  </div>
+  
+  <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
+    <a href="_001D-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Weiterlesen ➔</a>
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. Alle Rechte vorbehalten.</footer>
+</body>
+</html>

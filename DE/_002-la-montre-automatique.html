@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - 2. Die Automatikuhr</title>
+
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+
+  <style>
+    /* Allineamento forzato */
+    .header-card, .notebook-container {
+      max-width: 1100px !important;
+      margin: 0 auto !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Stili Lingue e Menu */
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(255,255,255,0.3); }
+    .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- ================= HEADER ================= -->
+  <div class="header-card">
+    <div class="header-left-block">
+      <div class="badge">Haute Horlogerie — Eidgenössisches Diplom</div>
+      <h1>2. Die Automatikuhr</h1>
+      <p class="subtitle">Uhrmachergutachten-Kurs — Schwungmassen & Wendelräder</p>
+      
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Hauptmenü</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. Das Handaufzugswerk</a>
+            <a href="_002-la-montre-automatique.html">2. Die Automatikuhr</a>
+            <a href="_003-Horloge_Electronique.html">3. Die Elektronische Uhr & Quarz</a>
+            <a href="_004-Complications.html">4. Komplikationen</a>
+            <a href="_005-Familles_Matieres.html">5. Die Werkstofffamilien</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen und -technologien</a>
+            <a href="_007-Habillage.html">7. Das Äußere der Uhr</a>
+            <a href="_008-Histoire_Mesure_Temps.html">8. Geschichte der Zeitmessung</a>
+          </div>
+        </div>
+        <div class="lang-switcher">
+          <a href="../FR/_002-la-montre-automatique.html" class="lang-btn">FR</a>
+          <a href="../EN/_002-la-montre-automatique.html" class="lang-btn">EN</a>
+          <a href="#" class="lang-btn active">DE</a>
+        </div>
+      </div>
+    </div>
+    <div class="header-right-block">
+     <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+    </div>
+  </div>
+
+  <!-- ================= NOTEBOOK ================= -->
+  <div class="notebook-container" id="notebook-main">
+    
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Modul 02 : Die Automatikuhr</h2>
+      </div>
+      <div class="tag-chic">⚡ Aufzug & Kinematik</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <!-- 1. HISTORIQUE -->
+      <h2 id="a1">1. Geschichte des Automatischen Aufzugs</h2>
+      <ul>
+        <li><strong>1770 — Die Anfänge (Schüttel- und Taschen-Perpetuelluhren):</strong> Initiiert vom Uhrmachermeister <em>Abraham-Louis Perrelet</em>, später weiterentwickelt von Hubert Sarton, Abraham-Louis Breguet und den Brüdern Berthoud. Damals erfolgte der Aufzug von Taschenuhren mit Hilfe eines Aufzugsschlüssels.</li>
+        <li><strong>1845 — Erfindung der Krone:</strong> Entwicklung des kombinierten Systems für Handaufzug und Zeiteinstellung ohne Schlüssel.</li>
+        <li><strong>1923 — 1. Automatische Armbanduhr (John Harwood):</strong> Verwendung einer Schwungmasse mit <i>begrenzter Rotation</i> (an Anschlägen / Hammerautomat). Hauptnachteil: Mikroschrauben lösten sich durch wiederholte Stöße. Die Zeiteinstellung erfolgte damals durch Drehen der Lünette.</li>
+        <li><strong>1926 — Movado Ermeto:</strong> Einführung des genialen Systems mit Schiebegehäuse, bei dem jede Öffnungs- und Schließbewegung die Zugfeder spannt.</li>
+      </ul>
+      <details class="image-popover">
+        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL (01-54) — Geschichte & Mechanismus-Typen</summary>
+        <div class="img-container"><img src="../01-54 La Montre Automatique - Historique.jpg" alt="Blatt 01-54"></div>
+      </details>
+
+      <!-- 2. TYPES DE MÉCANISMES -->
+      <h2 id="a2">2. Typen von automatischen Aufzugsmechanismen</h2>
+      <ul>
+        <li><strong>1. Zentralrotor (Hängende Schwungmasse):</strong>
+          <ul>
+            <li>Großer Rotationsdurchmesser garantiert ein hohes Aufzugsdrehmoment.</li>
+            <li>Modulares Zusatzaggregat: einfache Konstruktion und anpassbar an ein mechanisches Basiswerk.</li>
+            <li>Traditionelle Positionierung auf der <strong>Brückenseite</strong>.</li>
+          </ul>
+        </li>
+        <li><strong>2. Exzentrischer Rotor (Mikrorotor / Integrierter Mechanismus):</strong>
+          <ul>
+            <li>Emblematisches Beispiel: das prestigeträchtige Kaliber <em>Patek Philippe 240</em>.</li>
+            <li>Vollständig in die Dicke von Platine und Brücken eingelassener und integrierter Mechanismus.</li>
+            <li>Schwungmasse geprägt aus <strong>22K Gold</strong> (schweres und edles Material), um Gewicht und Trägheit bei begrenztem Durchmesser zu maximieren.</li>
+            <li>Ideale Architektur für <strong>ultraflache Uhren</strong>: Die Masse fügt keine axiale Überdicke hinzu und lässt die Schönheit des Werks bewundern.</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="img-always-visible">
+        <img src="../Movimento_carica_automatica.jpg" alt="Mechanisches Automatikwerk - Zentralrotor">
+        <div class="img-caption">📷 WERKSTATT-ANSICHT — Automatikwerk mit zentraler Schwungmasse auf Kugellager und Aufzugsräderwerk.</div>
+      </div>
+
+      <!-- 3. LA MASSE OSCILLANTE -->
+      <h2 id="a3">3. Bauteile: Die Schwungmasse (Werkstoffe & Befestigung)</h2>
+      <table class="table-custom">
+        <thead>
+          <tr><th>Struktur</th><th>Material</th><th>Spezifitäten & Werkstattvorgaben</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>A) Monometallisch</strong></td>
+            <td>22K Gold oder gesintertes Wolfram</td>
+            <td>• <strong>22K Gold:</strong> Dem absoluten High-End vorbehalten.<br>• <strong>Wolfram:</strong> Schwer und dicht, aber starrer/spröder.</td>
+          </tr>
+          <tr>
+            <td><strong>B) Bimetallisch</strong><br><i>(Industriestandard)</i></td>
+            <td>Zentrum aus Messing + Äußeres Segment aus Wolfram</td>
+            <td>• <strong>Im Zentrum (Messing):</strong> Flexibel und leicht zu bearbeiten.<br>• <strong>Außen (Wolfram):</strong> Schwerer, nach außen versetzter Kranz zur Maximierung der Trägheit.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="formula-box">
+        🔩 <strong>Befestigung:</strong> Die Montage erfolgt durch <b>mechanisches Verstemmen</b>, <b>technisches Verschrauben/Kleben</b> oder <b>Präzisionsschweißen</b>.
+      </div>
+
+      <!-- 4. LES INVERSEURS (INTRO) -->
+      <h2 id="a4">4. Die Wendelräder: Das kinematische Herz des Aufzugs</h2>
+      <p>
+        Die Schwungmasse bewegt sich frei in beide Rotationsrichtungen. Die Zugfeder kann jedoch nur in einer einzigen Richtung aufgezogen werden. Das <strong>Wendelrad (Inverses-System)</strong> ist der Mechanismus, der diese bidirektionale Bewegung gleichrichtet.
+      </p>
+
+      <!-- 5. TYPOLOGIE DES INVERSEURS -->
+      <h2 id="a5">5. Typologie und Rolle der Wendelräder</h2>
+      <p>
+        Sie sind über <strong>10 Millionen Beanspruchungen pro Jahr</strong> ausgesetzt und müssen mit minimaler Reibung arbeiten.
+      </p>
+      <ul>
+        <li><strong>Unidirektionales System (1 Wendelrad):</strong> Die Masse treibt das Räderwerk nur in eine Richtung an. In die andere dreht sie leer. <em>Beispiel: ETA 7750</em>.</li>
+        <li><strong>Bidirektionales System (2 Wendelräder):</strong> Die Masse zieht die Feder unabhängig von ihrer Drehrichtung auf. <em>Beispiel: ETA 2824-2</em>.</li>
+      </ul>
+      <div class="formula-box" style="background-color: #f8f9fa; border-left: 4px solid #d9534f; padding: 15px; margin: 20px 0;">
+        🚴‍♂️ <strong>Werkstatt-Analogie (Fahrrad mit Allradantrieb):</strong> <br>
+        Wenn der Rotor in eine Richtung dreht, greift ein Wendelrad ein und das andere schaltet auf Freilauf. Kehrt der Rotor seine Richtung um, kehren sich die Rollen um. Nur ein Wendelrad arbeitet gleichzeitig, wodurch die <strong>direkten Beanspruchungen halbiert</strong> werden.
+      </div>
+      <details class="image-popover">
+        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL — Wendelräder & Mobile</summary>
+        <div class="img-container"><img src="../04-01 Inverseurs Notes.jpg" alt="Handschriftliche Notizen 04-01"></div>
+      </details>
+
+      <!-- 6. LE MOBILE DE RÉDUCTION -->
+      <h2 id="a6">6. Das Reduktionsgetriebe (Untersetzung)</h2>
+      <ul>
+        <li><strong>Das Prinzip:</strong> Die Rotationsgeschwindigkeit wird reduziert, um eine proportionale Erhöhung des Aufzugsdrehmoments zu erreichen.</li>
+        <li><strong>Das Untersetzungsverhältnis (1/150):</strong> Es sind im Durchschnitt <strong>150 volle Umdrehungen der Schwungmasse</strong> erforderlich, damit die Federhauswelle <strong>1 einzige Umdrehung</strong> ausführt.</li>
+      </ul>
+
+      <!-- 7. LE BÂTI & LE DÉBRAYAGE -->
+      <h2 id="a7">7. Automatik-Gestell & Manueller Freilauf</h2>
+      <p>
+        Das "Automatik-Gestell" ist das strukturelle Modul (Brücken), welches die Wendelräder und das Reduktionsgetriebe umschließt. Es handelt sich oft um ein <strong>zusätzliches, auf das Basiswerk aufgesetztes Modul</strong>.
+      </p>
+      <p>Ein Sicherheitssystem trennt die beiden Aufzugsquellen voneinander:</p>
+      <ul>
+        <li><strong>Automatisch:</strong> Die Energie geht zum Sperrrad, ohne die Krone am Handgelenk mitzudrehen.</li>
+        <li><strong>Manuell:</strong> Die Kraft wird an den Wendelrädern "entkoppelt", damit sich die Schwungmasse nicht mit sehr hoher Geschwindigkeit dreht.</li>
+      </ul>
+
+      <!-- 8. LA BRIDE GLISSANTE -->
+      <h2 id="a8">8. Überspannungssicherung: Die Gleitfeder (Zaum)</h2>
+      <p>
+        Um ein Reißen der Feder zu verhindern, wenn am Handgelenk die maximale Spannung erreicht ist, wird die <em>Gleitfeder</em> verwendet.
+      </p>
+      <ul>
+        <li><strong>Funktionsweise:</strong> Es handelt sich um eine am äußeren Ende der Zugfeder befestigte Blattfeder, die gegen die Innenwand der Federhaustrommel drückt.</li>
+        <li><strong>Das Gleiten (Klick-Klick):</strong> Die Trommelwand weist Aussparungen auf, die mit <strong>schwarzem Graphitfett</strong> bestrichen sind. Sobald die maximale Spannung erreicht ist, "gleitet" die Feder, indem sie von Mulde zu Mulde springt, und baut so die Überspannung ab.</li>
+      </ul>
+      <details class="image-popover">
+        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL — Automatik-Gestell & Gleitfeder</summary>
+        <div class="img-container"><img src="../04-02 Inverseurs Notes.jpg" alt="Handschriftliche Notizen 04-02"></div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ================= UNTERE NAVIGATION UND KONTAKT ================= -->
+  <div style="margin-top: 40px; padding-top: 24px; border-top: 2px dashed #b0c4de; text-align: center;">
+    
+    <p style="font-family: 'Kalam', cursive, sans-serif; font-size: 15pt; color: #900c3f; font-weight: 700; margin-bottom: 20px;">
+      🏁 Ende von Modul 02: Die Grundlagen der Automatikuhr sind gelegt, aber die eigentliche Entdeckungsreise fängt erst an.
+    </p>
+
+    <!-- EXPERTEN-SUPPORT-BOX -->
+    <div style="background-color: #f4f7fa; border: 1px solid #c8d7e6; border-radius: 8px; padding: 20px; max-width: 650px; margin: 0 auto 28px auto; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+      <p style="font-family: 'Inter', sans-serif; font-size: 11pt; color: #1b365d; margin: 0 0 8px 0; font-weight: 700;">
+        Das uhrmacherische Universum ist unendlich... Setzen wir die Diskussion fort!
+      </p>
+      <p style="font-family: 'Inter', sans-serif; font-size: 9.5pt; color: #5a6b7c; margin: 0 0 16px 0; line-height: 1.5;">
+        Dieses Handbuch versammelt die Grundprinzipien des automatischen Aufzugs, aber es wäre unmöglich, den gesamten Reichtum dieses Fachgebiets in wenigen Kapiteln zusammenzufassen. Ich ermutige Sie, Ihre eigenen Recherchen fortzusetzen. Wenn Sie während Ihres Lernens Fragen oder Zweifel haben oder einfach eine Entdeckung teilen möchten, steht Ihnen meine Tür immer offen. Schreiben Sie mir an <strong>swisstime.expert@gmail.com</strong>.
+      </p>
+      <a href="mailto:swisstime.expert@gmail.com" style="display: inline-block; background-color: #d9534f; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 9.5pt; font-weight: 600; transition: background-color 0.2s;">
+        ✉️ Den Experten kontaktieren
+      </a>
+    </div>
+    
+    <!-- NAVIGATIONSTASTEN -->
+    <div class="btn-nav-row" style="justify-content: center; gap: 20px;">
+      <a href="index.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt;">📋 Zum Index zurückkehren</a>
+      <a href="_003-Horloge_Electronique.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Weiter zu Modul 03 : Elektronik & Quarz ➔</a>
+    </div>
+    
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. Alle Rechte vorbehalten.</footer>
+  
+</body>
+</html>

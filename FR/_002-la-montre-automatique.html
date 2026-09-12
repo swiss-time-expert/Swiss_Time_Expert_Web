@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - 2. La Montre Automatique</title>
+
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+
+  <style>
+    /* Allineamento forzato */
+    .header-card, .notebook-container {
+      max-width: 1100px !important;
+      margin: 0 auto !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Stili Lingue e Menu */
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(255,255,255,0.3); }
+    .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- ================= HEADER ================= -->
+  <div class="header-card">
+    <div class="header-left-block">
+      <div class="badge">Haute Horlogerie — Brevet Fédéral</div>
+      <h1>2. La Montre Automatique</h1>
+      <p class="subtitle">Cours d'expertise horlogère — Masses Oscillantes & Inverseurs</p>
+      
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Menu Principal</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. Le Mouvement à Remontage Manuel</a>
+            <a href="_002-la-montre-automatique.html">2. La Montre Automatique</a>
+            <a href="_003-Horloge_Electronique.html">3. L'Horloge Électronique & Quartz</a>
+            <a href="_004-Complications.html">4. Les Complications</a>
+            <a href="_005-Familles_Matieres.html">5. Les Familles de Matières</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Phases et Technologies de Fabrication</a>
+            <a href="_007-Habillage.html">7. L'Habillage de la Montre</a>
+            <a href="#">8. Histoire de la Mesure du Temps</a>
+          </div>
+        </div>
+        <div class="lang-switcher">
+          <a href="#" class="lang-btn active">FR</a>
+          <a href="../EN/_002-la-montre-automatique.html" class="lang-btn">EN</a>
+          <a href="../DE/_002-la-montre-automatique.html" class="lang-btn">DE</a>
+        </div>
+      </div>
+    </div>
+    <div class="header-right-block">
+     <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+    </div>
+  </div>
+
+  <!-- ================= NOTEBOOK ================= -->
+  <div class="notebook-container" id="notebook-main">
+    
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Module 02 : La Montre Automatique</h2>
+      </div>
+      <div class="tag-chic">⚡ Remontage & Cinématique</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <!-- 1. HISTORIQUE -->
+      <h2 id="a1">1. Historique du Remontage Automatique</h2>
+      <ul>
+        <li><strong>1770 — Les Origines (Montres à secousse et perpétuelles) :</strong> Initiées par le maître horloger <em>Abraham-Louis Perrelet</em>, puis développées par Hubert Sarton, Abraham-Louis Breguet et les frères Berthoud. À cette époque, le remontage de poche s'effectuait à l'aide d'une clé de remontoir.</li>
+        <li><strong>1845 — Invention de la couronne :</strong> Mise au point du système combiné pour le remontage manuel et la mise à l'heure sans clé.</li>
+        <li><strong>1923 — 1<sup>re</sup> montre-bracelet automatique (John Harwood) :</strong> Utilisation d'une masse à <i>rotation limitée</i> (à butées / marteau). Inconvénient majeur : les micro-vis se dévissaient sous l'effet répété des chocs. La mise à l'heure s'effectuait alors par la rotation de la lunette.</li>
+        <li><strong>1926 — Movado Ermeto :</strong> Introduction du ingénieux système à boîtier coulissant où chaque mouvement d'ouverture et de fermeture arme le ressort de barillet.</li>
+      </ul>
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-54) — Historique & Types de Mécanismes</summary>
+        <div class="img-container"><img src="../01-54 La Montre Automatique - Historique.jpg" alt="Fiche 01-54"></div>
+      </details>
+
+      <!-- 2. TYPES DE MÉCANISMES -->
+      <h2 id="a2">2. Types de Mécanismes de Remontage Automatique</h2>
+      <ul>
+        <li><strong>1° Masse Centrée (Masse suspendue) :</strong>
+          <ul>
+            <li>Grand diamètre de giration garantissant un couple d'armage élevé.</li>
+            <li>Mécanisme additionnel modulaire : conception aisée et adaptable sur un mouvement mécanique de base.</li>
+            <li>Positionnement traditionnel du <strong>côté ponts</strong>.</li>
+          </ul>
+        </li>
+        <li><strong>2° Masse Excentrée (Micro-rotor / Mécanisme intégré) :</strong>
+          <ul>
+            <li>Exemple emblématique : le prestigieux calibre <em>Patek Philippe 240</em>.</li>
+            <li>Mécanisme entièrement encastré et intégré dans l'épaisseur de la platine et des ponts.</li>
+            <li>Masse oscillante frappée en <strong>Or 22K</strong> (matériau lourd et noble) pour maximiser le poids et l'inertie dans un diamètre restreint.</li>
+            <li>Architecture idéale pour les <strong>montres extra-plates</strong> : la masse n'ajoute aucune surépaisseur axiale et laisse admirer la beauté du mouvement.</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="img-always-visible">
+  <img src="../Movimento_carica_automatica.jpg" alt="Mouvement automatique">
+  <div class="img-caption">📷 VUE D'ATELIER — Mouvement automatique à masse oscillante centrée sur roulement à billes et rouage de remontage.</div>
+</div>
+
+      <!-- 3. LA MASSE OSCILLANTE -->
+      <h2 id="a3">3. Pièces : La Masse Oscillante (Matériaux & Fixations)</h2>
+      <table class="table-custom">
+        <thead>
+          <tr><th>Structure</th><th>Matière</th><th>Spécificités & Contraintes d'Atelier</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>A) Monométallique</strong></td>
+            <td>Or 22K ou Tungstène fritté</td>
+            <td>• <strong>Or 22K :</strong> Réservé au très haut de gamme.<br>• <strong>Tungstène :</strong> Lourd et dense, mais plus rigide/cassant.</td>
+          </tr>
+          <tr>
+            <td><strong>B) Bimétallique</strong><br><i>(Standard de l'industrie)</i></td>
+            <td>Centre en Laiton + Segment extérieur en Tungstène</td>
+            <td>• <strong>Au centre (Laiton) :</strong> Souple et facile à usiner.<br>• <strong>À l'extérieur (Tungstène) :</strong> Couronne lourde déportée pour maximiser l'inertie.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="formula-box">
+        🔩 <strong>Fixation :</strong> L'assemblage s'effectue par <b>sertissage mécanique</b>, <b>vissage/collage technique</b>, ou <b>soudage de précision</b>.
+      </div>
+
+      <!-- 4. LES INVERSEURS (INTRO) -->
+      <h2 id="a4">4. Les Inverseurs : Le Cœur Cinématique du Remontage</h2>
+      <p>
+        La masse oscillante se déplace librement dans les deux sens de rotation. Or, le ressort de barillet ne peut être armé que dans un sens unique. L'<strong>inverseur</strong> est le mécanisme chargé de redresser ce mouvement bidirectionnel.
+      </p>
+
+      <!-- 5. TYPOLOGIE DES INVERSEURS -->
+      <h2 id="a5">5. Typologie et Rôle des Inverseurs</h2>
+      <p>
+        Soumis à plus de <strong>10 millions de sollicitations par an</strong>, ils doivent fonctionner avec un minimum de friction.
+      </p>
+      <ul>
+        <li><strong>Système Unidirectionnel (1 Inverseur) :</strong> La masse n'entraîne le rouage que dans un seul sens. Dans l'autre, elle tourne à vide. <em>Exemple : ETA 7750</em>.</li>
+        <li><strong>Système Bidirectionnel (2 Inverseurs) :</strong> La masse arme le ressort quel que soit son sens de rotation. <em>Exemple : ETA 2824-2</em>.</li>
+      </ul>
+      <div class="formula-box" style="background-color: #f8f9fa; border-left: 4px solid #d9534f; padding: 15px; margin: 20px 0;">
+        🚴‍♂️ <strong>Analogie d'Atelier (Bicyclette à Deux Roues Motrices) :</strong> <br>
+        Quand le rotor tourne dans un sens, un inverseur engrène et l'autre bascule en roue libre. Quand le rotor inverse sa course, les rôles s'inversent. Un seul inverseur travaille à la fois, ce qui <strong>dimezza les sollicitations directes</strong>.
+      </div>
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL — Inverseurs & Mobiles</summary>
+        <div class="img-container"><img src="../04-01 Inverseurs Notes.jpg" alt="Notes Manuscrites 04-01"></div>
+      </details>
+
+      <!-- 6. LE MOBILE DE RÉDUCTION -->
+      <h2 id="a6">6. Le Mobile de Réduction (Démultiplication)</h2>
+      <ul>
+        <li><strong>Le principe :</strong> On réduit la vitesse de rotation pour obtenir une augmentation proportionnelle du couple d'armage.</li>
+        <li><strong>Le Rapport de Réduction (1/150) :</strong> Il faut en moyenne <strong>150 tours complets de la masse</strong> pour faire effectuer <strong>1 seul tour</strong> à l'arbre de barillet.</li>
+      </ul>
+
+      <!-- 7. LE BÂTI & LE DÉBRAYAGE -->
+      <h2 id="a7">7. Le Bâti Automatique & Le Débrayage Manuel</h2>
+      <p>
+        Le "Bâti automatique" est le module structurel (ponts) qui enferme les inverseurs et la réduction. C'est souvent une <strong>pièce supplémentaire ajoutée au mouvement de base</strong>.
+      </p>
+      <p>Un système de sécurité isole les deux sources d'armage :</p>
+      <ul>
+        <li><strong>Automatique :</strong> L'énergie va au rochet sans faire tourner la couronne au poignet.</li>
+        <li><strong>Manuel :</strong> La force est "débrayée" aux inverseurs pour ne pas faire tourner la masse à très haute vitesse.</li>
+      </ul>
+
+      <!-- 8. LA BRIDE GLISSANTE -->
+      <h2 id="a8">8. Sécurité de Surtension : La Bride Glissante</h2>
+      <p>
+        Pour éviter la rupture du ressort lorsque la charge maximale est atteinte au poignet, on utilise la <em>Bride Glissante</em>.
+      </p>
+      <ul>
+        <li><strong>Fonctionnement :</strong> C'est une lame-ressort fixée à l'extrémité du ressort moteur qui presse contre la paroi interne du tambour.</li>
+        <li><strong>Le Glissement (Clic Clic) :</strong> La paroi comporte des encoches enduites de <strong>graisse au graphite noir</strong>. Dès que la tension maximale est atteinte, la bride "glisse" en sautant d'alvéole en alvéole, dissipant la surtension.</li>
+      </ul>
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL — Bâti Automatique & Bride Glissante</summary>
+        <div class="img-container"><img src="../04-02 Inverseurs Notes.jpg" alt="Notes Manuscrites 04-02"></div>
+      </details>
+</div>
+  </div>
+
+  <!-- ================= NAVIGAZIONE INFERIORE E CONTATTO ================= -->
+  <div style="margin-top: 40px; padding-top: 24px; border-top: 2px dashed #b0c4de; text-align: center;">
+    
+    <p style="font-family: 'Kalam', cursive, sans-serif; font-size: 15pt; color: #900c3f; font-weight: 700; margin-bottom: 20px;">
+      🏁 Fin du Module 02 : Les fondations de la montre automatique sont posées, mais la véritable exploration ne fait que commencer.
+    </p>
+
+    <!-- BOX SUPPORTO ESPERTO -->
+    <div style="background-color: #f4f7fa; border: 1px solid #c8d7e6; border-radius: 8px; padding: 20px; max-width: 650px; margin: 0 auto 28px auto; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+      <p style="font-family: 'Inter', sans-serif; font-size: 11pt; color: #1b365d; margin: 0 0 8px 0; font-weight: 700;">
+        L'univers horloger est infini... Poursuivons la discussion !
+      </p>
+      <p style="font-family: 'Inter', sans-serif; font-size: 9.5pt; color: #5a6b7c; margin: 0 0 16px 0; line-height: 1.5;">
+        Ce manuel rassemble les principes fondamentaux du remontage automatique, mais il serait impossible de résumer toute la richesse de ce domaine en quelques chapitres. Je vous encourage à poursuivre vos propres recherches. Si au fil de votre apprentissage vous avez des questions, des doutes, ou si vous souhaitez simplement partager une découverte, ma porte reste grande ouverte. Écrivez-moi à l'adresse <strong>swisstime.expert@gmail.com</strong>.
+      </p>
+      <a href="mailto:swisstime.expert@gmail.com" style="display: inline-block; background-color: #d9534f; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 9.5pt; font-weight: 600; transition: background-color 0.2s;">
+        ✉️ Contacter l'Expert
+      </a>
+    </div>
+    
+    <!-- BOTTONI DI NAVIGAZIONE -->
+    <div class="btn-nav-row" style="justify-content: center; gap: 20px;">
+      <a href="index.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt;">📋 Retour à l'Index</a>
+      <a href="_003-Horloge_Electronique.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Passer au Module 03 : Électronique & Quartz ➔</a>
+    </div>
+    
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
+  
+</body>
+</html>

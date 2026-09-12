@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - 1. The Manual Winding Movement</title>
+  
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+  
+  <style>
+    /* Forced alignment to synchronize Header and Notebook during zoom */
+    .header-card, .notebook-container {
+      max-width: 1100px !important;
+      margin: 0 auto !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Language Styles */
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(255,255,255,0.3); }
+    .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    /* Dropdown Menu */
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+  </style>
+</head>
+<body>
+
+  <div class="header-card">
+    
+    <!-- LEFT COLUMN: Text and Navigation -->
+    <div class="header-left-block">
+      <div class="badge">Haute Horlogerie — Federal Diploma</div>
+      <h1>1. The Manual Winding Movement</h1>
+      <p class="subtitle">Watchmaking Expertise Course — Energy & Barrel</p>
+      
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Main Menu</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. The Manual Winding Movement</a>
+            <a href="_002-la-montre-automatique.html">2. The Automatic Watch</a>
+            <a href="_003-Horloge_Electronique.html">3. The Electronic & Quartz Clock</a>
+            <a href="_004-Complications.html">4. Complications</a>
+            <a href="_005-Familles_Matieres.html">5. Material Families</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Manufacturing Phases and Technologies</a>
+            <a href="_007-Habillage.html">7. The Habillage (Watch Exterior)</a>
+            <a href="_008-Histoire_Mesure_Temps.html">8. History of Time Measurement</a>
+          </div>
+        </div>
+
+        <div class="lang-switcher">
+          <a href="../FR/_001A-Mouvement_Manuel.html" class="lang-btn">FR</a>
+          <a href="#" class="lang-btn active">EN</a>
+          <a href="../DE/_001A-Mouvement_Manuel.html" class="lang-btn">DE</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- RIGHT COLUMN: Logo -->
+    <div class="header-right-block">
+      <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+    </div>
+
+  </div>
+
+  <div class="notebook-container" id="notebook-main">
+    
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Module 01: Energy & Barrel</h2>
+      </div>
+      <div class="tag-chic">✍️ Course Notes & Diagrams</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <h2 id="p1">1. Block Diagram of the Mechanical Movement</h2>
+      <p>The block diagram defines the fundamental functional architecture of the manual winding mechanical watch. The accumulated energy is continuously transmitted, distributed, and regulated:</p>
+
+      <style>
+        .ste-container { max-width: 1000px; margin: 0 auto; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        .ste-image-wrapper { width: 100%; margin-bottom: 25px; }
+        .ste-base-img { width: 100%; height: auto; display: block; }
+        .ste-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .ste-card { background-color: #f8f9fa; padding: 18px; border-radius: 6px; border-top: 4px solid #1a365d; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .ste-step { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6c757d; letter-spacing: 1px; margin-bottom: 6px; }
+        .ste-title { font-size: 1.05rem; font-weight: bold; color: #1a365d; margin: 0 0 10px 0; line-height: 1.25; }
+        .ste-text { font-size: 0.85rem; line-height: 1.55; color: #333; margin: 0; text-align: left; }
+        @media (max-width: 768px) { .ste-grid { grid-template-columns: 1fr; gap: 15px; } }
+      </style>
+
+      <div class="ste-container">
+        <div class="ste-image-wrapper">
+          <img src="../Treno_del_tempo.png" alt="Functional diagram of the kinematic chain" class="ste-base-img">
+        </div>
+        
+        <div class="ste-grid">
+          <div class="ste-card">
+            <div class="ste-step">Step 1: Energy</div>
+            <h3 class="ste-title">The Mainspring & The Barrel</h3>
+            <p class="ste-text">The engine of the watch. The mainspring, housed inside the barrel drum (1), stores mechanical energy during winding.</p>
+          </div>
+          <div class="ste-card">
+            <div class="ste-step">Step 2: Transmission</div>
+            <h3 class="ste-title">The Going Train</h3>
+            <p class="ste-text">The reduction of force. The gear train (2) transmits the energy.</p>
+          </div>
+          <div class="ste-card">
+            <div class="ste-step">Step 3: Distribution</div>
+            <h3 class="ste-title">The Escapement</h3>
+            <p class="ste-text">The kinematic converter. The escape wheel (3) transforms continuous rotary motion into impulses.</p>
+          </div>
+          <div class="ste-card">
+            <div class="ste-step">Step 4: Regulation</div>
+            <h3 class="ste-title">The Oscillator</h3>
+            <p class="ste-text">The isochronous heart. The balance-spring assembly (4) dictates the absolute rhythm.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="img-always-visible">
+        <div class="interactive-wrapper">
+          <img src="../chaine-cinematique-mecanique.png" alt="Complete kinematic chain">
+          <div class="pin-marker" style="top: 14%; left: 49%;">1</div>
+          <div class="pin-marker" style="top: 46%; left: 51%;">2</div>
+          <div class="pin-marker" style="top: 41%; left: 33%;">3</div>
+          <div class="pin-marker" style="top: 56%; left: 44%;">4</div>
+          <div class="pin-marker" style="top: 72%; left: 32%;">5</div>
+          <div class="pin-marker" style="top: 76%; left: 59%;">8</div>
+          <div class="pin-marker" style="top: 64%; left: 60%;">9</div>
+          <div class="pin-marker" style="top: 38%; left: 81%; background: #1b365d;">⚙️</div>
+        </div>
+      </div>
+<div class="legend-grid">
+  <div class="legend-item"><span class="badge-mini">1</span> Barrel</div>
+  <div class="legend-item"><span class="badge-mini">2</span> Center wheel</div>
+  <div class="legend-item"><span class="badge-mini">3</span> Third wheel</div>
+  <div class="legend-item"><span class="badge-mini">4</span> Seconds wheel</div>
+  <div class="legend-item"><span class="badge-mini">5</span> Escape wheel</div>
+  <div class="legend-item"><span class="badge-mini">8</span> Balance wheel</div>
+  <div class="legend-item"><span class="badge-mini">9</span> Hairspring</div>
+  <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">⚙️</span> Winding mechanism</div>
+</div>
+      <details class="image-popover">
+        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-02) — Block Diagram & Introduction</summary>
+        <div class="img-container"><img src="../01-02 Scema Bloc-Energie-Trasmission-Distribution-Regulation.jpg" alt="Note 01-02"></div>
+      </details>
+
+      <h2 id="barillet">2. Motive Organ (Energy): The Barrel &amp; Winding Systems</h2>
+      <p>The barrel is the central component for storing potential energy in the mechanical movement.</p>
+
+      <div class="img-always-visible">
+        <img src="../barillet_bride.jpg" alt="Internal structure of the barrel and mainspring">
+        <div class="img-caption">📷 TECHNICAL VIEW — Anatomy of the barrel and mainspring.</div>
+      </div>
+
+      <div class="formula-box">
+        ⚙️ <strong>Workshop Rule:</strong> On an automatic movement, manual winding via the crown simulates exactly the state of maximum charge reached by the rotor.
+      </div>
+
+      <h2 id="croix-de-malte">3. Mainspring Attachment &amp; Torque Regulation</h2>
+      <div class="img-always-visible">
+        <img src="../croix-de-malte.png" alt="Operating principle of the Maltese Cross">
+        <div class="img-caption">📷 TECHNICAL DIAGRAM — The Maltese Cross: blocking rotation to utilize the linear torque range.</div>
+      </div>
+
+      <details class="image-popover">
+        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-03) — Mainspring Attachment, Maltese Cross &amp; Fusée</summary>
+        <div class="img-container"><img src="../01-03 Energie - Le Ressort (F4.4P46).jpg" alt="Note 01-03"></div>
+      </details>
+ <!-- FUSÉE-CHAÎNE CORRECTLY INSERTED IN THE CONTAINER -->
+      <div style="display: flex; gap: 20px; align-items: center; background: #fff; padding: 20px; border: 1px solid #dcdcdc; border-radius: 8px; margin-top: 25px; margin-bottom: 25px;">
+        <div style="flex: 0 0 45%;">
+          <img src="../fusee-chaine.png" alt="Fusée and Chain System" style="width: 100%; height: auto; border-radius: 4px;">
+        </div>
+        <div style="flex: 1;">
+          <h4 style="margin-top: 0; color: #2c4d75; font-size: 16px;">Constant Force: The Fusée and Chain</h4>
+          <p style="font-size: 14px; margin-bottom: 10px;">
+            This historical mechanism acts as a continuously variable transmission to compensate for the loss of torque from the mainspring as it unwinds.
+          </p>
+          <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
+            <li><strong>Maximum winding:</strong> The spring is strong, the chain pulls on the <em>small diameter</em> of the fusée (short lever arm).</li>
+            <li><strong>Unwinding:</strong> The spring weakens, the chain pulls on the <em>large diameter</em> of the fusée (long lever arm), thus perfectly equalizing the force transmitted to the escapement.</li>
+          </ul>
+        </div>
+      </div>
+      
+    </div> 
+  </div> 
+
+  <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
+    <a href="_001B-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continue reading ➔</a>
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. All rights reserved.</footer>
+  <script src="../_ricerca.js"></script>
+</body>
+</html>

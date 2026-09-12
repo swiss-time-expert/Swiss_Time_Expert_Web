@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - 1. Le Mouvement à Remontage Manuel</title>
+  
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+  
+  <style>
+    /* Allineamento forzato per sincronizzare Header e Notebook durante lo zoom */
+    .header-card, .notebook-container {
+      max-width: 1100px !important;
+      margin: 0 auto !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Stili per le Lingue */
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(255,255,255,0.3); }
+    .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    /* Menu a Tendina */
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- ================= HEADER A DUE COLONNE ================= -->
+  <div class="header-card">
+    
+    <div class="header-left-block">
+      <div class="badge">Haute Horlogerie — Brevet Fédéral</div>
+      <h1>1. Le Mouvement à Remontage Manuel</h1>
+      <p class="subtitle">Cours d'expertise horlogère — Distribution & Régulation</p>
+      
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Menu Principal</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. Le Mouvement à Remontage Manuel</a>
+            <a href="_002-la-montre-automatique.html">2. La Montre Automatique</a>
+            <a href="_003-Horloge_Electronique.html">3. L'Horloge Électronique & Quartz</a>
+            <a href="_004-Complications.html">4. Les Complications</a>
+            <a href="_005-Familles_Matieres.html">5. Les Familles de Matières</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Phases et Technologies de Fabrication</a>
+            <a href="_007-Habillage.html">7. L'Habillage de la Montre</a>
+            <a href="#">8. Histoire de la Mesure du Temps</a>
+          </div>
+        </div>
+
+        <div class="lang-switcher">
+          <a href="#" class="lang-btn active">FR</a>
+          <a href="../EN/_001C-Mouvement_Manuel.html" class="lang-btn">EN</a>
+          <a href="../DE/_001C-Mouvement_Manuel.html" class="lang-btn">DE</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right-block">
+      <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+    </div>
+
+  </div>
+
+  <!-- ================= NOTEBOOK ================= -->
+  <div class="notebook-container" id="notebook-main">
+    
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Module 01 : Échappement & Organe Réglant</h2>
+      </div>
+      <div class="tag-chic">✍️ Notes de Cours & Schémas</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <!-- CHAPITRE 7 -->
+      <h2 id="p7">7. Distribution : L'Échappement à Ancre Suisse</h2>
+      <ul>
+        <li><strong>Composants Clés :</strong> Roue d'échappement, Ancre suisse avec rubis, Double plateau avec ellipse.</li>
+        <li><strong>Fonction :</strong> Transformer la rotation en oscillations et distribuer l'énergie.</li>
+      </ul>
+      <div class="img-always-visible">
+        <div class="interactive-wrapper" style="max-width: 480px;">
+          <img src="../echappement-ancre.jpg" alt="Échappement">
+          <div class="pin-marker" style="top: 52%; left: 50%;">1</div>
+          <div class="pin-marker" style="top: 65%; left: 40%;">2</div>
+          <div class="pin-marker" style="top: 65%; left: 60%;">3</div>
+          <div class="pin-marker" style="top: 80%; left: 50%;">4</div>
+          <div class="pin-marker" style="top: 55%; left: 55%; background: #1b365d;">5</div>
+          <div class="pin-marker" style="top: 48%; left: 45%;">6</div>
+          <div class="pin-marker" style="top: 44%; left: 50%; background: #1b365d;">7</div>
+          <div class="pin-marker" style="top: 30%; left: 50%;">8</div>
+        </div>
+        <div class="legend-grid">
+          <div class="legend-item"><span class="badge-mini">1</span> Corps d'ancre</div>
+          <div class="legend-item"><span class="badge-mini">2</span> Levée d'entrée</div>
+          <div class="legend-item"><span class="badge-mini">3</span> Levée de sortie</div>
+          <div class="legend-item"><span class="badge-mini">4</span> Roue d'échappement</div>
+          <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">5</span> Dard</div>
+          <div class="legend-item"><span class="badge-mini">6</span> Fourchette</div>
+          <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">7</span> Cheville</div>
+          <div class="legend-item"><span class="badge-mini">8</span> Double plateau</div>
+        </div>
+      </div>
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-07) — Échappement à Ancre Suisse</summary>
+        <div class="img-container"><img src="../01-07 Regulation-l echappement.jpg" alt="Fiche 01-07"></div>
+      </details>
+      
+      <!-- 7B. APPROFONDISSEMENT -->
+      <h2 id="f7b">7B. Approfondissement Technique : Anatomie Fonctionnelle de l'Organe Réglant</h2>
+      <p>
+        L'organe réglant est le cœur isochrone de la montre mécanique. Il assure le découpage rigoureux du temps par ses oscillations régulières. La maîtrise de ses sous-ensembles (liaisons, guidages et impulsion) est indispensable pour comprendre la chronométrie.
+      </p>
+
+      <div class="img-always-visible">
+        <img src="../Balancier-spiral_parties_2.jpg" alt="Anatomie détaillée du balancier-spiral et de ses composants">
+        <div class="img-caption">📷 TAVOLA TECNICA D'ATELIER — Anatomie fonctionnelle de l'organe réglant et de l'ensemble balancier-spiral.</div>
+      </div>
+
+      <p><strong>Description détaillée des composants clés de l'ensemble balancier-spiral :</strong></p>
+      <ul>
+        <li>
+          <strong>1° Le Piton :</strong> C'est la cheville d'ancrage fixe qui immobilise l'extrémité extérieure du spiral sur le pont de balancier. Il constitue le point d'ancrage fixe externe de l'ensemble élastique.
+        </li>
+        <li>
+          <strong>2° La Virole :</strong> Petit anneau métallique central serti de manière micrométrique sur l'axe du balancier, dans lequel est fixée et immobilisée l'extrémité intérieure du spiral. Elle assure la liaison directe entre le ressort spiral et l'axe mobile.
+        </li>
+        <li>
+          <strong>3° Le Pivot :</strong> L'extrémité extrêmement fine et polie de l'axe du balancier. Les pivots tournent au sein de rubis (coussinets) et subissent des contraintes mécaniques extrêmes en cas de choc, d'où l'importance vitale des systèmes de protection (type Incabloc).
+        </li>
+        <li>
+          <strong>4° Le Spiral :</strong> Ressort élastique enroulé selon une courbe mathématique précise (généralement en alliage amagnétique à base de nickel ou de silicium). Il fournit le couple de rappel élastique permanent qui ramène constamment le balancier à sa position d'équilibre neutre.
+        </li>
+        <li>
+          <strong>5° La Serge du Balancier :</strong> L'anneau circulaire périphérique du balancier. Sa masse et son diamètre déterminent le <i>moment d'inertie</i> de la pièce. C'est sur la serge que l'on pratique l'équilibrage dynamique (masselottes ou vis de réglage).
+        </li>
+        <li>
+          <strong>6° Les Bras du Balancier :</strong> Les rayons de liaison rigides reliant le moyeu central (ou l'axe) à la serge extérieure, conçus pour offrir une rigidité maximale tout en minimisant la prise au vent et le poids.
+        </li>
+        <li>
+          <strong>7° La Raquette :</strong> Organe de réglage mobile doté de deux goupilles entre lesquelles glisse le spiral. En déplaçant la raquette, l'horloger modifie la <i>longueur active</i> de la spirale, ce qui permet d'ajuster précisément la marche (avancer ou retarder la montre).
+        </li>
+        <li>
+          <strong>8° Le Double Plateau :</strong> Double disque calé sur l'axe du balancier, comprenant l'encoche de sécurité et servant de support direct à l'ellipse d'impulsion.
+        </li>
+        <li>
+          <strong>9° L'Ellipse (Cheville d'impulsion) :</strong> Un petit cylindre rigide en rubis synthétique rouge solidement planté sur le double plateau. C'est le point de contact cinématique crucial : l'ellipse reçoit l'impulsion de la fourchette de l'ancre à chaque oscillation (pour entretenir le mouvement) et donne l'impulsion de déclenchement à l'ancre.
+        </li>
+      </ul>
+
+      <div class="formula-box">
+        ⏱️ <strong>Principe Isocrate :</strong> La période d'oscillation du balancier-spiral dépend de son moment d'inertie et de la raideur du ressort. Toute variation de la longueur active de la spirale (via la raquette) modifie instantanément la fréquence de la montre.
+      </div>
+      
+      <!-- CHAPITRE 8 -->
+      <h2 id="p8">8. Régulation : Le Balancier-Spiral & Fréquences d'Oscillation</h2>
+      <table class="table-custom">
+        <thead><tr><th>Fréquence (Ah)</th><th>Type de Calibre</th><th>Exemple</th><th>(Hz)</th><th>Alternances/Sec</th></tr></thead>
+        <tbody>
+          <tr><td><strong>18'000 Ah</strong></td><td>Historique / Poche</td><td>ETA 6497-1</td><td>2.5 Hz</td><td>5 tics/sec</td></tr>
+          <tr><td><strong>21'600 Ah</strong></td><td>Intermédiaire</td><td>ETA 6497-2</td><td>3.0 Hz</td><td>6 tics/sec</td></tr>
+          <tr><td><strong>28'800 Ah</strong></td><td>Standard moderne</td><td>ETA 2824-2</td><td>4.0 Hz</td><td>8 tics/sec</td></tr>
+          <tr><td><strong>36'000 Ah</strong></td><td>Haute Fréquence</td><td>Zenith El Primero</td><td>5.0 Hz</td><td>10 tics/sec</td></tr>
+        </tbody>
+      </table>
+      <div class="img-always-visible">
+        <img src="../balancier-spiral.jpg" alt="Balancier-spiral" style="max-height: 380px;">
+      </div>
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-08) — Balancier-Spiral</summary>
+        <div class="img-container"><img src="../01-08 Regulation-Le balancier Spiral.jpg" alt="Fiche 01-08"></div>
+      </details>
+      <!-- IMAGE ÉCHELLE BALANCIER / ALLUMETTE -->
+      <div class="img-always-visible">
+        <img src="../Balance_wheels.jfif" alt="Échelle de grandeur d'un balancier-spiral comparé à une tête d'allumette">
+        <div class="img-caption">📷 MISE EN ÉCHELLE — L'organe régulateur (pont, balancier et spiral) à côté d'une tête d'allumette, illustrant l'extrême miniaturisation de la micromécanique horlogère.</div>
+      </div>
+     
+            <!-- CHAPITRE 9 -->
+      <h2 id="p9">9. Anatomie du Balancier & Systèmes de Protection (Antichocs)</h2>
+      <p>L'évolution majeure réside dans la protection des pivots (0.07mm) contre les chocs mécaniques.</p>
+      <div class="img-always-visible"><img src="../Incabloc_01.jpg" alt="Anatomie Incabloc"></div>
+      <div class="img-always-visible"><img src="../Incabloc_02.jpg" alt="Montage Incabloc"></div>
+      <div class="img-always-visible"><img src="../Incabloc_03.jpg" alt="Dynamique Incabloc"></div>
+      <ul>
+        <li><strong>Composants de Liaison :</strong> Virole, Piton, Raquette.</li>
+      </ul>
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-09) — Composants du Balancier</summary>
+        <div class="img-container"><img src="../01-09 Regulation-Le balancier Spiral.jpg" alt="Fiche 01-09"></div>
+      </details>
+
+    </div>
+  </div>
+  
+  <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
+    <a href="_001D-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continuer la lecture ➔</a>
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
+</body>
+</html>

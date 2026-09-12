@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - 7. Das Äußere der Uhr (Habillage)</title>
+
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+
+  <style>
+    /* Allineamento forzato */
+    .header-card, .notebook-container {
+      max-width: 1100px !important;
+      margin: 0 auto !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Stili Lingue e Menu */
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(255,255,255,0.3); }
+    .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+    
+    /* Styles spécifiques pour le Work In Progress */
+    .wip-banner {
+      background: repeating-linear-gradient(45deg, #fffdf5, #fffdf5 20px, #fff2cc 20px, #fff2cc 40px);
+      border: 3px dashed #f0a500;
+      border-radius: 12px;
+      padding: 40px 20px;
+      text-align: center;
+      margin: 30px 0 50px 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= HEADER A DUE COLONNE ================= -->
+  <div class="header-card">
+    
+    <div class="header-left-block">
+      <div class="badge">Haute Horlogerie — Eidgenössisches Diplom</div>
+      <h1>7. Das Äußere der Uhr (Habillage)</h1>
+      <p class="subtitle">Uhrmachergutachten-Kurs — Gehäuse, Glas, Krone & Wasserdichtheit</p>
+      
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Hauptmenü</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. Das Handaufzugswerk</a>
+            <a href="_002-la-montre-automatique.html">2. Die Automatikuhr</a>
+            <a href="_003-Horloge_Electronique.html">3. Die Elektronische Uhr & Quarz</a>
+            <a href="_004-Complications.html">4. Komplikationen</a>
+            <a href="_005-Familles_Matieres.html">5. Die Werkstofffamilien</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen und -technologien</a>
+            <a href="_007-Habillage.html">7. Das Äußere der Uhr</a>
+            <a href="_008-Histoire_Mesure_Temps.html">8. Geschichte der Zeitmessung</a>
+          </div>
+        </div>
+
+        <div class="lang-switcher">
+          <a href="../FR/_007-Habillage.html" class="lang-btn">FR</a>
+          <a href="../EN/_007-Habillage.html" class="lang-btn">EN</a>
+          <a href="#" class="lang-btn active">DE</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right-block">
+      <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+    </div>
+
+  </div>
+
+  <!-- ================= NOTEBOOK ================= -->
+  <div class="notebook-container" id="notebook-main">
+    
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Modul 07 : Anatomie und Elemente des Äußeren (Habillage)</h2>
+      </div>
+      <div class="tag-chic">🛡️ Gehäuse & Ästhetik</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <!-- BANNIÈRE WORK IN PROGRESS -->
+      <div class="wip-banner">
+        <div style="font-size: 55px; margin-bottom: 15px;">🚧 👷‍♂️ 🛠️</div>
+        <h2 style="color: #d9534f; margin-top: 0; font-size: 28px;">Modul in Bearbeitung</h2>
+        <p style="font-size: 16px; color: #555; max-width: 600px; margin: 0 auto; font-weight: 500;">
+          Die detaillierte Ausarbeitung dieses Abschnitts ist derzeit in Arbeit. Die vollständige Nomenklatur, Bearbeitungstechniken, Materialien (Gold, Stahl, Titan, Keramik) und die Grundsätze der Wasserdichtheit werden in Kürze integriert.
+        </p>
+      </div>
+
+      <!-- IMAGE EXPLOSÉE EN GRAND FORMAT -->
+      <div style="text-align: center; margin-bottom: 40px; background: #fff; padding: 30px; border: 1px solid #dcdcdc; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.06);">
+        <h3 style="color: #2c4d75; margin-top: 0; margin-bottom: 25px; border-bottom: 2px solid #f0f4f8; padding-bottom: 10px; display: inline-block;">
+          Vorläufige Übersicht: Die Gehäusearchitektur
+        </h3>
+        <br>
+        <img src="../elements-boite.png" alt="Uhrengehäuse-Elemente" style="width: 100%; max-width: 800px; height: auto;">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= NAVIGAZIONE INFERIORE E CONTATTO ================= -->
+  <div style="margin-top: 40px; padding-top: 24px; border-top: 2px dashed #b0c4de; text-align: center;">
+    
+    <p style="font-family: 'Kalam', cursive, sans-serif; font-size: 15pt; color: #900c3f; font-weight: 700; margin-bottom: 20px;">
+      🏁 Modul 07: Die eingehende Studie des Äußeren der Uhr ist bald verfügbar.
+    </p>
+
+    <!-- BOX SUPPORTO ESPERTO -->
+    <div style="background-color: #f4f7fa; border: 1px solid #c8d7e6; border-radius: 8px; padding: 20px; max-width: 650px; margin: 0 auto 28px auto; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+      <p style="font-family: 'Inter', sans-serif; font-size: 11pt; color: #1b365d; margin: 0 0 8px 0; font-weight: 700;">
+        Das uhrmacherische Universum ist unendlich... Setzen wir die Diskussion fort!
+      </p>
+      <p style="font-family: 'Inter', sans-serif; font-size: 9.5pt; color: #5a6b7c; margin: 0 0 16px 0; line-height: 1.5;">
+        Während der Fertigstellung dieses Moduls zum Äußeren der Uhr ermutige ich Sie, Ihre eigenen Recherchen fortzusetzen. Wenn Sie während Ihres Lernens Fragen oder Zweifel haben oder einfach eine Entdeckung teilen möchten, steht Ihnen meine Tür immer offen. Schreiben Sie mir an <strong>swisstime.expert@gmail.com</strong>.
+      </p>
+      <a href="mailto:swisstime.expert@gmail.com" style="display: inline-block; background-color: #d9534f; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 9.5pt; font-weight: 600; transition: background-color 0.2s;">
+        ✉️ Den Experten kontaktieren
+      </a>
+    </div>
+    
+    <!-- BOTTONI DI NAVIGAZIONE -->
+    <div class="btn-nav-row" style="justify-content: center; gap: 20px;">
+      <a href="_006-Fhasses_Fabrication.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt;">⬅ Zurück zu Modul 06</a>
+      <a href="_008-Histoire_Mesure_Temps.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Weiter zu Modul 08 : Geschichte der Zeitmessung ➔</a>
+    </div>
+    
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. Alle Rechte vorbehalten.</footer>
+  
+  <script src="../_ricerca.js"></script>
+
+  <!-- SCRIPT DE PROTECTION -->
+  <script>
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.onkeydown = function(e) {
+      if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 85 || e.keyCode === 83)) {
+        return false;
+      }
+    };
+  </script>
+</body>
+</html>

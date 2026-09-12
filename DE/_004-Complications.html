@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - 4. Komplikationen (Kalender)</title>
+  
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+  
+  <style>
+    /* Allineamento forzato */
+    .header-card, .notebook-container {
+      max-width: 1100px !important;
+      margin: 0 auto !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Stili Lingue e Menu */
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(255,255,255,0.3); }
+    .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- ================= HEADER A DUE COLONNE ================= -->
+  <div class="header-card">
+    
+    <div class="header-left-block">
+      <div class="badge">Haute Horlogerie — Eidgenössisches Diplom</div>
+      <h1>4. Komplikationen (Teil 1)</h1>
+      <p class="subtitle">Uhrmachergutachten-Kurs — Kalender & Astronomie</p>
+      
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Hauptmenü</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. Das Handaufzugswerk</a>
+            <a href="_002-la-montre-automatique.html">2. Die Automatikuhr</a>
+            <a href="_003-Horloge_Electronique.html">3. Die Elektronische Uhr & Quarz</a>
+            <a href="_004-Complications.html">4. Komplikationen</a>
+            <a href="_005-Familles_Matieres.html">5. Die Werkstofffamilien</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen und -technologien</a>
+            <a href="_007-Habillage.html">7. Das Äußere der Uhr</a>
+            <a href="_008-Histoire_Mesure_Temps.html">8. Geschichte der Zeitmessung</a>
+          </div>
+        </div>
+
+        <div class="lang-switcher">
+          <a href="../FR/_004-Complications.html" class="lang-btn">FR</a>
+          <a href="../EN/_004-Complications.html" class="lang-btn">EN</a>
+          <a href="#" class="lang-btn active">DE</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right-block">
+      <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+    </div>
+
+  </div>
+
+  <!-- ================= NOTEBOOK ================= -->
+  <div class="notebook-container" id="notebook-main">
+    
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Modul 04 : Komplikationen</h2>
+      </div>
+      <div class="tag-chic">⚙️ Haute Horlogerie</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <div class="formula-box" style="margin-bottom: 25px;">
+        ⚙️ <strong>Offizielle Definition:</strong> Als „Komplikation“ bezeichnet man jede zusätzliche Anzeige oder Funktion, die eine Uhr zusätzlich zur Basiszeitanzeige (Stunden, Minuten und Sekunden) liefern kann. Unter diesem Gesichtspunkt ist das einfache Datum (Quantième simple) die erste aller Komplikationen.
+      </div>
+
+      <!-- KAPITEL 1 -->
+      <h2 id="dates">1. Datumsanzeigen (Grundkalender)</h2>
+      <ul>
+        <li><strong>Einfaches Datum:</strong> Anzeige des Datums über eine nummerierte Scheibe von 1 bis 31, sichtbar durch ein Fenster. Erfordert eine manuelle Korrektur (Schnellkorrektur) am Ende der Monate mit 28, 29 und 30 Tagen.</li>
+        <li><strong>Wochentag und Datum (Day-Date):</strong> Ergänzung um die Wochentagsanzeige, aufgedruckt auf einer zweiten drehbaren Scheibe. Die Anzeige erfolgt über zwei getrennte oder nebeneinander liegende Fenster.</li>
+        <li><strong>Großdatum:</strong> Vergrößerte Datumsanzeige für maximale Ablesbarkeit. Verwendet zwei übereinander oder in einer Ebene liegende Scheiben (eine für die Zehner von 0 bis 3, eine für die Einer von 0 bis 9), angetrieben von einer komplexen Synchronisationskurve.</li>
+        <li><strong>Zeigerdatum:</strong> Anstelle der klassischen Scheibe unter dem Zifferblatt wird das Datum durch einen speziellen Zentralzeiger oder innerhalb eines Hilfszifferblatts (Totalisator) angezeigt.</li>
+        <li><strong>Vollständiger Kalender (Triplo Calendario):</strong> Liefert Datum, Wochentag und Monat. Obwohl er umfassende Informationen bietet, "kennt" der Mechanismus die Monatslängen nicht und erfordert jedes Jahr fünfmal eine manuelle Korrektur.</li>
+      </ul>
+
+      <!-- KAPITEL 2 -->
+      <h2 id="astronomie">2. Astronomische Komplikationen & Komplexe Kalender</h2>
+      <p>Diese Kategorie markiert den Punkt, an dem Uhrwerksmechanismen ein mechanisches "Gedächtnis" für die Monatslängen erhalten.</p>
+      
+      <ul>
+        <li><strong>Jahreskalender:</strong> Eine relativ moderne Erfindung (von Patek Philippe 1996 patentiert), die die Brücke zwischen dem vollständigen Kalender und dem ewigen Kalender schlägt. Der Mechanismus unterscheidet automatisch zwischen Monaten mit 30 und 31 Tagen. Er erfordert nur eine einzige manuelle Korrektur pro Jahr, am Morgen des 1. März, um die unregelmäßige Länge des Februars auszugleichen.</li>
+        <li><strong>Ewiger Kalender:</strong> Die historische Vollendung der Mikromechanik. Ein komplexes System (oft basierend auf einer Kurve oder einem 48-Monats-Rad, das in 4 Jahren einen Umlauf vollzieht) berechnet völlig autonom die Länge aller Monate einschließlich Schaltjahren. Bis zum 1. März 2100 (Säkularjahr, das kein Schaltjahr ist) ist keine Korrektur erforderlich.</li>
+        <li><strong>Säkularer Kalender:</strong> Extreme und äußerst seltene Weiterentwicklung des ewigen Kalenders. Dank zusätzlicher Räderwerke (wie dem 400-Jahres-Rad) berechnet er mechanisch die Ausnahmen der Säkularjahre, die nicht durch 400 teilbar sind (z. B. 2100, 2200, 2300), und funktioniert jahrtausendelang ohne menschliche Korrektur (z. B. Andersen Genève, Patek Philippe Calibre 89, Vacheron Constantin 57260, IWC Portugieser Eternal Calendar).</li>
+        <li><strong>Mondphase:</strong> Eine drehbare Scheibe (meist mit zwei Monden verziert), die den synodischen Zyklus unseres Satelliten von ca. 29,5 Tagen (29 Tage, 12 Stunden, 44 Minuten und 2,8 Sekunden) getreu nachbildet.</li>
+        <li><strong>Zeitgleichung (Äquation):</strong> Zeigt die komplexe Differenz zwischen wahren Sonnenzeit (von der Natur vorgegeben) und mittlere Sonnenzeit (konventionelle 24 Stunden) an, die im Laufe des Jahres zwischen -16 und +14 Minuten schwankt.</li>
+      </ul>
+
+      <!-- ARBEIT IN AUSFÜHRUNG BEREICH -->
+      <div style="margin-top: 40px; background-color: #fff9e6; border: 2px dashed #f6c23e; border-radius: 8px; padding: 25px; text-align: center;">
+        <h3 style="color: #d89b00; margin-top: 0; font-family: 'Inter', sans-serif;">🚧 Modul in Bearbeitung 🚧</h3>
+        <p style="color: #555; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Das Universum der Uhrenkomplikationen ist riesig und komplex. Die Kapitel über <strong>Chronographen</strong>, <strong>Tourbillons</strong> und <strong>Schlaguhrwerke</strong> befinden sich derzeit in der Überarbeitung und detaillierten Strukturierungsphase. Sie werden demnächst nach Fertigstellung gemäß unseren strengen Qualitätsstandards veröffentlicht.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= UNTERE NAVIGATION UND KONTAKT ================= -->
+  <div style="margin-top: 40px; padding-top: 24px; border-top: 2px dashed #b0c4de; text-align: center;">
+    
+    <p style="font-family: 'Kalam', cursive, sans-serif; font-size: 15pt; color: #900c3f; font-weight: 700; margin-bottom: 20px;">
+      🏁 Ende des 1. Teils von Modul 04: Die Kalendergrundlagen sind gelegt, der nächste Teil folgt bald.
+    </p>
+
+    <!-- EXPERTEN-SUPPORT-BOX -->
+    <div style="background-color: #f4f7fa; border: 1px solid #c8d7e6; border-radius: 8px; padding: 20px; max-width: 650px; margin: 0 auto 28px auto; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+      <p style="font-family: 'Inter', sans-serif; font-size: 11pt; color: #1b365d; margin: 0 0 8px 0; font-weight: 700;">
+        Das uhrmacherische Universum ist unendlich... Setzen wir die Diskussion fort!
+      </p>
+      <p style="font-family: 'Inter', sans-serif; font-size: 9.5pt; color: #5a6b7c; margin: 0 0 16px 0; line-height: 1.5;">
+        Dieses Handbuch versammelt die Grundprinzipien der Kalenderkomplikationen, aber es wäre unmöglich, den gesamten Reichtum dieses Fachgebiets in einem einzigen Kapitel zusammenzufassen. Ich ermutige Sie, Ihre eigenen Recherchen fortzusetzen. Wenn Sie während Ihres Lernens Fragen oder Zweifel haben oder einfach eine Entdeckung teilen möchten, steht Ihnen meine Tür immer offen. Schreiben Sie mir an <strong>swisstime.expert@gmail.com</strong>.
+      </p>
+      <a href="mailto:swisstime.expert@gmail.com" style="display: inline-block; background-color: #d9534f; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 9.5pt; font-weight: 600; transition: background-color 0.2s;">
+        ✉️ Den Experten kontaktieren
+      </a>
+    </div>
+    
+    <!-- NAVIGATIONSTASTEN -->
+    <div class="btn-nav-row" style="justify-content: center; gap: 20px;">
+      <a href="index.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt;">📋 Zum Index zurückkehren</a>
+      <a href="_005-Familles_Matieres.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Weiter zu Modul 05 : Die Werkstofffamilien ➔</a>
+    </div>
+    
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. Alle Rechte vorbehalten.</footer>
+  
+  <script src="../_ricerca.js"></script>
+</body>
+</html>

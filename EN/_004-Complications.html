@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - 4. Complications (Calendar Mechanisms)</title>
+  
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+  
+  <style>
+    /* Allineamento forzato */
+    .header-card, .notebook-container {
+      max-width: 1100px !important;
+      margin: 0 auto !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Stili Lingue e Menu */
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(255,255,255,0.3); }
+    .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- ================= HEADER A DUE COLONNE ================= -->
+  <div class="header-card">
+    
+    <div class="header-left-block">
+      <div class="badge">Haute Horlogerie — Federal Diploma</div>
+      <h1>4. Complications (Part 1)</h1>
+      <p class="subtitle">Watchmaking Expertise Course — Calendar Indications & Astronomy</p>
+      
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Main Menu</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. The Manual Winding Movement</a>
+            <a href="_002-la-montre-automatique.html">2. The Automatic Watch</a>
+            <a href="_003-Horloge_Electronique.html">3. The Electronic & Quartz Clock</a>
+            <a href="_004-Complications.html">4. Complications</a>
+            <a href="_005-Familles_Matieres.html">5. Material Families</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Manufacturing Phases and Technologies</a>
+            <a href="_007-Habillage.html">7. The Watch Exterior (Habillage)</a>
+            <a href="_008-Histoire_Mesure_Temps.html">8. History of Time Measurement</a>
+          </div>
+        </div>
+
+        <div class="lang-switcher">
+          <a href="../FR/_004-Complications.html" class="lang-btn">FR</a>
+          <a href="_004-Complications.html" class="lang-btn active">EN</a>
+          <a href="../DE/_004-Complications.html" class="lang-btn">DE</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right-block">
+      <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+    </div>
+
+  </div>
+
+  <!-- ================= NOTEBOOK ================= -->
+  <div class="notebook-container" id="notebook-main">
+    
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Module 04: Complications</h2>
+      </div>
+      <div class="tag-chic">⚙️ Haute Horlogerie</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <div class="formula-box" style="margin-bottom: 25px;">
+        ⚙️ <strong>Official Definition:</strong> In watchmaking, a "complication" refers to any additional function or display provided by the watch beyond the baseline indication of hours, minutes, and seconds. In this respect, the simple calendar (date) represents the very first complication.
+      </div>
+
+      <!-- CHAPITRE 1 -->
+      <h2 id="dates">1. Date Indications (Basic Calendar Mechanisms)</h2>
+      <ul>
+        <li><strong>Simple Calendar (Date):</strong> Displays the date via a disc numbered from 1 to 31, visible through a dial aperture. Requires manual correction (quickset date) at the end of months having 28, 29, or 30 days.</li>
+        <li><strong>Day and Date (Day-Date):</strong> Adds the day of the week display, printed on a second rotating disc. The readout is provided via two separate or adjacent apertures.</li>
+        <li><strong>Big Date (Grande Date):</strong> An enlarged date display engineered for optimal legibility. Employs two overlapping or coplanar discs (one for tens from 0 to 3, one for units from 0 to 9) governed by a dedicated synchronization cam.</li>
+        <li><strong>Pointer Date:</strong> Instead of an aperture disc beneath the dial, the date is indicated by a dedicated central hand or within an auxiliary sub-dial.</li>
+        <li><strong>Full Calendar (Complete Calendar):</strong> Provides the date, day of the week, and month. While offering comprehensive information, the gearing does not account for variable month lengths and still requires manual correction five times a year.</li>
+      </ul>
+
+      <!-- CHAPITRE 2 -->
+      <h2 id="astronomie">2. Astronomical Complications & Complex Calendars</h2>
+      <p>This category represents the milestone where mechanical movements incorporate an autonomous "memory" of month lengths.</p>
+      
+      <ul>
+        <li><strong>Annual Calendar:</strong> A modern invention (patented by Patek Philippe in 1996) that bridges the gap between the full calendar and the perpetual calendar. The mechanism automatically distinguishes between 30-day and 31-day months, requiring only one manual adjustment per year on March 1st to compensate for February.</li>
+        <li><strong>Perpetual Calendar (QP):</strong> The historical benchmark of micromechanical engineering. A sophisticated program (frequently based on a 48-month wheel completing one full rotation every 4 years) autonomously calculates the length of every month, including leap years. No adjustment is required until March 1, 2100 (a secular century year that is not a leap year).</li>
+        <li><strong>Secular Perpetual Calendar:</strong> An extraordinary and ultra-rare horological evolution. Equipped with additional reduction gearing (such as a 400-year wheel), it mechanically accounts for century years not divisible by 400 (e.g., 2100, 2200, 2300), operating autonomously across multiple millennia (e.g., Andersen Genève, Patek Philippe Calibre 89, Vacheron Constantin 57260, IWC Portugieser Eternal Calendar).</li>
+        <li><strong>Moon Phases:</strong> A rotating disc (usually adorned with two moons) that faithfully mirrors the synodic lunar cycle of approximately 29.5 days (29 days, 12 hours, 44 minutes, and 2.8 seconds).</li>
+        <li><strong>Equation of Time:</strong> Displays the difference between true solar time (nature's actual solar cycle) and mean solar time (the conventional 24-hour civil standard), varying from approximately -16 to +14 minutes throughout the year.</li>
+      </ul>
+
+      <!-- SEZIONE WORK IN PROGRESS -->
+      <div style="margin-top: 40px; background-color: #fff9e6; border: 2px dashed #f6c23e; border-radius: 8px; padding: 25px; text-align: center;">
+        <h3 style="color: #d89b00; margin-top: 0; font-family: 'Inter', sans-serif;">🚧 Module Under Development 🚧</h3>
+        <p style="color: #555; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          The domain of horological complications is extensive and complex. The chapters dedicated to <strong>Chronographs</strong>, <strong>Tourbillons</strong>, and <strong>Striking Watches</strong> are currently undergoing detailed pedagogical structuring and technical review. They will be released upon meeting our certified quality standards.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= NAVIGAZIONE INFERIORE E CONTATTO ================= -->
+  <div style="margin-top: 40px; padding-top: 24px; border-top: 2px dashed #b0c4de; text-align: center;">
+    
+    <p style="font-family: 'Kalam', cursive, sans-serif; font-size: 15pt; color: #900c3f; font-weight: 700; margin-bottom: 20px;">
+      🏁 End of Module 04 (Part 1): Foundational calendar principles established; subsequent chapters coming soon.
+    </p>
+
+    <!-- BOX SUPPORTO ESPERTO -->
+    <div style="background-color: #f4f7fa; border: 1px solid #c8d7e6; border-radius: 8px; padding: 20px; max-width: 650px; margin: 0 auto 28px auto; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+      <p style="font-family: 'Inter', sans-serif; font-size: 11pt; color: #1b365d; margin: 0 0 8px 0; font-weight: 700;">
+        The horological universe is boundless... Let's continue the discussion!
+      </p>
+      <p style="font-family: 'Inter', sans-serif; font-size: 9.5pt; color: #5a6b7c; margin: 0 0 16px 0; line-height: 1.5;">
+        This course outlines the core principles of calendar complications, yet no single guide can encapsulate the full breadth of this discipline. If you have questions or observations as you advance through the material, direct inquiries are welcome. Reach out at <strong>swisstime.expert@gmail.com</strong>.
+      </p>
+      <a href="mailto:swisstime.expert@gmail.com" style="display: inline-block; background-color: #d9534f; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 9.5pt; font-weight: 600; transition: background-color 0.2s;">
+        ✉️ Contact the Expert
+      </a>
+    </div>
+    
+    <!-- BOTTONI DI NAVIGAZIONE -->
+    <div class="btn-nav-row" style="justify-content: center; gap: 20px;">
+      <a href="index.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt;">📋 Back to Index</a>
+      <a href="_005-Familles_Matieres.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Proceed to Module 05: Material Families ➔</a>
+    </div>
+    
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. All rights reserved.</footer>
+  
+  <script src="../_ricerca.js"></script>
+</body>
+</html>

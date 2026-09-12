@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - 5. Die Werkstofffamilien</title>
+
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+
+  <style>
+    /* Allineamento forzato */
+    .header-card, .notebook-container {
+      max-width: 1100px !important;
+      margin: 0 auto !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Stili Lingue e Menu */
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(255,255,255,0.3); }
+    .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- ================= HEADER A DUE COLONNE ================= -->
+  <div class="header-card">
+    
+    <div class="header-left-block">
+      <div class="badge">Haute Horlogerie — Eidgenössisches Diplom</div>
+      <h1>5. Die Werkstofffamilien</h1>
+      <p class="subtitle">Uhrmachergutachten-Kurs — Metallurgie, Eigenschaften & Anwendungen</p>
+      
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Hauptmenü</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. Das Handaufzugswerk</a>
+            <a href="_002-la-montre-automatique.html">2. Die Automatikuhr</a>
+            <a href="_003-Horloge_Electronique.html">3. Die Elektronische Uhr & Quarz</a>
+            <a href="_004-Complications.html">4. Komplikationen</a>
+            <a href="_005-Familles_Matieres.html">5. Die Werkstofffamilien</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen und -technologien</a>
+            <a href="_007-Habillage.html">7. Das Äußere der Uhr</a>
+            <a href="_008-Histoire_Mesure_Temps.html">8. Geschichte der Zeitmessung</a>
+          </div>
+        </div>
+
+        <div class="lang-switcher">
+          <a href="../FR/_005-Familles_Matieres.html" class="lang-btn">FR</a>
+          <a href="../EN/_005-Familles_Matieres.html" class="lang-btn">EN</a>
+          <a href="#" class="lang-btn active">DE</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right-block">
+     <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+    </div>
+
+  </div>
+
+  <!-- ================= NOTEBOOK ================= -->
+  <div class="notebook-container" id="notebook-main">
+    
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Modul 05 : Die 5 Haupt-Werkstofffamilien</h2>
+      </div>
+      <div class="tag-chic">🔬 Metallurgie & Vickers-Härte</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 30px;">
+        <!-- 1. Eisenbasis -->
+        <div style="flex: 1; min-width: 140px; background: #fff; border: 1px solid #2c4d75; border-radius: 8px; text-align: center; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+          <img src="../mat-01-fer.jpg" alt="Eisen" style="width: 100%; height: 65px; object-fit: cover; border-radius: 4px; margin-bottom: 10px;">
+          <div style="color: #d9534f; font-weight: bold; font-size: 15px; margin-bottom: 4px;">1°</div>
+          <div style="color: #2c4d75; font-weight: 600; font-size: 13px;">Eisenbasis (Fe)</div>
+        </div>
+
+        <!-- 2. Kupferbasis -->
+        <div style="flex: 1; min-width: 140px; background: #fff; border: 1px solid #2c4d75; border-radius: 8px; text-align: center; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+          <img src="../Cupper.jpg" alt="Kupfer" style="width: 100%; height: 65px; object-fit: cover; border-radius: 4px; margin-bottom: 10px;">
+          <div style="color: #d9534f; font-weight: bold; font-size: 15px; margin-bottom: 4px;">2°</div>
+          <div style="color: #2c4d75; font-weight: 600; font-size: 13px;">Kupferbasis (Cu)</div>
+        </div>
+
+        <!-- 3. Korund -->
+        <div style="flex: 1; min-width: 140px; background: #fff; border: 1px solid #2c4d75; border-radius: 8px; text-align: center; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+          <img src="../Corindon.jpg" alt="Korund" style="width: 100%; height: 65px; object-fit: cover; border-radius: 4px; margin-bottom: 10px;">
+          <div style="color: #d9534f; font-weight: bold; font-size: 15px; margin-bottom: 4px;">3°</div>
+          <div style="color: #2c4d75; font-weight: 600; font-size: 13px;">Korund (Al₂O₃)</div>
+        </div>
+        
+        <!-- 4. Nickelbasis -->
+        <div style="flex: 1; min-width: 140px; background: #fff; border: 1px solid #2c4d75; border-radius: 8px; text-align: center; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+          <img src="../Nikel.jpg" alt="Nickel" style="width: 100%; height: 65px; object-fit: cover; border-radius: 4px; margin-bottom: 10px;">
+          <div style="color: #d9534f; font-weight: bold; font-size: 15px; margin-bottom: 4px;">4°</div>
+          <div style="color: #2c4d75; font-weight: 600; font-size: 13px;">Nickelbasis (Ni / LIGA)</div>
+        </div>
+
+        <!-- 5. Reines Silizium -->
+        <div style="flex: 1; min-width: 140px; background: #fff; border: 1px solid #2c4d75; border-radius: 8px; text-align: center; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+          <img src="../Silicium.jpg" alt="Silizium" style="width: 100%; height: 65px; object-fit: cover; border-radius: 4px; margin-bottom: 10px;">
+          <div style="color: #d9534f; font-weight: bold; font-size: 15px; margin-bottom: 4px;">5°</div>
+          <div style="color: #2c4d75; font-weight: 600; font-size: 13px;">Reines Silizium (Si)</div>
+        </div>
+      </div>
+
+      <!-- 1. EISENBASIS -->
+      <h2 id="m1">1. Eisenbasis (Fe): Stähle & Wärmebehandlungen</h2>
+      <p>
+        Mit Kohlenstoff legiertes Eisen bildet das Rückgrat der Komponenten, die Reibung und mechanischen Belastungen ausgesetzt sind:
+      </p>
+
+      <ul>
+        <li><strong>Stahl (Fe + Kohlenstoff 1 bis 2% C):</strong>
+          <p>Der in der Uhrmacherei verwendete Stahl durchläuft zwingend einen vollständigen thermischen Zyklus in zwei Schritten:</p>
+          <ul>
+            <li><strong>I. Härten (Abschrecken):</strong> Der Stahl wird auf <strong>800°C</strong> erhitzt, bis er <i>kirschrot</i> glüht, und dann durch Abschrecken in Wasser oder Öl sofort abgekühlt.<br>
+            ➔ <em>Ergebnis:</em> Extreme Materialhärte, aber das Teil wird sehr spröde und zerbrechlich.</li>
+            <li><strong>II. Anlassen:</strong> Das Teil wird auf ca. <strong>280°C</strong> erwärmt, um innere Spannungen abzubauen, ohne die Oberflächenhärte zu verlieren.<br>
+            ➔ <em>Ergebnis:</em> Beseitigung der Sprödigkeit bei gleichzeitiger Erhaltung einer optimalen Festigkeit.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <div class="formula-box">
+        ⚙️ <strong>Grundlegende Werkstattregel:</strong><br>
+        In einer mechanischen Uhr sind <strong>ALLE</strong> Stahlkomponenten des Werks strikt aus <strong>gehärtetem Stahl</strong> gefertigt.
+      </div>
+
+      <ul>
+        <li><strong>Teile aus gehärtetem Stahl:</strong> Unruhwelle, Triebe, Sperrrad, Kronrad, Schrauben, Aufzugswelle.</li>
+        <li><strong>Durnico® (600 Hv):</strong> Hochfester legierter Stahl (Fe + C + Ni + Co). Sehr widerstandsfähiges und hartes Material, aber schwer zu bearbeiten. Verwendet für beanspruchte Federn, Winkeletagen und Aufzugssperräder.</li>
+      </ul>
+
+      <details class="image-popover">
+        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL (01-25) — Werkstofffamilien & Eisenbasis (Stahl, Härten, Anlassen, Durnico)</summary>
+        <div class="img-container">
+          <img src="../01-25 Matieres.jpg" alt="Blatt 01-25">
+        </div>
+      </details>
+
+      <!-- 2. KUPFERLEGIERUNGEN -->
+      <h2 id="m2">2. Kupferlegierungen (Kupferbasis)</h2>
+      <p>
+        Kupferlegierungen werden wegen ihrer guten Bearbeitbarkeit und antimagnetischen Eigenschaften bevorzugt für die Herstellung von Gestellen (Platinen, Brücken) und Rädern eingesetzt:
+      </p>
+
+      <ul>
+        <li><strong>Messing (180 Hv) — Kupfer-Zink-Legierung (Cu + Zn):</strong>
+          <ul>
+            <li><strong>Vorteile:</strong> Gut zu bearbeiten, leicht zerspanbar, antimagnetisch, guter natürlicher Gleitkoeffizient.</li>
+            <li><strong>Nachteil:</strong> Oxidiert an der Luft! Muss unbedingt durch eine galvanische Oberflächenbehandlung geschützt werden: Vergolden, Rhodinieren, Vernickeln (klassische Schichtdicke 1 µm; über 5 µm = <i>Plattieren</i>).</li>
+            <li><strong>Teile:</strong> Radkörper, Brücken, Platinen, Federhaustrommel und -deckel.</li>
+          </ul>
+        </li>
+        <li><strong>Neusilber / Maillechort (220 Hv) — Kupfer-Nickel-Zink-Legierung (Cu + Ni + Zn):</strong>
+          <ul>
+            <li><strong>Eigenschaften:</strong> Härter und mechanisch widerstandsfähiger als Messing, praktisch rostfrei, verändert sich im Laufe der Zeit nicht.</li>
+            <li><strong>Geschichte & Verwendung:</strong> Zwischen 1840 und 1910 wurde es roh ohne galvanische Behandlung verwendet. Heute ist es traditionellen High-End-Kalibern mit dekorativer Oberflächenbehandlung vorbehalten. Die Kosten liegen höher als bei Messing.</li>
+            <li><strong>Teile:</strong> Platinen, High-End-Brücken, Unruhreif.</li>
+          </ul>
+        </li>
+        <li><strong>Bronze — Kupfer-Zinn-Legierung (Cu + Sn):</strong>
+          <ul>
+            <li><strong>Eigenschaften:</strong> Hartes und sprödes Material mit einem außergewöhnlichen Gleitkoeffizienten gegenüber gehärtetem Stahl.</li>
+            <li><strong>Akustik:</strong> Hervorragende akustische Resonanz, traditionell verwendet für Gongfedern und Glocken von Schlaguhren.</li>
+            <li><strong>Teile:</strong> Verschleißfeste mechanische Teile, Lagerbuchsen, Hauptmechanismen.</li>
+          </ul>
+        </li>
+        <li><strong>Glucydur® (380 Hv) — Kupfer-Beryllium-Legierung (Cu + Be):</strong>
+          <ul>
+            <li><strong>Eigenschaften:</strong> Beryllium-Bronze-Legierung mit sehr hoher Härte und Elastizität, antimagnetisch, aber sehr schwer zu bearbeiten.</li>
+            <li><strong>Teile:</strong> Chronometer-Unruhen, Spezialfedern, Mitnehmerfinger (<em>wird nicht für die Spiralfeder verwendet</em>).</li>
+          </ul>
+        </li>
+      </ul>
+
+      <details class="image-popover">
+        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL (01-26) — Kupferlegierungen (Messing, Neusilber, Bronze, Glucydur)</summary>
+        <div class="img-container">
+          <img src="../01-26 Matieres.jpg" alt="Blatt 01-26">
+        </div>
+      </details>
+
+      <!-- 3. KORUND, NICKEL UND SILIZIUM -->
+      <h2 id="m3">3. Korund, Nickelbasis (LIGA) & Reines Silizium</h2>
+
+      <h3>3. Synthetischer Korund (Al₂O₃ - Aluminiumoxid)</h3>
+      <ul>
+        <li><strong>Extreme Härte:</strong> <strong>2200 bis 2400 Hv</strong> (liegt auf der Mohs-Skala direkt unter dem Diamanten).</li>
+        <li><strong>Eigenschaften:</strong> Nahezu null Reibungskoeffizient im Kontakt mit poliertem, gehärtetem Stahl. Die Farbe wird durch Zugabe von Metalloxiden während der thermischen Schmelze erzeugt:
+          <ul>
+            <li><span style="color: #d9534f; font-weight: bold;">Rot:</span> <strong>Rubin</strong> (Ankerpaletten, Hebestein, Lagersteine).</li>
+            <li><span style="color: #1b4965; font-weight: bold;">Blau / Transparent:</span> <strong>Saphir</strong> (Schutzgläser für Gehäuse und Saphirglasböden).</li>
+          </ul>
+        </li>
+        <li><strong>Historische Meilensteine:</strong>
+          <ul>
+            <li><strong>1704:</strong> Erfindung des Bohrverfahrens für natürliche Rubine für Uhrenlager.</li>
+            <li><strong>1904:</strong> Erfindung des Verfahrens zur synthetischen Rubinschmelze (Verneuil-Verfahren).</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>4. Nickelbasis & Mimotec®-Technologie (580 Hv)</h3>
+      <ul>
+        <li><strong>Zusammensetzung:</strong> Reines Nickel oder Nickel-Phosphor-Legierung (Ni + P).</li>
+        <li><strong>Herstellungsverfahren:</strong> Präzises galvanisches Wachstum durch Mikrobearbeitung (<strong>LIGA</strong>-Technologie / Galvanoformung).</li>
+        <li><strong>Eigenschaften:</strong> Extrem hart, leicht, vollkommen antimagnetisch. Ermöglicht die Konstruktion komplexer, massiver oder stark durchbrochener Komponenten.</li>
+        <li><strong>Teile:</strong> Chronographen-Herzhebel/-kurven, komplexe Federn, retrograde Anzeigeräder.</li>
+      </ul>
+
+      <!-- TECHNISCHER FOKUS: MIMOTEC-TECHNOLOGIE -->
+      <div style="background: #f8f9fa; border-left: 4px solid #2c4d75; padding: 15px; margin: 15px 0;">
+        <h4 style="margin-top: 0; color: #2c4d75;">4b. Technischer Fokus: Mimotec-Technologie (UV-LIGA-Verfahren)</h4>
+        <p style="font-size: 14px; margin-bottom: 10px;">
+          Als Pionier in der Uhrmacherei nutzt das Schweizer Unternehmen Mimotec das <strong>UV-LIGA</strong>-Verfahren (<em>Lithographie, Galvanoformung, Abformung</em>). Es handelt sich um eine Mikrobearbeitungsmethode, die Fotografie und galvanische Chemie kombiniert und das traditionelle mechanische Fräsen vollständig ersetzt.
+        </p>
+        <ul style="margin-bottom: 10px; font-size: 14px;">
+          <li><strong>1. Fotolithographie (Die Form):</strong> Ein fotoempfindlicher Lack wird auf eine leitfähige Platte aufgetragen. Durch eine Maske mit UV-Strahlen belichtet, zeichnet der Lack die genaue Kontur des Teils nach. Der nicht belichtete Teil wird aufgelöst, wodurch eine ultrapräzise Hohlform entsteht.</li>
+          <li><strong>2. Galvanoformung (Das Wachstum):</strong> Die Platte wird in ein galvanisches Bad getaucht. Nickel- (oder Nickel-Phosphor-) Ionen scheiden sich Atom für Atom ab und „wachsen“ von unten nach oben, um die Lackform auszufüllen.</li>
+          <li><strong>3. Freigabe des Teils:</strong> Der verbleibende Lack wird chemisch aufgelöst, wodurch die feste und perfekt geformte Metallkomponente freigesetzt wird.</li>
+        </ul>
+        <p style="font-size: 14px; font-weight: bold; margin-bottom: 0; color: #d9534f;">
+          Vorteile für die Haute Horlogerie:
+        </p>
+        <p style="font-size: 14px; margin-top: 4px; margin-bottom: 0;">
+          Absolute Präzision (Mikrontoleranzen), von Natur aus glatte Flanken (Spiegeloberflächengüte ohne manuelles Polieren), völlige Abwesenheit mechanischer Spannungen im Material und die Möglichkeit, komplexe Geometrien zu schaffen, die mit CNC-Bearbeitung unmöglich sind (perfekte innere scharfe Ecken).
+        </p>
+      </div>
+      
+      <h3>5. Reines Silizium (Si)</h3>
+      <ul>
+        <li><strong>Dichte und Leichtigkeit:</strong> Dichte von <strong>2.3 kg/dm³</strong> (Vergleich: Aluminium 2.7, Titan 4.5, Stahl 7.9, Gold 19.3).</li>
+        <li><strong>Bearbeitung:</strong> Plasmastrahlätzen (DRIE-Technologie).</li>
+        <li><strong>Eigenschaften:</strong> Ultraleicht, extrem hart, sehr spröde, 100% antimagnetisch. Es erträgt zyklische elastische Ermüdung hervorragend, toleriert jedoch keine plastische Verformung.</li>
+        <li><strong>Teile:</strong> Unruhe-Spiralfedern, Anker, Hemmungsräder, innovative Unruhen.</li>
+      </ul>
+
+      <details class="image-popover">
+        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL (01-27) — Korund, Rubin, Mimotec® LIGA & Reines Silizium</summary>
+        <div class="img-container">
+          <img src="../01-27 Matieres.jpg" alt="Blatt 01-27">
+        </div>
+      </details>
+
+      <!-- VERGLEICHSTABELLE -->
+      <h2 id="m4">Werkstatt-Vergleichstabelle: Härten & Dichten</h2>
+      <table class="table-custom">
+        <thead>
+          <tr>
+            <th>Werkstoff</th>
+            <th>Formel / Legierung</th>
+            <th>Vickers-Härte</th>
+            <th>Dichte (kg/dm³)</th>
+            <th>Typische Uhrenkomponenten</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Messing</strong></td>
+            <td>Cu + Zn</td>
+            <td>180 Hv</td>
+            <td>8.4 – 8.7</td>
+            <td>Platinen, Brücken, Räder, Federhäuser</td>
+          </tr>
+          <tr>
+            <td><strong>Neusilber</strong></td>
+            <td>Cu + Ni + Zn</td>
+            <td>220 Hv</td>
+            <td>8.7</td>
+            <td>High-End-Gestelle, traditionelle Brücken</td>
+          </tr>
+          <tr>
+            <td><strong>Glucydur®</strong></td>
+            <td>Cu + Be</td>
+            <td>380 Hv</td>
+            <td>8.25</td>
+            <td>Präzisionsunruhen, Mitnehmer, Federn</td>
+          </tr>
+          <tr>
+            <td><strong>Mimotec® (LIGA)</strong></td>
+            <td>Ni + P</td>
+            <td>580 Hv</td>
+            <td>2.3 – 8.9</td>
+            <td>Präzisionskurven, retrograde Räderwerke</td>
+          </tr>
+          <tr>
+            <td><strong>Durnico®</strong></td>
+            <td>Fe + C + Ni + Co</td>
+            <td>600 Hv</td>
+            <td>8.0</td>
+            <td>Widerstandsfähige Federn, Sperrräder, Winkeletagen</td>
+          </tr>
+          <tr>
+            <td><strong>Gehärteter Stahl</strong></td>
+            <td>Fe + C (1 bis 2% C)</td>
+            <td>700 – 800 Hv</td>
+            <td>7.85</td>
+            <td>Unruhwellen, Triebe, Schrauben, Wellen</td>
+          </tr>
+          <tr>
+            <td><strong>Reines Silizium</strong></td>
+            <td>Reines Si</td>
+            <td>1100 Hv</td>
+            <td>2.3</td>
+            <td>Antimagnetische Spiralen, moderne Hemmungen</td>
+          </tr>
+          <tr>
+            <td><strong>Korund (Rubin)</strong></td>
+            <td>Al₂O₃</td>
+            <td>2200 – 2400 Hv</td>
+            <td>4.0</td>
+            <td>Lagersteine, Ankerpaletten, Ellipse</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <!-- ================= UNTERE NAVIGATION UND KONTAKT ================= -->
+  <div style="margin-top: 40px; padding-top: 24px; border-top: 2px dashed #b0c4de; text-align: center;">
+    
+    <p style="font-family: 'Kalam', cursive, sans-serif; font-size: 15pt; color: #900c3f; font-weight: 700; margin-bottom: 20px;">
+      🏁 Ende von Modul 05: Die Grundlagen der uhrmacherischen Metallurgie sind gelegt, aber die eigentliche Entdeckungsreise fängt erst an.
+    </p>
+
+    <!-- EXPERTEN-SUPPORT-BOX -->
+    <div style="background-color: #f4f7fa; border: 1px solid #c8d7e6; border-radius: 8px; padding: 20px; max-width: 650px; margin: 0 auto 28px auto; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+      <p style="font-family: 'Inter', sans-serif; font-size: 11pt; color: #1b365d; margin: 0 0 8px 0; font-weight: 700;">
+        Das uhrmacherische Universum ist unendlich... Setzen wir die Diskussion fort!
+      </p>
+      <p style="font-family: 'Inter', sans-serif; font-size: 9.5pt; color: #5a6b7c; margin: 0 0 16px 0; line-height: 1.5;">
+        Dieses Handbuch versammelt die Grundprinzipien der Werkstoffe in der Uhrmacherei, aber es wäre unmöglich, den gesamten Reichtum dieses Fachgebiets in einem einzigen Kapitel zusammenzufassen. Ich ermutige Sie, Ihre eigenen Recherchen fortzusetzen. Wenn Sie während Ihres Lernens Fragen oder Zweifel haben oder einfach eine Entdeckung teilen möchten, steht Ihnen meine Tür immer offen. Schreiben Sie mir an <strong>swisstime.expert@gmail.com</strong>.
+      </p>
+      <a href="mailto:swisstime.expert@gmail.com" style="display: inline-block; background-color: #d9534f; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 9.5pt; font-weight: 600; transition: background-color 0.2s;">
+        ✉️ Den Experten kontaktieren
+      </a>
+    </div>
+    
+    <!-- NAVIGATIONSTASTEN -->
+    <div class="btn-nav-row" style="justify-content: center; gap: 20px;">
+      <a href="index.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt;">📋 Zum Index zurückkehren</a>
+      <a href="_006-Fhasses_Fabrication.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Weiter zu Modul 06 : Fertigungsphasen ➔</a>
+    </div>
+    
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. Alle Rechte vorbehalten.</footer>
+  
+  <script src="../_ricerca.js"></script>
+</body>
+</html>

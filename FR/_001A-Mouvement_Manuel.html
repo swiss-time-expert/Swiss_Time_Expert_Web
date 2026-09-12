@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - 1. Le Mouvement à Remontage Manuel</title>
+  
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+  
+  <style>
+    /* Allineamento forzato per sincronizzare Header e Notebook durante lo zoom */
+    .header-card, .notebook-container {
+      max-width: 1100px !important;
+      margin: 0 auto !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Stili per le Lingue */
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(255,255,255,0.3); }
+    .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    /* Menu a Tendina */
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+  </style>
+</head>
+<body>
+
+  <div class="header-card">
+    
+    <!-- COLONNA SINISTRA: Testi e Navigazione -->
+    <div class="header-left-block">
+      <div class="badge">Haute Horlogerie — Brevet Fédéral</div>
+      <h1>1. Le Mouvement à Remontage Manuel</h1>
+      <p class="subtitle">Cours d'expertise horlogère — Énergie & Barillet</p>
+      
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Menu Principal</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. Le Mouvement à Remontage Manuel</a>
+            <a href="_002-la-montre-automatique.html">2. La Montre Automatique</a>
+            <a href="_003-Horloge_Electronique.html">3. L'Horloge Électronique & Quartz</a>
+            <a href="_004-Complications.html">4. Les Complications</a>
+            <a href="_005-Familles_Matieres.html">5. Les Familles de Matières</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Phases et Technologies de Fabrication</a>
+            <a href="_007-Habillage.html">7. L'Habillage de la Montre</a>
+            <a href="#">8. Histoire de la Mesure du Temps</a>
+          </div>
+        </div>
+
+        <div class="lang-switcher">
+          <a href="#" class="lang-btn active">FR</a>
+          <a href="../EN/_001A-Mouvement_Manuel.html" class="lang-btn">EN</a>
+          <a href="../DE/_001A-Mouvement_Manuel.html" class="lang-btn">DE</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- COLONNA DESTRA: Logo -->
+    <div class="header-right-block">
+      <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+    </div>
+
+  </div>
+
+  <div class="notebook-container" id="notebook-main">
+    
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Module 01 : Énergie & Barillet</h2>
+      </div>
+      <div class="tag-chic">✍️ Notes de Cours & Schémas</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <h2 id="p1">1. Schéma Bloc du Mouvement Mécanique</h2>
+      <p>Le schéma bloc définit l'architecture fonctionnelle fondamentale de la montre mécanique à remontage manuel. L'énergie accumulée est transmise, distribuée et régulée de façon continue :</p>
+
+      <style>
+        .ste-container { max-width: 1000px; margin: 0 auto; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        .ste-image-wrapper { width: 100%; margin-bottom: 25px; }
+        .ste-base-img { width: 100%; height: auto; display: block; }
+        .ste-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .ste-card { background-color: #f8f9fa; padding: 18px; border-radius: 6px; border-top: 4px solid #1a365d; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .ste-step { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6c757d; letter-spacing: 1px; margin-bottom: 6px; }
+        .ste-title { font-size: 1.05rem; font-weight: bold; color: #1a365d; margin: 0 0 10px 0; line-height: 1.25; }
+        .ste-text { font-size: 0.85rem; line-height: 1.55; color: #333; margin: 0; text-align: left; }
+        @media (max-width: 768px) { .ste-grid { grid-template-columns: 1fr; gap: 15px; } }
+      </style>
+
+      <div class="ste-container">
+        <div class="ste-image-wrapper">
+          <img src="../Treno_del_tempo.png" alt="Schéma fonctionnel de la chaîne cinématique" class="ste-base-img">
+        </div>
+        
+        <div class="ste-grid">
+          <div class="ste-card">
+            <div class="ste-step">Étape 1 : Énergie</div>
+            <h3 class="ste-title">Le Ressort & Le Barillet</h3>
+            <p class="ste-text">Le moteur de la montre. Le ressort-moteur, logé à l'intérieur du tambour (1), emmagasine l'énergie mécanique lors de l'armage.</p>
+          </div>
+          <div class="ste-card">
+            <div class="ste-step">Étape 2 : Transmission</div>
+            <h3 class="ste-title">Le Rouage de Finissage</h3>
+            <p class="ste-text">La démultiplication de la force. Le train d'engrenages (2) achemine l'énergie.</p>
+          </div>
+          <div class="ste-card">
+            <div class="ste-step">Étape 3 : Distribution</div>
+            <h3 class="ste-title">L'Échappement</h3>
+            <p class="ste-text">Le convertisseur cinématique. La roue d'échappement (3) transforme le mouvement rotatif continu en impulsions.</p>
+          </div>
+          <div class="ste-card">
+            <div class="ste-step">Étape 4 : Régulation</div>
+            <h3 class="ste-title">L'Oscillateur</h3>
+            <p class="ste-text">Le cœur isochrone. L'ensemble balancier-spiral (4) dicte le rythme absolu.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="img-always-visible">
+        <div class="interactive-wrapper">
+          <img src="../chaine-cinematique-mecanique.png" alt="Chaîne cinématique complète">
+          <div class="pin-marker" style="top: 14%; left: 49%;">1</div>
+          <div class="pin-marker" style="top: 46%; left: 51%;">2</div>
+          <div class="pin-marker" style="top: 41%; left: 33%;">3</div>
+          <div class="pin-marker" style="top: 56%; left: 44%;">4</div>
+          <div class="pin-marker" style="top: 72%; left: 32%;">5</div>
+          <div class="pin-marker" style="top: 76%; left: 59%;">8</div>
+          <div class="pin-marker" style="top: 64%; left: 60%;">9</div>
+          <div class="pin-marker" style="top: 38%; left: 81%; background: #1b365d;">⚙️</div>
+        </div>
+      </div>
+<div class="legend-grid">
+      <div class="legend-item"><span class="badge-mini">1</span> Barillet</div>
+      <div class="legend-item"><span class="badge-mini">2</span> Roue de centre</div>
+      <div class="legend-item"><span class="badge-mini">3</span> Roue de troisième</div>
+      <div class="legend-item"><span class="badge-mini">4</span> Roue de seconde</div>
+      <div class="legend-item"><span class="badge-mini">5</span> Roue d'échappement</div>
+      <div class="legend-item"><span class="badge-mini">8</span> Balancier</div>
+      <div class="legend-item"><span class="badge-mini">9</span> Spiral</div>
+      <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">⚙️</span> Mécanisme de remontoir</div>
+    </div>
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-02) — Schéma Bloc & Introduction</summary>
+        <div class="img-container"><img src="../01-02 Scema Bloc-Energie-Trasmission-Distribution-Regulation.jpg" alt="Fiche 01-02"></div>
+      </details>
+
+      <h2 id="barillet">2. Organe Moteur (Énergie) : Le Barillet &amp; Systèmes de Remontage</h2>
+      <p>Le barillet est le composant central du stockage d'énergie potentielle du mouvement mécanique.</p>
+
+      <div class="img-always-visible">
+        <img src="../barillet_bride.jpg" alt="Structure interne du barillet et du ressort moteur">
+        <div class="img-caption">📷 VUE TECHNIQUE — Anatomie du barillet et du ressort moteur.</div>
+      </div>
+
+      <div class="formula-box">
+        ⚙️ <strong>Règle d'Atelier :</strong> Sur un mouvement automatique, le remontage manuel par la couronne simule exactement l'état de charge maximale atteint par le rotor.
+      </div>
+
+      <h2 id="croix-de-malte">3. Fixation du Ressort &amp; Régulation de Couple</h2>
+      <div class="img-always-visible">
+        <img src="../croix-de-malte.png" alt="Principe de fonctionnement de la Croix de Malte">
+        <div class="img-caption">📷 SCHÉMA TECHNIQUE — La Croix de Malte : blocage de la rotation pour l'exploitation de la plage de couple linéaire.</div>
+      </div>
+
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-03) — Fixation du Ressort, Croix de Malte &amp; Fusée</summary>
+        <div class="img-container"><img src="../01-03 Energie - Le Ressort (F4.4P46).jpg" alt="Fiche 01-03"></div>
+      </details>
+ <!-- FUSÉE-CHAÎNE INSERITA CORRETTAMENTE NEL CONTENITORE -->
+      <div style="display: flex; gap: 20px; align-items: center; background: #fff; padding: 20px; border: 1px solid #dcdcdc; border-radius: 8px; margin-top: 25px; margin-bottom: 25px;">
+        <div style="flex: 0 0 45%;">
+          <img src="../fusee-chaine.png" alt="Système Fusée-Chaîne" style="width: 100%; height: auto; border-radius: 4px;">
+        </div>
+        <div style="flex: 1;">
+          <h4 style="margin-top: 0; color: #2c4d75; font-size: 16px;">Force Constante : La Fusée-Chaîne</h4>
+          <p style="font-size: 14px; margin-bottom: 10px;">
+            Ce mécanisme historique agit comme une boîte de vitesses à variation continue pour compenser la perte de couple du ressort moteur au fur et à mesure de son désarmage.
+          </p>
+          <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
+            <li><strong>Armage maximal :</strong> Le ressort est fort, la chaîne tire sur le <em>petit diamètre</em> de la fusée (bras de levier court).</li>
+            <li><strong>Désarmage :</strong> Le ressort s'affaiblit, la chaîne tire sur le <em>grand diamètre</em> de la fusée (bras de levier long), égalisant ainsi parfaitement la force transmise à l'échappement.</li>
+          </ul>
+        </div>
+      </div>
+      
+    </div> 
+  </div> 
+
+  <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
+    <a href="_001B-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continuer la lecture ➔</a>
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
+  <script src="../_ricerca.js"></script>
+</body>
+</html>
