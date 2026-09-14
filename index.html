@@ -1,23 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Swiss Time Expert</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding-top: 100px; background: #1a1a1a; color: #ffffff; }
-        h1 { margin-bottom: 20px; }
-        p { color: #888; margin-bottom: 30px; }
-        .lang-btn { display: inline-block; margin: 10px; padding: 15px 30px; background: #007acc; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background 0.2s; }
-        .lang-btn:hover { background: #005999; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - Haute Horlogerie</title>
+  <link rel="icon" type="image/png" href="favicon.png?v=2">
+  <link rel="stylesheet" href="_stile.css">
+  <style>
+    body { 
+      /* Sfondo con immagine dello scappamento e filtro scuro per leggibilità */
+      background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), url('echappement-ancre.jpg') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0; 
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px; 
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+    }
+    .home-container { 
+      max-width: 650px; 
+      width: 100%;
+      background: rgba(255, 255, 255, 0.96); 
+      padding: 45px 35px; 
+      border-radius: 12px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+      text-align: center; 
+      border-top: 6px solid #1a365d; 
+    }
+    .home-logo { 
+      max-width: 280px; 
+      height: auto; 
+      margin-bottom: 25px; 
+    }
+    .badge-home { 
+      display: inline-block; 
+      background: #1a365d; 
+      color: #fff; 
+      padding: 5px 14px; 
+      border-radius: 20px; 
+      font-size: 10pt; 
+      font-weight: bold; 
+      margin-bottom: 15px; 
+      letter-spacing: 0.5px;
+    }
+    h1 { 
+      color: #1a365d; 
+      font-size: 24px; 
+      margin: 0 0 10px 0; 
+    }
+    .subtitle { 
+      color: #555; 
+      font-size: 15px; 
+      margin-bottom: 35px; 
+      line-height: 1.5; 
+    }
+    .lang-grid { 
+      display: flex; 
+      justify-content: center; 
+      gap: 15px; 
+      flex-wrap: wrap; 
+    }
+    .lang-card { 
+      background: #1a365d; 
+      color: white; 
+      padding: 12px 24px; 
+      text-decoration: none; 
+      border-radius: 6px; 
+      font-weight: bold; 
+      font-size: 15px; 
+      transition: all 0.2s; 
+      border: 1px solid #1a365d; 
+    }
+    .lang-card:hover { 
+      background: #d9534f; 
+      border-color: #d9534f; 
+      transform: translateY(-2px); 
+      box-shadow: 0 4px 12px rgba(217, 83, 79, 0.4); 
+    }
+    footer {
+      margin-top: 35px;
+      font-size: 11px;
+      color: #777;
+      border-top: 1px solid #eaeaea;
+      padding-top: 15px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Swiss Time Expert</h1>
-    <p>Please select your language / Bitte wählen Sie Ihre Sprache / Veuillez choisir votre langue</p>
+  <div class="home-container">
+    <img src="Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo" class="home-logo">
     <div>
-        <a href="DE/index.html" class="lang-btn">Deutsch</a>
-        <a href="EN/index.html" class="lang-btn">English</a>
-        <a href="FR/index.html" class="lang-btn">Français</a>
+      <span class="badge-home">Haute Horlogerie — Brevet Fédéral</span>
     </div>
+    <h1>Swiss Time Expert</h1>
+    <p class="subtitle">
+      Plateforme d'expertise horlogère, mécanique et complications.<br>
+      Veuillez sélectionner votre langue :
+    </p>
+    <div class="lang-grid">
+      <a href="FR/index.html" class="lang-card">Français</a>
+      <a href="EN/index.html" class="lang-card">English</a>
+      <a href="DE/index.html" class="lang-card">Deutsch</a>
+    </div>
+    <footer>
+      © 2026 Swiss Time Expert. Tous droits réservés.
+    </footer>
+  </div>
 </body>
 </html>
