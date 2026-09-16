@@ -635,3 +635,14 @@ footer {
   padding-top: 10px !important; /* Cuscinetto per il passaggio del mouse */
   margin-top: 0px !important;
 }
+/* Transizione fluida per la testata */
+.header-card {
+  transition: transform 0.35s ease-in-out, opacity 0.35s ease-in-out;
+}
+
+/* Classe che nasconde il banner facendolo scivolare in alto */
+.header-hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
