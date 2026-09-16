@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swiss Time Expert - 3. L'Horloge Électronique</title>
+  <title>Swiss Time Expert - 3. Electronic & Quartz Clockwork</title>
 
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
 
   <style>
-    /* Allineamento forzato */
+    /* Forced alignment */
     .header-card, .notebook-container {
       max-width: 1100px !important;
       margin: 0 auto !important;
@@ -17,7 +17,7 @@
       box-sizing: border-box;
     }
 
-    /* Stili Lingue e Menu */
+    /* Language and Menu Styles */
     .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
     .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
     .lang-btn:hover { background: rgba(255,255,255,0.3); }
@@ -35,32 +35,32 @@
 </head>
 <body>
 
-  <!-- ================= HEADER A DUE COLONNE ================= -->
+  <!-- ================= TWO-COLUMN HEADER ================= -->
   <div class="header-card">
     
     <div class="header-left-block">
-      <div class="badge">Haute Horlogerie — Brevet Fédéral</div>
-      <h1>3. L'Horloge Électronique & Quartz</h1>
-      <p class="subtitle">Cours d'expertise horlogère — Moteur, Pile & Thermo-Compensation</p>
+      <div class="badge">Haute Horlogerie — Federal Diploma</div>
+      <h1>3. Electronic & Quartz Clockwork</h1>
+      <p class="subtitle">Watchmaking Expertise Course — Motor, Battery & Thermo-Compensation</p>
       
       <div class="header-controls">
         <div class="dropdown">
-          <button class="dropbtn">☰ Menu Principal</button>
+          <button class="dropbtn">☰ Main Menu</button>
           <div class="dropdown-content">
-            <a href="_001A-Mouvement_Manuel.html">1. Le Mouvement à Remontage Manuel</a>
-            <a href="_002-la-montre-automatique.html">2. La Montre Automatique</a>
-            <a href="_003-Horloge_Electronique.html">3. L'Horloge Électronique & Quartz</a>
-            <a href="_004-Complications.html">4. Les Complications</a>
-            <a href="_005-Familles_Matieres.html">5. Les Familles de Matières</a>
-            <a href="_006-Fhasses_Fabrication.html">6. Phases et Technologies de Fabrication</a>
-            <a href="_007-Habillage.html">7. L'Habillage de la Montre</a>
-            <a href="#">8. Histoire de la Mesure du Temps</a>
+            <a href="_001A-Mouvement_Manuel.html">1. The Manual Winding Movement</a>
+            <a href="_002-la-montre-automatique.html">2. The Automatic Watch</a>
+            <a href="_003-Horloge_Electronique.html">3. Electronic & Quartz Clockwork</a>
+            <a href="_004-Complications.html">4. Complications</a>
+            <a href="_005-Familles_Matieres.html">5. Material Families</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Manufacturing Phases and Technologies</a>
+            <a href="_007-Habillage.html">7. The Watch Exterior (Habillage)</a>
+            <a href="#">8. History of Time Measurement</a>
           </div>
         </div>
 
         <div class="lang-switcher">
-          <a href="#" class="lang-btn active">FR</a>
-          <a href="../EN/_003-Horloge_Electronique.html" class="lang-btn">EN</a>
+          <a href="../FR/_003-Horloge_Electronique.html" class="lang-btn">FR</a>
+          <a href="#" class="lang-btn active">EN</a>
           <a href="../DE/_003-Horloge_Electronique.html" class="lang-btn">DE</a>
         </div>
       </div>
@@ -77,45 +77,45 @@
     
     <div class="notebook-header">
       <div class="notebook-title-cell">
-        <h2 class="handwritten-heading">Module 03 : L'Horloge Électronique</h2>
+        <h2 class="handwritten-heading">Module 03: Electronic & Quartz Clockwork</h2>
       </div>
-      <div class="tag-chic">⚡ Électronique & Quartz</div>
+      <div class="tag-chic">⚡ Electronics & Quartz</div>
     </div>
 
     <div class="handwritten-body" id="course-content-area">
 
-      <!-- 1. HISTORIQUE -->
-      <h2 id="e1">1. Historique de l'Horlogerie Électronique</h2>
+      <!-- 1. HISTORY -->
+      <h2 id="e1">1. History of Electronic Watchmaking</h2>
       <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 20px;">
         <div style="flex: 1;">
           <ul style="margin-bottom: 0;">
-            <li><strong>1940 :</strong> Première horloge à quartz (taille imposante, équivalente à un grand réfrigérateur).</li>
-            <li><strong>1958 :</strong> Montre électromécanique (Hamilton 500).</li>
-            <li><strong>1960 :</strong> Montre à diapason résonateur à <strong>300 Hz</strong> (Bulova Accutron) : l'aiguille des secondes avance par 300 petits sauts/seconde, donnant l'illusion d'un glissement fluide.</li>
-            <li><strong>1968 :</strong> Prototype Beta 21 (Centre Électronique Horloger - CEH), montre à quartz suisse oscillant à <strong>32'768 Hz</strong>.</li>
-            <li><strong>1983 :</strong> Lancement de la <strong>Swatch®</strong> : montre à quartz simplifiée où les composants du rouage et du boîtier sont directement intégrés et soudés dans le fond de boîte.</li>
-            <li><strong>1990 :</strong> Montre radiopilotée : synchronisation quotidienne de l'heure par ondes radioélectriques.</li>
-            <li><strong>2010 :</strong> Montre GPS (Seiko Astron) : base de temps à quartz ajustée automatiquement par signaux satellitaires.</li>
+            <li><strong>1940:</strong> First quartz clock (imposing size, equivalent to a large refrigerator)[cite: 6].</li>
+            <li><strong>1958:</strong> Electromechanical watch (Hamilton 500)[cite: 6].</li>
+            <li><strong>1960:</strong> Tuning fork resonator watch at <strong>300 Hz</strong> (Bulova Accutron): the seconds hand advances in 300 small jumps/second, giving the illusion of a smooth glide[cite: 6].</li>
+            <li><strong>1968:</strong> Beta 21 prototype (Centre Électronique Horloger - CEH), Swiss quartz watch oscillating at <strong>32,768 Hz</strong>[cite: 6].</li>
+            <li><strong>1983:</strong> Launch of the <strong>Swatch®</strong>: simplified quartz watch where gear and case components are directly integrated and soldered into the caseback[cite: 6].</li>
+            <li><strong>1990:</strong> Radio-controlled watch: daily time synchronization via radio waves[cite: 6].</li>
+            <li><strong>2010:</strong> GPS watch (Seiko Astron): quartz time base automatically adjusted by satellite signals[cite: 6].</li>
           </ul>
         </div>
         <div style="flex: 0 0 28%; text-align: center; background: #fff; padding: 10px; border: 1px solid #dcdcdc; border-radius: 8px;">
           <img src="../Swatch-1985_hg.jpg" alt="Swatch 1985" style="width: 100%; height: auto; border-radius: 4px;">
-          <p style="font-size: 12px; color: #555; margin: 8px 0 0 0;"><i>Révolution 1983 : Le mouvement intégré au boîtier Swatch</i></p>
+          <p style="font-size: 12px; color: #555; margin: 8px 0 0 0;"><i>1983 Revolution: Movement integrated into the Swatch case</i>[cite: 6]</p>
         </div>
       </div>
 
       <details class="image-popover">
-        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-46) — Historique de l'Horloge Électronique & Principes</summary>
+        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-46) — History of Electronic Clockwork & Principles</summary>
         <div class="img-container">
-          <img src="../01-46 Horloge électronique-History.jpg" alt="Fiche 01-46 Historique">
+          <img src="../01-46 Horloge électronique-History.jpg" alt="Sheet 01-46 History">
         </div>
       </details>
 
-      <!-- 2. ARCHITECTURE ANALOGIQUE VS LCD -->
-      <h2 id="e2">2. Architectures d'Affichage : Analogique vs Écran LCD</h2>
+      <!-- 2. ANALOG VS LCD ARCHITECTURE -->
+      <h2 id="e2">2. Display Architectures: Analog vs LCD Screen</h2>
       
       <p style="margin-bottom: 20px; font-size: 15px;">
-        <em>Note : L'avènement du quartz n'a pas seulement concerné l'horlogerie de masse. Dès les années 1970, les plus prestigieuses manufactures de Haute Horlogerie (Rolex, Omega, Zenith) ont développé des calibres à quartz d'une finition exceptionnelle, prouvant la noblesse de cette technologie.</em>
+        <em>Note: The advent of quartz did not only concern mass watchmaking. Starting in the 1970s, the most prestigious Haute Horlogerie manufactures (Rolex, Omega, Zenith) developed quartz calibers of exceptional finish, proving the nobility of this technology[cite: 6].</em>
       </p>
 
       <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 20px;">
@@ -123,150 +123,150 @@
         <div style="flex: 0 0 35%; text-align: center; background: #fff; padding: 15px; border: 1px solid #dcdcdc; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
           <img src="../zenith-futur-1975.jpg" alt="Zenith Futur TimeCommand 1975" style="width: 100%; height: auto; border-radius: 4px;">
           <p style="font-size: 13px; color: #555; margin: 10px 0 0 0; line-height: 1.4;">
-            <i><strong>Zenith Futur TimeCommand (1975)</strong><br>Un parfait exemple hybride de Haute Horlogerie : affichage analogique traditionnel combiné à un module électronique digital (LED).</i>
+            <i><strong>Zenith Futur TimeCommand (1975)</strong><br>A perfect hybrid example of Haute Horlogerie: traditional analog display combined with a digital electronic module (LED)[cite: 6].</i>
           </p>
         </div>
         
         <div style="flex: 1;">
-          <h3 style="margin-top: 0;">1° Montre à Quartz à Affichage Analogique (à Aiguilles)</h3>
+          <h3 style="margin-top: 0;">1° Analog Quartz Watch (Hands)</h3>
           <p>
-            L'énergie provient de la pile et alimente le <strong>Circuit Intégré (IC)</strong>. L'IC stimule le <strong>Quartz</strong> qui oscille à <strong>32'768 Hz</strong>. L'IC divise cette fréquence et transmet une impulsion électrique bipolaire par seconde à la <strong>bobine</strong>. La bobine magnétise le <strong>stator</strong>, qui fait tourner le <strong>rotor</strong> d'un demi-tour (180°), entraînant le rouage et l'aiguille des secondes.
+            Energy comes from the battery and powers the <strong>Integrated Circuit (IC)</strong>. The IC stimulates the <strong>Quartz</strong> which oscillates at <strong>32,768 Hz</strong>. The IC divides this frequency and transmits a bipolar electrical impulse per second to the <strong>coil</strong>. The coil magnetizes the <strong>stator</strong>, which rotates the <strong>rotor</strong> by a half-turn (180°), driving the gear train and seconds hand[cite: 6].
           </p>
-          <h3>2° Montre à Quartz Entièrement Électronique (Affichage LCD/LED)</h3>
+          <h3>2° Fully Electronic Quartz Watch (LCD/LED Display)</h3>
           <p style="margin-bottom: 0;">
-            <strong>Aucune pièce mécanique mobile !</strong> L'IC gère directement la base de temps et pilote les segments de l'écran (cristaux liquides ou diodes luminescentes), avec possibilité d'éclairage auxiliaire et d'affichage de fonctions multiples à la demande.
+            <strong>No moving mechanical parts!</strong> The IC directly manages the time base and drives the screen segments (liquid crystals or light-emitting diodes), with auxiliary lighting and multi-function display capabilities on demand[cite: 6].
           </p>
         </div>
       </div>
 
-      <!-- 3. COMPOSANTS : CIRCUIT, QUARTZ & PIÉZO-ÉLECTRICITÉ -->
-      <h2 id="e3">3. Composants Clés : Circuit Imprimé, Circuit Intégré & Quartz</h2>
+      <!-- 3. COMPONENTS: CIRCUIT, QUARTZ & PIEZO -->
+      <h2 id="e3">3. Key Components: Printed Circuit, Integrated Circuit & Quartz</h2>
       
       <div style="background: #fff; padding: 15px; border: 1px solid #dcdcdc; border-radius: 8px; margin-bottom: 20px; text-align: center;">
-         <img src="../eta-955-esploso.jpg" alt="Calibre ETA 955.412" style="width: 100%; max-width: 750px; height: auto; border-radius: 4px;">
-         <p style="font-size: 13.5px; color: #555; margin: 10px 0 0 0; font-style: italic;">Calibre ETA-ESA 955.412 éclaté : séparation visible entre la platine mécanique, le circuit électronique (bleu), la bobine (cuivre) et le rouage du temps.</p>
-         <p style="font-size: 11px; color: #999; margin: 8px 0 0 0;">* Image : Domaine public (CC0). ETA est une marque déposée de Swatch Group SA. Utilisation à des fins strictement pédagogiques.</p>
+         <img src="../eta-955-esploso.jpg" alt="Caliber ETA 955.412" style="width: 100%; max-width: 750px; height: auto; border-radius: 4px;">
+         <p style="font-size: 13.5px; color: #555; margin: 10px 0 0 0; font-style: italic;">Exploded ETA-ESA 955.412 caliber: visible separation between the mechanical mainplate, electronic circuit (blue), coil (copper), and time gear train[cite: 6].</p>
+         <p style="font-size: 11px; color: #999; margin: 8px 0 0 0;">* Image: Public Domain (CC0). ETA is a registered trademark of Swatch Group SA. Used for strictly educational purposes[cite: 6].</p>
       </div>
 
       <ul>
-        <li><strong>1° Circuit Imprimé (PCB) :</strong> Réalisé en <strong>résine époxy</strong> (matière isolante). Il sert de structure porteuse et intègre les pistes conductrices en cuivre.</li>
-        <li><strong>2° Circuit Intégré (IC) :</strong> Conçu en <strong>Silicium</strong> pur. Ses 4 fonctions d'atelier :
+        <li><strong>1° Printed Circuit Board (PCB):</strong> Made of <strong>epoxy resin</strong> (insulating material). It serves as a structural base and integrates copper conductive tracks[cite: 6].</li>
+        <li><strong>2° Integrated Circuit (IC):</strong> Designed in pure <strong>Silicon</strong>. Its 4 workshop functions[cite: 6]:
           <ol>
-            <li>Alimenter le résonateur à quartz.</li>
-            <li>Diviser et compter les oscillations (Hz).</li>
-            <li>Délivrer l'impulsion motrice à la bobine chaque seconde.</li>
-            <li>Piloter les fonctions additionnelles (calendrier, thermo-compensation, etc.).</li>
+            <li>Power the quartz resonator[cite: 6].</li>
+            <li>Divide and count oscillations (Hz)[cite: 6].</li>
+            <li>Deliver the driving impulse to the coil every second[cite: 6].</li>
+            <li>Drive additional functions (calendar, thermo-compensation, etc.)[cite: 6].</li>
           </ol>
         </li>
-        <li><strong>3° Le Quartz Diapason :</strong>
+        <li><strong>3° The Quartz Tuning Fork:</strong>
           <ul>
-            <li><strong>Matière :</strong> Quartz de synthèse taillé en forme de diapason miniature.</li>
-            <li><strong>Effet Piézo-Électrique :</strong> 
-              • Sous compression mécanique ➔ Apparition d'une tension électrique aux extrémités.<br>
-              • Inversement, sous tension électrique ➔ Déformation et vibration mécanique continue à <strong>32'768 Hz</strong>.
+            <li><strong>Material:</strong> Synthetic quartz cut in the shape of a miniature tuning fork[cite: 6].</li>
+            <li><strong>Piezo-Electric Effect:</strong> 
+              • Under mechanical compression ➔ Appearance of an electrical voltage at the extremities[cite: 6].<br>
+              • Conversely, under electrical voltage ➔ Continuous deformation and mechanical vibration at <strong>32,768 Hz</strong>[cite: 6].
             </li>
-            <li><strong>Sensibilités & Comportement :</strong><br>
-              • <em>Magnétisme :</em> Le quartz est 100% insensible aux champs magnétiques (seul le moteur pas à pas peut être perturbé).<br>
-              • <em>Chocs :</em> Insensible.<br>
-              • <em>Température :</em> Calibré précisément pour une précision maximale à <strong>25°C</strong>. Tout écart thermique (froid ou chaud) produit une perte de fréquence provoquant un <strong>retard</strong> de la marche.
+            <li><strong>Sensitivities & Behavior:</strong><br>
+              • <em>Magnetism:</em> Quartz is 100% immune to magnetic fields (only the stepper motor can be disturbed)[cite: 6].<br>
+              • <em>Shocks:</em> Immune[cite: 6].<br>
+              • <em>Temperature:</em> Calibrated precisely for peak precision at <strong>25°C</strong>. Any thermal deviation (cold or hot) produces a frequency loss causing a <strong>delay</strong> in the rate[cite: 6].
             </li>
           </ul>
         </li>
       </ul>
       
       <details class="image-popover">
-        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-48) — Circuit Imprimé, Fonctions IC, Effet Piézo-Électrique & Température</summary>
+        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-48) — Printed Circuit, IC Functions, Piezo-Electric Effect & Temperature</summary>
         <div class="img-container">
-          <img src="../01-48 Horloge électronique-Montre a Quarz(P342).jpg" alt="Fiche 01-48 Composants">
+          <img src="../01-48 Horloge électronique-Montre a Quarz(P342).jpg" alt="Sheet 01-48 Components">
         </div>
       </details>
 
-      <!-- 4. CHRONOMÈTRE À QUARTZ & THERMO-COMPENSATION -->
-      <h2 id="e4">4. Chronomètre à Quartz & Thermo-Compensation (Certification COSC)</h2>
+      <!-- 4. QUARTZ CHRONOMETER & THERMO-COMPENSATION -->
+      <h2 id="e4">4. Quartz Chronometer & Thermo-Compensation (COSC Certification)</h2>
       <p>
-        Pour atteindre la précision chronométrique certifiée (COSC Quartz), le calibre intègre un capteur thermique :
+        To achieve certified chronometric precision (COSC Quartz), the caliber incorporates a thermal sensor[cite: 6]:
       </p>
       <ul>
-        <li><strong>Principe :</strong> Un thermomètre intégré à l'IC relève en continu la température du calibre (entre -10°C et +60°C). L'IC calcule la dérive thermique du quartz et ajuste le comptage des impulsions motrices (par inhibition).</li>
-        <li><strong>Performance :</strong> Un mouvement thermo-compensé est <strong>environ 20 fois plus précis</strong> qu'un mouvement à quartz standard.</li>
+        <li><strong>Principle:</strong> A thermometer integrated into the IC continuously monitors caliber temperature (between -10°C and +60°C). The IC calculates thermal drift of the quartz and adjusts the counting of driving impulses (via inhibition)[cite: 6].</li>
+        <li><strong>Performance:</strong> A thermo-compensated movement is <strong>approximately 20 times more precise</strong> than a standard quartz movement[cite: 6].</li>
       </ul>
 
-      <!-- 5. LA PILE HORLOGÈRE ET FONCTION EOL -->
-      <h2 id="e5">5. La Pile Horlogère & Fonction d'Alerte EOL</h2>
+      <!-- 5. WATCH BATTERY & EOL FUNCTION -->
+      <h2 id="e5">5. The Watch Battery & EOL Warning Function</h2>
       <ul>
-        <li><strong>Principe Électrochimique :</strong> Production d'électricité par réaction d'oxydoréduction irréversible entre deux métaux.
+        <li><strong>Electrochemical Principle:</strong> Electricity production via irreversible oxidation-reduction reaction between two metals[cite: 6].
           <ul>
-            <li><strong>Oxydes d'Argent (1.55 V) :</strong> Standard des montres bracelets (courbe de décharge très plate).</li>
-            <li><strong>Lithium (3.0 V) :</strong> Grande capacité, grand diamètre et format plat.</li>
+            <li><strong>Silver Oxides (1.55 V):</strong> Standard for wristwatches (very flat discharge curve)[cite: 6].</li>
+            <li><strong>Lithium (3.0 V):</strong> High capacity, large diameter and flat format[cite: 6].</li>
           </ul>
         </li>
-        <li><strong>Règles d'Atelier pour la Manipulation :</strong>
+        <li><strong>Workshop Rules for Handling:</strong>
           <ul>
-            <li><strong>JAMAIS avec les doigts !</strong> Utiliser obligatoirement des brucelles en plastique ou isolées (risque de micro-court-circuit, dépôt de graisse acide et oxydation des contacts).</li>
-            <li>Stockage au sec à température ambiante.</li>
-            <li>Stockage prolongé des montres : <strong>Tige tirée</strong> pour couper l'alimentation du moteur.</li>
+            <li><strong>NEVER with fingers!</strong> Use plastic or insulated tweezers (micro-short-circuit risk, acid grease deposit, and contact oxidation)[cite: 6].</li>
+            <li>Dry storage at room temperature[cite: 6].</li>
+            <li>Prolonged storage of watches: <strong>Pulled stem</strong> to cut motor power[cite: 6].</li>
           </ul>
         </li>
-        <li><strong>Fonction EOL (End of Life) :</strong>
+        <li><strong>EOL Function (End of Life):</strong>
           <ul>
-            <li>Lorsque la tension chute de $1.55\text{ V}$ à environ $1.20\text{ V}$, l'aiguille des secondes avance par <strong>sauts de 4 secondes</strong> pour avertir l'utilisateur.</li>
-            <li>Il reste environ 2 semaines à 1 mois d'autonomie avant l'arrêt complet ($0.9\text{ V}$).</li>
-            <li><em>Fonction obligatoire sur les montres de plongée (sécurité vitale).</em></li>
+            <li>When voltage drops from $1.55\text{ V}$ to approx. $1.20\text{ V}$, the seconds hand advances in <strong>4-second jumps</strong> to warn the user[cite: 6].</li>
+            <li>About 2 weeks to 1 month of autonomy remains before complete stop ($0.9\text{ V}$)[cite: 6].</li>
+            <li><em>Mandatory function on dive watches (vital safety)[cite: 6].</em></li>
           </ul>
         </li>
       </ul>
 
       <details class="image-popover">
-        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-49) — Caractéristiques des Piles, Manipulation & Courbe de Décharge EOL</summary>
+        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-49) — Battery Characteristics, Handling & EOL Discharge Curve</summary>
         <div class="img-container">
-          <img src="../01-49 Horloge électronique-Montre a Quarz.jpg" alt="Fiche 01-49 Piles">
+          <img src="../01-49 Horloge électronique-Montre a Quarz.jpg" alt="Sheet 01-49 Batteries">
         </div>
       </details>
 
-      <!-- 6. MOTEUR PAS À PAS ET ROUAGE -->
-      <h2 id="e6">6. Moteur Pas à Pas Lavet & Rouage de Finissage</h2>
+      <!-- 6. STEPPER MOTOR AND GEAR TRAIN -->
+      <h2 id="e6">6. Lavet Stepper Motor & Finishing Gear Train</h2>
       <p>
-        Le moteur électromécanique Lavet transforme chaque impulsion électrique de l'IC en un déplacement mécanique :
+        The Lavet electromechanical motor transforms each electrical impulse from the IC into mechanical displacement[cite: 6]:
       </p>
 
       <div style="display: flex; gap: 20px; margin-bottom: 25px;">
          <div style="flex: 1; text-align: center; background: #fff; padding: 15px; border: 1px solid #dcdcdc; border-radius: 8px;">
-            <img src="../Lavet-schema.png" alt="Schéma Lavet" style="width: 100%; max-width: 250px; height: auto;">
-            <p style="font-size: 13px; color: #555; margin: 10px 0 0 0;"><i>Cinématique de rotation du rotor aimanté</i></p>
+            <img src="../Lavet-schema.png" alt="Lavet Diagram" style="width: 100%; max-width: 250px; height: auto;">
+            <p style="font-size: 13px; color: #555; margin: 10px 0 0 0;"><i>Rotation kinematics of the magnetized rotor</i>[cite: 6]</p>
          </div>
          <div style="flex: 1; text-align: center; background: #fff; padding: 15px; border: 1px solid #dcdcdc; border-radius: 8px;">
-            <img src="../Quartz_Clock_Motor.jpg" alt="Bobine Lavet" style="width: 100%; max-width: 250px; height: auto; border-radius: 4px; object-fit: cover;">
-            <p style="font-size: 13px; color: #555; margin: 10px 0 0 0;"><i>Stator et bobine en fil de cuivre pur</i></p>
+            <img src="../Quartz_Clock_Motor.jpg" alt="Lavet Coil" style="width: 100%; max-width: 250px; height: auto; border-radius: 4px; object-fit: cover;">
+            <p style="font-size: 13px; color: #555; margin: 10px 0 0 0;"><i>Stator and coil in pure copper wire</i>[cite: 6]</p>
          </div>
       </div>
 
       <ul>
-        <li><strong>1° Bobine :</strong> Fil de cuivre isolé enroulé générant un champ magnétique lors du passage de l'impulsion.</li>
-        <li><strong>2° Stator :</strong> Pièce en fer doux qui conduit et concentre les lignes de champ magnétique vers le rotor.</li>
-        <li><strong>3° Rotor :</strong> Pignon solidaire d'un aimant permanent bipolaire (Nord/Sud). Le champ magnétique le fait pivoter d'un <strong>demi-tour (180°) par seconde</strong>.</li>
-        <li><strong>4° Rouage réducteur :</strong>
+        <li><strong>1° Coil:</strong> Wound insulated copper wire generating a magnetic field when impulse passes[cite: 6].</li>
+        <li><strong>2° Stator:</strong> Soft iron part guiding and concentrating magnetic field lines toward the rotor[cite: 6].</li>
+        <li><strong>3° Rotor:</strong> Pinion secured to a permanent bipolar magnet (North/South). The magnetic field rotates it by a <strong>half-turn (180°) per second</strong>[cite: 6].</li>
+        <li><strong>4° Reduction gear train:</strong>
           <br>
-          <b>Pignon du rotor ➔ 1<sup>re</sup> roue || Pignon de 1<sup>re</sup> roue ➔ 2<sup>e</sup> roue (Seconde) ➔ 3<sup>e</sup> roue ➔ Chaussée (Affichage des Minutes)</b>
+          <b>Rotor pinion ➔ 1<sup>st</sup> wheel || 1<sup>st</sup> wheel pinion ➔ 2<sup>nd</sup> wheel (Seconds) ➔ 3<sup>rd</sup> wheel ➔ Cannon pinion (Minutes Display)</b>[cite: 6]
           <br>
-          <em>Matières :</em> Roues en laiton, pignons en acier trempé.
+          <em>Materials:</em> Brass wheels, hardened steel pinions[cite: 6].
         </li>
       </ul>
 
       <details class="image-popover">
-        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-52) — Anatomie du Moteur Pas à Pas (Bobine, Stator, Rotor) & Rouage</summary>
+        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-52) — Stepper Motor Anatomy (Coil, Stator, Rotor) & Gear Train</summary>
         <div class="img-container">
-          <img src="../01-52 Horloge électronique-Montre a Quarz-Moteur-Rouage.jpg" alt="Fiche 01-52 Moteur et Rouage">
+          <img src="../01-52 Horloge électronique-Montre a Quarz-Moteur-Rouage.jpg" alt="Sheet 01-52 Motor and Gear Train">
         </div>
       </details>
 
-      <!-- 7. AFFICHAGE, AUTOQUARTZ & SYNTHÈSE -->
-      <h2 id="e7">7. Équilibrage des Aiguilles, Systèmes Hybrides & Bilan d'Atelier</h2>
+      <!-- 7. DISPLAY, AUTOQUARTZ & SYNTHESIS -->
+      <h2 id="e7">7. Hand Balancing, Hybrid Systems & Workshop Overview</h2>
       <ul>
-        <li><strong>Équilibrage de l'Aiguille des Secondes :</strong> En raison du très faible couple moteur disponible, l'aiguille des secondes doit impérativement posséder un contrepoids équilibré pour éviter toute surconsommation d'énergie.</li>
-        <li><strong>Mouvements Hybrides (Autoquartz / Kinetic) :</strong>
+        <li><strong>Seconds Hand Balancing:</strong> Due to very low available motor torque, the seconds hand must possess a balanced counterweight to prevent energy overconsumption[cite: 6].</li>
+        <li><strong>Hybrid Movements (Autoquartz / Kinetic):</strong>
           <ul>
-            <li>Association d'un quartz et d'un accumulateur rechargeable alimenté par une masse oscillante mécanique via une micro-génératrice (dynamo).</li>
-            <li>Exemples : <i>Seiko Kinetic (Kinetic Direct Drive)</i> et <i>ETA Autoquartz (Swatch Group)</i>.</li>
+            <li>Combination of a quartz and a rechargeable accumulator powered by a mechanical oscillating weight via a micro-generator (dynamo)[cite: 6].</li>
+            <li>Examples: <i>Seiko Kinetic (Kinetic Direct Drive)</i> and <i>ETA Autoquartz (Swatch Group)</i>[cite: 6].</li>
           </ul>
         </li>
       </ul>
@@ -274,71 +274,71 @@
       <table class="table-custom">
         <thead>
           <tr>
-            <th>Avantages du Quartz</th>
-            <th>Inconvénients du Quartz</th>
+            <th>Advantages of Quartz</th>
+            <th>Disadvantages of Quartz</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>• Précision exceptionnelle (30 fois supérieure au mouvement mécanique)</td>
-            <td>• Dépendance au changement régulier de la pile</td>
+            <td>• Exceptional precision (30 times higher than mechanical movement)[cite: 6]</td>
+            <td>• Dependence on regular battery replacement[cite: 6]</td>
           </tr>
           <tr>
-            <td>• Coût de fabrication très compétitif</td>
-            <td>• Sensibilité de la marche aux variations thermiques (hors thermo-compensation)</td>
+            <td>• Highly competitive manufacturing cost[cite: 6]</td>
+            <td>• Rate sensitivity to thermal variations (excluding thermo-compensation)[cite: 6]</td>
           </tr>
           <tr>
-            <td>• Encombrement réduit (calibres ultra-plats et compacts)</td>
-            <td>• Durée de vie limitée des composants électroniques sur le long terme</td>
+            <td>• Reduced footprint (ultra-thin and compact calibers)[cite: 6]</td>
+            <td>• Limited lifespan of electronic components over the long term[cite: 6]</td>
           </tr>
           <tr>
-            <td>• Insensible aux chocs mécaniques et au magnétisme direct</td>
-            <td>• Absence de valeur patrimoniale et de noblesse mécanique traditionnelle</td>
+            <td>• Immune to mechanical shocks and direct magnetism[cite: 6]</td>
+            <td>• Absence of heritage value and traditional mechanical nobility[cite: 6]</td>
           </tr>
         </tbody>
       </table>
 
       <details class="image-popover">
-        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-53) — Équilibrage des Aiguilles, Systèmes Autoquartz & Considérations d'Atelier</summary>
+        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-53) — Hand Balancing, Autoquartz Systems & Workshop Considerations</summary>
         <div class="img-container">
-          <img src="../01-53 Horloge électronique-Montre a Quarz-Consideration.jpg" alt="Fiche 01-53 Considérations">
+          <img src="../01-53 Horloge électronique-Montre a Quarz-Consideration.jpg" alt="Sheet 01-53 Considerations">
         </div>
       </details>
 
     </div>
   </div>
 
-  <!-- ================= NAVIGAZIONE INFERIORE E CONTATTO ================= -->
+  <!-- ================= BOTTOM NAVIGATION & CONTACT ================= -->
   <div style="margin-top: 40px; padding-top: 24px; border-top: 2px dashed #b0c4de; text-align: center;">
     
     <p style="font-family: 'Kalam', cursive, sans-serif; font-size: 15pt; color: #900c3f; font-weight: 700; margin-bottom: 20px;">
-      🏁 Fin du Module 03 : Les fondations de la montre à quartz sont posées, mais la véritable exploration ne fait que commencer.
+      🏁 End of Module 03: The foundations of the quartz watch are laid, but the true exploration is only just beginning[cite: 6].
     </p>
 
-    <!-- BOX SUPPORTO ESPERTO -->
+    <!-- EXPERT SUPPORT BOX -->
     <div style="background-color: #f4f7fa; border: 1px solid #c8d7e6; border-radius: 8px; padding: 20px; max-width: 650px; margin: 0 auto 28px auto; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
       <p style="font-family: 'Inter', sans-serif; font-size: 11pt; color: #1b365d; margin: 0 0 8px 0; font-weight: 700;">
-        L'univers horloger est infini... Poursuivons la discussion !
+        The watchmaking universe is infinite... Let's continue the discussion![cite: 6]
       </p>
       <p style="font-family: 'Inter', sans-serif; font-size: 9.5pt; color: #5a6b7c; margin: 0 0 16px 0; line-height: 1.5;">
-        Ce manuel rassemble les principes fondamentaux de l'horlogerie électronique, mais il serait impossible de résumer toute la richesse de ce domaine en quelques chapitres. Je vous encourage à poursuivre vos propres recherches. Si au fil de votre apprentissage vous avez des questions, des doutes, ou si vous souhaitez simplement partager une découverte, ma porte reste grande ouverte. Écrivez-moi à l'adresse <strong>swisstime.expert@gmail.com</strong>.
+        This manual gathers the fundamental principles of electronic watchmaking, but it would be impossible to summarize all the richness of this field in a few chapters. I encourage you to pursue your own research. If during your learning you have questions, doubts, or if you simply wish to share a discovery, my door remains wide open. Write to me at <strong>swisstime.expert@gmail.com</strong>[cite: 6].
       </p>
       <a href="mailto:swisstime.expert@gmail.com" style="display: inline-block; background-color: #d9534f; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 9.5pt; font-weight: 600; transition: background-color 0.2s;">
-        ✉️ Contacter l'Expert
+        ✉️ Contact the Expert
       </a>
     </div>
     
-    <!-- BOTTONI DI NAVIGAZIONE -->
+    <!-- NAVIGATION BUTTONS -->
     <div class="btn-nav-row" style="justify-content: center; gap: 20px;">
-      <a href="index.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt;">📋 Retour à l'Index</a>
-      <a href="_004-Complications.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Passer au Module 04 : Les Complications ➔</a>
+      <a href="index.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt;">📋 Return to Index</a>
+      <a href="_004-Complications.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Proceed to Module 04: Complications ➔</a>
     </div>
     
   </div>
   
-  <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
+  <footer>© 2026 Swiss Time Expert. All rights reserved[cite: 6].</footer>
   
-  <!-- SCRIPT DE PROTECTION -->
+  <!-- PROTECTION SCRIPT -->
   <script>
     document.addEventListener('contextmenu', event => event.preventDefault());
     document.onkeydown = function(e) {
@@ -347,5 +347,6 @@
       }
     };
   </script>
-<script src="script.js"></script>\n</body>
+<script src="script.js"></script>
+</body>
 </html>
