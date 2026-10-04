@@ -118,26 +118,42 @@
         <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-07) — Échappement à Ancre Suisse</summary>
         <div class="img-container"><img src="../01-07 Regulation-l echappement.jpg" alt="Fiche 01-07"></div>
       </details>
-<!-- Inizio Modello 3D Interattivo - Scappamento -->
-<div style="margin: 25px 0; background: #ffffff; padding: 15px; border-radius: 8px; border: 1px solid #dcdcdc; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-  
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
-  <model-viewer 
-    src="../swiss_lever_escapement_mechanism.glb" 
-    alt="Échappement à ancre suisse - Swiss Time Expert" 
-    auto-rotate 
-    camera-controls 
-    autoplay 
-    animation-name="*"
-    style="width: 100%; height: 420px; background-color: #ffffff;">
-  </model-viewer>
+      <!-- Inizio Modello 3D Interattivo - Scappamento -->
+      <div style="margin: 25px 0; background: #ffffff; padding: 15px; border-radius: 8px; border: 1px solid #dcdcdc; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        
+        <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
-  <p style="text-align: center; font-family: inherit; font-size: 0.85em; color: #555; margin-top: 10px; font-style: italic;">
-    Modèle 3D interactif : faites glisser avec la souris ou les doigts pour faire pivoter et observer le mouvement de l'échappement.
-  </p>
-</div>
-<!-- Fine Modello 3D -->
+        <model-viewer 
+          id="escapement-model"
+          src="../swiss_lever_escapement_mechanism.glb" 
+          alt="Échappement à ancre suisse - Swiss Time Expert" 
+          auto-rotate 
+          camera-controls 
+          autoplay 
+          animation-name="*"
+          style="width: 100%; height: 420px; background-color: #ffffff;">
+        </model-viewer>
+
+        <p style="text-align: center; font-family: inherit; font-size: 0.85em; color: #555; margin-top: 10px; font-style: italic;">
+          Modèle 3D interactif : faites glisser avec la souris ou les doigts pour faire pivoter et observer le mouvement de l'échappement.
+        </p>
+
+        <script>
+          const modelViewer = document.querySelector('#escapement-model');
+
+          modelViewer.addEventListener('load', () => {
+            const material = modelViewer.model.materials.find(m => m.name.toLowerCase().includes('ancora') || m.name.toLowerCase().includes('lever'));
+            
+            if (material) {
+              material.pbrMetallicRoughness.setBaseColorFactor([0.9, 0.75, 0.3, 1.0]);
+              material.pbrMetallicRoughness.setMetallicFactor(0.9);
+              material.pbrMetallicRoughness.setRoughnessFactor(0.2);
+            }
+          });
+        </script>
+      </div>
+      <!-- Fine Modello 3D -->
       
       <!-- 7B. APPROFONDISSEMENT -->
       <h2 id="f7b">7B. Approfondissement Technique : Anatomie Fonctionnelle de l'Organe Réglant</h2>
@@ -168,7 +184,7 @@
           <strong>5° La Serge du Balancier :</strong> L'anneau circulaire périphérique du balancier. Sa masse et son diamètre déterminent le <i>moment d'inertie</i> de la pièce. C'est sur la serge que l'on pratique l'équilibrage dynamique (masselottes ou vis de réglage).
         </li>
         <li>
-          <strong>6° Les Bras du Balancier :</strong> Les rayons de liaison rigides reliant le moyeu central (ou l'axe) à la serge extérieure, conçus pour offrir une rigidité maximale tout en minimisant la prise au vent et le poids.
+          <strong>6° Les Bras du Balancier :</strong> Les rayons de liaison rigides reliant le moyeu central (ou l'axe) à la serge extérieure, conçus pour offrir une rigidité maximale tout en minimizando la prise au vent et le poids.
         </li>
         <li>
           <strong>7° La Raquette :</strong> Organe de réglage mobile doté de deux goupilles entre lesquelles glisse le spiral. En déplaçant la raquette, l'horloger modifie la <i>longueur active</i> de la spirale, ce qui permet d'ajuster précisément la marche (avancer ou retarder la montre).
@@ -209,7 +225,7 @@
         <div class="img-caption">📷 MISE EN ÉCHELLE — L'organe régulateur (pont, balancier et spiral) à côté d'une tête d'allumette, illustrant l'extrême miniaturisation de la micromécanique horlogère.</div>
       </div>
      
-            <!-- CHAPITRE 9 -->
+      <!-- CHAPITRE 9 -->
       <h2 id="p9">9. Anatomie du Balancier & Systèmes de Protection (Antichocs)</h2>
       <p>L'évolution majeure réside dans la protection des pivots (0.07mm) contre les chocs mécaniques.</p>
       <div class="img-always-visible"><img src="../Incabloc_01.jpg" alt="Anatomie Incabloc"></div>
@@ -231,5 +247,6 @@
   </div>
   
   <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
-<script src="../script.js"></script>n</body>
+  <script src="../script.js"></script>
+</body>
 </html>
