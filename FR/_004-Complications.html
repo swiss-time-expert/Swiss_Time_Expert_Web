@@ -8,6 +8,8 @@
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
   
+<!-- Google Model Viewer per file GLB 3D -->
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
   <style>
     /* Allineamento forzato */
     .header-card, .notebook-container {
@@ -109,6 +111,21 @@
         <li><strong>Phases de Lune :</strong> Un disque rotatif (généralement orné de deux lunes) qui reproduit fidèlement le cycle synodique de notre satellite, soit environ 29,5 jours (29 jours, 12 heures, 44 minutes et 2,8 secondes).</li>
         <li><strong>Équation du Temps :</strong> Indique la différence complexe entre le temps solaire vrai (dicté par la nature) et le temps solaire moyen (conventionnel de 24 heures), qui fluctue de -16 à +14 minutes au cours de l'année.</li>
       </ul>
+<div style="text-align: center; margin: 30px 0; background: rgba(255, 255, 255, 0.5); padding: 15px; border-radius: 8px; border: 1px solid #dcdcdc;">
+ <model-viewer 
+    src="../mechanical_watch_mechanism.glb" 
+    alt="Movimento orologiero meccanico 3D" 
+    auto-rotate 
+    camera-controls 
+    interaction-prompt="auto"
+    style="width: 100%; height: 500px; background-color: transparent;"
+    exposure="1.2"
+    shadow-intensity="0.5">
+  </model-viewer>
+  <p style="font-size: 13px; color: #555; margin-top: 10px; font-style: italic;">
+    💡 Clicca e trascina per ruotare il movimento a 360° ed esplorarlo anche dal fondello (lato posteriore).
+  </p>
+</div>
 
       <!-- SEZIONE WORK IN PROGRESS -->
       <div style="margin-top: 40px; background-color: #fff9e6; border: 2px dashed #f6c23e; border-radius: 8px; padding: 25px; text-align: center;">
