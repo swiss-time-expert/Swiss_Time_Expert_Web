@@ -116,7 +116,9 @@
     id="watch-viewer"
     src="../mechanical_watch_mechanism.glb" 
     alt="Movimento orologiero meccanico 3D" 
-        camera-controls 
+    auto-rotate 
+    autoplay 
+    camera-controls 
     interaction-prompt="auto"
     style="width: 100%; height: 500px; background-color: transparent;"
     exposure="1.2"
@@ -128,14 +130,13 @@
 </div>
 
 <script>
-  // Script per rendere trasparente il disco nero nel modello 3D
   const modelViewer = document.querySelector('#watch-viewer');
   modelViewer.addEventListener('load', () => {
     modelViewer.model.materials.forEach(material => {
       const color = material.pbrMetallicRoughness.baseColorFactor;
-      // Se il materiale è nero o molto scuro, riduce l'opacità (es. 0.15 = quasi invisibile ma intuibile)
-      if (color[0] < 0.1 && color[1] < 0.1 && color[2] < 0.1) {
-        material.pbrMetallicRoughness.setBaseColorFactor([color[0], color[1], color[2], 0.15]);
+      // Rende trasparente solo il nero assoluto del disco di fondo
+      if (color[0] === 0 && color[1] === 0 && color[2] === 0) {
+        material.pbrMetallicRoughness.setBaseColorFactor([0, 0, 0, 0]);
         material.setAlphaMode('BLEND');
       }
     });
