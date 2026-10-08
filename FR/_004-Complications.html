@@ -112,11 +112,11 @@
         <li><strong>Équation du Temps :</strong> Indique la différence complexe entre le temps solaire vrai (dicté par la nature) et le temps solaire moyen (conventionnel de 24 heures), qui fluctue de -16 à +14 minutes au cours de l'année.</li>
       </ul>
 <div style="text-align: center; margin: 30px 0; background: rgba(255, 255, 255, 0.5); padding: 15px; border-radius: 8px; border: 1px solid #dcdcdc;">
- <model-viewer 
+  <model-viewer 
+    id="watch-viewer"
     src="../mechanical_watch_mechanism.glb" 
     alt="Movimento orologiero meccanico 3D" 
-    auto-rotate 
-    camera-controls 
+        camera-controls 
     interaction-prompt="auto"
     style="width: 100%; height: 500px; background-color: transparent;"
     exposure="1.2"
@@ -126,6 +126,21 @@
     💡 Clicca e trascina per ruotare il movimento a 360° ed esplorarlo anche dal fondello (lato posteriore).
   </p>
 </div>
+
+<script>
+  // Script per rendere trasparente il disco nero nel modello 3D
+  const modelViewer = document.querySelector('#watch-viewer');
+  modelViewer.addEventListener('load', () => {
+    modelViewer.model.materials.forEach(material => {
+      const color = material.pbrMetallicRoughness.baseColorFactor;
+      // Se il materiale è nero o molto scuro, riduce l'opacità (es. 0.15 = quasi invisibile ma intuibile)
+      if (color[0] < 0.1 && color[1] < 0.1 && color[2] < 0.1) {
+        material.pbrMetallicRoughness.setBaseColorFactor([color[0], color[1], color[2], 0.15]);
+        material.setAlphaMode('BLEND');
+      }
+    });
+  });
+</script>
 
       <!-- SEZIONE WORK IN PROGRESS -->
       <div style="margin-top: 40px; background-color: #fff9e6; border: 2px dashed #f6c23e; border-radius: 8px; padding: 25px; text-align: center;">
