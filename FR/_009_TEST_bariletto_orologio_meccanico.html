@@ -17,8 +17,8 @@
             flex-direction: column;
             align-items: center;
         }
-        h1 { font-size: 24px; margin-bottom: 8px; color: #ffffff; }
-        p { color: #888; margin-bottom: 24px; }
+        h1 { font-size: 24px; margin-bottom: 8px; color: #ffffff; text-align: center; }
+        p { color: #888; margin-bottom: 24px; text-align: center; }
         
         /* Stile del box 3D */
         model-viewer {
@@ -28,6 +28,34 @@
             background-color: #1a1a1a;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+
+        /* Stile per il pannello del cursore (stile Schiantoski) */
+        .controls-container {
+            width: 100%;
+            max-width: 700px;
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-sizing: border-box;
+        }
+
+        .controls-container label {
+            font-size: 14px;
+            color: #bbb;
+            font-weight: 500;
+        }
+
+        /* La "barra volume" / slider personalizzata */
+        input[type="range"] {
+            width: 100%;
+            accent-color: #d4af37; /* Colore oro elegante stile orologeria */
+            cursor: pointer;
         }
     </style>
 </head>
@@ -36,15 +64,34 @@
     <h1>Il Bariletto dell'Orologio Meccanico</h1>
     <p>Modello 3D interattivo in scala reale (diametro 11 mm, 80 denti a evolvente)</p>
 
-    <!-- Visualizzatore 3D con il nome file completo e corretto -->
+    <!-- Visualizzatore 3D con percorso che punta alla radice -->
     <model-viewer 
-        src="../bariletto_orologio_meccanico.main_design.glb" 
+        id="bariletto-viewer"
+        src="../barilotto_orologio_meccanico.main_design.glb" 
         alt="Bariletto orologio meccanico" 
-        auto-rotate 
         camera-controls 
         shadow-intensity="1"
         exposure="1"
-        orientation="0deg 0deg 0deg">
+        camera-orbit="45deg 55deg 2.5m">
     </model-viewer>
+
+    <!-- Pannello di controllo con il cursore stile Schiantoski -->
+    <div class="controls-container">
+        <label for="exploder">Muovi il cursore per aprire / esplodere il bariletto:</label>
+        <input type="range" id="exploder" min="0" max="100" value="0">
+    </div>
+
+    <script>
+        // Script di interazione per collegare il cursore al modello 3D
+        const viewer = document.querySelector('#bariletto-viewer');
+        const slider = document.querySelector('#exploder');
+
+        slider.addEventListener('input', (event) => {
+            const progress = event.target.value / 100;
+            // Qui potremo mappare il movimento del cursore sull'animazione o sullo spostamento dei pezzi
+            console.log("Valore cursore:", progress);
+        });
+    </script>
+
 </body>
 </html>
