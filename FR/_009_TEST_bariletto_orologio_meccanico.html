@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bariletto - Orologeria Meccanica</title>
+    <!-- Importiamo lo script ufficiale di Google per il visualizzatore 3D -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 { font-size: 24px; margin-bottom: 8px; color: #ffffff; }
+        p { color: #888; margin-bottom: 24px; }
+        
+        /* Stile del box 3D */
+        model-viewer {
+            width: 100%;
+            max-width: 700px;
+            height: 500px;
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Il Bariletto dell'Orologio Meccanico</h1>
+    <p>Modello 3D interattivo in scala reale (diametro 11 mm, 80 denti a evolvente)</p>
+
+    <!-- Visualizzatore 3D con percorso che punta alla radice -->
+    <model-viewer 
+        src="../.main_design.glb" 
+        alt="Bariletto orologio meccanico" 
+        auto-rotate 
+        camera-controls 
+        shadow-intensity="1"
+        exposure="1"
+        orientation="0deg 0deg 0deg">
+    </model-viewer>
+
+</body>
+</html>
