@@ -67,14 +67,14 @@
 <body>
 
     <h1>Il Bariletto dell'Orologio Meccanico</h1>
-    <p>Modello 3D interattivo in scala reale — Vista esplosa dinamica</p>
+    <p>Modello 3D interattivo in scala reale — Vista esplosa verticale</p>
 
     <!-- Box dove verrà renderizzata la scena 3D -->
     <div id="canvas-container"></div>
 
     <!-- Pannello con il cursore per l'esploso -->
     <div class="controls-container">
-        <label for="exploder">Muovi il cursore per aprire / esplodere il bariletto:</label>
+        <label for="exploder">Muovi il cursore per aprire / esplodere il bariletto in verticale:</label>
         <input type="range" id="exploder" min="0" max="100" value="0">
     </div>
 
@@ -123,36 +123,36 @@
                 const model = gltf.scene;
                 scene.add(model);
 
-                // Analisi e catalogazione dei singoli componenti interni ed esterni
+                // Analisi e catalogazione dei componenti con sfasamento puramente verticale (asse Y)
                 model.traverse((child) => {
                     if (child.isMesh) {
                         const initialPos = child.position.clone();
                         const name = child.name.toLowerCase();
                         
-                        // Direzione e intensità di scostamento per l'esploso
-                        let dir = new THREE.Vector3(0, 1, 0);
-                        let multiplier = 1.0;
+                        let verticalOffset = 0;
 
+                        // Assegniamo quote di sollevamento verticale distinte per componente
                         if (name.includes('albero') || name.includes('shaft') || name.includes('asse')) {
-                            multiplier = 3.0; // L'albero si solleva molto più in alto
+                            verticalOffset = 18; // L'albero si solleva in cima
                         } else if (name.includes('coperchio') || name.includes('cover')) {
-                            multiplier = 2.0; // Il coperchio si solleva sopra il tamburo
+                            verticalOffset = 10; // Il coperchio si solleva subito sopra il tamburo
                         } else if (name.includes('molla') || name.includes('spring')) {
-                            multiplier = 0.8;
+                            verticalOffset = 3;  // La molla interna si espande leggermente in altezza
+                        } else if (name.includes('tamburo') || name.includes('drum') || name.includes('ruota') || name.includes('wheel')) {
+                            verticalOffset = -4; // Il corpo del bariletto scende leggermente verso il basso
                         } else {
-                            multiplier = (initialPos.y >= 0) ? 1.0 : -0.8;
+                            verticalOffset = 6;  // Componenti generici
                         }
 
                         parts.push({
                             mesh: child,
                             initialPos: initialPos,
-                            explodeDir: dir,
-                            maxDist: 12 * multiplier
+                            targetY: initialPos.y + verticalOffset // Posizione finale a fine corsa del cursore
                         });
                     }
                 });
 
-                console.log("Componenti del bariletto caricati correttamente:", parts.length);
+                console.log("Componenti caricati per l'esploso verticale:", parts.length);
             }, undefined, function (error) {
                 console.error('Errore nel caricamento del file GLB:', error);
             });
@@ -168,12 +168,12 @@
             animate();
         }
 
-        // Funzione che sposta i pezzi in base al cursore
+        // Funzione di aggiornamento: X e Z restano bloccati, si muove solo la Y in verticale!
         function updateExplosion(t) {
             parts.forEach(p => {
-                p.mesh.position.x = p.initialPos.x + p.explodeDir.x * p.maxDist * t;
-                p.mesh.position.y = p.initialPos.y + p.explodeDir.y * p.maxDist * t;
-                p.mesh.position.z = p.initialPos.z + p.explodeDir.z * p.maxDist * t;
+                p.mesh.position.x = p.initialPos.x; // Nessun movimento orizzontale X
+                p.mesh.position.z = p.initialPos.z; // Nessun movimento orizzontale Z
+                p.mesh.position.y = p.initialPos.y + (p.targetY - p.initialPos.y) * t; // Spostamento verticale fluido
             });
         }
 
