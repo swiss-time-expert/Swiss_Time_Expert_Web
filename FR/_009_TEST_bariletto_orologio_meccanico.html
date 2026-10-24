@@ -113,32 +113,41 @@
 
                 model.traverse((child) => {
                     if (child.isMesh) {
-                        const initialPos = child.position.clone();
+                        // Calcoliamo il bounding box per centrare geometricamente il pezzo sull'asse X e Z
+                        child.geometry.computeBoundingBox();
+                        const box = child.geometry.boundingBox;
+                        const center = new THREE.Vector3();
+                        box.getCenter(center);
+                        
+                        // Centriamo la geometria azzerando l'offset orizzontale sul piano XZ
+                        child.geometry.translate(-center.x, 0, -center.z);
+
+                        const initialY = child.position.y + center.y;
                         const name = child.name.toLowerCase();
                         
                         let verticalOffset = 0;
 
                         if (name.includes('albero') || name.includes('shaft') || name.includes('asse')) {
-                            verticalOffset = 22; // Albero in cima
+                            verticalOffset = 22;
                         } else if (name.includes('coperchio') || name.includes('cover')) {
-                            verticalOffset = 12; // Coperchio sopra il tamburo
+                            verticalOffset = 12;
                         } else if (name.includes('molla') || name.includes('spring')) {
-                            verticalOffset = 4;  // Molla all'interno
+                            verticalOffset = 4;
                         } else if (name.includes('tamburo') || name.includes('drum') || name.includes('ruota') || name.includes('wheel')) {
-                            verticalOffset = -4; // Tamburo giù
+                            verticalOffset = -4;
                         } else {
-                            verticalOffset = (initialPos.y >= 0) ? 8 : -3;
+                            verticalOffset = (initialY >= 0) ? 8 : -3;
                         }
 
                         parts.push({
                             mesh: child,
-                            initialY: initialPos.y,
-                            targetY: initialPos.y + verticalOffset
+                            initialY: initialY,
+                            targetY: initialY + verticalOffset
                         });
                     }
                 });
 
-                console.log("Componenti coassiali caricati:", parts.length);
+                console.log("Componenti coassiali perfettamente centrati:", parts.length);
             }, undefined, function (error) {
                 console.error('Errore nel caricamento del file GLB:', error);
             });
@@ -153,12 +162,12 @@
             animate();
         }
 
-        // Allineamento coassiale perfetto: X e Z fissati rigorosamente a 0, movimento solo su Y
+        // Posizionamento coassiale forzato a 0 su X e Z, con movimento fluido verticale su Y
         function updateExplosion(t) {
             parts.forEach(p => {
-                p.mesh.position.x = 0; // Centratura coassiale X
-                p.mesh.position.z = 0; // Centratura coassiale Z
-                p.mesh.position.y = p.initialY + (p.targetY - p.initialY) * t; // Spostamento verticale
+                p.mesh.position.x = 0;
+                p.mesh.position.z = 0;
+                p.mesh.position.y = p.initialY + (p.targetY - p.initialY) * t;
             });
         }
 
