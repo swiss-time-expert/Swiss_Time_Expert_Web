@@ -63,7 +63,7 @@
 <body>
 
     <h1>Il Bariletto dell'Orologio Meccanico</h1>
-    <p>Modello 3D interattivo in scala reale — Vista esplosa coassiale verticale</p>
+    <p>Modello 3D interattivo in scala reale — Vista esplosa verticale nativa</p>
 
     <div id="canvas-container"></div>
 
@@ -109,64 +109,37 @@
             const loader = new THREE.GLTFLoader();
             loader.load('../bariletto_orologio_meccanico.main_design.glb', function (gltf) {
                 const model = gltf.scene;
-                
-                // Raccogliamo tutte le mesh e le loro matrici globali
-                const meshesToProcess = [];
+                scene.add(model);
+
                 model.traverse((child) => {
                     if (child.isMesh) {
-                        meshesToProcess.push({
-                            geometry: child.geometry.clone(),
-                            material: child.material,
-                            name: child.name,
-                            matrixWorld: child.matrixWorld.clone()
+                        const initialPos = child.position.clone();
+                        const name = child.name.toLowerCase();
+                        
+                        let verticalOffset = 0;
+
+                        // Assegnazione delle quote di sollevamento verticale in base al componente
+                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse')) {
+                            verticalOffset = 22; // Albero in cima
+                        } else if (name.includes('coperchio') || name.includes('cover')) {
+                            verticalOffset = 12; // Coperchio sopra
+                        } else if (name.includes('molla') || name.includes('spring')) {
+                            verticalOffset = 2;  // Leggero stacco per la molla
+                        } else if (name.includes('tamburo') || name.includes('drum') || name.includes('ruota') || name.includes('wheel')) {
+                            verticalOffset = -4; // Tamburo in basso
+                        } else {
+                            verticalOffset = (initialPos.y >= 0) ? 8 : -4;
+                        }
+
+                        parts.push({
+                            mesh: child,
+                            initialPos: initialPos,
+                            targetY: initialPos.y + verticalOffset
                         });
                     }
                 });
 
-                // Ricostruiamo le mesh centrandole geometricamente sul piano XZ
-                meshesToProcess.forEach((data, index) => {
-                    data.geometry.applyMatrix4(data.matrixWorld);
-                    data.geometry.computeBoundingBox();
-                    
-                    const box = data.geometry.boundingBox;
-                    const center = new THREE.Vector3();
-                    box.getCenter(center);
-                    
-                    // Centratura perfetta azzerando X e Z della geometria
-                    data.geometry.translate(-center.x, 0, -center.z);
-
-                    const mesh = new THREE.Mesh(data.geometry, data.material);
-                    mesh.castShadow = true;
-                    mesh.receiveShadow = true;
-
-                    const name = data.name.toLowerCase();
-                    let verticalOffset = 0;
-
-                    // Assegnazione quote verticali tecniche in base al componente
-                    if (name.includes('albero') || name.includes('shaft') || name.includes('asse')) {
-                        verticalOffset = 25; // Albero in cima
-                    } else if (name.includes('coperchio') || name.includes('cover')) {
-                        verticalOffset = 14; // Coperchio sopra
-                    } else if (name.includes('molla') || name.includes('spring')) {
-                        verticalOffset = 3;  // Molla interna
-                    } else if (name.includes('tamburo') || name.includes('drum') || name.includes('ruota') || name.includes('wheel')) {
-                        verticalOffset = -6; // Tamburo in basso
-                    } else {
-                        verticalOffset = (index * 5) - 5;
-                    }
-
-                    scene.add(mesh);
-
-                    parts.push({
-                        mesh: mesh,
-                        initialY: center.y,
-                        targetY: center.y + verticalOffset
-                    });
-                });
-
-                // Rimuoviamo il modello originale non allineato
-                scene.remove(model);
-                console.log("Bariletto ricostruito coassialmente con successo:", parts.length);
+                console.log("Componenti caricati per l'esploso verticale nativo:", parts.length);
             }, undefined, function (error) {
                 console.error('Errore nel caricamento del file GLB:', error);
             });
@@ -181,12 +154,12 @@
             animate();
         }
 
-        // Movimento blindato esclusivamente sull'asse verticale Y
+        // Manteniamo X e Z originali del CAD, animando esclusivamente la quota Y in verticale
         function updateExplosion(t) {
             parts.forEach(p => {
-                p.mesh.position.x = 0;
-                p.mesh.position.z = 0;
-                p.mesh.position.y = p.initialY + (p.targetY - p.initialY) * t;
+                p.mesh.position.x = p.initialPos.x;
+                p.mesh.position.z = p.initialPos.z;
+                p.mesh.position.y = p.initialPos.y + (p.targetY - p.initialPos.y) * t;
             });
         }
 
