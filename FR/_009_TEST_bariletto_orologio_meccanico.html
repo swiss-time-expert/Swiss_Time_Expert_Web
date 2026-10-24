@@ -18,7 +18,6 @@
         h1 { font-size: 24px; margin-bottom: 8px; color: #ffffff; text-align: center; }
         p { color: #888; margin-bottom: 24px; text-align: center; }
         
-        /* Contenitore della scena 3D */
         #canvas-container {
             width: 100%;
             max-width: 700px;
@@ -31,7 +30,6 @@
             overflow: hidden;
         }
 
-        /* Pannello di controllo con il cursore */
         .controls-container {
             width: 100%;
             max-width: 700px;
@@ -51,7 +49,6 @@
             font-weight: 500;
         }
 
-        /* Barra di scorrimento personalizzata stile ottone/oro */
         input[type="range"] {
             width: 100%;
             accent-color: #d4af37;
@@ -59,7 +56,6 @@
         }
     </style>
 
-    <!-- Librerie ufficiali Three.js, OrbitControls e GLTFLoader -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -69,10 +65,8 @@
     <h1>Il Bariletto dell'Orologio Meccanico</h1>
     <p>Modello 3D interattivo in scala reale — Vista esplosa verticale</p>
 
-    <!-- Box dove verrà renderizzata la scena 3D -->
     <div id="canvas-container"></div>
 
-    <!-- Pannello con il cursore per l'esploso -->
     <div class="controls-container">
         <label for="exploder">Muovi il cursore per aprire / esplodere il bariletto in verticale:</label>
         <input type="range" id="exploder" min="0" max="100" value="0">
@@ -85,27 +79,22 @@
         const container = document.getElementById('canvas-container');
 
         function init() {
-            // 1. Scena
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x1a1a1a);
 
-            // 2. Camera
             camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
             camera.position.set(0, 25, 40);
 
-            // 3. Renderer WebGL
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.shadowMap.enabled = true;
             container.appendChild(renderer.domElement);
 
-            // 4. Controlli Orbit per ruotare e zoomare liberamente con il mouse
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
 
-            // 5. Illuminazione ottimizzata per esaltare ottone e acciaio
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
             scene.add(ambientLight);
 
@@ -117,13 +106,11 @@
             dirLight2.position.set(-20, -20, -20);
             scene.add(dirLight2);
 
-            // 6. Caricamento del file GLB dalla radice del sito
             const loader = new THREE.GLTFLoader();
             loader.load('../bariletto_orologio_meccanico.main_design.glb', function (gltf) {
                 const model = gltf.scene;
                 scene.add(model);
 
-                // Analisi e catalogazione dei componenti con sfasamento puramente verticale (asse Y)
                 model.traverse((child) => {
                     if (child.isMesh) {
                         const initialPos = child.position.clone();
@@ -131,23 +118,24 @@
                         
                         let verticalOffset = 0;
 
-                        // Assegniamo quote di sollevamento verticale distinte per componente
+                        // Riconoscimento intelligente o fallback basato sulla posizione
                         if (name.includes('albero') || name.includes('shaft') || name.includes('asse')) {
-                            verticalOffset = 18; // L'albero si solleva in cima
+                            verticalOffset = 20; // L'asse va molto in alto
                         } else if (name.includes('coperchio') || name.includes('cover')) {
-                            verticalOffset = 10; // Il coperchio si solleva subito sopra il tamburo
+                            verticalOffset = 12; // Il coperchio sale sopra il tamburo
                         } else if (name.includes('molla') || name.includes('spring')) {
-                            verticalOffset = 3;  // La molla interna si espande leggermente in altezza
+                            verticalOffset = 4;  // La molla interna si espande leggermente
                         } else if (name.includes('tamburo') || name.includes('drum') || name.includes('ruota') || name.includes('wheel')) {
-                            verticalOffset = -4; // Il corpo del bariletto scende leggermente verso il basso
+                            verticalOffset = -5; // Il corpo principale scende leggermente
                         } else {
-                            verticalOffset = 6;  // Componenti generici
+                            // Se il nome non è riconosciuto, diamo un offset proporzionale alla sua altezza di partenza
+                            verticalOffset = (initialPos.y >= 0) ? 8 : -3;
                         }
 
                         parts.push({
                             mesh: child,
                             initialPos: initialPos,
-                            targetY: initialPos.y + verticalOffset // Posizione finale a fine corsa del cursore
+                            targetY: initialPos.y + verticalOffset
                         });
                     }
                 });
@@ -157,10 +145,9 @@
                 console.error('Errore nel caricamento del file GLB:', error);
             });
 
-            // 7. Interazione con il cursore (Slider)
             const slider = document.getElementById('exploder');
             slider.addEventListener('input', (event) => {
-                const t = event.target.value / 100; // Valore normalizzato da 0 a 1
+                const t = event.target.value / 100;
                 updateExplosion(t);
             });
 
@@ -168,12 +155,12 @@
             animate();
         }
 
-        // Funzione di aggiornamento: X e Z restano bloccati, si muove solo la Y in verticale!
+        // Blocco assoluto su X e Z: i pezzi si muovono SOLO in verticale (Y)
         function updateExplosion(t) {
             parts.forEach(p => {
-                p.mesh.position.x = p.initialPos.x; // Nessun movimento orizzontale X
-                p.mesh.position.z = p.initialPos.z; // Nessun movimento orizzontale Z
-                p.mesh.position.y = p.initialPos.y + (p.targetY - p.initialPos.y) * t; // Spostamento verticale fluido
+                p.mesh.position.x = p.initialPos.x;
+                p.mesh.position.z = p.initialPos.z;
+                p.mesh.position.y = p.initialPos.y + (p.targetY - p.initialPos.y) * t;
             });
         }
 
