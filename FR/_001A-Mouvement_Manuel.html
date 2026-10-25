@@ -103,10 +103,10 @@
         @media (max-width: 768px) { .ste-grid { grid-template-columns: 1fr; gap: 15px; } }
       </style>
 
+      <!-- 1. MODELLO 3D INTERATTIVO AL POSTO DEL TRENO 2D -->
       <div class="ste-container">
-        <!-- Schema pulito principale del treno del tempo -->
         <div class="ste-image-wrapper">
-          <img src="../Treno_del_tempo.png" alt="Schéma fonctionnel de la chaîne cinématique" class="ste-base-img">
+          <model-viewer src="../Train_fix.main_design.glb" alt="Chaîne cinématique complète 3D" auto-rotate camera-controls style="width: 100%; height: 450px; background-color: #f8f9fa; border-radius: 8px;"></model-viewer>
         </div>
         
         <div class="ste-grid">
@@ -133,10 +133,10 @@
         </div>
       </div>
 
-      <!-- Modello 3D Interattivo GLB con i pin numerati -->
+      <!-- 2. VECCHIA FOTO STATICA CON I PIN NUMERATI (chaine-cinematique-mecanique.png) AL POSTO DEL 3D -->
       <div class="img-always-visible">
         <div class="interactive-wrapper" style="position: relative;">
-          <model-viewer src="../Train_fix.main_design.glb" alt="Chaîne cinématique complète 3D" auto-rotate camera-controls style="width: 100%; height: 450px; background-color: #f8f9fa; border-radius: 8px;"></model-viewer>
+          <img src="../chaine-cinematique-mecanique.png" alt="Chaîne cinématique complète" style="width: 100%; height: auto; display: block;">
           <div class="pin-marker" style="top: 14%; left: 49%; position: absolute; z-index: 5;">1</div>
           <div class="pin-marker" style="top: 46%; left: 51%; position: absolute; z-index: 5;">2</div>
           <div class="pin-marker" style="top: 41%; left: 33%; position: absolute; z-index: 5;">3</div>
