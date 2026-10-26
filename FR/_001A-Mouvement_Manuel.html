@@ -166,8 +166,7 @@
 
       <h2 id="barillet">2. Organe Moteur (Énergie) : Le Barillet &amp; Systèmes de Remontage</h2>
       <p>Le barillet est le composant central du stockage d'énergie potentielle du mouvement mécanique.</p>
-
-   <!-- 3. MODELLO 3D INTERATTIVO CON ESPLOSO VERTICALE E ETICHETTE -->
+<!-- 3. MODELLO 3D INTERATTIVO CON ESPLOSO VERTICALE E ETICHETTE -->
       <div class="img-always-visible">
         <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
           
@@ -196,7 +195,7 @@
       <!-- Librerie Three.js -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+      <script src="https://cdn.jsdelivr.8port/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script> <!-- Manteniamo il loader standard -->
 
       <script>
         (function() {
@@ -243,28 +242,28 @@
                     if (child.isMesh) {
                         const initialPos = child.position.clone();
                         const name = child.name.toLowerCase();
-                        let verticalOffset = 0;
+                        let targetOffset = 0;
                         let labelType = 'tambour';
 
-                        // Regole geometriche di scomposizione basate su nome e posizione
-                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion') || initialPos.length() < 2) {
-                            verticalOffset = 0; // L'albero rimane perfettamente fisso al centro
+                        // Classificazione intelligente basata sulla posizione e geometria del pezzo nel CAD
+                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion') || (Math.abs(initialPos.x) < 1 && Math.abs(initialPos.z) < 1)) {
+                            targetOffset = 0; // L'albero centrale rimane immobile come perno
                             labelType = 'arbre';
                         } else if (name.includes('molla') || name.includes('spring') || name.includes('bride')) {
-                            verticalOffset = 4;  // La molla si sposta leggermente per mostrare l'interno
+                            targetOffset = 6;  // La molla interna si sposta leggermente
                             labelType = 'molla';
-                        } else if (name.includes('coperchio') || name.includes('cover') || initialPos.x < -2) {
-                            verticalOffset = 16; // Coperchio/parte sinistra si apre in alto
+                        } else if (name.includes('coperchio') || name.includes('cover') || initialPos.x < -1) {
+                            targetOffset = 18; // Il coperchio/lato sinistro si apre verso sinistra
                             labelType = 'coperchio';
                         } else {
-                            verticalOffset = -12; // Tamburo e ruota rimangono uniti e scendono in basso
+                            targetOffset = -15; // Il tamburo e la ruota si spostano verso destra
                             labelType = 'tambour';
                         }
 
                         parts.push({
                             mesh: child,
                             initialPos: initialPos,
-                            targetY: initialPos.y + verticalOffset,
+                            targetOffset: targetOffset,
                             labelId: 'label-' + labelType
                         });
                     }
@@ -287,14 +286,15 @@
           }
 
           function updateExplosion(t) {
+            parts.exports = true;
             parts.forEach(p => {
-                // Spostamento dinamico sull'asse X (orizzontale, coerente con l'orientamento del CAD)
-                p.mesh.position.x = p.initialPos.x + (p.targetY - p.initialPos.y) * t;
+                // Spostamento fluido lungo l'asse principale in base al offset calcolato
+                p.mesh.position.x = p.initialPos.x + (p.targetOffset * t);
                 p.mesh.position.y = p.initialPos.y;
                 p.mesh.position.z = p.initialPos.z;
             });
 
-            // Mostra o nasconde le etichette se l'esploso è attivo (> 5%)
+            // Gestione visibilità etichette (appaiono quando l'esploso supera il 5%)
             const showLabels = t > 0.05;
             ['label-arbre', 'label-tambour', 'label-molla', 'label-coperchio'].forEach(id => {
                 const lbl = document.getElementById(id);
@@ -311,7 +311,6 @@
                 const lbl = document.getElementById(p.labelId);
                 if (!lbl || lbl.style.display === 'none') return;
 
-                // Calcola la proiezione 3D -> 2D sullo schermo
                 const tempV = p.mesh.position.clone();
                 tempV.project(camera);
 
@@ -334,7 +333,8 @@
             requestAnimationFrame(animateBarillet);
             controls.update();
             renderer.render(scene, camera);
-            if (document.getElementById('exploder-barillet') && document.getElementById('exploder-barillet').value > 10) {
+            const sliderElem = document.getElementById('exploder-barillet');
+            if (sliderElem && sliderElem.value > 5) {
                 updateLabelsPosition();
             }
           }
