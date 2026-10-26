@@ -167,16 +167,28 @@
       <h2 id="barillet">2. Organe Moteur (Énergie) : Le Barillet &amp; Systèmes de Remontage</h2>
       <p>Le barillet est le composant central du stockage d'énergie potentielle du mouvement mécanique.</p>
 
-      <!-- 3. MODELLO 3D INTERATTIVO DEL BARILETTO ESPLOSO -->
+    <!-- 3. MODELLO 3D INTERATTIVO DEL BARILETTO ESPLOSO -->
       <div class="img-always-visible">
         <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
-          <model-viewer id="barillet-viewer" src="../barillet_fix.glb" alt="Anatomie du barillet et du ressort moteur 3D" auto-rotate camera-controls style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px;"></model-viewer>
-          <!-- Slider di controllo "volume" / esploso del barilletto -->
+          <model-viewer id="barillet-viewer" src="../barillet_fix.glb" alt="Anatomie du barillet et du ressort moteur 3D" camera-controls autoplay animation-name="*" shadow-intensity="1" style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px;"></model-viewer>
+          
+          <!-- Slider di controllo dell'animazione esplosa -->
           <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px; display: flex; align-items: center; gap: 15px;">
-            <label for="explosion-slider" style="font-size: 14px; font-weight: bold; color: #1a365d; white-space: nowrap;">⚙️ Contrôle de l'Éploso (Volume) :</label>
-            <input type="range" id="explosion-slider" min="1" max="3" step="0.05" value="1" style="flex-grow: 1; cursor: pointer;" oninput="document.getElementById('barillet-viewer').scale = `${this.value} ${this.value} ${this.value}`; document.getElementById('val-scale').innerText = Math.round(this.value * 100) + '%';">
-            <span id="val-scale" style="font-size: 13px; font-weight: bold; color: #6c757d; min-width: 40px;">100%</span>
+            <label for="explosion-slider" style="font-size: 14px; font-weight: bold; color: #1a365d; white-space: nowrap;">⚙️ Contrôle de l'Exploso :</label>
+            <input type="range" id="explosion-slider" min="0" max="1" step="0.01" value="0" style="flex-grow: 1; cursor: pointer;" oninput="
+              const viewer = document.getElementById('barillet-viewer');
+              if (viewer.duration) {
+                viewer.currentTime = viewer.duration * this.value;
+                viewer.pause();
+              }
+              document.getElementById('val-scale').innerText = Math.round(this.value * 100) + '%';
+            ">
+            <span id="val-scale" style="font-size: 13px; font-weight: bold; color: #6c757d; min-width: 40px;">0%</span>
           </div>
+
+          <div class="img-caption" style="margin-top: 10px;">📷 VUE TECHNIQUE 3D — Anatomie du barillet et du ressort moteur (Modèle explosé interactif).</div>
+        </div>
+      </div>
 
           <div class="img-caption" style="margin-top: 10px;">📷 VUE TECHNIQUE 3D — Anatomie du barillet et du ressort moteur (Modèle explosé interactif).</div>
         </div>
