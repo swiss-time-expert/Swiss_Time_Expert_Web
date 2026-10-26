@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bariletto - Orologeria Meccanica [TEST 004]</title>
+    <title>Bariletto - Orologeria Meccanica [TEST 005]</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -31,7 +31,7 @@
             overflow: hidden;
         }
 
-        /* Etichette trasparenti con lettere in blu d'atelier che seguono i componenti */
+        /* Etichette trasparenti con lettere in blu d'atelier dinamiche */
         .atelier-label {
             position: absolute;
             display: none;
@@ -81,8 +81,8 @@
 </head>
 <body>
 
-    <h1>Il Bariletto dell'Orologio Meccanico <span style="color: #d9534f; font-size: 18px;">[TEST 004]</span></h1>
-    <p>Modello 3D interattivo — Esploso orizzontale sincronizzato con etichette dinamiche</p>
+    <h1>Il Bariletto dell'Orologio Meccanico <span style="color: #d9534f; font-size: 18px;">[TEST 005]</span></h1>
+    <p>Modello 3D interattivo — Esploso verticale sincronizzato con etichette dinamiche</p>
 
     <div id="canvas-container">
         <!-- Etichette trasparenti fluttuanti con testo blu d'atelier -->
@@ -93,7 +93,7 @@
     </div>
 
     <div class="controls-container">
-        <label for="exploder">Muovi il cursore per aprire / esplodere il bariletto (TEST 004) :</label>
+        <label for="exploder">Muovi il cursore per aprire / esplodere il bariletto in verticale (TEST 005) :</label>
         <input type="range" id="exploder" min="0" max="100" value="0">
     </div>
 
@@ -133,8 +133,6 @@
             scene.add(dirLight2);
 
             const loader = new THREE.GLTFLoader();
-            
-            // Caricamento del modello 3D (se desideri fare il Mix & Match con file separati, qui potrai caricarne un secondo in parallelo)
             loader.load('../bariletto_orologio_meccanico.main_design.glb', function (gltf) {
                 const model = gltf.scene;
                 scene.add(model);
@@ -144,34 +142,34 @@
                         const initialPos = child.position.clone();
                         const name = child.name.toLowerCase();
                         
-                        let horizontalOffset = 0;
+                        let verticalOffset = 0;
                         let labelType = 'tambour';
 
-                        // Assegnazione degli offset lungo l'asse orizzontale (X)
+                        // Assegnazione degli offset lungo l'asse verticale (Y)
                         if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion')) {
-                            horizontalOffset = 0; // L'albero fa da riferimento centrale fisso
+                            verticalOffset = 0; // L'albero fa da riferimento centrale fisso
                             labelType = 'arbre';
                         } else if (name.includes('coperchio') || name.includes('cover')) {
-                            horizontalOffset = 18; // Coperchio si sposta a destra
+                            verticalOffset = 18; // Coperchio sale in alto
                             labelType = 'coperchio';
                         } else if (name.includes('molla') || name.includes('spring')) {
-                            horizontalOffset = 6;  // Molla interna
+                            verticalOffset = 6;  // Molla interna
                             labelType = 'molla';
                         } else {
-                            horizontalOffset = -15; // Tamburo e ruota si spostano a sinistra
+                            verticalOffset = -15; // Tamburo e ruota scendono in basso
                             labelType = 'tambour';
                         }
 
                         parts.push({
                             mesh: child,
                             initialPos: initialPos,
-                            targetX: initialPos.x + horizontalOffset,
+                            targetY: initialPos.y + verticalOffset,
                             labelId: 'label-' + labelType
                         });
                     }
                 });
 
-                console.log("Componenti TEST 004 caricati con successo:", parts.length);
+                console.log("Componenti TEST 005 caricati con successo:", parts.length);
             }, undefined, function (error) {
                 console.error('Errore nel caricamento del file GLB:', error);
             });
@@ -188,9 +186,9 @@
 
         function updateExplosion(t) {
             parts.forEach(p => {
-                // Movimento fluido sull'asse X (orizzontale)
-                p.mesh.position.x = p.initialPos.x + (p.targetX - p.initialPos.x) * t;
-                p.mesh.position.y = p.initialPos.y;
+                // Movimento fluido sull'asse Y (verticale)
+                p.mesh.position.x = p.initialPos.x;
+                p.mesh.position.y = p.initialPos.y + (p.targetY - p.initialPos.y) * t;
                 p.mesh.position.z = p.initialPos.z;
             });
         }
@@ -209,7 +207,6 @@
                 const lbl = document.getElementById(p.labelId);
                 if (!lbl) return;
 
-                // Calcola la posizione 3D corrente del centro del mesh e proiettala sullo schermo 2D
                 const tempV = p.mesh.position.clone();
                 tempV.project(camera);
 
@@ -232,7 +229,6 @@
             controls.update();
             renderer.render(scene, camera);
 
-            // Aggiorna costantemente la posizione dei cartellini per seguirli anche quando ruoti la telecamera col mouse
             updateLabelsPosition();
         }
 
