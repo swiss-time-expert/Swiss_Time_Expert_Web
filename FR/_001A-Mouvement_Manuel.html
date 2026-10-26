@@ -288,14 +288,14 @@
 
           function updateExplosion(t) {
             parts.forEach(p => {
-                // Annamo sull'asse verticale (Y o X a seconda di come è orientato il CAD)
-                p.mesh.position.x = p.initialPos.x;
+                // Spostamento dinamico sull'asse X (orizzontale, coerente con l'orientamento del CAD)
+                p.mesh.position.x = p.initialPos.x + (p.targetY - p.initialPos.y) * t;
+                p.mesh.position.y = p.initialPos.y;
                 p.mesh.position.z = p.initialPos.z;
-                p.mesh.position.y = p.initialPos.y + (p.targetY - p.initialPos.y) * t;
             });
 
-            // Mostra o nasconde le etichette se l'esploso è attivo (> 10%)
-            const showLabels = t > 0.1;
+            // Mostra o nasconde le etichette se l'esploso è attivo (> 5%)
+            const showLabels = t > 0.05;
             ['label-arbre', 'label-tambour', 'label-molla', 'label-coperchio'].forEach(id => {
                 const lbl = document.getElementById(id);
                 if (lbl) lbl.style.display = showLabels ? 'block' : 'none';
