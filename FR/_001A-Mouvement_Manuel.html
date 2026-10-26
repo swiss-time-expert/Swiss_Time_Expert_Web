@@ -167,19 +167,29 @@
       <h2 id="barillet">2. Organe Moteur (Énergie) : Le Barillet &amp; Systèmes de Remontage</h2>
       <p>Le barillet est le composant central du stockage d'énergie potentielle du mouvement mécanique.</p>
 
-      <!-- 3. MODELLO 3D INTERATTIVO CON ESPLOSO VERTICALE THREE.JS (Pignone fisso, coperchi e tamburo apribili) -->
+   <!-- 3. MODELLO 3D INTERATTIVO CON ESPLOSO VERTICALE E ETICHETTE -->
       <div class="img-always-visible">
         <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
           
-          <div id="canvas-container-barillet" style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px; position: relative; overflow: hidden;"></div>
+          <!-- Contenitore 3D e Cartellini dei nomi -->
+          <div id="canvas-container-barillet" style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px; position: relative; overflow: hidden;">
+            
+            <!-- Etichette fluttuanti dei componenti (Formato d'atelier) -->
+            <div id="label-arbre" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Arbre & Pignon</div>
+            <div id="label-tambour" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Tambour & Roue</div>
+            <div id="label-molla" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Ressort-moteur</div>
+            <div id="label-coperchio" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Couvercle</div>
 
+          </div>
+
+          <!-- Slider di controllo dell'esploso -->
           <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px; display: flex; align-items: center; gap: 15px;">
             <label for="exploder-barillet" style="font-size: 14px; font-weight: bold; color: #1a365d; white-space: nowrap;">⚙️ Contrôle de l'Exploso :</label>
             <input type="range" id="exploder-barillet" min="0" max="100" value="0" style="flex-grow: 1; cursor: pointer; accent-color: #1a365d;">
             <span id="val-scale-barillet" style="font-size: 13px; font-weight: bold; color: #6c757d; min-width: 40px;">0%</span>
           </div>
 
-          <div class="img-caption" style="margin-top: 10px;">📷 VUE TECHNIQUE 3D — Anatomie du barillet, ressort et tacques d'accrochage (Modèle explosé interactif).</div>
+          <div class="img-caption" style="margin-top: 10px;">📷 VUE TECHNIQUE 3D — Anatomie du barillet avec labels dynamiques.</div>
         </div>
       </div>
 
@@ -234,32 +244,28 @@
                         const initialPos = child.position.clone();
                         const name = child.name.toLowerCase();
                         let verticalOffset = 0;
+                        let labelType = 'tambour';
 
-                        // 1. PIGNONE / ALBERO CENTRALE: Rimane fisso a quota 0 come perno d'appoggio
-                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion') || name.includes('pivot')) {
-                            verticalOffset = 0; 
-                        } 
-                        // 2. COPERCHIO SUPERIORE / FACCIATA SUPERIORE: Si solleva verso l'alto
-                        else if (name.includes('coperchio_sup') || name.includes('top') || (initialPos.y > 5)) {
-                            verticalOffset = 15; 
-                        } 
-                        // 3. COPERCHIO INFERIORE: Scende verso il basso
-                        else if (name.includes('coperchio_inf') || name.includes('bottom') || (initialPos.y < -5)) {
-                            verticalOffset = -15; 
-                        } 
-                        // 4. MOLLA / RESSORT-MOTEUR (con l'uncino e le tacche visibili all'interno)
-                        else if (name.includes('molla') || name.includes('spring') || name.includes('bride')) {
-                            verticalOffset = 5;  
-                        } 
-                        // 5. TAMBURO E RUOTA DENTATA (corpo unico solido)
-                        else {
-                            verticalOffset = -5; 
+                        // Regole geometriche di scomposizione basate su nome e posizione
+                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion') || initialPos.length() < 2) {
+                            verticalOffset = 0; // L'albero rimane perfettamente fisso al centro
+                            labelType = 'arbre';
+                        } else if (name.includes('molla') || name.includes('spring') || name.includes('bride')) {
+                            verticalOffset = 4;  // La molla si sposta leggermente per mostrare l'interno
+                            labelType = 'molla';
+                        } else if (name.includes('coperchio') || name.includes('cover') || initialPos.x < -2) {
+                            verticalOffset = 16; // Coperchio/parte sinistra si apre in alto
+                            labelType = 'coperchio';
+                        } else {
+                            verticalOffset = -12; // Tamburo e ruota rimangono uniti e scendono in basso
+                            labelType = 'tambour';
                         }
 
                         parts.push({
                             mesh: child,
                             initialPos: initialPos,
-                            targetY: initialPos.y + verticalOffset
+                            targetY: initialPos.y + verticalOffset,
+                            labelId: 'label-' + labelType
                         });
                     }
                 });
@@ -282,9 +288,38 @@
 
           function updateExplosion(t) {
             parts.forEach(p => {
+                // Annamo sull'asse verticale (Y o X a seconda di come è orientato il CAD)
                 p.mesh.position.x = p.initialPos.x;
                 p.mesh.position.z = p.initialPos.z;
                 p.mesh.position.y = p.initialPos.y + (p.targetY - p.initialPos.y) * t;
+            });
+
+            // Mostra o nasconde le etichette se l'esploso è attivo (> 10%)
+            const showLabels = t > 0.1;
+            ['label-arbre', 'label-tambour', 'label-molla', 'label-coperchio'].forEach(id => {
+                const lbl = document.getElementById(id);
+                if (lbl) lbl.style.display = showLabels ? 'block' : 'none';
+            });
+
+            if (showLabels) {
+                updateLabelsPosition();
+            }
+          }
+
+          function updateLabelsPosition() {
+            parts.forEach(p => {
+                const lbl = document.getElementById(p.labelId);
+                if (!lbl || lbl.style.display === 'none') return;
+
+                // Calcola la proiezione 3D -> 2D sullo schermo
+                const tempV = p.mesh.position.clone();
+                tempV.project(camera);
+
+                const x = (tempV.x *  .5 + .5) * container.clientWidth;
+                const y = (tempV.y * -.5 + .5) * container.clientHeight;
+
+                lbl.style.left = (x - 30) + 'px';
+                lbl.style.top = (y - 15) + 'px';
             });
           }
 
@@ -299,6 +334,9 @@
             requestAnimationFrame(animateBarillet);
             controls.update();
             renderer.render(scene, camera);
+            if (document.getElementById('exploder-barillet') && document.getElementById('exploder-barillet').value > 10) {
+                updateLabelsPosition();
+            }
           }
 
           if (document.readyState === 'complete') {
