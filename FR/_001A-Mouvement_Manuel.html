@@ -235,19 +235,25 @@
                         const name = child.name.toLowerCase();
                         let verticalOffset = 0;
 
-                        // Logica di scostamento verticale personalizzata
-                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion')) {
-                            verticalOffset = 0; // Il pignone centrale rimane perfettamente fisso come base d'appoggio
-                        } else if (name.includes('coperchio_sup') || name.includes('cover_top') || (name.includes('coperchio') && initialPos.y > 0)) {
-                            verticalOffset = 18; // Coperchio superiore sale in alto
-                        } else if (name.includes('coperchio_inf') || name.includes('cover_bottom') || (name.includes('coperchio') && initialPos.y <= 0)) {
-                            verticalOffset = -18; // Coperchio inferiore scende in basso
-                        } else if (name.includes('molla') || name.includes('spring') || name.includes('bride')) {
-                            verticalOffset = 6; // La molla con il suo uncino si sposta leggermente per mostrare le tacche
-                        } else if (name.includes('tamburo') || name.includes('drum') || name.includes('ruota') || name.includes('wheel')) {
-                            verticalOffset = -8; // Il tamburo del barilletto scende
-                        } else {
-                            verticalOffset = (initialPos.y >= 0) ? 12 : -10;
+                        // 1. PIGNONE / ALBERO CENTRALE: Rimane fisso a quota 0 come perno d'appoggio
+                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion') || name.includes('pivot')) {
+                            verticalOffset = 0; 
+                        } 
+                        // 2. COPERCHIO SUPERIORE / FACCIATA SUPERIORE: Si solleva verso l'alto
+                        else if (name.includes('coperchio_sup') || name.includes('top') || (initialPos.y > 5)) {
+                            verticalOffset = 15; 
+                        } 
+                        // 3. COPERCHIO INFERIORE: Scende verso il basso
+                        else if (name.includes('coperchio_inf') || name.includes('bottom') || (initialPos.y < -5)) {
+                            verticalOffset = -15; 
+                        } 
+                        // 4. MOLLA / RESSORT-MOTEUR (con l'uncino e le tacche visibili all'interno)
+                        else if (name.includes('molla') || name.includes('spring') || name.includes('bride')) {
+                            verticalOffset = 5;  
+                        } 
+                        // 5. TAMBURO E RUOTA DENTATA (corpo unico solido)
+                        else {
+                            verticalOffset = -5; 
                         }
 
                         parts.push({
