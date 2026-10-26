@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swiss Time Expert - 1. The Manual Winding Movement</title>
+  <title>Swiss Time Expert - 1. The Manual-Winding Movement</title>
   
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
+  
+  <!-- Script for 3D model-viewer (Gear train at the top) -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   
   <style>
     /* Forced alignment to synchronize Header and Notebook during zoom */
@@ -17,7 +20,7 @@
       box-sizing: border-box;
     }
 
-    /* Language Styles */
+    /* Language Switcher Styles */
     .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
     .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
     .lang-btn:hover { background: rgba(255,255,255,0.3); }
@@ -38,24 +41,24 @@
 
   <div class="header-card">
     
-    <!-- LEFT COLUMN: Text and Navigation -->
+    <!-- LEFT COLUMN: Texts and Navigation -->
     <div class="header-left-block">
       <div class="badge">Haute Horlogerie — Federal Diploma</div>
-      <h1>1. The Manual Winding Movement</h1>
-      <p class="subtitle">Watchmaking Expertise Course — Energy & Barrel</p>
+      <h1>1. The Manual-Winding Movement</h1>
+      <p class="subtitle">Watchmaking Expertise Course — Energy & Mainspring Barrel</p>
       
       <div class="header-controls">
         <div class="dropdown">
           <button class="dropbtn">☰ Main Menu</button>
           <div class="dropdown-content">
-            <a href="_001A-Mouvement_Manuel.html">1. The Manual Winding Movement</a>
+            <a href="_001A-Mouvement_Manuel.html">1. The Manual-Winding Movement</a>
             <a href="_002-la-montre-automatique.html">2. The Automatic Watch</a>
-            <a href="_003-Horloge_Electronique.html">3. The Electronic & Quartz Clock</a>
+            <a href="_003-Horloge_Electronique.html">3. Electronic Clock & Quartz</a>
             <a href="_004-Complications.html">4. Complications</a>
             <a href="_005-Familles_Matieres.html">5. Material Families</a>
             <a href="_006-Fhasses_Fabrication.html">6. Manufacturing Phases and Technologies</a>
-            <a href="_007-Habillage.html">7. The Habillage (Watch Exterior)</a>
-            <a href="_008-Histoire_Mesure_Temps.html">8. History of Time Measurement</a>
+            <a href="_007-Habillage.html">7. Watch Exterior & Casing</a>
+            <a href="#">8. History of Time Measurement</a>
           </div>
         </div>
 
@@ -78,15 +81,15 @@
     
     <div class="notebook-header">
       <div class="notebook-title-cell">
-        <h2 class="handwritten-heading">Module 01: Energy & Barrel</h2>
+        <h2 class="handwritten-heading">Module 01 : Energy & Barrel</h2>
       </div>
-      <div class="tag-chic">✍️ Course Notes & Diagrams</div>
+      <div class="tag-chic">✍️ Lecture Notes & Schemas</div>
     </div>
 
     <div class="handwritten-body" id="course-content-area">
 
       <h2 id="p1">1. Block Diagram of the Mechanical Movement</h2>
-      <p>The block diagram defines the fundamental functional architecture of the manual winding mechanical watch. The accumulated energy is continuously transmitted, distributed, and regulated:</p>
+      <p>The block diagram defines the fundamental functional architecture of the manual-winding mechanical watch. The accumulated energy is transmitted, distributed, and regulated continuously:</p>
 
       <style>
         .ste-container { max-width: 1000px; margin: 0 auto; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
@@ -100,26 +103,27 @@
         @media (max-width: 768px) { .ste-grid { grid-template-columns: 1fr; gap: 15px; } }
       </style>
 
+      <!-- 1. TOP INTERACTIVE 3D GEAR TRAIN MODEL -->
       <div class="ste-container">
         <div class="ste-image-wrapper">
-          <img src="../Treno_del_tempo.png" alt="Functional diagram of the kinematic chain" class="ste-base-img">
+          <model-viewer src="../Train_fix.main_design.glb" alt="Complete 3D kinematic chain" auto-rotate camera-controls style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px;"></model-viewer>
         </div>
         
         <div class="ste-grid">
           <div class="ste-card">
             <div class="ste-step">Step 1: Energy</div>
-            <h3 class="ste-title">The Mainspring & The Barrel</h3>
-            <p class="ste-text">The engine of the watch. The mainspring, housed inside the barrel drum (1), stores mechanical energy during winding.</p>
+            <h3 class="ste-title">The Mainspring & Barrel</h3>
+            <p class="ste-text">The watch's engine. The mainspring, housed inside the drum (1), stores mechanical energy during winding.</p>
           </div>
           <div class="ste-card">
             <div class="ste-step">Step 2: Transmission</div>
-            <h3 class="ste-title">The Going Train</h3>
-            <p class="ste-text">The reduction of force. The gear train (2) transmits the energy.</p>
+            <h3 class="ste-title">The Go-Train (Wheel Train)</h3>
+            <p class="ste-text">Force reduction and multiplication. The gear train (2) routes the energy forward.</p>
           </div>
           <div class="ste-card">
             <div class="ste-step">Step 3: Distribution</div>
             <h3 class="ste-title">The Escapement</h3>
-            <p class="ste-text">The kinematic converter. The escape wheel (3) transforms continuous rotary motion into impulses.</p>
+            <p class="ste-text">The kinematic converter. The escape wheel (3) transforms continuous rotational movement into impulses.</p>
           </div>
           <div class="ste-card">
             <div class="ste-step">Step 4: Regulation</div>
@@ -129,69 +133,246 @@
         </div>
       </div>
 
-      <div class="img-always-visible">
-        <div class="interactive-wrapper">
-          <img src="../chaine-cinematique-mecanique.png" alt="Complete kinematic chain">
-          <div class="pin-marker" style="top: 14%; left: 49%;">1</div>
-          <div class="pin-marker" style="top: 46%; left: 51%;">2</div>
-          <div class="pin-marker" style="top: 41%; left: 33%;">3</div>
-          <div class="pin-marker" style="top: 56%; left: 44%;">4</div>
-          <div class="pin-marker" style="top: 72%; left: 32%;">5</div>
-          <div class="pin-marker" style="top: 76%; left: 59%;">8</div>
-          <div class="pin-marker" style="top: 64%; left: 60%;">9</div>
-          <div class="pin-marker" style="top: 38%; left: 81%; background: #1b365d;">⚙️</div>
+      <!-- 2. STATIC IMAGE WITH PINS -->
+      <div class="img-always-visible" style="background: #fff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <div class="interactive-wrapper" style="position: relative; width: 100%;">
+          <img src="../chaine-cinematique-mecanique.png" alt="Complete kinematic chain" style="width: 100%; height: auto; display: block; border-radius: 4px;">
+          <div class="pin-marker" style="top: 14%; left: 49%; position: absolute; z-index: 5;">1</div>
+          <div class="pin-marker" style="top: 46%; left: 51%; position: absolute; z-index: 5;">2</div>
+          <div class="pin-marker" style="top: 41%; left: 33%; position: absolute; z-index: 5;">3</div>
+          <div class="pin-marker" style="top: 56%; left: 44%; position: absolute; z-index: 5;">4</div>
+          <div class="pin-marker" style="top: 72%; left: 32%; position: absolute; z-index: 5;">5</div>
+          <div class="pin-marker" style="top: 76%; left: 59%; position: absolute; z-index: 5;">8</div>
+          <div class="pin-marker" style="top: 64%; left: 60%; position: absolute; z-index: 5;">9</div>
+          <div class="pin-marker" style="top: 38%; left: 81%; background: #1b365d; position: absolute; z-index: 5;">⚙️</div>
         </div>
       </div>
-<div class="legend-grid">
-  <div class="legend-item"><span class="badge-mini">1</span> Barrel</div>
-  <div class="legend-item"><span class="badge-mini">2</span> Center wheel</div>
-  <div class="legend-item"><span class="badge-mini">3</span> Third wheel</div>
-  <div class="legend-item"><span class="badge-mini">4</span> Seconds wheel</div>
-  <div class="legend-item"><span class="badge-mini">5</span> Escape wheel</div>
-  <div class="legend-item"><span class="badge-mini">8</span> Balance wheel</div>
-  <div class="legend-item"><span class="badge-mini">9</span> Hairspring</div>
-  <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">⚙️</span> Winding mechanism</div>
-</div>
+
+      <div class="legend-grid">
+        <div class="legend-item"><span class="badge-mini">1</span> Barrel</div>
+        <div class="legend-item"><span class="badge-mini">2</span> Center wheel</div>
+        <div class="legend-item"><span class="badge-mini">3</span> Third wheel</div>
+        <div class="legend-item"><span class="badge-mini">4</span> Fourth wheel (Seconds)</div>
+        <div class="legend-item"><span class="badge-mini">5</span> Escape wheel</div>
+        <div class="legend-item"><span class="badge-mini">8</span> Balance wheel</div>
+        <div class="legend-item"><span class="badge-mini">9</span> Balance spring</div>
+        <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">⚙️</span> Keyless works (Winding mechanism)</div>
+      </div>
+
       <details class="image-popover">
-        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-02) — Block Diagram & Introduction</summary>
-        <div class="img-container"><img src="../01-02 Scema Bloc-Energie-Trasmission-Distribution-Regulation.jpg" alt="Note 01-02"></div>
+        <summary>📷 ORIGINAL MANUSCRIPT SHEET (01-02) — Block Diagram & Introduction</summary>
+        <div class="img-container"><img src="../01-02 Scema Bloc-Energie-Trasmission-Distribution-Regulation.jpg" alt="Sheet 01-02"></div>
       </details>
 
-      <h2 id="barillet">2. Motive Organ (Energy): The Barrel &amp; Winding Systems</h2>
-      <p>The barrel is the central component for storing potential energy in the mechanical movement.</p>
+      <h2 id="barillet">2. Motor Organ (Energy): The Barrel &amp; Winding Systems</h2>
+      <p>The barrel is the central component for storing potential energy in a mechanical movement.</p>
 
+      <!-- 3. INTERACTIVE 3D MODEL WITH EXPLODED VIEW AND LABELS -->
       <div class="img-always-visible">
-        <img src="../barillet_bride.jpg" alt="Internal structure of the barrel and mainspring">
-        <div class="img-caption">📷 TECHNICAL VIEW — Anatomy of the barrel and mainspring.</div>
+        <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
+          
+          <!-- 3D Container and Name Tags -->
+          <div id="canvas-container-barillet" style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px; position: relative; overflow: hidden;">
+            
+            <!-- Floating component labels (Atelier Format) -->
+            <div id="label-arbre" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Arbor & Pinion</div>
+            <div id="label-tambour" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Drum & Wheel</div>
+            <div id="label-molla" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Mainspring</div>
+            <div id="label-coperchio" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Cover / Lid</div>
+
+          </div>
+
+          <!-- Explosion Control Slider -->
+          <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px; display: flex; align-items: center; gap: 15px;">
+            <label for="exploder-barillet" style="font-size: 14px; font-weight: bold; color: #1a365d; white-space: nowrap;">⚙️ Explosion Control:</label>
+            <input type="range" id="exploder-barillet" min="0" max="100" value="0" style="flex-grow: 1; cursor: pointer; accent-color: #1a365d;">
+            <span id="val-scale-barillet" style="font-size: 13px; font-weight: bold; color: #6c757d; min-width: 40px;">0%</span>
+          </div>
+
+          <div class="img-caption" style="margin-top: 10px;">📷 3D TECHNICAL VIEW — Anatomy of the barrel with dynamic labels.</div>
+        </div>
       </div>
+
+      <!-- Clean Three.js Libraries -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+      <script>
+        let scene_barillet, camera_barillet, renderer_barillet, controls_barillet;
+        let parts_barillet = [];
+
+        const container_barillet = document.getElementById('canvas-container-barillet');
+
+        function initBarillet3D() {
+            if (!container_barillet) return;
+
+            scene_barillet = new THREE.Scene();
+            scene_barillet.background = new THREE.Color(0xffffff);
+
+            camera_barillet = new THREE.PerspectiveCamera(45, container_barillet.clientWidth / container_barillet.clientHeight, 0.1, 1000);
+            camera_barillet.position.set(0, 25, 40);
+
+            renderer_barillet = new THREE.WebGLRenderer({ antialias: true });
+            renderer_barillet.setSize(container_barillet.clientWidth, container_barillet.clientHeight);
+            renderer_barillet.setPixelRatio(window.devicePixelRatio);
+            renderer_barillet.shadowMap.enabled = true;
+            container_barillet.appendChild(renderer_barillet.domElement);
+
+            controls_barillet = new THREE.OrbitControls(camera_barillet, renderer_barillet.domElement);
+            controls_barillet.enableDamping = true;
+            controls_barillet.dampingFactor = 0.05;
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+            scene_barillet.add(ambientLight);
+
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.2);
+            dirLight1.position.set(20, 40, 20);
+            scene_barillet.add(dirLight1);
+
+            const dirLight2 = new THREE.DirectionalLight(0x88bbff, 0.6);
+            dirLight2.position.set(-20, -20, -20);
+            scene_barillet.add(dirLight2);
+
+            const loader = new THREE.GLTFLoader();
+            loader.load('../barillet_fix.glb', function (gltf) {
+                const model = gltf.scene;
+                scene_barillet.add(model);
+
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        const initialPos = child.position.clone();
+                        const name = child.name.toLowerCase();
+                        
+                        let targetOffset = 0;
+                        let labelType = 'tambour';
+
+                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion')) {
+                            targetOffset = 0;
+                            labelType = 'arbre';
+                        } else if (name.includes('coperchio') || name.includes('cover')) {
+                            targetOffset = 18;
+                            labelType = 'coperchio';
+                        } else if (name.includes('molla') || name.includes('spring')) {
+                            targetOffset = 6;
+                            labelType = 'molla';
+                        } else {
+                            targetOffset = -15;
+                            labelType = 'tambour';
+                        }
+
+                        parts_barillet.push({
+                            mesh: child,
+                            initialPos: initialPos,
+                            targetOffset: targetOffset,
+                            labelId: 'label-' + labelType
+                        });
+                    }
+                });
+            }, undefined, function (error) {
+                console.error('Error loading GLB file:', error);
+            });
+
+            const slider = document.getElementById('exploder-barillet');
+            if (slider) {
+                slider.addEventListener('input', (event) => {
+                    const t = event.target.value / 100;
+                    updateBarilletExplosion(t);
+                    document.getElementById('val-scale-barillet').innerText = event.target.value + '%';
+                });
+            }
+
+            window.addEventListener('resize', onWindowResizeBarillet, false);
+            animateBarillet();
+        }
+
+        function updateBarilletExplosion(t) {
+            parts_barillet.forEach(p => {
+                p.mesh.position.x = p.initialPos.x + (p.targetOffset * t);
+                p.mesh.position.y = p.initialPos.y;
+                p.mesh.position.z = p.initialPos.z;
+            });
+
+            const showLabels = t > 0.05;
+            ['label-arbre', 'label-tambour', 'label-molla', 'label-coperchio'].forEach(id => {
+                const lbl = document.getElementById(id);
+                if (lbl) lbl.style.display = showLabels ? 'block' : 'none';
+            });
+
+            if (showLabels) {
+                updateBarilletLabelsPosition();
+            }
+        }
+
+        function updateBarilletLabelsPosition() {
+            parts_barillet.forEach(p => {
+                const lbl = document.getElementById(p.labelId);
+                if (!lbl || lbl.style.display === 'none') return;
+
+                const tempV = p.mesh.position.clone();
+                tempV.project(camera_barillet);
+
+                const x = (tempV.x *  .5 + .5) * container_barillet.clientWidth;
+                const y = (tempV.y * -.5 + .5) * container_barillet.clientHeight;
+
+                lbl.style.left = (x - 30) + 'px';
+                lbl.style.top = (y - 15) + 'px';
+            });
+        }
+
+        function onWindowResizeBarillet() {
+            if (!container_barillet) return;
+            camera_barillet.aspect = container_barillet.clientWidth / container_barillet.clientHeight;
+            camera_barillet.updateProjectionMatrix();
+            renderer_barillet.setSize(container_barillet.clientWidth, container_barillet.clientHeight);
+        }
+
+        function animateBarillet() {
+            requestAnimationFrame(animateBarillet);
+            controls_barillet.update();
+            renderer_barillet.render(scene_barillet, camera_barillet);
+            
+            const sliderElem = document.getElementById('exploder-barillet');
+            if (sliderElem && sliderElem.value > 5) {
+                updateBarilletLabelsPosition();
+            }
+        }
+
+        if (document.readyState === 'complete') {
+            initBarillet3D();
+        } else {
+            window.addEventListener('load', initBarillet3D);
+        }
+      </script>
 
       <div class="formula-box">
-        ⚙️ <strong>Workshop Rule:</strong> On an automatic movement, manual winding via the crown simulates exactly the state of maximum charge reached by the rotor.
+        ⚙️ <strong>Atelier Rule:</strong> On an automatic movement, manual winding via the crown precisely simulates the maximum charge state achieved by the rotor.
       </div>
 
-      <h2 id="croix-de-malte">3. Mainspring Attachment &amp; Torque Regulation</h2>
+      <h2 id="croix-de-malte">3. Spring Attachment &amp; Torque Regulation</h2>
       <div class="img-always-visible">
-        <img src="../croix-de-malte.png" alt="Operating principle of the Maltese Cross">
-        <div class="img-caption">📷 TECHNICAL DIAGRAM — The Maltese Cross: blocking rotation to utilize the linear torque range.</div>
+        <img src="../croix-de-malte.png" alt="Maltese cross operating principle">
+        <div class="img-caption">📷 TECHNICAL SCHEMATIC — The Maltese Cross: blocking rotation to exploit the linear torque range.</div>
       </div>
 
       <details class="image-popover">
-        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-03) — Mainspring Attachment, Maltese Cross &amp; Fusée</summary>
-        <div class="img-container"><img src="../01-03 Energie - Le Ressort (F4.4P46).jpg" alt="Note 01-03"></div>
+        <summary>📷 ORIGINAL MANUSCRIPT SHEET (01-03) — Spring Attachment, Maltese Cross &amp; Fusee</summary>
+        <div class="img-container"><img src="../01-03 Energie - Le Ressort (F4.4P46).jpg" alt="Sheet 01-03"></div>
       </details>
- <!-- FUSÉE-CHAÎNE CORRECTLY INSERTED IN THE CONTAINER -->
+
+      <!-- FUSEE-CHAIN -->
       <div style="display: flex; gap: 20px; align-items: center; background: #fff; padding: 20px; border: 1px solid #dcdcdc; border-radius: 8px; margin-top: 25px; margin-bottom: 25px;">
         <div style="flex: 0 0 45%;">
-          <img src="../fusee-chaine.png" alt="Fusée and Chain System" style="width: 100%; height: auto; border-radius: 4px;">
+          <img src="../fusee-chaine.png" alt="Fusee-Chain System" style="width: 100%; height: auto; border-radius: 4px;">
         </div>
         <div style="flex: 1;">
-          <h4 style="margin-top: 0; color: #2c4d75; font-size: 16px;">Constant Force: The Fusée and Chain</h4>
+          <h4 style="margin-top: 0; color: #2c4d75; font-size: 16px;">Constant Force: The Fusee-Chain</h4>
           <p style="font-size: 14px; margin-bottom: 10px;">
-            This historical mechanism acts as a continuously variable transmission to compensate for the loss of torque from the mainspring as it unwinds.
+            This historical mechanism acts like a continuously variable transmission to compensate for the mainspring's torque loss as it unwinds.
           </p>
           <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
-            <li><strong>Maximum winding:</strong> The spring is strong, the chain pulls on the <em>small diameter</em> of the fusée (short lever arm).</li>
-            <li><strong>Unwinding:</strong> The spring weakens, the chain pulls on the <em>large diameter</em> of the fusée (long lever arm), thus perfectly equalizing the force transmitted to the escapement.</li>
+            <li><strong>Maximum winding:</strong> The spring is strong; the chain pulls on the <em>small diameter</em> of the fusee (short lever arm).</li>
+            <li><strong>Unwinding:</strong> The spring weakens; the chain pulls on the <em>large diameter</em> of the fusee (long lever arm), perfectly equalizing the force transmitted to the escapement.</li>
           </ul>
         </div>
       </div>
@@ -205,5 +386,6 @@
   
   <footer>© 2026 Swiss Time Expert. All rights reserved.</footer>
   <script src="../_ricerca.js"></script>
-<script src="../script.js"></script>n</body>
+  <script src="../script.js"></script>
+</body>
 </html>
