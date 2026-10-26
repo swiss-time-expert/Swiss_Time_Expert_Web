@@ -166,7 +166,8 @@
 
       <h2 id="barillet">2. Organe Moteur (Énergie) : Le Barillet &amp; Systèmes de Remontage</h2>
       <p>Le barillet est le composant central du stockage d'énergie potentielle du mouvement mécanique.</p>
-<!-- 3. MODELLO 3D INTERATTIVO CON ESPLOSO VERTICALE E ETICHETTE -->
+
+      <!-- 3. MODELLO 3D INTERATTIVO CON ESPLOSO E ETICHETTE -->
       <div class="img-always-visible">
         <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
           
@@ -192,75 +193,75 @@
         </div>
       </div>
 
-      <!-- Librerie Three.js -->
+      <!-- Librerie Three.js corrette e pulite -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-      <script src="https://cdn.jsdelivr.8port/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script> <!-- Manteniamo il loader standard -->
+      <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
       <script>
-        (function() {
-          let scene, camera, renderer, controls;
-          let parts = [];
-          const container = document.getElementById('canvas-container-barillet');
+        let scene_barillet, camera_barillet, renderer_barillet, controls_barillet;
+        let parts_barillet = [];
 
-          if (!container) return;
+        const container_barillet = document.getElementById('canvas-container-barillet');
 
-          function initBarillet3D() {
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xffffff);
+        function initBarillet3D() {
+            if (!container_barillet) return;
 
-            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.set(0, 25, 40);
+            scene_barillet = new THREE.Scene();
+            scene_barillet.background = new THREE.Color(0xffffff); // Sfondo bianco pulito coordinato con il quaderno
 
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.shadowMap.enabled = true;
-            container.appendChild(renderer.domElement);
+            camera_barillet = new THREE.PerspectiveCamera(45, container_barillet.clientWidth / container_barillet.clientHeight, 0.1, 1000);
+            camera_barillet.position.set(0, 25, 40);
 
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
+            renderer_barillet = new THREE.WebGLRenderer({ antialias: true });
+            renderer_barillet.setSize(container_barillet.clientWidth, container_barillet.clientHeight);
+            renderer_barillet.setPixelRatio(window.devicePixelRatio);
+            renderer_barillet.shadowMap.enabled = true;
+            container_barillet.appendChild(renderer_barillet.domElement);
+
+            controls_barillet = new THREE.OrbitControls(camera_barillet, renderer_barillet.domElement);
+            controls_barillet.enableDamping = true;
+            controls_barillet.dampingFactor = 0.05;
 
             const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
-            scene.add(ambientLight);
+            scene_barillet.add(ambientLight);
 
             const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.2);
             dirLight1.position.set(20, 40, 20);
-            scene.add(dirLight1);
+            scene_barillet.add(dirLight1);
 
             const dirLight2 = new THREE.DirectionalLight(0x88bbff, 0.6);
             dirLight2.position.set(-20, -20, -20);
-            scene.add(dirLight2);
+            scene_barillet.add(dirLight2);
 
             const loader = new THREE.GLTFLoader();
             loader.load('../barillet_fix.glb', function (gltf) {
                 const model = gltf.scene;
-                scene.add(model);
+                scene_barillet.add(model);
 
                 model.traverse((child) => {
                     if (child.isMesh) {
                         const initialPos = child.position.clone();
                         const name = child.name.toLowerCase();
+                        
                         let targetOffset = 0;
                         let labelType = 'tambour';
 
-                        // Classificazione intelligente basata sulla posizione e geometria del pezzo nel CAD
-                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion') || (Math.abs(initialPos.x) < 1 && Math.abs(initialPos.z) < 1)) {
-                            targetOffset = 0; // L'albero centrale rimane immobile come perno
+                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion')) {
+                            targetOffset = 0;
                             labelType = 'arbre';
-                        } else if (name.includes('molla') || name.includes('spring') || name.includes('bride')) {
-                            targetOffset = 6;  // La molla interna si sposta leggermente
-                            labelType = 'molla';
-                        } else if (name.includes('coperchio') || name.includes('cover') || initialPos.x < -1) {
-                            targetOffset = 18; // Il coperchio/lato sinistro si apre verso sinistra
+                        } else if (name.includes('coperchio') || name.includes('cover')) {
+                            targetOffset = 18;
                             labelType = 'coperchio';
+                        } else if (name.includes('molla') || name.includes('spring')) {
+                            targetOffset = 6;
+                            labelType = 'molla';
                         } else {
-                            targetOffset = -15; // Il tamburo e la ruota si spostano verso destra
+                            targetOffset = -15;
                             labelType = 'tambour';
                         }
 
-                        parts.push({
+                        parts_barillet.push({
                             mesh: child,
                             initialPos: initialPos,
                             targetOffset: targetOffset,
@@ -276,25 +277,22 @@
             if (slider) {
                 slider.addEventListener('input', (event) => {
                     const t = event.target.value / 100;
-                    updateExplosion(t);
+                    updateBarilletExplosion(t);
                     document.getElementById('val-scale-barillet').innerText = event.target.value + '%';
                 });
             }
 
-            window.addEventListener('resize', onWindowResize, false);
+            window.addEventListener('resize', onWindowResizeBarillet, false);
             animateBarillet();
-          }
+        }
 
-          function updateExplosion(t) {
-            parts.exports = true;
-            parts.forEach(p => {
-                // Spostamento fluido lungo l'asse principale in base al offset calcolato
+        function updateBarilletExplosion(t) {
+            parts_barillet.forEach(p => {
                 p.mesh.position.x = p.initialPos.x + (p.targetOffset * t);
                 p.mesh.position.y = p.initialPos.y;
                 p.mesh.position.z = p.initialPos.z;
             });
 
-            // Gestione visibilità etichette (appaiono quando l'esploso supera il 5%)
             const showLabels = t > 0.05;
             ['label-arbre', 'label-tambour', 'label-molla', 'label-coperchio'].forEach(id => {
                 const lbl = document.getElementById(id);
@@ -302,49 +300,49 @@
             });
 
             if (showLabels) {
-                updateLabelsPosition();
+                updateBarilletLabelsPosition();
             }
-          }
+        }
 
-          function updateLabelsPosition() {
-            parts.forEach(p => {
+        function updateBarilletLabelsPosition() {
+            parts_barillet.forEach(p => {
                 const lbl = document.getElementById(p.labelId);
                 if (!lbl || lbl.style.display === 'none') return;
 
                 const tempV = p.mesh.position.clone();
-                tempV.project(camera);
+                tempV.project(camera_barillet);
 
-                const x = (tempV.x *  .5 + .5) * container.clientWidth;
-                const y = (tempV.y * -.5 + .5) * container.clientHeight;
+                const x = (tempV.x *  .5 + .5) * container_barillet.clientWidth;
+                const y = (tempV.y * -.5 + .5) * container_barillet.clientHeight;
 
                 lbl.style.left = (x - 30) + 'px';
                 lbl.style.top = (y - 15) + 'px';
             });
-          }
+        }
 
-          function onWindowResize() {
-            if (!container) return;
-            camera.aspect = container.clientWidth / container.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(container.clientWidth, container.clientHeight);
-          }
+        function onWindowResizeBarillet() {
+            if (!container_barillet) return;
+            camera_barillet.aspect = container_barillet.clientWidth / container_barillet.clientHeight;
+            camera_barillet.updateProjectionMatrix();
+            renderer_barillet.setSize(container_barillet.clientWidth, container_barillet.clientHeight);
+        }
 
-          function animateBarillet() {
+        function animateBarillet() {
             requestAnimationFrame(animateBarillet);
-            controls.update();
-            renderer.render(scene, camera);
+            controls_barillet.update();
+            renderer_barillet.render(scene_barillet, camera_barillet);
+            
             const sliderElem = document.getElementById('exploder-barillet');
             if (sliderElem && sliderElem.value > 5) {
-                updateLabelsPosition();
+                updateBarilletLabelsPosition();
             }
-          }
+        }
 
-          if (document.readyState === 'complete') {
-              initBarillet3D();
-          } else {
-              window.addEventListener('load', initBarillet3D);
-          }
-        })();
+        if (document.readyState === 'complete') {
+            initBarillet3D();
+        } else {
+            window.addEventListener('load', initBarillet3D);
+        }
       </script>
 
       <div class="formula-box">
