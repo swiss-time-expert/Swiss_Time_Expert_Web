@@ -8,6 +8,9 @@
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
   
+  <!-- Script per il visualizzatore 3D model-viewer (Treno in alto) -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  
   <style>
     /* Allineamento forzato per sincronizzare Header e Notebook durante lo zoom */
     .header-card, .notebook-container {
@@ -40,22 +43,22 @@
     
     <!-- COLONNA SINISTRA: Testi e Navigazione -->
     <div class="header-left-block">
-      <div class="badge">Haute Horlogerie — Eidgenössisches Diplom</div>
+      <div class="badge">Haute Horlogerie — Brevet Fédéral</div>
       <h1>1. Das Handaufzugswerk</h1>
-      <p class="subtitle">Uhrmachergutachten-Kurs — Energie & Federhaus</p>
+      <p class="subtitle">Uhrmacherischer Expertekurs — Energie & Federhaus</p>
       
       <div class="header-controls">
         <div class="dropdown">
-          <button class="dropbtn">☰ Hauptmenü</button>
+          <button class="dropbtn">☰ Hauptmenu</button>
           <div class="dropdown-content">
             <a href="_001A-Mouvement_Manuel.html">1. Das Handaufzugswerk</a>
             <a href="_002-la-montre-automatique.html">2. Die Automatikuhr</a>
-            <a href="_003-Horloge_Electronique.html">3. Die Elektronische Uhr & Quarz</a>
+            <a href="_003-Horloge_Electronique.html">3. Elektronische Uhr & Quarz</a>
             <a href="_004-Complications.html">4. Komplikationen</a>
-            <a href="_005-Familles_Matieres.html">5. Die Werkstofffamilien</a>
+            <a href="_005-Familles_Matieres.html">5. Werkstoffgruppen</a>
             <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen und -technologien</a>
-            <a href="_007-Habillage.html">7. Das Äußere der Uhr</a>
-            <a href="_008-Histoire_Mesure_Temps.html">8. Geschichte der Zeitmessung</a>
+            <a href="_007-Habillage.html">7. Die Uhrenausstattung</a>
+            <a href="#">8. Geschichte der Zeitmessung</a>
           </div>
         </div>
 
@@ -80,13 +83,13 @@
       <div class="notebook-title-cell">
         <h2 class="handwritten-heading">Modul 01 : Energie & Federhaus</h2>
       </div>
-      <div class="tag-chic">✍️ Kursnotizen & Schemata</div>
+      <div class="tag-chic">✍️ Kursnotizen & Schemas</div>
     </div>
 
     <div class="handwritten-body" id="course-content-area">
 
       <h2 id="p1">1. Blockschaltbild des mechanischen Werks</h2>
-      <p>Das Blockschaltbild definiert die grundlegende Funktionsarchitektur der mechanischen Handaufzugsuhr. Die gespeicherte Energie wird kontinuierlich übertragen, verteilt und reguliert:</p>
+      <p>Das Blockschaltbild definiert die fundamentale Funktionsarchitektur der mechanischen Handaufzugsuhr. Die angesammelte Energie wird kontinuierlich übertragen, verteilt und reguliert :</p>
 
       <style>
         .ste-container { max-width: 1000px; margin: 0 auto; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
@@ -100,90 +103,276 @@
         @media (max-width: 768px) { .ste-grid { grid-template-columns: 1fr; gap: 15px; } }
       </style>
 
+      <!-- 1. MODELLO 3D INTERATTIVO DEL TRENO IN ALTO -->
       <div class="ste-container">
         <div class="ste-image-wrapper">
-          <img src="../Treno_del_tempo.png" alt="Funktionsschema der kinematischen Kette" class="ste-base-img">
+          <model-viewer src="../Train_fix.main_design.glb" alt="Vollständige kinematische Kette 3D" auto-rotate camera-controls style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px;"></model-viewer>
         </div>
         
         <div class="ste-grid">
           <div class="ste-card">
-            <div class="ste-step">Schritt 1: Energie</div>
-            <h3 class="ste-title">Die Feder & Das Federhaus</h3>
-            <p class="ste-text">Der Motor der Uhr. Die im Inneren der Trommel (1) untergebrachte Zugfeder speichert beim Aufziehen mechanische Energie.</p>
+            <div class="ste-step">Schritt 1 : Energie</div>
+            <h3 class="ste-title">Die Zugfeder & Das Federhaus</h3>
+            <p class="ste-text">Der Motor der Uhr. Die im Inneren der Trommel (1) untergebrachte Triebfeder speichert beim Aufziehen mechanische Energie.</p>
           </div>
           <div class="ste-card">
-            <div class="ste-step">Schritt 2: Übertragung</div>
+            <div class="ste-step">Schritt 2 : Übertragung</div>
             <h3 class="ste-title">Das Räderwerk</h3>
-            <p class="ste-text">Die Kraftuntersetzung. Der Räderzug (2) leitet die Energie weiter.</p>
+            <p class="ste-text">Die Kraftuntersetzung. Das Räderwerk (2) leitet die Energie weiter.</p>
           </div>
           <div class="ste-card">
-            <div class="ste-step">Schritt 3: Verteilung</div>
+            <div class="ste-step">Schritt 3 : Verteilung</div>
             <h3 class="ste-title">Die Hemmung</h3>
-            <p class="ste-text">Der kinematische Wandler. Das Steigrad (3) wandelt die kontinuierliche Drehbewegung in Impulse um.</p>
+            <p class="ste-text">Der kinematische Wandler. Das Steigrad (3) wandelt die gleichförmige Drehbewegung in Impulse um.</p>
           </div>
           <div class="ste-card">
-            <div class="ste-step">Schritt 4: Regulierung</div>
+            <div class="ste-step">Schritt 4 : Regulierung</div>
             <h3 class="ste-title">Der Oszillator</h3>
             <p class="ste-text">Das isochrone Herz. Die Unruh-Spirale-Einheit (4) gibt den absoluten Takt vor.</p>
           </div>
         </div>
       </div>
 
-      <div class="img-always-visible">
-        <div class="interactive-wrapper">
-          <img src="../chaine-cinematique-mecanique.png" alt="Vollständige kinematische Kette">
-          <div class="pin-marker" style="top: 14%; left: 49%;">1</div>
-          <div class="pin-marker" style="top: 46%; left: 51%;">2</div>
-          <div class="pin-marker" style="top: 41%; left: 33%;">3</div>
-          <div class="pin-marker" style="top: 56%; left: 44%;">4</div>
-          <div class="pin-marker" style="top: 72%; left: 32%;">5</div>
-          <div class="pin-marker" style="top: 76%; left: 59%;">8</div>
-          <div class="pin-marker" style="top: 64%; left: 60%;">9</div>
-          <div class="pin-marker" style="top: 38%; left: 81%; background: #1b365d;">⚙️</div>
+      <!-- 2. IMMAGINE STATICA CON PIN -->
+      <div class="img-always-visible" style="background: #fff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <div class="interactive-wrapper" style="position: relative; width: 100%;">
+          <img src="../chaine-cinematique-mecanique.png" alt="Vollständige kinematische Kette" style="width: 100%; height: auto; display: block; border-radius: 4px;">
+          <div class="pin-marker" style="top: 14%; left: 49%; position: absolute; z-index: 5;">1</div>
+          <div class="pin-marker" style="top: 46%; left: 51%; position: absolute; z-index: 5;">2</div>
+          <div class="pin-marker" style="top: 41%; left: 33%; position: absolute; z-index: 5;">3</div>
+          <div class="pin-marker" style="top: 56%; left: 44%; position: absolute; z-index: 5;">4</div>
+          <div class="pin-marker" style="top: 72%; left: 32%; position: absolute; z-index: 5;">5</div>
+          <div class="pin-marker" style="top: 76%; left: 59%; position: absolute; z-index: 5;">8</div>
+          <div class="pin-marker" style="top: 64%; left: 60%; position: absolute; z-index: 5;">9</div>
+          <div class="pin-marker" style="top: 38%; left: 81%; background: #1b365d; position: absolute; z-index: 5;">⚙️</div>
         </div>
       </div>
 
-      <details class="image-popover">
-        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL (01-02) — Blockschaltbild & Einführung</summary>
-        <div class="img-container"><img src="../01-02 Scema Bloc-Energie-Trasmission-Distribution-Regulation.jpg" alt="Blatt 01-02"></div>
-      </details>
-
-      <h2 id="barillet">2. Antriebsorgan (Energie): Das Federhaus &amp; Aufzugssysteme</h2>
-      <p>Das Federhaus ist die zentrale Komponente zur Speicherung potenzieller Energie des mechanischen Werks.</p>
-
-      <div class="img-always-visible">
-        <img src="../barillet_bride.jpg" alt="Innere Struktur von Federhaus und Zugfeder">
-        <div class="img-caption">📷 TECHNISCHE ANSICHT — Anatomie von Federhaus und Zugfeder.</div>
+      <div class="legend-grid">
+        <div class="legend-item"><span class="badge-mini">1</span> Federhaus</div>
+        <div class="legend-item"><span class="badge-mini">2</span> Minutenrad</div>
+        <div class="legend-item"><span class="badge-mini">3</span> Drittes Rad</div>
+        <div class="legend-item"><span class="badge-mini">4</span> Sekundenrad</div>
+        <div class="legend-item"><span class="badge-mini">5</span> Steigrad</div>
+        <div class="legend-item"><span class="badge-mini">8</span> Unruh</div>
+        <div class="legend-item"><span class="badge-mini">9</span> Spiralfeder</div>
+        <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">⚙️</span> Aufzugmechanismus</div>
       </div>
 
+      <details class="image-popover">
+        <summary>📷 ORIGINALES HANDSCHRIFTLICHES BLATT (01-02) — Blockschaltbild & Einführung</summary>
+        <div class="img-container"><img src="../01-02 Scema Bloc-Energie-Trasmission-Distribution-Regulation.jpg" alt="Fiche 01-02"></div>
+      </details>
+
+      <h2 id="barillet">2. Antriebsorgan (Energie) : Das Federhaus &amp; Aufzugsysteme</h2>
+      <p>Das Federhaus ist die zentrale Komponente zur Speicherung potenzieller Energie im mechanischen Werk.</p>
+
+      <!-- 3. MODELLO 3D INTERATTIVO CON ESPLOSO E ETICHETTE -->
+      <div class="img-always-visible">
+        <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
+          
+          <!-- Contenitore 3D e Cartellini dei nomi -->
+          <div id="canvas-container-barillet" style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px; position: relative; overflow: hidden;">
+            
+            <!-- Etichette fluttuanti dei componenti (Formato d'atelier) -->
+            <div id="label-arbre" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Welle & Trieb</div>
+            <div id="label-tambour" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Trommel & Rad</div>
+            <div id="label-molla" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Triebfeder</div>
+            <div id="label-coperchio" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Federhausdeckel</div>
+
+          </div>
+
+          <!-- Slider di controllo dell'esploso -->
+          <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px; display: flex; align-items: center; gap: 15px;">
+            <label for="exploder-barillet" style="font-size: 14px; font-weight: bold; color: #1a365d; white-space: nowrap;">⚙️ Explosions-Steuerung :</label>
+            <input type="range" id="exploder-barillet" min="0" max="100" value="0" style="flex-grow: 1; cursor: pointer; accent-color: #1a365d;">
+            <span id="val-scale-barillet" style="font-size: 13px; font-weight: bold; color: #6c757d; min-width: 40px;">0%</span>
+          </div>
+
+          <div class="img-caption" style="margin-top: 10px;">📷 3D-TECHNISCHE ANSICHT — Anatomie des Federhauses mit dynamischen Beschriftungen.</div>
+        </div>
+      </div>
+
+      <!-- Librerie Three.js corrette e pulite -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+      <script>
+        let scene_barillet, camera_barillet, renderer_barillet, controls_barillet;
+        let parts_barillet = [];
+
+        const container_barillet = document.getElementById('canvas-container-barillet');
+
+        function initBarillet3D() {
+            if (!container_barillet) return;
+
+            scene_barillet = new THREE.Scene();
+            scene_barillet.background = new THREE.Color(0xffffff);
+
+            camera_barillet = new THREE.PerspectiveCamera(45, container_barillet.clientWidth / container_barillet.clientHeight, 0.1, 1000);
+            camera_barillet.position.set(0, 25, 40);
+
+            renderer_barillet = new THREE.WebGLRenderer({ antialias: true });
+            renderer_barillet.setSize(container_barillet.clientWidth, container_barillet.clientHeight);
+            renderer_barillet.setPixelRatio(window.devicePixelRatio);
+            renderer_barillet.shadowMap.enabled = true;
+            container_barillet.appendChild(renderer_barillet.domElement);
+
+            controls_barillet = new THREE.OrbitControls(camera_barillet, renderer_barillet.domElement);
+            controls_barillet.enableDamping = true;
+            controls_barillet.dampingFactor = 0.05;
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+            scene_barillet.add(ambientLight);
+
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.2);
+            dirLight1.position.set(20, 40, 20);
+            scene_barillet.add(dirLight1);
+
+            const dirLight2 = new THREE.DirectionalLight(0x88bbff, 0.6);
+            dirLight2.position.set(-20, -20, -20);
+            scene_barillet.add(dirLight2);
+
+            const loader = new THREE.GLTFLoader();
+            loader.load('../barillet_fix.glb', function (gltf) {
+                const model = gltf.scene;
+                scene_barillet.add(model);
+
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        const initialPos = child.position.clone();
+                        const name = child.name.toLowerCase();
+                        
+                        let targetOffset = 0;
+                        let labelType = 'tambour';
+
+                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion')) {
+                            targetOffset = 0;
+                            labelType = 'arbre';
+                        } else if (name.includes('coperchio') || name.includes('cover')) {
+                            targetOffset = 18;
+                            labelType = 'coperchio';
+                        } else if (name.includes('molla') || name.includes('spring')) {
+                            targetOffset = 6;
+                            labelType = 'molla';
+                        } else {
+                            targetOffset = -15;
+                            labelType = 'tambour';
+                        }
+
+                        parts_barillet.push({
+                            mesh: child,
+                            initialPos: initialPos,
+                            targetOffset: targetOffset,
+                            labelId: 'label-' + labelType
+                        });
+                    }
+                });
+            }, undefined, function (error) {
+                console.error('Errore nel caricamento del file GLB:', error);
+            });
+
+            const slider = document.getElementById('exploder-barillet');
+            if (slider) {
+                slider.addEventListener('input', (event) => {
+                    const t = event.target.value / 100;
+                    updateBarilletExplosion(t);
+                    document.getElementById('val-scale-barillet').innerText = event.target.value + '%';
+                });
+            }
+
+            window.addEventListener('resize', onWindowResizeBarillet, false);
+            animateBarillet();
+        }
+
+        function updateBarilletExplosion(t) {
+            parts_barillet.forEach(p => {
+                p.mesh.position.x = p.initialPos.x + (p.targetOffset * t);
+                p.mesh.position.y = p.initialPos.y;
+                p.mesh.position.z = p.initialPos.z;
+            });
+
+            const showLabels = t > 0.05;
+            ['label-arbre', 'label-tambour', 'label-molla', 'label-coperchio'].forEach(id => {
+                const lbl = document.getElementById(id);
+                if (lbl) lbl.style.display = showLabels ? 'block' : 'none';
+            });
+
+            if (showLabels) {
+                updateBarilletLabelsPosition();
+            }
+        }
+
+        function updateBarilletLabelsPosition() {
+            parts_barillet.forEach(p => {
+                const lbl = document.getElementById(p.labelId);
+                if (!lbl || lbl.style.display === 'none') return;
+
+                const tempV = p.mesh.position.clone();
+                tempV.project(camera_barillet);
+
+                const x = (tempV.x *  .5 + .5) * container_barillet.clientWidth;
+                const y = (tempV.y * -.5 + .5) * container_barillet.clientHeight;
+
+                lbl.style.left = (x - 30) + 'px';
+                lbl.style.top = (y - 15) + 'px';
+            });
+        }
+
+        function onWindowResizeBarillet() {
+            if (!container_barillet) return;
+            camera_barillet.aspect = container_barillet.clientWidth / container_barillet.clientHeight;
+            camera_barillet.updateProjectionMatrix();
+            renderer_barillet.setSize(container_barillet.clientWidth, container_barillet.clientHeight);
+        }
+
+        function animateBarillet() {
+            requestAnimationFrame(animateBarillet);
+            controls_barillet.update();
+            renderer_barillet.render(scene_barillet, camera_barillet);
+            
+            const sliderElem = document.getElementById('exploder-barillet');
+            if (sliderElem && sliderElem.value > 5) {
+                updateBarilletLabelsPosition();
+            }
+        }
+
+        if (document.readyState === 'complete') {
+            initBarillet3D();
+        } else {
+            window.addEventListener('load', initBarillet3D);
+        }
+      </script>
+
       <div class="formula-box">
-        ⚙️ <strong>Werkstattregel:</strong> Bei einer Automatikuhr simuliert das Handaufzug über die Krone genau den maximalen Ladezustand, den der Rotor erreicht.
+        ⚙️ <strong>Atelier-Regel :</strong> Bei einer Automatikuhr simuliert der Handaufzug über die Krone genau den vom Rotor erreichten maximalen Ladezustand.
       </div>
 
       <h2 id="croix-de-malte">3. Federbefestigung &amp; Drehmomentregulierung</h2>
       <div class="img-always-visible">
         <img src="../croix-de-malte.png" alt="Funktionsprinzip des Malteserkreuzes">
-        <div class="img-caption">📷 TECHNISCHES SCHEMA — Das Malteserkreuz: Blockierung der Rotation zur Ausnutzung des linearen Drehmomentbereichs.</div>
+        <div class="img-caption">📷 TECHNISCHES SCHEMA — Das Malteserkreuz : Blockierung der Drehung zur Nutzung des linearen Drehmomentbereichs.</div>
       </div>
 
       <details class="image-popover">
-        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL (01-03) — Federbefestigung, Malteserkreuz &amp; Schnecke</summary>
-        <div class="img-container"><img src="../01-03 Energie - Le Ressort (F4.4P46).jpg" alt="Blatt 01-03"></div>
+        <summary>📷 ORIGINALES HANDSCHRIFTLICHES BLATT (01-03) — Federbefestigung, Malteserkreuz &amp; Kette-Schnecke</summary>
+        <div class="img-container"><img src="../01-03 Energie - Le Ressort (F4.4P46).jpg" alt="Fiche 01-03"></div>
       </details>
 
       <!-- FUSÉE-CHAÎNE -->
       <div style="display: flex; gap: 20px; align-items: center; background: #fff; padding: 20px; border: 1px solid #dcdcdc; border-radius: 8px; margin-top: 25px; margin-bottom: 25px;">
         <div style="flex: 0 0 45%;">
-          <img src="../fusee-chaine.png" alt="Schnecke-Kette-System" style="width: 100%; height: auto; border-radius: 4px;">
+          <img src="../fusee-chaine.png" alt="Kette-Schnecke-System" style="width: 100%; height: auto; border-radius: 4px;">
         </div>
         <div style="flex: 1;">
-          <h4 style="margin-top: 0; color: #2c4d75; font-size: 16px;">Konstante Kraft: Schnecke und Kette</h4>
+          <h4 style="margin-top: 0; color: #2c4d75; font-size: 16px;">Konstante Kraft : Kette-Schnecke</h4>
           <p style="font-size: 14px; margin-bottom: 10px;">
-            Dieser historische Mechanismus wirkt wie ein stufenloses Getriebe, um den Drehmomentabfall der Zugfeder beim Entspannen auszugleichen.
+            Dieser historische Mechanismus wirkt wie ein stufenloses Getriebe, um den Drehmomentabfall der Zugfeder beim Ablaufen auszugleichen.
           </p>
           <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
-            <li><strong>Maximaler Aufzug:</strong> Die Feder ist stark, die Kette zieht am <em>kleinen Durchmesser</em> der Schnecke (kurzer Hebelarm).</li>
-            <li><strong>Entspannung:</strong> Die Feder schwächt sich ab, die Kette zieht am <em>großen Durchmesser</em> der Schnecke (langer Hebelarm), wodurch die an die Hemmung übertragene Kraft perfekt ausgeglichen wird.</li>
+            <li><strong>Maximaler Aufzug :</strong> Die Feder ist stark, die Kette zieht am <em>kleinen Durchmesser</em> der Schnecke (kurzer Hebelarm).</li>
+            <li><strong>Ablauf :</strong> Die Feder schwächt sich ab, die Kette zieht am <em>grossen Durchmesser</em> der Schnecke (langer Hebelarm), wodurch die an die Hemmung übertragene Kraft perfekt ausgeglichen wird.</li>
           </ul>
         </div>
       </div>
@@ -197,5 +386,6 @@
   
   <footer>© 2026 Swiss Time Expert. Alle Rechte vorbehalten.</footer>
   <script src="../_ricerca.js"></script>
-<script src="../script.js"></script>n</body>
+  <script src="../script.js"></script>
+</body>
 </html>
