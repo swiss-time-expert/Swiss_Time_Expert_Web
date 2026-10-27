@@ -164,8 +164,19 @@
         <div class="img-container"><img src="../01-02 Scema Bloc-Energie-Trasmission-Distribution-Regulation.jpg" alt="Sheet 01-02"></div>
       </details>
 
-      <h2 id="barillet">2. Motor Organ (Energy): The Barrel &amp; Winding Systems</h2>
-      <p>The barrel is the central component for storing potential energy in a mechanical movement.</p>
+      <h2 id="barillet">2. Motor Organ (Energy): The Barrel, Mainspring &amp; Torque Dynamics</h2>
+      <p>The barrel is the central component for storing potential energy in a mechanical movement. Atelier analysis reveals critical mechanical details regarding mainspring attachment and torque delivery curves.</p>
+
+      <!-- NOTEBOOK NOTES SECTION (FIG 4.4 P. 46) -->
+      <div style="background: #fdfdfd; border: 1px solid #dcdcdc; border-left: 5px solid #1a365d; padding: 20px; border-radius: 6px; margin-bottom: 25px;">
+        <h3 style="margin-top: 0; color: #1a365d; font-size: 17px;">📝 Atelier Notes: Mainspring Geometry & Torque Curve (Ref. Fig 4.4, p. 46)</h3>
+        <p style="font-size: 14px; line-height: 1.6; color: #333;">
+          <strong>1. Mainspring Attachment:</strong> The mainspring is held by a bridle (hook) located on the inside wall of the barrel drum. At the center, a hook is positioned on the barrel arbor to secure the inner end of the spring. Furthermore, the inner end of the mainspring features a dedicated fixing hole.
+        </p>
+        <p style="font-size: 14px; line-height: 1.6; color: #333;">
+          <strong>2. Torque Analysis (Arre p. 60, p. 311):</strong> During the first turns of winding, the delivered force/torque is remarkably low. Conversely, at full winding (top of the curve), the force is extremely high. This non-linear power curve requires regulation to ensure consistent amplitude across the movement's power reserve.
+        </p>
+      </div>
 
       <!-- 3. INTERACTIVE 3D MODEL WITH EXPLODED VIEW AND LABELS -->
       <div class="img-always-visible">
@@ -247,145 +258,4 @@
                         let targetOffset = 0;
                         let labelType = 'tambour';
 
-                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion')) {
-                            targetOffset = 0;
-                            labelType = 'arbre';
-                        } else if (name.includes('coperchio') || name.includes('cover')) {
-                            targetOffset = 18;
-                            labelType = 'coperchio';
-                        } else if (name.includes('molla') || name.includes('spring')) {
-                            targetOffset = 6;
-                            labelType = 'molla';
-                        } else {
-                            targetOffset = -15;
-                            labelType = 'tambour';
-                        }
-
-                        parts_barillet.push({
-                            mesh: child,
-                            initialPos: initialPos,
-                            targetOffset: targetOffset,
-                            labelId: 'label-' + labelType
-                        });
-                    }
-                });
-            }, undefined, function (error) {
-                console.error('Error loading GLB file:', error);
-            });
-
-            const slider = document.getElementById('exploder-barillet');
-            if (slider) {
-                slider.addEventListener('input', (event) => {
-                    const t = event.target.value / 100;
-                    updateBarilletExplosion(t);
-                    document.getElementById('val-scale-barillet').innerText = event.target.value + '%';
-                });
-            }
-
-            window.addEventListener('resize', onWindowResizeBarillet, false);
-            animateBarillet();
-        }
-
-        function updateBarilletExplosion(t) {
-            parts_barillet.forEach(p => {
-                p.mesh.position.x = p.initialPos.x + (p.targetOffset * t);
-                p.mesh.position.y = p.initialPos.y;
-                p.mesh.position.z = p.initialPos.z;
-            });
-
-            const showLabels = t > 0.05;
-            ['label-arbre', 'label-tambour', 'label-molla', 'label-coperchio'].forEach(id => {
-                const lbl = document.getElementById(id);
-                if (lbl) lbl.style.display = showLabels ? 'block' : 'none';
-            });
-
-            if (showLabels) {
-                updateBarilletLabelsPosition();
-            }
-        }
-
-        function updateBarilletLabelsPosition() {
-            parts_barillet.forEach(p => {
-                const lbl = document.getElementById(p.labelId);
-                if (!lbl || lbl.style.display === 'none') return;
-
-                const tempV = p.mesh.position.clone();
-                tempV.project(camera_barillet);
-
-                const x = (tempV.x *  .5 + .5) * container_barillet.clientWidth;
-                const y = (tempV.y * -.5 + .5) * container_barillet.clientHeight;
-
-                lbl.style.left = (x - 30) + 'px';
-                lbl.style.top = (y - 15) + 'px';
-            });
-        }
-
-        function onWindowResizeBarillet() {
-            if (!container_barillet) return;
-            camera_barillet.aspect = container_barillet.clientWidth / container_barillet.clientHeight;
-            camera_barillet.updateProjectionMatrix();
-            renderer_barillet.setSize(container_barillet.clientWidth, container_barillet.clientHeight);
-        }
-
-        function animateBarillet() {
-            requestAnimationFrame(animateBarillet);
-            controls_barillet.update();
-            renderer_barillet.render(scene_barillet, camera_barillet);
-            
-            const sliderElem = document.getElementById('exploder-barillet');
-            if (sliderElem && sliderElem.value > 5) {
-                updateBarilletLabelsPosition();
-            }
-        }
-
-        if (document.readyState === 'complete') {
-            initBarillet3D();
-        } else {
-            window.addEventListener('load', initBarillet3D);
-        }
-      </script>
-
-      <div class="formula-box">
-        ⚙️ <strong>Atelier Rule:</strong> On an automatic movement, manual winding via the crown precisely simulates the maximum charge state achieved by the rotor.
-      </div>
-
-      <h2 id="croix-de-malte">3. Spring Attachment &amp; Torque Regulation</h2>
-      <div class="img-always-visible">
-        <img src="../croix-de-malte.png" alt="Maltese cross operating principle">
-        <div class="img-caption">📷 TECHNICAL SCHEMATIC — The Maltese Cross: blocking rotation to exploit the linear torque range.</div>
-      </div>
-
-      <details class="image-popover">
-        <summary>📷 ORIGINAL MANUSCRIPT SHEET (01-03) — Spring Attachment, Maltese Cross &amp; Fusee</summary>
-        <div class="img-container"><img src="../01-03 Energie - Le Ressort (F4.4P46).jpg" alt="Sheet 01-03"></div>
-      </details>
-
-      <!-- FUSEE-CHAIN -->
-      <div style="display: flex; gap: 20px; align-items: center; background: #fff; padding: 20px; border: 1px solid #dcdcdc; border-radius: 8px; margin-top: 25px; margin-bottom: 25px;">
-        <div style="flex: 0 0 45%;">
-          <img src="../fusee-chaine.png" alt="Fusee-Chain System" style="width: 100%; height: auto; border-radius: 4px;">
-        </div>
-        <div style="flex: 1;">
-          <h4 style="margin-top: 0; color: #2c4d75; font-size: 16px;">Constant Force: The Fusee-Chain</h4>
-          <p style="font-size: 14px; margin-bottom: 10px;">
-            This historical mechanism acts like a continuously variable transmission to compensate for the mainspring's torque loss as it unwinds.
-          </p>
-          <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
-            <li><strong>Maximum winding:</strong> The spring is strong; the chain pulls on the <em>small diameter</em> of the fusee (short lever arm).</li>
-            <li><strong>Unwinding:</strong> The spring weakens; the chain pulls on the <em>large diameter</em> of the fusee (long lever arm), perfectly equalizing the force transmitted to the escapement.</li>
-          </ul>
-        </div>
-      </div>
-      
-    </div> 
-  </div> 
-
-  <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
-    <a href="_001B-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continue reading ➔</a>
-  </div>
-  
-  <footer>© 2026 Swiss Time Expert. All rights reserved.</footer>
-  <script src="../_ricerca.js"></script>
-  <script src="../script.js"></script>
-</body>
-</html>
+                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.
