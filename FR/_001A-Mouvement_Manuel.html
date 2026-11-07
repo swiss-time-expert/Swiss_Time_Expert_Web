@@ -35,13 +35,6 @@
     .dropdown-content a:last-child { border-bottom: none; }
     .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
     .dropdown:hover .dropdown-content { display: block; }
-
-    /* Box Formule e Tabelle Tecniche */
-    .formula-box { background: #f8f9fa; border-left: 4px solid #27ae60; padding: 20px; margin: 20px 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 0.98em; line-height: 1.6; color: #2c3e50; }
-    .formula-math { font-family: monospace; background: #eef2f7; padding: 10px 14px; border-radius: 4px; display: inline-block; font-weight: bold; color: #1a365d; margin: 10px 0; font-size: 1.1em; }
-    .tech-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95em; }
-    .tech-table th, .tech-table td { border: 1px solid #dcdcdc; padding: 10px; text-align: center; }
-    .tech-table th { background-color: #1a365d; color: white; }
   </style>
 </head>
 <body>
@@ -52,7 +45,7 @@
     <div class="header-left-block">
       <div class="badge">Haute Horlogerie — Brevet Fédéral</div>
       <h1>1. Le Mouvement à Remontage Manuel</h1>
-      <p class="subtitle">Cours d'expertise horlogère — Énergie, Barillet & Train</p>
+      <p class="subtitle">Cours d'expertise horlogère — Énergie & Barillet</p>
       
       <div class="header-controls">
         <div class="dropdown">
@@ -88,7 +81,7 @@
     
     <div class="notebook-header">
       <div class="notebook-title-cell">
-        <h2 class="handwritten-heading">Module 01 : Énergie, Barillet & Chaîne Cinématique</h2>
+        <h2 class="handwritten-heading">Module 01 : Énergie & Barillet</h2>
       </div>
       <div class="tag-chic">✍️ Notes de Cours & Schémas</div>
     </div>
@@ -172,18 +165,227 @@
       </details>
 
       <h2 id="barillet">2. Organe Moteur (Énergie) : Le Barillet &amp; Systèmes de Remontage</h2>
-      <p>Le barillet est le composant central du stockage d'énergie potentielle du mouvement mécanique. L'ensemble est constitué de quatre éléments fondamentaux :</p>
-      <ul>
-        <li><strong>Le Tambour :</strong> Boîte cylindrique abritant le ressort et portant la denture extérieure qui engrène avec le pignon de centre.</li>
-        <li><strong>Le Ressort-moteur :</strong> Lame élastique enroulée à l'intérieur, dont l'extrémité extérieure est fixée à la paroi du tambour.</li>
-        <li><strong>L'Arbre de barillet :</strong> Axe pivotant entre le pont et la platine, muni d'une bonde avec crochet pour l'attache intérieure du ressort.</li>
-        <li><strong>Le Couvercle :</strong> Élément de fermeture qui assure le guidage axial de l'arbre et protège le mécanisme des poussières.</li>
-      </ul>
+      <p>Le barillet est le composant central du stockage d'énergie potentielle du mouvement mécanique.</p>
 
       <!-- 3. MODELLO 3D INTERATTIVO CON ESPLOSO E ETICHETTE -->
       <div class="img-always-visible">
         <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
           
+          <!-- Contenitore 3D e Cartellini dei nomi -->
           <div id="canvas-container-barillet" style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px; position: relative; overflow: hidden;">
+            
+            <!-- Etichette fluttuanti dei componenti (Formato d'atelier) -->
             <div id="label-arbre" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Arbre & Pignon</div>
-            <div id="label-tambour" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10
+            <div id="label-tambour" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Tambour & Roue</div>
+            <div id="label-molla" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Ressort-moteur</div>
+            <div id="label-coperchio" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Couvercle</div>
+
+          </div>
+
+          <!-- Slider di controllo dell'esploso -->
+          <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px; display: flex; align-items: center; gap: 15px;">
+            <label for="exploder-barillet" style="font-size: 14px; font-weight: bold; color: #1a365d; white-space: nowrap;">⚙️ Contrôle de l'Exploso :</label>
+            <input type="range" id="exploder-barillet" min="0" max="100" value="0" style="flex-grow: 1; cursor: pointer; accent-color: #1a365d;">
+            <span id="val-scale-barillet" style="font-size: 13px; font-weight: bold; color: #6c757d; min-width: 40px;">0%</span>
+          </div>
+
+          <div class="img-caption" style="margin-top: 10px;">📷 VUE TECHNIQUE 3D — Anatomie du barillet avec labels dynamiques.</div>
+        </div>
+      </div>
+
+      <!-- Librerie Three.js corrette e pulite -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+      <script>
+        let scene_barillet, camera_barillet, renderer_barillet, controls_barillet;
+        let parts_barillet = [];
+
+        const container_barillet = document.getElementById('canvas-container-barillet');
+
+        function initBarillet3D() {
+            if (!container_barillet) return;
+
+            scene_barillet = new THREE.Scene();
+            scene_barillet.background = new THREE.Color(0xffffff); // Sfondo bianco pulito coordinato con il quaderno
+
+            camera_barillet = new THREE.PerspectiveCamera(45, container_barillet.clientWidth / container_barillet.clientHeight, 0.1, 1000);
+            camera_barillet.position.set(0, 25, 40);
+
+            renderer_barillet = new THREE.WebGLRenderer({ antialias: true });
+            renderer_barillet.setSize(container_barillet.clientWidth, container_barillet.clientHeight);
+            renderer_barillet.setPixelRatio(window.devicePixelRatio);
+            renderer_barillet.shadowMap.enabled = true;
+            container_barillet.appendChild(renderer_barillet.domElement);
+
+            controls_barillet = new THREE.OrbitControls(camera_barillet, renderer_barillet.domElement);
+            controls_barillet.enableDamping = true;
+            controls_barillet.dampingFactor = 0.05;
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+            scene_barillet.add(ambientLight);
+
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.2);
+            dirLight1.position.set(20, 40, 20);
+            scene_barillet.add(dirLight1);
+
+            const dirLight2 = new THREE.DirectionalLight(0x88bbff, 0.6);
+            dirLight2.position.set(-20, -20, -20);
+            scene_barillet.add(dirLight2);
+
+            const loader = new THREE.GLTFLoader();
+            loader.load('../barillet_fix.glb', function (gltf) {
+                const model = gltf.scene;
+                scene_barillet.add(model);
+
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        const initialPos = child.position.clone();
+                        const name = child.name.toLowerCase();
+                        
+                        let targetOffset = 0;
+                        let labelType = 'tambour';
+
+                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion')) {
+                            targetOffset = 0;
+                            labelType = 'arbre';
+                        } else if (name.includes('coperchio') || name.includes('cover')) {
+                            targetOffset = 18;
+                            labelType = 'coperchio';
+                        } else if (name.includes('molla') || name.includes('spring')) {
+                            targetOffset = 6;
+                            labelType = 'molla';
+                        } else {
+                            targetOffset = -15;
+                            labelType = 'tambour';
+                        }
+
+                        parts_barillet.push({
+                            mesh: child,
+                            initialPos: initialPos,
+                            targetOffset: targetOffset,
+                            labelId: 'label-' + labelType
+                        });
+                    }
+                });
+            }, undefined, function (error) {
+                console.error('Errore nel caricamento del file GLB:', error);
+            });
+
+            const slider = document.getElementById('exploder-barillet');
+            if (slider) {
+                slider.addEventListener('input', (event) => {
+                    const t = event.target.value / 100;
+                    updateBarilletExplosion(t);
+                    document.getElementById('val-scale-barillet').innerText = event.target.value + '%';
+                });
+            }
+
+            window.addEventListener('resize', onWindowResizeBarillet, false);
+            animateBarillet();
+        }
+
+        function updateBarilletExplosion(t) {
+            parts_barillet.forEach(p => {
+                p.mesh.position.x = p.initialPos.x + (p.targetOffset * t);
+                p.mesh.position.y = p.initialPos.y;
+                p.mesh.position.z = p.initialPos.z;
+            });
+
+            const showLabels = t > 0.05;
+            ['label-arbre', 'label-tambour', 'label-molla', 'label-coperchio'].forEach(id => {
+                const lbl = document.getElementById(id);
+                if (lbl) lbl.style.display = showLabels ? 'block' : 'none';
+            });
+
+            if (showLabels) {
+                updateBarilletLabelsPosition();
+            }
+        }
+
+        function updateBarilletLabelsPosition() {
+            parts_barillet.forEach(p => {
+                const lbl = document.getElementById(p.labelId);
+                if (!lbl || lbl.style.display === 'none') return;
+
+                const tempV = p.mesh.position.clone();
+                tempV.project(camera_barillet);
+
+                const x = (tempV.x *  .5 + .5) * container_barillet.clientWidth;
+                const y = (tempV.y * -.5 + .5) * container_barillet.clientHeight;
+
+                lbl.style.left = (x - 30) + 'px';
+                lbl.style.top = (y - 15) + 'px';
+            });
+        }
+
+        function onWindowResizeBarillet() {
+            if (!container_barillet) return;
+            camera_barillet.aspect = container_barillet.clientWidth / container_barillet.clientHeight;
+            camera_barillet.updateProjectionMatrix();
+            renderer_barillet.setSize(container_barillet.clientWidth, container_barillet.clientHeight);
+        }
+
+        function animateBarillet() {
+            requestAnimationFrame(animateBarillet);
+            controls_barillet.update();
+            renderer_barillet.render(scene_barillet, camera_barillet);
+            
+            const sliderElem = document.getElementById('exploder-barillet');
+            if (sliderElem && sliderElem.value > 5) {
+                updateBarilletLabelsPosition();
+            }
+        }
+
+        if (document.readyState === 'complete') {
+            initBarillet3D();
+        } else {
+            window.addEventListener('load', initBarillet3D);
+        }
+      </script>
+
+      <div class="formula-box">
+        ⚙️ <strong>Règle d'Atelier :</strong> Sur un mouvement automatique, le remontage manuel par la couronne simule exactement l'état de charge maximale atteint par le rotor.
+      </div>
+
+      <h2 id="croix-de-malte">3. Fixation du Ressort &amp; Régulation de Couple</h2>
+      <div class="img-always-visible">
+        <img src="../croix-de-malte.png" alt="Principe de fonctionnement de la Croix de Malte">
+        <div class="img-caption">📷 SCHÉMA TECHNIQUE — La Croix de Malte : blocage de la rotation pour l'exploitation de la plage de couple linéaire.</div>
+      </div>
+
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-03) — Fixation du Ressort, Croix de Malte &amp; Fusée</summary>
+        <div class="img-container"><img src="../01-03 Energie - Le Ressort (F4.4P46).jpg" alt="Fiche 01-03"></div>
+      </details>
+
+      <!-- FUSÉE-CHAÎNE -->
+      <div style="display: flex; gap: 20px; align-items: center; background: #fff; padding: 20px; border: 1px solid #dcdcdc; border-radius: 8px; margin-top: 25px; margin-bottom: 25px;">
+        <div style="flex: 0 0 45%;">
+          <img src="../fusee-chaine.png" alt="Système Fusée-Chaîne" style="width: 100%; height: auto; border-radius: 4px;">
+        </div>
+        <div style="flex: 1;">
+          <h4 style="margin-top: 0; color: #2c4d75; font-size: 16px;">Force Constante : La Fusée-Chaîne</h4>
+          <p style="font-size: 14px; margin-bottom: 10px;">
+            Ce mécanisme historique agit comme une boîte de vitesses à variation continue pour compenser la perte de couple du ressort moteur au fur et à mesure de son désarmage.
+          </p>
+          <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
+            <li><strong>Armage maximal :</strong> Le ressort est fort, la chaîne tire sur le <em>petit diamètre</em> de la fusée (bras de levier court).</li>
+            <li><strong>Désarmage :</strong> Le ressort s'affaiblit, la chaîne tire sur le <em>grand diamètre</em> de la fusée (bras de levier long), égalisant ainsi parfaitement la force transmise à l'échappement.</li>
+          </ul>
+        </div>
+      </div>
+      
+    </div> 
+  </div> 
+
+  <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
+    <a href="_001B-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continuer la lecture ➔</a>
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
+  <script src="../_ricerca.js"></script>
+  <script src="../script.js"></script>
+</body>
+</html>
