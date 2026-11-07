@@ -35,6 +35,12 @@
     .dropdown-content a:last-child { border-bottom: none; }
     .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
     .dropdown:hover .dropdown-content { display: block; }
+
+    /* Box Formule e Tabelle Tecniche */
+    .formula-box { background: #f8f9fa; border-left: 4px solid #27ae60; padding: 15px; margin: 20px 0; font-family: monospace; font-size: 0.95em; line-height: 1.6; }
+    .tech-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95em; }
+    .tech-table th, .tech-table td { border: 1px solid #dcdcdc; padding: 10px; text-align: center; }
+    .tech-table th { background-color: #1a365d; color: white; }
   </style>
 </head>
 <body>
@@ -45,7 +51,7 @@
     <div class="header-left-block">
       <div class="badge">Haute Horlogerie — Brevet Fédéral</div>
       <h1>1. Le Mouvement à Remontage Manuel</h1>
-      <p class="subtitle">Cours d'expertise horlogère — Énergie & Barillet</p>
+      <p class="subtitle">Cours d'expertise horlogère — Énergie, Barillet & Train</p>
       
       <div class="header-controls">
         <div class="dropdown">
@@ -81,7 +87,7 @@
     
     <div class="notebook-header">
       <div class="notebook-title-cell">
-        <h2 class="handwritten-heading">Module 01 : Énergie & Barillet</h2>
+        <h2 class="handwritten-heading">Module 01 : Énergie, Barillet & Chaîne Cinématique</h2>
       </div>
       <div class="tag-chic">✍️ Notes de Cours & Schémas</div>
     </div>
@@ -208,7 +214,7 @@
             if (!container_barillet) return;
 
             scene_barillet = new THREE.Scene();
-            scene_barillet.background = new THREE.Color(0xffffff); // Sfondo bianco pulito coordinato con il quaderno
+            scene_barillet.background = new THREE.Color(0xffffff);
 
             camera_barillet = new THREE.PerspectiveCamera(45, container_barillet.clientWidth / container_barillet.clientHeight, 0.1, 1000);
             camera_barillet.position.set(0, 25, 40);
@@ -345,11 +351,54 @@
         }
       </script>
 
+      <!-- INTEGRAZIONE RIGORE TECNICO E FORMULE DEL BARILLET -->
+      <h2>3. Analyse Cinématique & Formules d'Ingénierie du Ressort</h2>
+      <p>Pour modéliser le comportement énergétique du ressort dans le tambour, on analyse le nombre de tours utiles ($\Delta N_u = N'' - N'$) et la formule du moment de force maximal exercé sur l'arbre :</p>
+
+      <div class="formula-box">
+        $$M_{opmax} = \frac{E \cdot h \cdot e^3}{12 \cdot L} \cdot 2\pi \cdot \Delta N_t$$
+        <br>
+        <strong>Légende technique :</strong><br>
+        • <strong>E :</strong> Module d'élasticité du matériau (ex. alliage Nivaflex ~2,2 × 10⁵ MPa).<br>
+        • <strong>h :</strong> Hauteur (largeur) de la lame du ressort [mm].<br>
+        • <strong>e :</strong> Épaisseur de la lame [mm].<br>
+        • <strong>L :</strong> Longueur active du ressort [mm].<br>
+        • <strong>Δ N_t :</strong> Nombre de tours de développement total.
+      </div>
+
+      <h3>Propriétés Métallurgiques des Alliages (Nivaflex)</h3>
+      <table class="tech-table">
+        <tr>
+          <th>Alliage</th>
+          <th>Co (%)</th>
+          <th>Ni (%)</th>
+          <th>Cr (%)</th>
+          <th>Fe (%)</th>
+          <th>W / Mo</th>
+        </tr>
+        <tr>
+          <td>Nivaflex® 45/8</td>
+          <td>45%</td>
+          <td>21%</td>
+          <td>18%</td>
+          <td>5%</td>
+          <td>4% / 4%</td>
+        </tr>
+        <tr>
+          <td>Nivaflex® 45/5</td>
+          <td>45%</td>
+          <td>21%</td>
+          <td>18%</td>
+          <td>5%</td>
+          <td>4% / 4% (Be 0.2%)</td>
+        </tr>
+      </table>
+
       <div class="formula-box">
         ⚙️ <strong>Règle d'Atelier :</strong> Sur un mouvement automatique, le remontage manuel par la couronne simule exactement l'état de charge maximale atteint par le rotor.
       </div>
 
-      <h2 id="croix-de-malte">3. Fixation du Ressort &amp; Régulation de Couple</h2>
+      <h2 id="croix-de-malte">4. Fixation du Ressort &amp; Régulation de Couple</h2>
       <div class="img-always-visible">
         <img src="../croix-de-malte.png" alt="Principe de fonctionnement de la Croix de Malte">
         <div class="img-caption">📷 SCHÉMA TECHNIQUE — La Croix de Malte : blocage de la rotation pour l'exploitation de la plage de couple linéaire.</div>
