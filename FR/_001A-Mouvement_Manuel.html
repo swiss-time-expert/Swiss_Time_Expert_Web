@@ -179,7 +179,7 @@
         <li><strong>L'Arbre de barillet :</strong> Axe pivotant entre le pont et la platine, muni d'une bonde avec crochet pour l'attache intérieure du ressort.</li>
         <li><strong>Le Couvercle :</strong> Élément de fermeture qui assure le guidage axial de l'arbre et protège le mécanisme des poussières.</li>
       </ul>
-<!-- 3. MODELLO 3D INTERATTIVO DEL BARILLET (Estratto dal file di test) -->
+<!-- 3. VISUALIZZATORE 3D DEL BARILLET (Derivato dal file di test, stabile e senza esploso forzato) -->
       <div class="img-always-visible">
         <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
           
@@ -191,17 +191,11 @@
             <div id="label-tambour" style="position: absolute; display: none; background: transparent; color: #1a365d; padding: 2px 6px; font-size: 11px; font-weight: bold; font-family: sans-serif; pointer-events: none; z-index: 10; text-shadow: 0 1px 2px rgba(255,255,255,0.9); transform: translate(-50%, -150%);">1. Tambour & Roue</div>
           </div>
 
-          <!-- Slider di controllo dell'esploso -->
-          <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px; display: flex; align-items: center; gap: 15px;">
-            <label for="exploder-barillet" style="font-size: 14px; font-weight: bold; color: #1a365d; white-space: nowrap;">⚙️ Contrôle de l'Exploso :</label>
-            <input type="range" id="exploder-barillet" min="0" max="100" value="0" style="flex-grow: 1; cursor: pointer; accent-color: #1a365d;">
-          </div>
-
-          <div class="img-caption" style="margin-top: 10px;">📷 VUE TECHNIQUE 3D — Anatomie du barillet avec labels dynamiques.</div>
+          <div class="img-caption" style="margin-top: 10px;">📷 VUE TECHNIQUE 3D — Modèle de référence du barillet (Affichage fixe et stable).</div>
         </div>
       </div>
 
-      <!-- Librerie Three.js e Script di controllo dedicato al barillet -->
+      <!-- Librerie Three.js e Script di visualizzazione stabile -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -209,7 +203,6 @@
       <script>
         let scene_barillet, camera_barillet, renderer_barillet, controls_barillet;
         let parts_barillet = [];
-        let currentExplosionProgress_barillet = 0;
         const container_barillet = document.getElementById('canvas-container-barillet');
 
         function initBarillet3D() {
@@ -236,50 +229,32 @@
             scene_barillet.add(dirLight1);
 
             const loader = new THREE.GLTFLoader();
+            // Utilizzo del file .glb del test, coerente e di ottima resa visiva
             loader.load('../bariletto_orologio_meccanico.main_design.glb', function (gltf) {
                 const model = gltf.scene;
                 scene_barillet.add(model);
 
                 model.traverse((child) => {
                     if (child.isMesh) {
-                        const initialPos = child.position.clone();
                         const name = child.name ? child.name.toLowerCase() : "";
-                        let targetOffsetVector = new THREE.Vector3(0, 0, 0);
                         let labelType = 'tambour';
 
                         if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion')) {
-                            targetOffsetVector.set(0, 0, 0);
                             labelType = 'arbre';
                         } else if (name.includes('molla') || name.includes('spring')) {
-                            targetOffsetVector.set(0, 2, 0);
                             labelType = 'molla';
+                        } else if (name.includes('coperchio') || name.includes('cover')) {
+                            labelType = 'coperchio';
                         } else {
-                            targetOffsetVector.set(-8, 0, 0);
                             labelType = 'tambour';
                         }
 
-                        parts_barillet.push({ mesh: child, initialPos: initialPos, targetOffset: targetOffsetVector, labelId: 'label-' + labelType });
-
-                        if (!name.includes('albero') && !name.includes('shaft') && !name.includes('asse') && !name.includes('pinion') && !name.includes('molla') && !name.includes('spring')) {
-                            const coperchioMesh = child.clone();
-                            scene_barillet.add(coperchioMesh);
-                            parts_barillet.push({ mesh: coperchioMesh, initialPos: initialPos, targetOffset: new THREE.Vector3(8, 0, 0), labelId: 'label-coperchio' });
-                        }
+                        parts_barillet.push({ mesh: child, labelId: 'label-' + labelType });
                     }
                 });
+            }, undefined, function (error) {
+                console.error('Errore nel caricamento del file 3D del bariletto:', error);
             });
-
-            const slider = document.getElementById('exploder-barillet');
-            if (slider) {
-                slider.addEventListener('input', (event) => {
-                    currentExplosionProgress_barillet = event.target.value / 100;
-                    parts_barillet.forEach(p => {
-                        p.mesh.position.x = p.initialPos.x + (p.targetOffset.x * currentExplosionProgress_barillet);
-                        p.mesh.position.y = p.initialPos.y + (p.targetOffset.y * currentExplosionProgress_barillet);
-                        p.mesh.position.z = p.initialPos.z + (p.targetOffset.z * currentExplosionProgress_barillet);
-                    });
-                });
-            }
 
             window.addEventListener('resize', () => {
                 if (!container_barillet) return;
@@ -293,26 +268,19 @@
                 controls_barillet.update();
                 renderer_barillet.render(scene_barillet, camera_barillet);
 
-                const showLabels = currentExplosionProgress_barillet > 0.05;
-                ['label-arbre', 'label-coperchio', 'label-molla', 'label-tambour'].forEach(id => {
-                    const lbl = document.getElementById(id);
-                    if (lbl) lbl.style.display = showLabels ? 'block' : 'none';
+                // Mostra le etichette in modo stabile attorno ai componenti
+                parts_barillet.forEach(p => {
+                    const lbl = document.getElementById(p.labelId);
+                    if (!lbl) return;
+                    const tempV = p.mesh.position.clone();
+                    tempV.project(camera_barillet);
+                    lbl.style.display = 'block';
+                    lbl.style.left = ((tempV.x * .5 + .5) * container_barillet.clientWidth) + 'px';
+                    lbl.style.top = ((tempV.y * -.5 + .5) * container_barillet.clientHeight) + 'px';
                 });
-
-                if (showLabels) {
-                    parts_barillet.forEach(p => {
-                        const lbl = document.getElementById(p.labelId);
-                        if (!lbl) return;
-                        const tempV = p.mesh.position.clone();
-                        tempV.project(camera_barillet);
-                        lbl.style.left = ((tempV.x * .5 + .5) * container_barillet.clientWidth) + 'px';
-                        lbl.style.top = ((tempV.y * -.5 + .5) * container_barillet.clientHeight) + 'px';
-                    });
-                }
             }
             animateBarillet();
         }
 
         if (document.readyState === 'complete') { initBarillet3D(); } else { window.addEventListener('load', initBarillet3D); }
       </script>
-      
