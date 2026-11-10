@@ -23,6 +23,24 @@
     .dropdown-content a:last-child { border-bottom: none; }
     .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
     .dropdown:hover .dropdown-content { display: block; }
+
+    /* Box di approfondimento con barra verde a sinistra */
+    .tech-doc-box { 
+      background: #f8f9fa; 
+      border-left: 5px solid #27ae60; 
+      padding: 20px 25px; 
+      margin: 25px 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      font-size: 1em; 
+      line-height: 1.6; 
+      color: #2c3e50; 
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .tech-doc-box h3 { color: #1a365d; margin-top: 20px; font-size: 1.15em; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+    .tech-doc-box h3:first-child { margin-top: 0; }
+    .tech-doc-box h4 { color: #2980b9; margin-top: 15px; font-size: 1.05em; }
+    .formula-math { font-family: monospace; background: #eef2f7; padding: 8px 12px; border-radius: 4px; display: inline-block; font-weight: bold; color: #1a365d; margin: 8px 0; }
   </style>
 </head>
 <body>
@@ -123,7 +141,7 @@
         <div class="img-container"><img src="../01-05 Trasmission-Chaine Cinematique Fabrication (P59).jpg" alt="Fiche 01-05"></div>
       </details>
 
-<!-- APPROFONDIMENTO TECNICO: ORGANES DE TRANSMISSION & RAPPORTS -->
+      <!-- APPROFONDIMENTO TECNICO: ORGANES DE TRANSMISSION & RAPPORTS -->
       <div class="tech-doc-box">
         <h3>5.1 Étude Approfondie des Mobiles et de la Denture</h3>
         <p>L'analyse détaillée des organes de transmission met en lumière des impératifs géométriques et tribologiques stricts pour garantir un rendement énergétique optimal (généralement supérieur à 90 % par mobile).</p>
@@ -156,40 +174,15 @@
         </div>
       </div>
 
-   <!-- 6. RAPPORTS DE TRANSMISSION ET CALCULS GÉOMÉTRIQUES -->
-      <h2 id="rapports-engrenage">6. Rapports Significatifs d'Engrenage &amp; Calcul de la Réserve de Marche</h2>
-      
-      <p>Pour garantir la rigueur de la chaîne cinématique, le calcul des rapports de transmission entre les mobiles doit s'appuyer sur le nombre exact de dents ($Z$) des roues et d'ailes des pignons ($N$).</p>
-
-      <!-- 1° Calcolo della Riserva di Marcia -->
-      <div style="background: #fdfdfd; border: 1px solid #dcdcdc; border-left: 5px solid #1a365d; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
-        <h4 style="margin-top: 0; color: #1a365d; font-size: 16px;">1° Calcul de la Réserve de Marches Théorique</h4>
-        <p style="font-size: 14px; margin-bottom: 8px;">
-          <strong>Paramètres de base :</strong> Barillet = 84 dents | Pignon de centre = 12 dents | Tours de remontage = 6.5 tours utiles.
-        </p>
-        <div class="formula-math">Rapport (i) = Z_{barillet} / N_{pignon\_centre} = 84 / 12 = 7</div>
-        <div class="formula-math" style="margin-top: 5px; display: block;">Autonomie totale = 7 × 6.5 tours = 45.5 heures</div>
-      </div>
-
-      <!-- 2° Rapport Roue de Centre - Roue de Seconde -->
-      <div style="background: #fdfdfd; border: 1px solid #dcdcdc; border-left: 5px solid #27ae60; padding: 20px; border-radius: 6px; margin-bottom: 25px;">
-        <h4 style="margin-top: 0; color: #27ae60; font-size: 16px;">2° Rapport Global : De la Roue de Centre à l'Échappement</h4>
-        <p style="font-size: 14px; margin-bottom: 8px;">
-          <strong>Vérification d'atelier (Correction rigoureuse) :</strong> Le train d'engrenages intermédiaire assure la multiplication exacte pour convertir la rotation lente du barillet en impulsions régulières pour l'oscillateur.
-        </p>
-        <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
-          <li><strong>Roue de centre → Pignon de troisième :</strong> 80 / 10 = 8</li>
-          <li><strong>Roue de troisième → Pignon de quatrième :</strong> 75 / 10 = 7.5</li>
-          <li><strong>Roue de quatrième → Pignon d'échappement :</strong> 70 / 7 = 10</li>
-        </ul>
-        <div class="formula-math" style="margin-top: 10px;">Rapport Global Intermédiaire = 8 × 7.5 × 10 = 600</div>
-      </div>
-  </div>
+    </div>  
+  </div>  
 
   <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
     <a href="_001C-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continuer la lecture ➔</a>
   </div>
   
   <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
-<script src="../script.js"></script>n</body>
+  
+  <script src="../script.js"></script>
+</body>
 </html>
