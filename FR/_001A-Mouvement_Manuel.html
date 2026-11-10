@@ -180,7 +180,7 @@
         <li><strong>Le Couvercle :</strong> Élément de fermeture qui assure le guidage axial de l'arbre et protège le mécanisme des poussières.</li>
       </ul>
 
-<!-- 3. MODELLO 3D INTERATTIVO DEL BARILLET (Allineato alla versione inglese funzionante) -->
+<!-- 3. MODELLO 3D INTERATTIVO DEL BARILLET -->
       <div class="img-always-visible">
         <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
           
@@ -248,7 +248,6 @@
             scene_barillet.add(dirLight2);
 
             const loader = new THREE.GLTFLoader();
-            // Percorso corretto alla radice per il file barillet_fix.glb funzionante
             loader.load('../barillet_fix.glb', function (gltf) {
                 const model = gltf.scene;
                 scene_barillet.add(model);
@@ -358,5 +357,108 @@
             window.addEventListener('load', initBarillet3D);
         }
       </script>
+
+      <!-- BLOCCO DI APPROFONDIMENTO TECNICO CON LA BARRA VERDE A SINISTRA -->
+      <div class="tech-doc-box">
+        <h3>4.1 Généralités et Rôle de l'Accumulateur d'Énergie</h3>
+        <p>Dans l'architecture d'un mouvement mécanique, l'énergie initiale est apportée par l'utilisateur lorsqu'il manipule la couronne de remontoir pour armer le ressort de barillet. Le système fonctionne ainsi comme un accumulateur d'énergie cinétique convertie en énergie potentielle élastique.</p>
+        <p>La chaîne fonctionnelle classique de l'horlogerie se décompose en cinq grands sous-ensembles :</p>
+        <ul>
+          <li><strong>Source d'énergie :</strong> Armage manuel ou automatique.</li>
+          <li><strong>Accumulateur :</strong> Barillet et son ressort.</li>
+          <li><strong>Comptage et Transmission :</strong> Rouage.</li>
+          <li><strong>Distribution :</strong> Échappement.</li>
+          <li><strong>Régulation & Affichage :</strong> Organe réglant et affichage de l'heure.</li>
+        </ul>
+
+        <h3>4.2 Le Barillet et son Ressort</h3>
+        <h4>4.2.1 Descriptif technique de l'assemblage</h4>
+        <p>L'ensemble du barillet est généralement composé de quatre éléments fondamentaux :</p>
+        <ul>
+          <li><strong>Tambour de barillet :</strong> Boîte cylindrique abritant le ressort et servant de pivotement à l'arbre. Une encoche ou un dégagement sur le diamètre intérieur permet d'accrocher l'extrémité du ressort pour assurer l'entraînement du tambour.</li>
+          <li><strong>Ressort de barillet :</strong> Lame élastique enroulée à l'intérieur du tambour.</li>
+          <li><strong>Arbre de barillet :</strong> Axe pivotant entre le pont et la platine, comportant une bonde munie d'un crochet pour fixer l'attache intérieure du ressort.</li>
+          <li><strong>Couvercle de barillet :</strong> Élément de fermeture de la boîte qui participe également au guidage et au pivotement de l'arbre.</li>
+        </ul>
+
+        <h4>4.2.2 Principe physique et évolution géométrique</h4>
+        <p>Le ressort se présente sous la forme d'une lame à section rectangulaire. En cherchant à reprendre sa forme initiale après avoir été enroulé serré autour de la bonde de l'arbre, il produit le couple nécessaire au fonctionnement du mouvement.</p>
+        <p>Historiquement, la géométrie du ressort a évolué d'un enroulement spiralé classique vers la forme en S inversé (ou bride à retour), optimisée en fonction de la limite d'élasticité du matériau pour garantir une restitution d'énergie plus linéaire. La denture périphérique du tambour transmet directement ce couple au rouage de minuterie et de moyenne.</p>
+
+        <h3>4.3 Analyse Cinématique : Nombre de Tours et États du Ressort</h3>
+        <p>Pour modéliser le comportement du ressort, on distingue trois états fondamentaux de développement :</p>
+        <ul>
+          <li><strong>N'' :</strong> Nombre de tours du ressort entièrement armé (enroulé serré autour de la bonde).</li>
+          <li><strong>N' :</strong> Nombre de tours du ressort détendu à l'intérieur du tambour (en appui contre la paroi interne R).</li>
+          <li><strong>N₀ :</strong> Nombre de tours théorique du ressort à l'état libre (détendu hors du barillet).</li>
+        </ul>
+        <p>La différence entre l'espace de la bonde (r) et le rayon interne du tambour (R) est calculée pour réserver environ 50 % de surface occupée et 50 % de surface libre, maximisant ainsi la capacité d'accumulation d'énergie.</p>
+        <p><strong>Formules fondamentales de développement :</strong></p>
+        <ul>
+          <li>Nombre de tours de développement total ($\Delta N_t$) : <div class="formula-math">ΔN_t = N'' - N₀</div></li>
+          <li>Nombre de tours utiles dans le barillet ($\Delta N_u$) : <div class="formula-math">ΔN_u = N'' - N'</div></li>
+        </ul>
+
+        <h3>4.4 Paramètres de Conception et Formules d'Ingénierie</h3>
+        <h4>4.4.1 Longueur théorique du ressort</h4>
+        <p>La longueur active <em>L</em> du ressort dépend de la géométrie du tambour et de la bonde :</p>
+        <div class="formula-math">L ≈ (R² - r²) / (2 · e)</div>
+        <p><em>(Note empirique d'atelier : pour optimiser l'énergie réelle, cette longueur théorique est généralement majorée de 10 % à 33 % selon les dimensions du mouvement).</em></p>
+
+        <h4>4.4.2 Moment de force maximal (M_opmax)</h4>
+        <p>Lorsque le ressort est complètement armé autour de la bonde, le moment de force maximal se calcule via l'expression :</p>
+        <div class="formula-math">M_opmax = (E · h · e³) / (12 · L) · 2π · ΔN_t</div>
+        <p><strong>Où :</strong></p>
+        <ul>
+          <li><strong>E</strong> = Module d'élasticité du matériau ($2,2 \times 10^5$ à $2,3 \times 10^5$ MPa ou N·mm⁻²).</li>
+          <li><strong>h</strong> = Hauteur (largeur) de la lame du ressort [mm].</li>
+          <li><strong>e</strong> = Épaisseur de la lame [mm].</li>
+          <li><strong>L</strong> = Longueur du ressort [mm].</li>
+          <li><strong>Δ N_t</strong> = Nombre de tours de développement total.</li>
+        </ul>
+
+        <h4>4.4.3 Propriétés de la Matière</h4>
+        <p>Les ressorts modernes de haute horlogerie utilisent des alliages à durcissement structural à base de cobalt, nickel et chrome (ex. Nivaflex). Ces matériaux amagnétiques offrent une ductilité élevée, une résistance à la corrosion et supportent de fortes contraintes élastiques sans déformation plastique permanente.</p>
+        <p><strong>Tension limite admissible (σ_max) :</strong> Comprise entre 2840 MPa et 3340 MPa selon les grades.</p>
+      </div>
+
+      <h2 id="croix-de-malte">3. Fixation du Ressort &amp; Régulation de Couple</h2>
+      <div class="img-always-visible">
+        <img src="../croix-de-malte.png" alt="Principe de fonctionnement de la Croix de Malte">
+        <div class="img-caption">📷 SCHÉMA TECHNIQUE — La Croix de Malte : blocage de la rotation pour l'exploitation de la plage de couple linéaire.</div>
+      </div>
+
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-03) — Fixation du Ressort, Croix de Malte &amp; Fusée</summary>
+        <div class="img-container"><img src="../01-03 Energie - Le Ressort (F4.4P46).jpg" alt="Fiche 01-03"></div>
+      </details>
+
+      <!-- FUSÉE-CHAÎNE -->
+      <div style="display: flex; gap: 20px; align-items: center; background: #fff; padding: 20px; border: 1px solid #dcdcdc; border-radius: 8px; margin-top: 25px; margin-bottom: 25px;">
+        <div style="flex: 0 0 45%;">
+          <img src="../fusee-chaine.png" alt="Système Fusée-Chaîne" style="width: 100%; height: auto; border-radius: 4px;">
+        </div>
+        <div style="flex: 1;">
+          <h4 style="margin-top: 0; color: #2c4d75; font-size: 16px;">Force Constante : La Fusée-Chaîne</h4>
+          <p style="font-size: 14px; margin-bottom: 10px;">
+            Ce mécanisme historique agit comme une boîte de vitesses à variation continue pour compenser la perte de couple du ressort moteur au fur et à mesure de son désarmage.
+          </p>
+          <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
+            <li><strong>Armage maximal :</strong> Le ressort est fort, la chaîne tire sur le <em>petit diamètre</em> de la fusée (bras de levier court).</li>
+            <li><strong>Désarmage :</strong> Le ressort s'affaiblit, la chaîne tire sur le <em>grand diamètre</em> de la fusée (bras de levier long), égalisant ainsi parfaitement la force transmise à l'échappement.</li>
+          </ul>
+        </div>
+      </div>
+      
+    </div> 
+  </div> 
+
+  <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
+    <a href="_001B-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continuer la lecture ➔</a>
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
+  <script src="../_ricerca.js"></script>
+  <script src="../script.js"></script>
 </body>
 </html>
