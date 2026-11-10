@@ -231,9 +231,14 @@
 
             const loader = new THREE.GLTFLoader();
             // Percorso corretto che sale dalla cartella FR/ alla radice per caricare il file del test
+            const loader = new THREE.GLTFLoader();
             loader.load('../bariletto_orologio_meccanico.main_design.glb', function (gltf) {
-                const model = gltf.scene;
-                scene_barillet.add(model);
+                const model = gltf.scene; // <--- QUESTA RIGA È FONDAMENTALE
+                scene_barillet.add(model); // <--- AGGIUNGE IL MODELLO ALLA SCENA
+
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        // ... resto del codice ...
 
                 model.traverse((child) => {
                     if (child.isMesh) {
@@ -284,3 +289,6 @@
 
         if (document.readyState === 'complete') { initBarillet3D(); } else { window.addEventListener('load', initBarillet3D); }
       </script>
+
+</body>
+</html>
