@@ -123,28 +123,34 @@
         <div class="img-container"><img src="../01-05 Trasmission-Chaine Cinematique Fabrication (P59).jpg" alt="Fiche 01-05"></div>
       </details>
 
-      <!-- CHAPITRE 6 -->
-      <h2 id="p6">6. Rapports Significatifs d'Engrenage & Calcul de la Réserve de Marche</h2>
-      <h3>1° Calcul de la Réserve de Marche Théorique</h3>
-      <ul><li>Barillet = 96 dents | Pignon de centre = 12 dents | Tours d'armage = 6.5 tours max</li></ul>
-      <div class="formula-box">
-        📐 <strong>Formule :</strong><br>
-        1. Rapport : <b>96 / 12 = 8</b><br>
-        2. Autonomie : <b>8 × 6.5 = 52 heures</b>.
-      </div>
-      <h3>2° Rapport Roue de Centre – Roue de Seconde (1/60)</h3>
-      <div class="formula-box">
-        ⚙️ <strong>Décomposition :</strong><br>
-        Centre / Pignon Moyen : <b>80 / 10 = 8</b><br>
-        Moyenne / Pignon Seconde : <b>60 / 8 = 7.5</b><br>
-        🎯 <strong>Rapport Global :</strong> <b>8 × 7.5 = 60</b>.
-      </div>
-      <details class="image-popover">
-        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-06) — Rapports Significatifs & Calculs</summary>
-        <div class="img-container"><img src="../01-06 Trasmission-Chaine Cinematique Rapport.jpg" alt="Fiche 01-06"></div>
-      </details>
+   <!-- 6. RAPPORTS DE TRANSMISSION ET CALCULS GÉOMÉTRIQUES -->
+      <h2 id="rapports-engrenage">6. Rapports Significatifs d'Engrenage &amp; Calcul de la Réserve de Marche</h2>
+      
+      <p>Pour garantir la rigueur de la chaîne cinématique, le calcul des rapports de transmission entre les mobiles doit s'appuyer sur le nombre exact de dents ($Z$) des roues et d'ailes des pignons ($N$).</p>
 
-    </div>
+      <!-- 1° Calcolo della Riserva di Marcia -->
+      <div style="background: #fdfdfd; border: 1px solid #dcdcdc; border-left: 5px solid #1a365d; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
+        <h4 style="margin-top: 0; color: #1a365d; font-size: 16px;">1° Calcul de la Réserve de Marches Théorique</h4>
+        <p style="font-size: 14px; margin-bottom: 8px;">
+          <strong>Paramètres de base :</strong> Barillet = 84 dents | Pignon de centre = 12 dents | Tours de remontage = 6.5 tours utiles.
+        </p>
+        <div class="formula-math">Rapport (i) = Z_{barillet} / N_{pignon\_centre} = 84 / 12 = 7</div>
+        <div class="formula-math" style="margin-top: 5px; display: block;">Autonomie totale = 7 × 6.5 tours = 45.5 heures</div>
+      </div>
+
+      <!-- 2° Rapport Roue de Centre - Roue de Seconde -->
+      <div style="background: #fdfdfd; border: 1px solid #dcdcdc; border-left: 5px solid #27ae60; padding: 20px; border-radius: 6px; margin-bottom: 25px;">
+        <h4 style="margin-top: 0; color: #27ae60; font-size: 16px;">2° Rapport Global : De la Roue de Centre à l'Échappement</h4>
+        <p style="font-size: 14px; margin-bottom: 8px;">
+          <strong>Vérification d'atelier (Correction rigoureuse) :</strong> Le train d'engrenages intermédiaire assure la multiplication exacte pour convertir la rotation lente du barillet en impulsions régulières pour l'oscillateur.
+        </p>
+        <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
+          <li><strong>Roue de centre → Pignon de troisième :</strong> 80 / 10 = 8</li>
+          <li><strong>Roue de troisième → Pignon de quatrième :</strong> 75 / 10 = 7.5</li>
+          <li><strong>Roue de quatrième → Pignon d'échappement :</strong> 70 / 7 = 10</li>
+        </ul>
+        <div class="formula-math" style="margin-top: 10px;">Rapport Global Intermédiaire = 8 × 7.5 × 10 = 600</div>
+      </div>
   </div>
 
   <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
