@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - Laboratoire Interactif & Aiguille Chronométrique</title>
+  
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+  
+  <style>
+    body {
+      background-color: #f4f6f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+    }
+    .lab-container {
+      background: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-radius: 8px;
+      padding: 30px;
+      max-width: 750px;
+      width: 100%;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      border-left: 6px solid #27ae60;
+    }
+    h2 {
+      color: #1a365d;
+      margin-top: 0;
+      font-size: 1.35em;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 10px;
+    }
+    p.intro {
+      color: #4a5568;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+    .gear-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8f9fa;
+      padding: 12px 18px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+    }
+    .gear-label {
+      font-weight: bold;
+      color: #2c3e50;
+      font-size: 0.95em;
+    }
+    .gear-select, .gear-input {
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+      font-weight: bold;
+      color: #1a365d;
+      background: #fff;
+      font-size: 1em;
+    }
+    .results-box {
+      background: #eef2f7;
+      border: 1px solid #cbd5e1;
+      padding: 20px;
+      border-radius: 6px;
+      margin-top: 25px;
+    }
+    .results-box h3 {
+      margin-top: 0;
+      color: #1a365d;
+      font-size: 1.1em;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 6px;
+    }
+    .result-line {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+      font-size: 1em;
+      color: #334155;
+      align-items: center;
+    }
+    .result-value {
+      font-family: monospace;
+      font-weight: bold;
+      padding: 3px 10px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+    }
+    .status-badge {
+      font-size: 0.9em;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    
+    /* Stile per l'indicatore grafico / Ago della bilancia */
+    .gauge-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+    .gauge-title {
+      font-weight: bold;
+      color: #1a365d;
+      font-size: 0.95em;
+      margin-bottom: 10px;
+    }
+    .clock-dial {
+      position: relative;
+      width: 160px;
+      height: 80px;
+      border-top-left-radius: 80px;
+      border-top-right-radius: 80px;
+      background: #f1f5f9;
+      border: 2px solid #cbd5e1;
+      border-bottom: none;
+      overflow: hidden;
+    }
+    .dial-mark {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      height: 10px;
+      background: #94a3b8;
+      transform-origin: bottom center;
+    }
+    .needle {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 4px;
+      height: 70px;
+      background: #1a365d;
+      transform-origin: bottom center;
+      transform: translateX(-50%) rotate(0deg);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 4px 4px 0 0;
+    }
+    .needle::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 12px;
+      background: #d9534f;
+      border-radius: 50%;
+      border: 2px solid #fff;
+    }
+    .dial-labels {
+      display: flex;
+      justify-content: space-between;
+      width: 180px;
+      font-size: 0.75em;
+      color: #64748b;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lab-container">
+    <h2>⚙️ Atelier Virtuel : Banc d'Essai & Aiguille Chronométrique</h2>
+    <p class="intro">Composez librement le nombre de dents (Z) et les pignons (N). L'aiguille de contrôle indique instantanément si votre train de rouage respecte la révolution exacte de 60 secondes.</p>
+
+    <!-- Fréquence de l'échappement -->
+    <div class="gear-row" style="background: #e8f4fd; border-color: #bbe1fa;">
+      <span class="gear-label" style="color: #1d4ed8;">⚡ Fréquence du Balancier / Échappement :</span>
+      <select id="frequence" class="gear-select" onchange="calculateRouage()">
+        <option value="18000">18'000 A/h (2.5 Hz)</option>
+        <option value="19800">19'800 A/h (2.75 Hz)</option>
+        <option value="21600">21'600 A/h (3.0 Hz)</option>
+        <option value="28800" selected>28'800 A/h (4.0 Hz - Haute Fréquence)</option>
+      </select>
+    </div>
+
+    <!-- Barillet -->
+    <div class="gear-row">
+      <span class="gear-label">1. Barillet (Dents Z1) :</span>
+      <select id="z_barillet" class="gear-select" onchange="calculateRouage()">
+        <option value="72" selected>72 dents</option>
+        <option value="78">78 dents</option>
+        <option value="80">80 dents</option>
+        <option value="84">84 dents</option>
+        <option value="90">90 dents</option>
+      </select>
+    </div>
+
+    <!-- Pignon de Centre -->
+    <div class="gear-row">
+      <span class="gear-label">2. Pignon de Centre (Ailes N1) :</span>
+      <select id="n_centre" class="gear-select" onchange="calculateRouage()">
+        <option value="10" selected>10 ailes</option>
+        <option value="12">12 ailes</option>
+        <option value="14">14 ailes</option>
+      </select>
+    </div>
+
+    <!-- Roue de Centre -> Pignon de Troisième -->
+    <div class="gear-row">
+      <span class="gear-label">3. Roue de Centre / Pignon 3e (Z2 / N2) :</span>
+      <div>
+        Roue: <input type="number" id="z_centre" value="91" class="gear-input" style="width: 70px;" oninput="calculateRouage()"> 
+        Pignon: <input type="number" id="n_troisieme" value="21" class="gear-input" style="width: 70px;" oninput="calculateRouage()">
+      </div>
+    </div>
+
+    <!-- Roue de Troisième -> Pignon de Quatrième -->
+    <div class="gear-row">
+      <span class="gear-label">4. Roue 3e / Pignon 4e (Z3 / N3) :</span>
+      <div>
+        Roue: <input type="number" id="z_troisieme" value="81" class="gear-input" style="width: 70px;" oninput="calculateRouage()"> 
+        Pignon: <input type="number" id="n_quatrieme" value="10" class="gear-input" style="width: 70px;" oninput="calculateRouage()">
+      </div>
+    </div>
+
+    <!-- Roue de Quatrième -> Pignon d'Échappement -->
+    <div class="gear-row">
+      <span class="gear-label">5. Roue 4e / Pignon Échappement (Z4 / N4) :</span>
+      <div>
+        Roue: <input type="number" id="z_quatrieme" value="70" class="gear-input" style="width: 70px;" oninput="calculateRouage()"> 
+        Pignon: <input type="number" id="n_echappement" value="13" class="gear-input" style="width: 70px;" oninput="calculateRouage()">
+      </div>
+    </div>
+
+    <!-- Box dei Risultati in Tempo Reale -->
+    <div class="results-box">
+      <h3>📊 Résultats & Aiguille de Contrôle</h3>
+      
+      <div class="result-line">
+        <span>Rapport Barillet ➔ Centre :</span>
+        <span id="res_barillet" class="result-value" style="background:#fff; color:#1a365d;">7.00</span>
+      </div>
+      <div class="result-line">
+        <span>Autonomie Théorique :</span>
+        <span id="res_autonomie" class="result-value" style="background:#fff; color:#1a365d;">46.8 h</span>
+      </div>
+      <div class="result-line">
+        <span>Rapport Global Intermédiaire :</span>
+        <span id="res_global" class="result-value" style="background:#fff; color:#1a365d;">600.0</span>
+      </div>
+      
+      <div class="result-line" style="margin-top: 12px; border-top: 1px dashed #cbd5e1; padding-top: 12px;">
+        <span><strong>Temps réel d'un tour de Seconde :</strong></span>
+        <span id="res_temps_tour" class="result-value" style="font-size: 1.1em;">60.0 s</span>
+      </div>
+      
+      <div class="result-line" style="align-items: center; margin-top: 8px;">
+        <span>Statut Chronométrique :</span>
+        <span id="res_status" class="status-badge" style="background: #d1fae5; color: #065f46;">Conforme (60s exactes)</span>
+      </div>
+
+      <!-- AGUILLE DE LA BALANCE (INDICATORE GRAFICO) -->
+      <div class="gauge-container">
+        <div class="gauge-title">⚖️ Aiguille de Contrôle Chronométrique</div>
+        <div class="clock-dial" id="dialBox">
+          <!-- Tacche di riferimento -->
+          <div class="dial-mark" style="transform: translateX(-50%) rotate(-60deg); height: 6px;"></div>
+          <div class="dial-mark" style="transform: translateX(-50%) rotate(-30deg); height: 6px;"></div>
+          <div class="dial-mark" style="transform: translateX(-50%) rotate(0deg); height: 12px; background: #27ae60;"></div>
+          <div class="dial-mark" style="transform: translateX(-50%) rotate(30deg); height: 6px;"></div>
+          <div class="dial-mark" style="transform: translateX(-50%) rotate(60deg); height: 6px;"></div>
+          <!-- L'ago mobile -->
+          <div class="needle" id="gaugeNeedle"></div>
+        </div>
+        <div class="dial-labels">
+          <span>10h (Avance)</span>
+          <span style="color: #27ae60; font-weight: bold;">12h (60s)</span>
+          <span>2h (Retard)</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function calculateRouage() {
+      let freq = parseFloat(document.getElementById('frequence').value);
+      let zB = parseFloat(document.getElementById('z_barillet').value);
+      let nC = parseFloat(document.getElementById('n_centre').value);
+      
+      let zC = parseFloat(document.getElementById('z_centre').value);
+      let n3 = parseFloat(document.getElementById('n_troisieme').value);
+      
+      let z3 = parseFloat(document.getElementById('z_troisieme').value);
+      let n4 = parseFloat(document.getElementById('n_quatrieme').value);
+      
+      let z4 = parseFloat(document.getElementById('z_quatrieme').value);
+      let nE = parseFloat(document.getElementById('n_echappement').value);
+
+      // 1. Rapport Barillet
+      let ratioBarillet = zB / nC;
+      let autonomy = ratioBarillet * 6.5;
+      
+      // 2. Rapport Global du train
+      let stage1 = zC / n3;
+      let stage2 = z3 / n4;
+      let stage3 = z4 / nE;
+      let globalRatio = stage1 * stage2 * stage3;
+
+      // 3. Référence idéale selon la fréquence (pour que le rapport global donne exactement 60s)
+      let rapportIdealRef = 600; 
+      if (freq === 18000) rapportIdealRef = 500;
+      if (freq === 19800) rapportIdealRef = 550;
+      if (freq === 21600) rapportIdealRef = 600;
+      if (freq === 28800) rapportIdealRef = 800; // Esempio di riferimento per 28800
+
+      // Temps réel d'un tour en fonction du rapport global assemblé
+      let tempsTour = 60 * (globalRatio / rapportIdealRef);
+
+      // Mise à jour interface valeurs
+      document.getElementById('res_barillet').innerText = ratioBarillet.toFixed(2);
+      document.getElementById('res_autonomie').innerText = autonomy.toFixed(1) + " h";
+      document.getElementById('res_global').innerText = globalRatio.toFixed(1);
+      
+      let timeValEl = document.getElementById('res_temps_tour');
+      timeValEl.innerText = tempsTour.toFixed(2) + " s";
+
+      let statusEl = document.getElementById('res_status');
+      let needleEl = document.getElementById('gaugeNeedle');
+
+      // Calcul de l'angle de l'aiguille (-60deg à +60deg)
+      // 60s = 0deg (12h). Si temps < 60 (avance -> 10h), angle négatif. Si temps > 60 (retard -> 2h), angle positif.
+      let diff = tempsTour - 60.0;
+      let angleDeg = diff * 3.0; // Sensibilité de l'aiguille
+      if (angleDeg < -75) angleDeg = -75;
+      if (angleDeg > 75) angleDeg = 75;
+
+      needleEl.style.transform = `translateX(-50%) rotate(${angleDeg}deg)`;
+
+      if (Math.abs(tempsTour - 60.0) < 0.1) {
+        statusEl.innerText = "Conforme (60s exactes)";
+        statusEl.style.background = "#d1fae5";
+        statusEl.style.color = "#065f46";
+        timeValEl.style.background = "#d1fae5";
+        timeValEl.style.color = "#065f46";
+      } else if (tempsTour < 60.0) {
+        statusEl.innerText = "Avance (Tour trop rapide)";
+        statusEl.style.background = "#fee2e2";
+        statusEl.style.color = "#991b1b";
+        timeValEl.style.background = "#fee2e2";
+        timeValEl.style.color = "#991b1b";
+      } else {
+        statusEl.innerText = "Retard (Tour trop lent)";
+        statusEl.style.background = "#fee2e2";
+        statusEl.style.color = "#991b1b";
+        timeValEl.style.background = "#fee2e2";
+        timeValEl.style.color = "#991b1b";
+      }
+    }
+
+    window.onload = calculateRouage;
+  </script>
+
+</body>
+</html>
