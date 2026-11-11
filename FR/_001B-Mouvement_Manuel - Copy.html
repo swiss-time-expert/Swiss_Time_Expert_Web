@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - 1. Le Mouvement à Remontage Manuel</title>
+  
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+  
+  <style>
+    /* Stili per le Lingue e Menu a Tendina */
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(255,255,255,0.3); }
+    .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+
+    /* Box di approfondimento con barra verde a sinistra */
+    .tech-doc-box { 
+      background: #f8f9fa; 
+      border-left: 5px solid #27ae60; 
+      padding: 20px 25px; 
+      margin: 25px 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      font-size: 1em; 
+      line-height: 1.6; 
+      color: #2c3e50; 
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .tech-doc-box h3 { color: #1a365d; margin-top: 20px; font-size: 1.15em; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+    .tech-doc-box h3:first-child { margin-top: 0; }
+    .tech-doc-box h4 { color: #2980b9; margin-top: 15px; font-size: 1.05em; }
+    .formula-math { font-family: monospace; background: #eef2f7; padding: 8px 12px; border-radius: 4px; display: inline-block; font-weight: bold; color: #1a365d; margin: 8px 0; }
+  </style>
+</head>
+<body>
+
+  <!-- ================= HEADER A DUE COLONNE ================= -->
+  <div class="header-card">
+    
+    <div class="header-left-block">
+      <div class="badge">Haute Horlogerie — Brevet Fédéral</div>
+      <h1>1. Le Mouvement à Remontage Manuel</h1>
+      <p class="subtitle">Cours d'expertise horlogère — Caractéristiques Techniques</p>
+      
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Menu Principal</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. Le Mouvement à Remontage Manuel</a>
+            <a href="_002-la-montre-automatique.html">2. La Montre Automatique</a>
+            <a href="_003-Horloge_Electronique.html">3. L'Horloge Électronique & Quartz</a>
+            <a href="_004-Complications.html">4. Les Complications</a>
+            <a href="_005-Familles_Matieres.html">5. Les Familles de Matières</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Phases et Technologies de Fabrication</a>
+            <a href="_007-Habillage.html">7. L'Habillage de la Montre</a>
+            <a href="#">8. Histoire de la Mesure du Temps</a>
+          </div>
+        </div>
+
+        <div class="lang-switcher">
+          <a href="#" class="lang-btn active">FR</a>
+          <a href="../EN/_001B-Mouvement_Manuel.html" class="lang-btn">EN</a>
+          <a href="../DE/_001B-Mouvement_Manuel.html" class="lang-btn">DE</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right-block">
+     <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+    </div>
+
+  </div>
+
+  <!-- ================= NOTEBOOK ================= -->
+  <div class="notebook-container" id="notebook-main">
+    
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Module 01 : Le Ressort Moteur (Suite)</h2>
+      </div>
+      <div class="tag-chic">✍️ Notes de Cours & Schémas</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <!-- CHAPITRE 4 -->
+      <h2 id="p4">4. Caractéristiques Techniques de la Matière Nivaflex®</h2>
+      <p>Composition métallurgique et propriétés des alliages pour ressorts moteurs d'horlogerie :</p>
+      <table class="table-custom">
+        <thead><tr><th>Alliage</th><th>Co</th><th>Ni</th><th>Cr</th><th>Fe</th><th>W</th><th>Mo</th><th>Ti</th><th>Be</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Nivaflex® 45/18</strong></td><td>45%</td><td>21%</td><td>18%</td><td>5%</td><td>4%</td><td>4%</td><td>1%</td><td>0%</td></tr>
+          <tr><td><strong>Nivaflex® 45/5</strong></td><td>45%</td><td>21%</td><td>18%</td><td>5%</td><td>4%</td><td>4%</td><td>1%</td><td>0.2%</td></tr>
+        </tbody>
+      </table>
+      <ul>
+        <li><strong>Propriétés Physiques :</strong> Densité 8.5 g/cm³, 100% Amagnétique.</li>
+        <li><strong>Atouts Horlogers :</strong> Totalement inoxydable, dureté (830 Vickers), haute résistance.</li>
+      </ul>
+
+      <!-- CHAPITRE 5 -->
+      <h2 id="p5">5. Transmission : Chaîne Cinématique & Structure du Mobile</h2>
+      <ul>
+        <li><strong>Ordre Cinématique :</strong><br><b>Barillet ➔ Roue de Centre ➔ Roue Moyenne ➔ Roue de Seconde ➔ Échappement</b></li>
+      </ul>
+      <div class="img-always-visible">
+        <div class="interactive-wrapper" style="max-width: 620px;">
+          <img src="../rouage-transmission.png" onerror="this.onerror=null; this.src='../rouage-transmission.jpg';" alt="Rouage">
+          <div class="pin-marker" style="top: 48%; left: 83%;">1</div>
+          <div class="pin-marker" style="top: 42%; left: 96%;">2</div>
+          <div class="pin-marker" style="top: 47%; left: 9%;">3</div>
+          <div class="pin-marker" style="top: 86%; left: 23%;">4</div>
+          <div class="pin-marker" style="top: 77%; left: 81%;">5</div>
+        </div>
+        <div class="legend-grid">
+          <div class="legend-item"><span class="badge-mini">1</span> B — Barillet</div>
+          <div class="legend-item"><span class="badge-mini">2</span> C — Roue de centre</div>
+          <div class="legend-item"><span class="badge-mini">3</span> M — Roue moyenne</div>
+          <div class="legend-item"><span class="badge-mini">4</span> S — Roue de seconde</div>
+          <div class="legend-item"><span class="badge-mini">5</span> E — Pignon d'échappement</div>
+        </div>
+      </div>
+      <ul>
+        <li><strong>Structure d'un Mobile :</strong> Planche (laiton), Pignon (acier). Assemblage par chassage.</li>
+        <li><strong>Taillage :</strong> Fraisage de forme (profil cycloïdal).</li>
+        <li><strong>Traitement :</strong> Roulage des pivots pour durcissement superficiel.</li>
+      </ul>
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-05) — Transmission & Mobiles</summary>
+        <div class="img-container"><img src="../01-05 Trasmission-Chaine Cinematique Fabrication (P59).jpg" alt="Fiche 01-05"></div>
+      </details>
+
+      <!-- APPROFONDIMENTO TECNICO: ORGANES DE TRANSMISSION & RAPPORTS -->
+      <div class="tech-doc-box">
+        <h3>5.1 Étude Approfondie des Mobiles et de la Denture</h3>
+        <p>L'analyse détaillée des organes de transmission met en lumière des impératifs géométriques et tribologiques stricts pour garantir un rendement énergétique optimal (généralement supérieur à 90 % par mobile).</p>
+
+        <h3 id="p5-1">5.1.1 Le Profil de Denture (Profil Cycloïdal)</h3>
+        <p>Contrairement à la mécanique industrielle qui privilégie le profil de denture développante de cercle, l'horlogerie suisse utilise traditionnellement le <strong>profil cycloïdal</strong> (et particulièrement l'épicycloïde pour les dents de la roue et l'hypocycloïde pour les flancs du pignon). Ce choix répond à des contraintes spécifiques :</p>
+        
+        <!-- SCHÉMA TECHNIQUE ILLUSTRATIF DU PROFIL CYCLOÏDAL (UNICO E PULITO) -->
+        <div class="img-always-visible" style="text-align: center; margin: 25px 0;">
+          <div style="position: relative; display: inline-block; max-width: 550px; width: 100%; background: #fff; padding: 12px; border: 1px solid #dcdcdc; border-radius: 8px;">
+            <img src="../profil-cycloide.png" onerror="this.onerror=null; this.src='../profil-cycloide.jpg';" alt="Schéma du profil cycloïdal" style="width: 100%; height: auto; display: block; border-radius: 4px;">
+          </div>
+          <div class="img-caption" style="font-size: 13px; color: #555; margin-top: 8px;">📷 SCHÉMA TECHNIQUE — Engrenage cycloïdal : interaction entre l'épicycloïde (dents de la roue) et l'hypocycloïde (flancs du pignon).</div>
+        </div>
+
+        <ul>
+          <li><strong>Frottement réduit au minimum :</strong> L'engrènement cycloïdal minimise le glissement des surfaces au moment de l'attaque et du dégagement des dents. Il n'y a pas de contact sur la ligne de centres.</li>
+          <li><strong>Tolérance au jeu d'engrènement :</strong> Les mobiles horlogers fonctionnent sans lubrification lourde sur les rouages intermédiaires ; le profil tolère de légères variations d'inter-axes sans bloquer le train.</li>
+        </ul>
+
+        <h3 id="p5-2">5.1.2 Calculs Rigoureux des Rapports de Transmission</h3>
+        <p>Pour garantir la rigueur de la chaîne cinématique, le calcul des rapports s'appuie sur le nombre exact de dents ($Z$) des roues et d'ailes des pignons ($N$) :</p>
+        
+        <div style="background: #fff; border: 1px solid #dcdcdc; padding: 15px; border-radius: 6px; margin: 15px 0;">
+          <h4 style="margin-top: 0; color: #1a365d; font-size: 15px;">1° Calcul de la Réserve de Marche Théorique</h4>
+          <p style="font-size: 14px; margin-bottom: 5px;"><strong>Paramètres :</strong> Barillet = 84 dents | Pignon de centre = 12 dents | Tours utiles = 6.5</p>
+          <div class="formula-math">Rapport (i) = 84 / 12 = 7</div>
+          <div class="formula-math" style="display: block; margin-top: 5px;">Autonomie totale = 7 × 6.5 = 45.5 heures</div>
+        </div>
+
+        <div style="background: #fff; border: 1px solid #dcdcdc; padding: 15px; border-radius: 6px; margin: 15px 0;">
+          <h4 style="margin-top: 0; color: #27ae60; font-size: 15px;">2° Rapport Global : De la Roue de Centre à l'Échappement</h4>
+          <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
+            <li>Roue de centre → Pignon de troisième : 80 / 10 = 8</li>
+            <li>Roue de troisième → Pignon de quatrième : 75 / 10 = 7.5</li>
+            <li>Roue de quatrième → Pignon d'échappement : 70 / 7 = 10</li>
+          </ul>
+          <div class="formula-math" style="margin-top: 8px;">Rapport Global Intermédiaire = 8 × 7.5 × 10 = 600</div>
+        </div>
+      </div>
+
+    </div>  
+  </div>  
+
+  <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
+    <a href="_001C-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continuer la lecture ➔</a>
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
+  
+  <script src="../script.js"></script>
+</body>
+</html>
