@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../_stile.css">
   
   <style>
+    /* Stili per le Lingue e Menu a Tendina */
     .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
     .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
     .lang-btn:hover { background: rgba(255,255,255,0.3); }
@@ -23,6 +24,7 @@
     .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
     .dropdown:hover .dropdown-content { display: block; }
 
+    /* Box di approfondimento con barra verde a sinistra */
     .tech-doc-box { 
       background: #f8f9fa; 
       border-left: 5px solid #27ae60; 
@@ -45,6 +47,7 @@
 
   <!-- ================= HEADER A DUE COLONNE ================= -->
   <div class="header-card">
+    
     <div class="header-left-block">
       <div class="badge">Haute Horlogerie — Brevet Fédéral</div>
       <h1>1. Le Mouvement à Remontage Manuel</h1>
@@ -76,10 +79,12 @@
     <div class="header-right-block">
      <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
     </div>
+
   </div>
 
   <!-- ================= NOTEBOOK ================= -->
   <div class="notebook-container" id="notebook-main">
+    
     <div class="notebook-header">
       <div class="notebook-title-cell">
         <h2 class="handwritten-heading">Module 01 : Le Ressort Moteur (Suite)</h2>
@@ -144,6 +149,14 @@
         <h3 id="p5-1">5.1.1 Le Profil de Denture (Profil Cycloïdal)</h3>
         <p>Contrairement à la mécanique industrielle qui privilégie le profil de denture développante de cercle, l'horlogerie suisse utilise traditionnellement le <strong>profil cycloïdal</strong> (et particulièrement l'épicycloïde pour les dents de la roue et l'hypocycloïde pour les flancs du pignon). Ce choix répond à des contraintes spécifiques :</p>
         
+        <!-- IMMAGINE 3D D'ATELIER (PROFILO CICLOIDALE) -->
+        <div class="img-always-visible" style="text-align: center; margin: 25px 0;">
+          <div style="position: relative; display: inline-block; max-width: 580px; width: 100%; background: #fff; padding: 10px; border: 1px solid #dcdcdc; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.04);">
+            <img src="profil-cycloide.png" alt="Modélisation 3D du Profil Cycloïdal" style="width: 100%; height: auto; display: block; border-radius: 4px;">
+          </div>
+          <div class="img-caption" style="font-size: 13px; color: #555; margin-top: 8px; font-style: italic;">📷 MODÉLISATION 3D D'ATELIER — Vue rapprochée de l'engrènement : interaction géométrique entre les dents de la roue et le pignon.</div>
+        </div>
+
         <ul>
           <li><strong>Frottement réduit au minimum :</strong> L'engrènement cycloïdal minimise le glissement des surfaces au moment de l'attaque et du dégagement des dents. Il n'y a pas de contact sur la ligne de centres.</li>
           <li><strong>Tolérance au jeu d'engrènement :</strong> Les mobiles horlogers fonctionnent sans lubrification lourde sur les rouages intermédiaires ; le profil tolère de légères variations d'inter-axes sans bloquer le train.</li>
