@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swiss Time Expert - Laboratoire Interactif & Aiguille Chronométrique</title>
+  <title>Swiss Time Expert - Laboratoire Interactif & Calibres Historiques</title>
   
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
@@ -69,7 +69,7 @@
       padding: 20px;
       border-radius: 6px;
       margin-top: 25px;
-      transition: background 0.3s ease;
+      transition: all 0.3s ease;
     }
     .results-box h3 {
       margin-top: 0;
@@ -102,7 +102,7 @@
       transition: all 0.3s ease;
     }
     
-    /* Stile per l'indicatore grafico / Ago della bilancia ripulito */
+    /* Stile per l'indicatore grafico / Ago della bilancia */
     .gauge-container {
       display: flex;
       flex-direction: column;
@@ -188,28 +188,41 @@
 <body>
 
   <div class="lab-container">
-    <h2>⚙️ Atelier Virtuel : Banc d'Essai & Aiguille Chronométrique</h2>
-    <p class="intro">Composez librement le nombre de dents (Z) et les pignons (N). L'aiguille de contrôle et les codes couleur indiquent instantanément l'écart chronométrique.</p>
+    <h2>⚙️ Atelier Virtuel : Banc d'Essai & Calibres Historiques</h2>
+    <p class="intro">Sélectionnez un calibre de référence (y compris le légendaire 5 Hz) ou composez librement les rouages. L'aiguille de contrôle indique instantanément la conformité chronométrique.</p>
+
+    <!-- SELETTORE CALIBRI STORICI / STANDARD -->
+    <div class="gear-row" style="background: #eef2f7; border-color: #cbd5e1;">
+      <span class="gear-label" style="color: #1a365d;">🏛️ Sélection du Calibre de Référence :</span>
+      <select id="presetCalibre" class="gear-select" onchange="applyPreset()" style="background: #fff; color: #1a365d; border-color: #94a3b8;">
+        <option value="custom">-- Mode Libre (Personnalisé) --</option>
+        <option value="unitas">Calibre Standard 3 Hz (ex: ETA / Unitas 6498)</option>
+        <option value="eta2824">Calibre Automatique 4 Hz (ex: ETA 2824-2)</option>
+        <option value="elprimero">Calibre Haute Fréquence 5 Hz (ex: Zenith El Primero)</option>
+        <option value="patek">Calibre Haute Horlogerie (Inspiration Patek Manifattura)</option>
+      </select>
+    </div>
 
     <!-- Fréquence de l'échappement -->
     <div class="gear-row" style="background: #e8f4fd; border-color: #bbe1fa;">
       <span class="gear-label" style="color: #1d4ed8;">⚡ Fréquence du Balancier / Échappement :</span>
-      <select id="frequence" class="gear-select" onchange="calculateRouage()">
+      <select id="frequence" class="gear-select" onchange="onManualChange()">
         <option value="18000">18'000 A/h (2.5 Hz)</option>
         <option value="19800">19'800 A/h (2.75 Hz)</option>
-        <option value="21600">21'600 A/h (3.0 Hz)</option>
-        <option value="28800" selected>28'800 A/h (4.0 Hz - Haute Fréquence)</option>
+        <option value="21600" selected>21'600 A/h (3.0 Hz)</option>
+        <option value="28800">28'800 A/h (4.0 Hz)</option>
+        <option value="36000">36'000 A/h (5.0 Hz - El Primero)</option>
       </select>
     </div>
 
     <!-- Barillet -->
     <div class="gear-row">
       <span class="gear-label">1. Barillet (Dents Z1) :</span>
-      <select id="z_barillet" class="gear-select" onchange="calculateRouage()">
-        <option value="72" selected>72 dents</option>
+      <select id="z_barillet" class="gear-select" onchange="onManualChange()">
+        <option value="72">72 dents</option>
         <option value="78">78 dents</option>
         <option value="80">80 dents</option>
-        <option value="84">84 dents</option>
+        <option value="84" selected>84 dents</option>
         <option value="90">90 dents</option>
       </select>
     </div>
@@ -217,9 +230,9 @@
     <!-- Pignon de Centre -->
     <div class="gear-row">
       <span class="gear-label">2. Pignon de Centre (Ailes N1) :</span>
-      <select id="n_centre" class="gear-select" onchange="calculateRouage()">
-        <option value="10" selected>10 ailes</option>
-        <option value="12">12 ailes</option>
+      <select id="n_centre" class="gear-select" onchange="onManualChange()">
+        <option value="10">10 ailes</option>
+        <option value="12" selected>12 ailes</option>
         <option value="14">14 ailes</option>
       </select>
     </div>
@@ -228,8 +241,8 @@
     <div class="gear-row">
       <span class="gear-label">3. Roue de Centre / Pignon 3e (Z2 / N2) :</span>
       <div>
-        Roue: <input type="number" id="z_centre" value="91" class="gear-input" style="width: 70px;" oninput="calculateRouage()"> 
-        Pignon: <input type="number" id="n_troisieme" value="21" class="gear-input" style="width: 70px;" oninput="calculateRouage()">
+        Roue: <input type="number" id="z_centre" value="80" class="gear-input" style="width: 70px;" oninput="onManualChange()"> 
+        Pignon: <input type="number" id="n_troisieme" value="10" class="gear-input" style="width: 70px;" oninput="onManualChange()">
       </div>
     </div>
 
@@ -237,8 +250,8 @@
     <div class="gear-row">
       <span class="gear-label">4. Roue 3e / Pignon 4e (Z3 / N3) :</span>
       <div>
-        Roue: <input type="number" id="z_troisieme" value="43" class="gear-input" style="width: 70px;" oninput="calculateRouage()"> 
-        Pignon: <input type="number" id="n_quatrieme" value="9" class="gear-input" style="width: 70px;" oninput="calculateRouage()">
+        Roue: <input type="number" id="z_troisieme" value="75" class="gear-input" style="width: 70px;" oninput="onManualChange()"> 
+        Pignon: <input type="number" id="n_quatrieme" value="10" class="gear-input" style="width: 70px;" oninput="onManualChange()">
       </div>
     </div>
 
@@ -246,8 +259,8 @@
     <div class="gear-row">
       <span class="gear-label">5. Roue 4e / Pignon Échappement (Z4 / N4) :</span>
       <div>
-        Roue: <input type="number" id="z_quatrieme" value="296" class="gear-input" style="width: 70px;" oninput="calculateRouage()"> 
-        Pignon: <input type="number" id="n_echappement" value="13" class="gear-input" style="width: 70px;" oninput="calculateRouage()">
+        Roue: <input type="number" id="z_quatrieme" value="70" class="gear-input" style="width: 70px;" oninput="onManualChange()"> 
+        Pignon: <input type="number" id="n_echappement" value="7" class="gear-input" style="width: 70px;" oninput="onManualChange()">
       </div>
     </div>
 
@@ -261,21 +274,21 @@
       </div>
       <div class="result-line">
         <span>Autonomie Théorique :</span>
-        <span id="res_autonomie" class="result-value" style="background:#fff; color:#1a365d;">33.4 h</span>
+        <span id="res_autonomie" class="result-value" style="background:#fff; color:#1a365d;">45.5 h</span>
       </div>
       <div class="result-line">
         <span>Rapport Global Intermédiaire :</span>
-        <span id="res_global" class="result-value" style="background:#fff; color:#1a365d;">471.4</span>
+        <span id="res_global" class="result-value" style="background:#fff; color:#1a365d;">600.0</span>
       </div>
       
       <div class="result-line" style="margin-top: 12px; border-top: 1px dashed #cbd5e1; padding-top: 12px;">
         <span><strong>Temps réel d'un tour de Seconde :</strong></span>
-        <span id="res_temps_tour" class="result-value" style="font-size: 1.1em;">56.57 s</span>
+        <span id="res_temps_tour" class="result-value" style="font-size: 1.1em;">60.00 s</span>
       </div>
       
       <div class="result-line" style="align-items: center; margin-top: 8px;">
         <span>Statut Chronométrique :</span>
-        <span id="res_status" class="status-badge">Avance (Trop Rapide)</span>
+        <span id="res_status" class="status-badge">Conforme (60s exactes)</span>
       </div>
 
       <!-- AGUILLE DE LA BALANCE RIPULITA -->
@@ -301,6 +314,39 @@
   </div>
 
   <script>
+    // PRESET DEI CALIBRI STORICI (inclus 5 Hz El Primero)
+    const calibresPresets = {
+      unitas: { freq: "21600", zB: "84", nC: "12", zC: "80", n3: "10", z3: "75", n4: "10", z4: "70", nE: "7", ref: 600 },
+      eta2824: { freq: "28800", zB: "78", nC: "12", zC: "75", n3: "10", z3: "70", n4: "10", z4: "80", nE: "8", ref: 800 },
+      elprimero: { freq: "36000", zB: "80", nC: "10", zC: "80", n3: "10", z3: "75", n4: "10", z4: "100", nE: "10", ref: 1000 },
+      patek: { freq: "21600", zB: "88", nC: "12", zC: "80", n3: "10", z3: "72", n4: "10", z4: "75", nE: "7.5", ref: 600 }
+    };
+
+    function applyPreset() {
+      let val = document.getElementById('presetCalibre').value;
+      if (val === 'custom') return;
+
+      let p = calibresPresets[val];
+      if (p) {
+        document.getElementById('frequence').value = p.freq;
+        document.getElementById('z_barillet').value = p.zB;
+        document.getElementById('n_centre').value = p.nC;
+        document.getElementById('z_centre').value = p.zC;
+        document.getElementById('n_troisieme').value = p.n3;
+        document.getElementById('z_troisieme').value = p.z3;
+        document.getElementById('n_quatrieme').value = p.n4;
+        document.getElementById('z_quatrieme').value = p.z4;
+        document.getElementById('n_echappement').value = p.nE;
+        
+        calculateRouage();
+      }
+    }
+
+    function onManualChange() {
+      document.getElementById('presetCalibre').value = 'custom';
+      calculateRouage();
+    }
+
     function calculateRouage() {
       let freq = parseFloat(document.getElementById('frequence').value);
       let zB = parseFloat(document.getElementById('z_barillet').value);
@@ -325,12 +371,13 @@
       let stage3 = z4 / nE;
       let globalRatio = stage1 * stage2 * stage3;
 
-      // 3. Référence idéale selon la fréquence
+      // 3. Référence idéale selon la fréquence (inclus 36000 A/h -> 5 Hz)
       let rapportIdealRef = 600; 
       if (freq === 18000) rapportIdealRef = 500;
       if (freq === 19800) rapportIdealRef = 550;
       if (freq === 21600) rapportIdealRef = 600;
       if (freq === 28800) rapportIdealRef = 800;
+      if (freq === 36000) rapportIdealRef = 1000;
 
       let tempsTour = 60 * (globalRatio / rapportIdealRef);
 
@@ -347,8 +394,6 @@
       let resultsBoxEl = document.getElementById('resultsBox');
 
       // Calcul de l'angle de l'aiguille (-75deg à +75deg)
-      // Si temps < 60 (avance -> a sinistra / rosso), angle négatif.
-      // Si temps > 60 (retard -> a destra / blu), angle positif.
       let diff = tempsTour - 60.0;
       let angleDeg = diff * 3.5; 
       if (angleDeg < -75) angleDeg = -75;
@@ -356,9 +401,8 @@
 
       needleEl.style.transform = `translateX(-50%) rotate(${angleDeg}deg)`;
 
-      // Applicazione dinamica dei colori (Verde = Ottimale, Rosso = Troppo veloce/Avance, Blu = Troppo lento/Retard)
+      // Application des couleurs dynamiques (Vert = Zéro, Rouge = Avance/Trop rapide, Bleu = Retard/Trop lent)
       if (Math.abs(tempsTour - 60.0) < 0.1) {
-        // CONFORME / VERT
         statusEl.innerText = "Conforme (60s exactes)";
         statusEl.style.background = "#d1fae5";
         statusEl.style.color = "#065f46";
@@ -367,7 +411,6 @@
         resultsBoxEl.style.borderColor = "#27ae60";
         resultsBoxEl.style.background = "#f0fdf4";
       } else if (tempsTour < 60.0) {
-        // TROP RAPIDE / AVANCE / ROUGE
         statusEl.innerText = "Avance (Trop Rapide)";
         statusEl.style.background = "#fee2e2";
         statusEl.style.color = "#991b1b";
@@ -376,7 +419,6 @@
         resultsBoxEl.style.borderColor = "#ef4444";
         resultsBoxEl.style.background = "#fef2f2";
       } else {
-        // TROP LENT / RETARD / BLEU
         statusEl.innerText = "Retard (Trop Lent)";
         statusEl.style.background = "#dbeafe";
         statusEl.style.color = "#1e40af";
