@@ -30,16 +30,17 @@
     .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
     .dropdown:hover .dropdown-content { display: block; }
 
+    /* Box tecnico senza bordo verde verticale */
     .tech-doc-box { 
       background: #f8f9fa; 
-      border-left: 5px solid #27ae60; 
+      border: 1px solid #e2e8f0;
       padding: 20px 25px; 
       margin: 25px 0; 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       font-size: 1em; 
       line-height: 1.6; 
       color: #2c3e50; 
-      border-radius: 4px;
+      border-radius: 6px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.02);
     }
     .tech-doc-box h3 { color: #1a365d; margin-top: 20px; font-size: 1.15em; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
@@ -49,6 +50,11 @@
     .timeline-table th, .timeline-table td { border: 1px solid #dcdcdc; padding: 12px 15px; text-align: left; }
     .timeline-table th { background-color: #1a365d; color: white; text-align: center; }
     .timeline-table td.year { font-weight: bold; color: #27ae60; text-align: center; white-space: nowrap; }
+    
+    .timeline-table a { color: #1a365d; text-decoration: none; font-weight: bold; }
+    .timeline-table a:hover { color: #d9534f; text-decoration: underline; }
+    
+    .wip-tag { display: inline-block; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; margin-left: 6px; }
   </style>
 </head>
 <body>
@@ -119,12 +125,12 @@
           <tbody>
             <tr>
               <td class="year">An 1000</td>
-              <td><strong>Premiers mécanismes pour horloges</strong> : Construction des premiers mécanismes en fer forgé (poids de 300 à 600 kg) par les forgerons sans l'usage de vis (précision d'environ 2 à 3 heures par jour).</td>
+              <td><strong>Premiers mécanismes pour horloges</strong> : Construction des premiers mécanismes en fer forgé (poids de 300 à 600 kg) par les forgerons sans l'usage de vis.</td>
               <td>Forgerons médiévaux</td>
             </tr>
             <tr>
               <td class="year">~1500</td>
-              <td><strong>Le Barillet et la Molla Motrice (Ressort Moteur)</strong> : L'invention du barillet et du ressort moteur permet de s'affranchir des poids moteurs, ouvrant la voie à la portabilité et aux premiers "œufs de Nuremberg".</td>
+              <td><strong>Le Barillet et le Ressort Moteur</strong> : L'invention du barillet et du ressort moteur permet de s'affranchir des poids moteurs, ouvrant la voie à la portabilité.</td>
               <td>Horlogerie d'Europe Centrale</td>
             </tr>
             <tr>
@@ -134,99 +140,66 @@
             </tr>
             <tr>
               <td class="year">1580–1680</td>
-              <td><strong>Fioritura Estetica (Âge d'or artistique)</strong> : Évolution des boîtiers en formes artistique et sculptées, portés en pendentifs ou en bijoux ostentatoires.</td>
+              <td><strong>Fioritura Estetica (Âge d'or artistique)</strong> : Évolution des boîtiers en formes artistiques et sculptées, portés en pendentifs ou en bijoux.</td>
               <td>Artisans joailliers & horlogers</td>
             </tr>
             <tr>
               <td class="year">1657</td>
-              <td><strong>Le Pendule</strong> : Application du pendule aux horloges, améliorant drastiquement la précision (erreur réduite à 30-45 secondes/jour) et apparition de l'aiguille des secondes.</td>
+              <td><strong>Le Pendule</strong> : Application du pendule aux horloges, améliorant drastiquement la précision et apparition de l'aiguille des secondes.</td>
               <td>Christiaan Huygens</td>
             </tr>
             <tr>
               <td class="year">1675</td>
-              <td><strong>Le Balancier et le Spiral</strong> : Invention du ressort spiral couplé au balancier, résolvant le problème de la portabilité et posant les bases de la montre moderne de précision.</td>
+              <td><a href="_001C-Mouvement_Manuel.html#p8">Le Balancier et le Spiral</a> : Invention du ressort spiral couplé au balancier, posant les bases de la montre moderne de précision.</td>
               <td>Christiaan Huygens</td>
             </tr>
             <tr>
               <td class="year">1770</td>
-              <td><strong>L'Orologio Automatico à scatto ("Remontage")</strong> : Premier mécanisme de remontage automatique à masse oscillante pour montres de poche.</td>
+              <td><strong>Le premier système automatique à secousse</strong> : Premier mécanisme de remontage automatique à masse oscillante pour montres de poche.</td>
               <td>Abraham-Louis Perrelet</td>
             </tr>
             <tr>
               <td class="year" id="tourbillon">1801</td>
-              <td><strong>Le Tourbillon</strong> : Brevet du tourbillon pour neutraliser les écarts de marche dus à la gravité terrestre sur les montres de poche maintenues en position verticale.</td>
+              <td><a href="#tourbillon-section">Le Tourbillon</a> : Brevet du tourbillon pour neutraliser les écarts de marche dus à la gravité terrestre.</td>
               <td>Abraham-Louis Breguet</td>
             </tr>
             <tr>
               <td class="year">1845</td>
-              <td><strong>La Couronne de Remontage et Mise à l'Heure</strong> : Brevet révolutionnaire permettant de remonter le ressort et de régler l'heure directement par la couronne, sans clé.</td>
+              <td><strong>La Couronne de Remontage et Mise à l'Heure</strong> : Brevet révolutionnaire permettant de remonter le ressort et régler l'heure sans clé.</td>
               <td>Adrien Philippe (Patek Philippe)</td>
             </tr>
             <tr>
               <td class="year">1914</td>
-              <td><strong>La Naissance de la Montre-Bracelet</strong> : Adaptation des montres de poche avec des anses soudées pour équiper les officiers sur le front pendant la Première Guerre mondiale.</td>
+              <td><strong>La Naissance de la Montre-Bracelet</strong> : Adaptation des montres de poche avec des anses soudées pour les officiers sur le front.</td>
               <td>Usage militaire et industriel</td>
             </tr>
             <tr>
               <td class="year">1925</td>
-              <td><strong>Première Montre Automatique de Poignet</strong> : Commercialisation du système à mouvements oscillants (sans couronne de remontage classique, réglage par la lunette).</td>
+              <td><strong>Première Montre Automatique de Poignet</strong> : Commercialisation du système à mouvements oscillants (réglage par la lunette).</td>
               <td>John Harwood</td>
             </tr>
             <tr>
               <td class="year">1926–1927</td>
-              <td><strong>Les Premiers Systèmes d'Étanchéité</strong> : Introduction des joints (initialement en liège) et des boîtiers vissés pour protéger les mouvements de l'humidité.</td>
+              <td><strong>Les Premiers Systèmes d'Étanchéité</strong> : Introduction des joints et des boîtiers vissés pour protéger les mouvements de l'humidité.</td>
               <td>Industrie horlogère suisse</td>
             </tr>
             <tr>
               <td class="year">1928 (Brev. 1933)</td>
-              <td><strong>Le Système Antichoc (Incabloc)</strong> : Invention du ressort de suspension élastique protégeant les pivots fragiles de l'axe du balancier contre les chocs.</td>
+              <td><a href="_001C-Mouvement_Manuel.html#p9">Le Système Antichoc (Incabloc)</a> : Invention du ressort de suspension élastique protégeant les pivots du balancier.</td>
               <td>Porte & Burger (Incabloc)</td>
             </tr>
             <tr>
               <td class="year">1931</td>
-              <td><strong>Le Reverso</strong> : Création de l'iconique cassa réversible conçue pour protéger le verre lors des matchs de polo en Inde.</td>
+              <td><strong>Le Reverso</strong> : Création de l'iconique caisse réversible conçue pour protéger le verre lors des matchs de polo.</td>
               <td>Jaeger-LeCoultre</td>
             </tr>
             <tr>
               <td class="year">1958</td>
-              <td><strong>L'Ère Électromécanique</strong> : Lancement de la Hamilton Ventura, mariant l'énergie électrique (pile) et l'oscillateur mécanique.</td>
+              <td><strong>L'Ère Électromécanique</strong> : Lancement de la Hamilton Ventura, mariant l'énergie électrique et l'oscillateur mécanique.</td>
               <td>Hamilton</td>
             </tr>
             <tr>
               <td class="year">1960</td>
-              <td><strong>La Technologie à Diapason</strong> : Le Bulova Accutron oscillant à 300 Hz, offrant une précision sans précédent pour l'époque.</td>
+              <td><strong>La Technologie à Diapason</strong> : Le Bulova Accutron oscillant à 300 Hz, offrant une précision sans précédent.</td>
               <td>Bulova</td>
             </tr>
-            <tr>
-              <td class="year">1968</td>
-              <td><strong>Le Défi du Quartz</strong> : Développement du calibre Beta 21 (32'768 Hz) par un consortium de 21 marques suisses pour contrer l'essor de la technologie à quartz.</td>
-              <td>Centre Electronique Horloger (CEH)</td>
-            </tr>
-            <tr>
-              <td class="year">1978</td>
-              <td><strong>L'Ingénierie Ultra-fine</strong> : *La Délirium* repousse les frontières de la miniaturisation en atteignant des épaisseurs record (2 mm puis 0,98 mm).</td>
-              <td>Collection horlogère suisse</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h2>Conclusion et Perspectives</h2>
-      <p>
-        L'histoire de la mesure du temps démontre que chaque rupture technologique (du pendule au quartz, en passant par le spiral et le tourbillon) n'a jamais fait disparaître l'art mécanique traditionnel ; au contraire, elle l'a élevé au rang de Haute Horlogerie d'exception.
-      </p>
-
-    </div>
-  </div>
-
-  <div class="notebook-container" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; display: flex; justify-content: space-between; align-items: center;">
-    <a href="_007-Habillage.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt; text-decoration: none; border-radius: 6px;">⬅ Retour au Module 07</a>
-    <a href="index.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt; text-decoration: none; border-radius: 6px;">📋 Retour à l'Index Principal</a>
-  </div>
-  
-  <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
-  
-  <script src="../_ricerca.js"></script>
-  <script src="../script.js"></script>
-</body>
-</html>
