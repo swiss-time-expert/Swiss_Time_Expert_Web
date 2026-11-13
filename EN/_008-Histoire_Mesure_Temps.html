@@ -4,12 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swiss Time Expert - 8. History of Time Measurement</title>
-
+  
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
-
+  
   <style>
-    /* Forced alignment */
     .header-card, .notebook-container {
       max-width: 1100px !important;
       margin: 0 auto !important;
@@ -17,7 +16,6 @@
       box-sizing: border-box;
     }
 
-    /* Language and Menu Styles */
     .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
     .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
     .lang-btn:hover { background: rgba(255,255,255,0.3); }
@@ -31,49 +29,53 @@
     .dropdown-content a:last-child { border-bottom: none; }
     .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
     .dropdown:hover .dropdown-content { display: block; }
+
+    .tech-doc-box { 
+      background: #f8f9fa; 
+      border: 1px solid #e2e8f0;
+      padding: 20px 25px; 
+      margin: 25px 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      font-size: 1em; 
+      line-height: 1.6; 
+      color: #2c3e50; 
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .tech-doc-box h3 { color: #1a365d; margin-top: 20px; font-size: 1.15em; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+    .tech-doc-box h3:first-child { margin-top: 0; }
     
-    /* WIP Box Style */
-    .wip-box {
-      background-color: #fff9e6;
-      border: 2px dashed #f6c23e;
-      border-radius: 8px;
-      padding: 50px 20px;
-      text-align: center;
-      margin: 40px 0;
-    }
-    .wip-box h2 {
-      color: #d89b00;
-      font-family: 'Inter', sans-serif;
-      margin-top: 0;
-      font-size: 24px;
-    }
-    .wip-box p {
-      color: #555;
-      font-size: 16px;
-      line-height: 1.6;
-    }
+    .timeline-table { width: 100%; border-collapse: collapse; margin: 25px 0; font-size: 0.95em; background: #fff; }
+    .timeline-table th, .timeline-table td { border: 1px solid #dcdcdc; padding: 12px 15px; text-align: left; }
+    .timeline-table th { background-color: #1a365d; color: white; text-align: center; }
+    .timeline-table td.year { font-weight: bold; color: #27ae60; text-align: center; white-space: nowrap; }
+    
+    .timeline-table a { color: #1a365d; text-decoration: none; font-weight: bold; }
+    .timeline-table a:hover { color: #d9534f; text-decoration: underline; }
+    
+    .wip-tag { display: inline-block; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; margin-left: 6px; text-decoration: none; }
+    .wip-tag:hover { background: #fde68a; color: #92400e; }
   </style>
 </head>
 <body>
 
-  <!-- ================= TWO-COLUMN HEADER ================= -->
   <div class="header-card">
     <div class="header-left-block">
       <div class="badge">Haute Horlogerie — Federal Diploma</div>
-      <h1>8. History of Time Measurement</h1>
+      <h1 id="intro">8. History of Time Measurement</h1>
       <p class="subtitle">Watchmaking Expertise Course — Chronometry & Historical Evolution</p>
       
       <div class="header-controls">
         <div class="dropdown">
           <button class="dropbtn">☰ Main Menu</button>
           <div class="dropdown-content">
-            <a href="_001A-Mouvement_Manuel.html">1. The Manual Winding Movement</a>
+            <a href="_001A-Mouvement_Manuel.html">1. The Manual-Winding Movement</a>
             <a href="_002-la-montre-automatique.html">2. The Automatic Watch</a>
-            <a href="_003-Horloge_Electronique.html">3. The Electronic & Quartz Clock</a>
+            <a href="_003-Horloge_Electronique.html">3. Electronic Clock & Quartz</a>
             <a href="_004-Complications.html">4. Complications</a>
             <a href="_005-Familles_Matieres.html">5. Material Families</a>
-            <a href="_006-Fhasses_Fabrication.html">6. Manufacturing Phases and Technologies</a>
-            <a href="_007-Habillage.html">7. The Habillage (Watch Exterior)</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Manufacturing Phases & Technologies</a>
+            <a href="_007-Habillage.html">7. Watch Exterior (Casing)</a>
             <a href="_008-Histoire_Mesure_Temps.html">8. History of Time Measurement</a>
           </div>
         </div>
@@ -91,24 +93,180 @@
     </div>
   </div>
 
-  <!-- ================= NOTEBOOK CONTAINER ================= -->
-  <div class="notebook-container">
+  <div class="notebook-container" id="notebook-main">
     
-    <div class="wip-box">
-      <h2>🚧 Module Under Construction 🚧</h2>
-      <p>The content of this chapter is currently being written and revised<br>to guarantee our pedagogical quality standards.</p>
-      <p>It will be published shortly.</p>
-      
-      <div style="margin-top: 40px; display: flex; justify-content: center; gap: 20px;">
-        <a href="_007-Habillage.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt; text-decoration: none; border-radius: 6px;">⬅ Back to Module 07</a>
-        <a href="index.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt; text-decoration: none; border-radius: 6px;">📋 Return to Main Menu</a>
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Chronological Timeline: From Origins to the Modern Era</h2>
       </div>
+      <div class="tag-chic">📜 Historical Milestones & Inventions</div>
     </div>
 
+    <div class="handwritten-body" id="course-content-area">
+
+      <h2>Introduction to Chronometric Evolution</h2>
+      <p>
+        The history of time measurement is an incessant quest for precision, miniaturization, and autonomy. 
+        From imposing medieval public clocks to contemporary ultra-thin calibers, every major technical invention has redefined our relationship with time and pushed the limits of micromechanics.
+      </p>
+
+      <div class="tech-doc-box" id="chronologie">
+        <h3>Fundamental Chronology of Mechanical and Electronic Horology</h3>
+        <p>The table below lists the key milestones, major inventions, and pioneers that shaped Haute Horlogerie, directly linked to the course's expertise chapters:</p>
+        
+        <table class="timeline-table">
+          <thead>
+            <tr>
+              <th>Date / Period</th>
+              <th>Innovation / Major Event & Workshop Hook</th>
+              <th>Author / Context</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="year">Around 1000</td>
+              <td><strong>Early clock mechanisms</strong> : Construction of the first forged iron mechanisms (weight of 300 to 600 kg) by blacksmiths without the use of screws. <a href="#wip-section" class="wip-tag">WIP</a></td>
+              <td>Medieval blacksmiths</td>
+            </tr>
+            <tr>
+              <td class="year">~1500</td>
+              <td><a href="_001A-Mouvement_Manuel.html#p2">The Mainspring Barrel and Spring</a> : The invention of the barrel and mainspring freed clocks from driving weights, paving the way for portability.</td>
+              <td>Central European Horology</td>
+            </tr>
+            <tr>
+              <td class="year">~1540</td>
+              <td><a href="_005-Familles_Matieres.html#m1">The Introduction of the Screw</a> : Screws are used for the first time as standardized fastening elements in watch construction.</td>
+              <td>Renaissance master watchmakers</td>
+            </tr>
+            <tr>
+              <td class="year">1580–1680</td>
+              <td><a href="_007-Habillage.html">Fioritura Estetica (Artistic Golden Age)</a> : Evolution of watch cases into artistic and sculpted shapes, worn as pendants or jewelry.</td>
+              <td>Artisan jewelers & watchmakers</td>
+            </tr>
+            <tr>
+              <td class="year">1657</td>
+              <td><strong>The Pendulum</strong> : Application of the pendulum to clocks, drastically improving precision and introducing the seconds hand. <a href="#wip-section" class="wip-tag">WIP</a></td>
+              <td>Christiaan Huygens</td>
+            </tr>
+            <tr>
+              <td class="year">1675</td>
+              <td><a href="_001C-Mouvement_Manuel.html#p8">The Balance and Hairspring</a> : Invention of the hairspring coupled to the balance wheel, laying the foundation of modern precision timekeeping.</td>
+              <td>Christiaan Huygens</td>
+            </tr>
+            <tr>
+              <td class="year">1770</td>
+              <td><a href="_002-la-montre-automatique.html#a1">The First Shaking Automatic System</a> : First automatic winding mechanism with an oscillating weight for pocket watches.</td>
+              <td>Abraham-Louis Perrelet</td>
+            </tr>
+            <tr>
+              <td class="year" id="tourbillon">1801</td>
+              <td><a href="#tourbillon-section">The Tourbillon</a> : Patenting of the tourbillon to neutralize rate variations caused by Earth's gravity.</td>
+              <td>Abraham-Louis Breguet</td>
+            </tr>
+            <tr>
+              <td class="year">1845</td>
+              <td><a href="_001D-Mouvement_Manuel.html#p12">Winding Crown and Time Setting</a> : Revolutionary patent allowing the mainspring to be wound and time set directly via the crown without a key.</td>
+              <td>Adrien Philippe (Patek Philippe)</td>
+            </tr>
+            <tr>
+              <td class="year">1914</td>
+              <td><a href="_007-Habillage.html">The Birth of the Wristwatch</a> : Adaptation of pocket watches with soldered lugs to equip officers on the front lines.</td>
+              <td>Military & industrial use</td>
+            </tr>
+            <tr>
+              <td class="year">1925</td>
+              <td><a href="_002-la-montre-automatique.html">First Automatic Wristwatch</a> : Commercialization of the oscillating movement system (setting via the bezel).</td>
+              <td>John Harwood</td>
+            </tr>
+            <tr>
+              <td class="year">1926–1927</td>
+              <td><a href="_007-Habillage.html">First Water-Resistance Systems</a> : Introduction of gaskets (initially cork) and screw-down cases to protect movements from moisture.</td>
+              <td>Swiss watch industry</td>
+            </tr>
+            <tr>
+              <td class="year">1928 (Pat. 1933)</td>
+              <td><a href="_001C-Mouvement_Manuel.html#p9">The Shock-Absorbing System (Incabloc)</a> : Invention of the elastic suspension spring protecting fragile balance staff pivots.</td>
+              <td>Porte & Burger (Incabloc)</td>
+            </tr>
+            <tr>
+              <td class="year">1931</td>
+              <td><a href="_004-Complications.html">The Reverso</a> : Creation of the iconic reversible case designed to protect the crystal during polo matches.</td>
+              <td>Jaeger-LeCoultre</td>
+            </tr>
+            <tr>
+              <td class="year">1958</td>
+              <td><a href="_003-Horloge_Electronique.html#e1">The Electromechanical Era</a> : Launch of the Hamilton Ventura, marrying electrical energy (battery) and mechanical oscillator.</td>
+              <td>Hamilton</td>
+            </tr>
+            <tr>
+              <td class="year">1960</td>
+              <td><a href="_003-Horloge_Electronique.html">The Tuning Fork Technology</a> : The Bulova Accutron oscillating at 300 Hz, offering unprecedented precision for its time.</td>
+              <td>Bulova</td>
+            </tr>
+            <tr>
+              <td class="year">1968</td>
+              <td><a href="_003-Horloge_Electronique.html">The Quartz Challenge</a> : Development of the Beta 21 caliber (32,768 Hz) by a consortium of 21 Swiss brands to counter quartz technology.</td>
+              <td>Centre Electronique Horloger (CEH)</td>
+            </tr>
+            <tr>
+              <td class="year">1978</td>
+              <td><strong>Ultra-Thin Engineering</strong> : *La Délirium* pushes the boundaries of miniaturization by reaching record thicknesses (2 mm then 0.98 mm). <a href="#wip-section" class="wip-tag">WIP</a></td>
+              <td>Swiss watch collection</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- WORKSHOP MASTERCLASS: THE TOURBILLON (1801) -->
+      <div class="tech-doc-box" id="tourbillon-section">
+        <h3>Workshop Masterclass: The Tourbillon by Abraham-Louis Breguet (1801)</h3>
+        <p>
+          Patented on June 26, 1801 (7 Messidor, Year IX), the tourbillon is the masterwork of Abraham-Louis Breguet. Contrary to common misconception, it is not a display complication (it adds no functions to the dial), but a supreme <strong>regulation device</strong>.
+        </p>
+        
+        <h4>1. The Physical Problem: Gravity</h4>
+        <p>
+          During Breguet's time, worn watches were primarily pocket watches. Placed vertically in a waistcoat pocket, the watch experienced Earth's gravitational pull, which altered the center of gravity of the balance-spring assembly and created permanent rate variations depending on the position.
+        </p>
+
+        <h4>2. The Mechanical Solution: The Rotating Cage</h4>
+        <p>
+          Breguet conceived enclosing the entire regulating organ (escapement, pallet lever, balance wheel, and hairspring) inside a <strong>mobile cage that completes a full rotation every minute</strong>. 
+          By rotating continuously through 360 degrees, positional errors cancel each other out and average out, guaranteeing perfect isochronism regardless of the watch's vertical position.
+        </p>
+
+        <div style="background: #fff; border: 1px solid #dcdcdc; padding: 15px; border-radius: 6px; margin-top: 15px;">
+          <h4 style="margin-top: 0; color: #1a365d; font-size: 15px;">⚙️ The Execution Challenge</h4>
+          <p style="font-size: 14px; margin-bottom: 0;">
+            Crafting a tourbillon requires manufacturing dozens of microscopic components assembled in a cage whose total weight often does not exceed a few tenths of a gram, so as not to burden the movement's moment of inertia. This is why it remains the absolute symbol of mastery in Haute Horlogerie.
+          </p>
+        </div>
+      </div>
+
+      <!-- WORK IN PROGRESS SECTION -->
+      <div class="tech-doc-box" id="wip-section" style="background: #fffbeb; border-color: #fcd34d;">
+        <h3 style="color: #92400e;">🚧 Upcoming Masterclasses in Preparation (Work in Progress)</h3>
+        <p style="font-size: 14px; color: #78350f; margin-bottom: 0;">
+          Chapters dedicated to John Harrison's Marine Chronometer, medieval public clocks, and historical quartz calibers will soon be integrated into this interactive timeline.
+        </p>
+      </div>
+
+      <h2>Conclusion and Perspectives</h2>
+      <p>
+        The history of time measurement demonstrates that every technological disruption has never made traditional mechanical art disappear; on the contrary, it has elevated it to the rank of exceptional Haute Horlogerie.
+      </p>
+
+    </div>
   </div>
 
+  <div class="notebook-container" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; display: flex; justify-content: space-between; align-items: center;">
+    <a href="_007-Habillage.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt; text-decoration: none; border-radius: 6px;">⬅ Return to Module 07</a>
+    <a href="index.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt; text-decoration: none; border-radius: 6px;">📋 Return to Main Index</a>
+  </div>
+  
   <footer>© 2026 Swiss Time Expert. All rights reserved.</footer>
   
   <script src="../_ricerca.js"></script>
-<script src="../script.js"></script>n</body>
+  <script src="../script.js"></script>
+</body>
 </html>

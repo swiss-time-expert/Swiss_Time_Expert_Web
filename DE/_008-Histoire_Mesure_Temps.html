@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swiss Time Expert - 8. Geschichte der Zeitmessung</title>
-
+  <title>Swiss Time Expert - Inhaltsverzeichnis</title>
+  
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
 
   <style>
-    /* Allineamento forzato */
+    /* Erzwungene Ausrichtung */
     .header-card, .notebook-container {
       max-width: 1100px !important;
       margin: 0 auto !important;
@@ -17,98 +17,191 @@
       box-sizing: border-box;
     }
 
-    /* Stili Lingue e Menu */
-    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    /* Sprachumschalter-Stil */
+    .lang-switcher { display: flex; gap: 8px; }
     .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
     .lang-btn:hover { background: rgba(255,255,255,0.3); }
     .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
-
-    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
-    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
-    .dropbtn:hover { background: rgba(255,255,255,0.3); }
-    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
-    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
-    .dropdown-content a:last-child { border-bottom: none; }
-    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
-    .dropdown:hover .dropdown-content { display: block; }
     
-    /* Stile per il box di cantiere */
-    .wip-box {
-      background-color: #fff9e6;
-      border: 2px dashed #f6c23e;
-      border-radius: 8px;
-      padding: 50px 20px;
-      text-align: center;
-      margin: 40px 0;
-    }
-    .wip-box h2 {
-      color: #d89b00;
-      font-family: 'Inter', sans-serif;
-      margin-top: 0;
-      font-size: 24px;
-    }
-    .wip-box p {
-      color: #555;
-      font-size: 16px;
-      line-height: 1.6;
-    }
+    .header-controls { display: flex; align-items: center; gap: 20px; }
   </style>
 </head>
 <body>
 
-  <!-- ================= HEADER A DUE COLONNE ================= -->
+  <!-- ================= HEADER ================= -->
   <div class="header-card">
     <div class="header-left-block">
-      <div class="badge">Haute Horlogerie — Eidgenössisches Diplom</div>
-      <h1>8. Geschichte der Zeitmessung</h1>
-      <p class="subtitle">Uhrmachergutachten-Kurs — Work in Progress</p>
+      <div class="badge">Haute Horlogerie — Eidgenössisches Fähigkeitszeugnis</div>
+      <h1>Swiss Time Expert — Inhaltsverzeichnis</h1>
+      <p class="subtitle">Interaktiver Index und Schnellnavigation zu den Kursmodulen</p>
       
-      <div class="header-controls" style="margin-top: 15px; display: flex; align-items: center;">
-        <div class="dropdown">
-          <button class="dropbtn">☰ Hauptmenü</button>
-          <div class="dropdown-content">
-            <a href="_001A-Mouvement_Manuel.html">1. Das Handaufzugswerk</a>
-            <a href="_002-la-montre-automatique.html">2. Die Automatikuhr</a>
-            <a href="_003-Horloge_Electronique.html">3. Die Elektronische Uhr & Quarz</a>
-            <a href="_004-Complications.html">4. Komplikationen</a>
-            <a href="_005-Familles_Matieres.html">5. Werkstofffamilien</a>
-            <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen und -technologien</a>
-            <a href="_007-Habillage.html">7. Das Äußere der Uhr</a>
-            <a href="_008-Histoire_Mesure_Temps.html">8. Geschichte der Zeitmessung</a>
-          </div>
-        </div>
-
+      <div class="header-controls" style="margin-top: 15px;">
         <div class="lang-switcher">
-          <a href="../FR/_008-Histoire_Mesure_Temps.html" class="lang-btn">FR</a>
-          <a href="../EN/_008-Histoire_Mesure_Temps.html" class="lang-btn">EN</a>
+          <a href="../FR/index.html" class="lang-btn">FR</a>
+          <a href="../EN/index.html" class="lang-btn">EN</a>
           <a href="#" class="lang-btn active">DE</a>
         </div>
       </div>
     </div>
-
+    
     <div class="header-right-block">
-      <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+     <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
     </div>
   </div>
 
   <!-- ================= NOTEBOOK CONTAINER ================= -->
   <div class="notebook-container">
     
-    <div class="wip-box">
-      <h2>🚧 Modul in Entwicklung 🚧</h2>
-      <p>Der Inhalt dieses Kapitels befindet sich derzeit in der Redaktions- und Überarbeitungsphase,<br>um unsere pädagogischen Qualitätsstandards zu gewährleisten.</p>
-      <p>Es wird in Kürze veröffentlicht.</p>
-      
-      <div style="margin-top: 40px; display: flex; justify-content: center; gap: 20px;">
-        <a href="_007-Habillage.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt; text-decoration: none; border-radius: 6px;">⬅ Zurück zu Modul 07</a>
-        <a href="index.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt; text-decoration: none; border-radius: 6px;">📋 Zum Hauptindex</a>
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Interaktive Werkstatt-Übersicht</h2>
       </div>
+      <div class="tag-chic">🧭 Direkter Zugriff nach Themen</div>
     </div>
 
-  </div>
+    <!-- MODUL 1 -->
+    <div class="menu-card">
+      <a href="_001A-Mouvement_Manuel.html" class="module-header-link">
+        <h2>• 1. Das Handaufzugswerk</h2>
+        <span class="btn-open-module">Kurs öffnen ➔</span>
+      </a>
+      <ul class="subtopics-grid">
+        <li class="subtopic-item"><a href="_001A-Mouvement_Manuel.html#p1">1. Blockschaltbild des mechanischen Werks</a></li>
+        <li class="subtopic-item"><a href="_001A-Mouvement_Manuel.html#p2">2. Antriebsorgan : Das Federhaus</a></li>
+        <li class="subtopic-item"><a href="_001A-Mouvement_Manuel.html#p3">3. Federbefestigung, MALTESERKREUZ & Schnecke</a></li>
+        <li class="subtopic-item"><a href="_001B-Mouvement_Manuel.html#p4">4. Nivaflex®-Eigenschaften</a></li>
+        <li class="subtopic-item"><a href="_001B-Mouvement_Manuel.html#p5">5. Übertragung : Die kinematische Kette</a></li>
+        <li class="subtopic-item"><a href="_001B-Mouvement_Manuel.html#p6">6. Übersetzungsverhältnisse & Gangreserve</a></li>
+        <li class="subtopic-item"><a href="_001C-Mouvement_Manuel.html#p7">7. Hemmung : Die Schweizer Ankerhemmung</a></li>
+        <li class="subtopic-item"><a href="_001C-Mouvement_Manuel.html#p8">8. Regulierung : Unruh-Spirale & Frequenzen</a></li>
+        <li class="subtopic-item"><a href="_001C-Mouvement_Manuel.html#p9">9. Unruhanatomie & Stoßsicherung</a></li>
+        <li class="subtopic-item"><a href="_001D-Mouvement_Manuel.html#p10">10. Die Spiralfeder & Regulierungsmethoden</a></li>
+        <li class="subtopic-item"><a href="_001D-Mouvement_Manuel.html#p11">11. Anzeige & Zeigerwerkmechanismus</a></li>
+        <li class="subtopic-item"><a href="_001D-Mouvement_Manuel.html#p12">12. Die Krone & Winkelhebel-Kinematik</a></li>
+        <li class="subtopic-item"><a href="_001D-Mouvement_Manuel.html#p13">13. Selbsteinschätzung & Interaktives Quiz</a></li>
+      </ul>
+    </div>
 
-  <footer>© 2026 Swiss Time Expert. Alle Rechte vorbehalten.</footer>
-  
-  <script src="../_ricerca.js"></script>
-<script src="../script.js"></script>n</body>
+    <!-- MODUL 2 -->
+    <div class="menu-card">
+      <a href="_002-la-montre-automatique.html" class="module-header-link">
+        <h2>• 2. Die Automatikuhr</h2>
+        <span class="btn-open-module">Kurs öffnen ➔</span>
+      </a>
+      <ul class="subtopics-grid">
+        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a1">1. Geschichte des automatischen Aufzugs</a></li>
+        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a2">2. Mechanismus-Typen (Schwungmassen)</a></li>
+        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a3">3. Bauteile : Die Schwungmasse</a></li>
+        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a4">4. Die Wechsler : Das kinematische Herz</a></li>
+        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a5">5. Typologie und Rolle der Wechsler</a></li>
+        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a6">6. Das Reduktionsgetriebe (1/150)</a></li>
+        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a7">7. Automatik-Brücke & Auskupplung</a></li>
+        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a8">8. Sicherheit : Die Gleitzapfenfeder (Zaum)</a></li>
+      </ul>
+    </div>
+
+    <!-- MODUL 3 -->
+    <div class="menu-card">
+      <a href="_003-Horloge_Electronique.html" class="module-header-link">
+        <h2>• 3. Elektronische Uhr & Quarz</h2>
+        <span class="btn-open-module">Kurs öffnen ➔</span>
+      </a>
+      <ul class="subtopics-grid">
+        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e1">1. Geschichte der elektronischen Uhrmacherei</a></li>
+        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e2">2. Anzeigearchitekturen (Analog/LCD)</a></li>
+        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e3">3. Leiterplatte, IC & Quarz</a></li>
+        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e4">4. Quartz-Chronometer & Thermo-Kompensation</a></li>
+        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e5">5. Die Uhrenbatterie & EOL-Warnung</a></li>
+        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e6">6. Lavet-Schrittmotor & Räderwerk</a></li>
+        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e7">7. Ausgleich & Hybridsysteme</a></li>
+      </ul>
+    </div>
+
+    <!-- MODUL 4 -->
+    <div class="menu-card">
+      <a href="_004-Complications.html" class="module-header-link">
+        <h2>• 4. Komplikationen</h2>
+        <span class="btn-open-module">Kurs öffnen ➔</span>
+      </a>
+     <ul class="subtopics-grid">
+        <li class="subtopic-item"><a href="_004-Complications.html#dates">1. Datumsanzeigen (Kalender)</a></li>
+        <li class="subtopic-item"><a href="_004-Complications.html#astronomie">2. Astronomische Komplikationen & komplexe Kalender</a></li>
+        <li class="subtopic-item"><a href="_004-Complications.html#chronographes">3. Chronographen & Schlagwerke</a></li>
+      </ul>
+    </div>
+
+    <!-- MODUL 5 -->
+    <div class="menu-card">
+      <a href="_005-Familles_Matieres.html" class="module-header-link">
+        <h2>• 5. Werkstoffgruppen</h2>
+        <span class="btn-open-module">Kurs öffnen ➔</span>
+      </a>
+      <ul class="subtopics-grid">
+        <li class="subtopic-item"><a href="_005-Familles_Matieres.html#m1">1° Eisenbasis : Stähle, Härtung & Durnico®</a></li>
+        <li class="subtopic-item"><a href="_005-Familles_Matieres.html#m2">2° Kupferlegierungen : Messing, Neusilber, Bronze & Glucydur®</a></li>
+        <li class="subtopic-item"><a href="_005-Familles_Matieres.html#m3">3° Korund (Rubin/Saphir), Nickelbasis & Silizium</a></li>
+        <li class="subtopic-item"><a href="_005-Familles_Matieres.html#m4">Vergleichstabelle : Vickers-Härten & Dichten</a></li>
+      </ul>
+    </div>
+
+    <!-- MODUL 6 -->
+    <div class="menu-card">
+      <a href="_006-Fhasses_Fabrication.html" class="module-header-link">
+        <h2>• 6. Fertigungsphasen & Technologien</h2>
+        <span class="btn-open-module">Kurs öffnen ➔</span>
+      </a>
+      <ul class="subtopics-grid">
+        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f1">1. Die drei Hauptschritte der Fertigung</a></li>
+        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f2">2. Vergleich : Fräsen, Eroodieren & LIGA</a></li>
+        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f3">3. Drahterosion, Wasserstrahl & Laser</a></li>
+        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f4">4. UV-LIGA-Technologie & Mimetal™-Verfahren</a></li>
+        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f5">5. Pulvermetallurgie & Sintern (RECONIT®)</a></li>
+        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f6">6. Rubin-Herstellung (La Pierrette)</a></li>
+        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f7">7. Veredelungen & Dekorationen der Haute Horlogerie</a></li>
+        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f8">8. Siliziumteil-Fertigung (DRIE)</a></li>
+      </ul>
+    </div>
+
+    <!-- MODUL 7 -->
+    <div class="menu-card">
+      <a href="_007-Habillage.html" class="module-header-link">
+        <h2>• 7. Die Uhrgehäuse-Ausstattung</h2>
+        <span class="btn-open-module">Kurs öffnen ➔</span>
+      </a>
+      <ul class="subtopics-grid">
+        <li class="subtopic-item"><a href="_007-Habillage.html#boite">1. Das Gehäuse und seine Komponenten</a></li>
+        <li class="subtopic-item"><a href="_007-Habillage.html#glaces">2. Gläser und Wasserdichtheit</a></li>
+        <li class="subtopic-item"><a href="_007-Habillage.html#cadrans">3. Zifferblätter, Zeiger & Veredelungen</a></li>
+      </ul>
+    </div>
+
+    <!-- MODUL 8 -->
+    <div class="menu-card">
+      <a href="_008-Histoire_Mesure_Temps.html" class="module-header-link">
+        <h2>• 8. Geschichte der Zeitmessung</h2>
+        <span class="btn-open-module">Kurs öffnen ➔</span>
+      </a>
+      <ul class="subtopics-grid">
+        <li class="subtopic-item"><a href="_008-Histoire_Mesure_Temps.html#intro">1. Einführung in die chronometrische Entwicklung</a></li>
+        <li class="subtopic-item"><a href="_008-Histoire_Mesure_Temps.html#chronologie">2. Grundlegende Chronologie (1000 - 1978 n. Chr.)</a></li>
+        <li class="subtopic-item"><a href="_008-Histoire_Mesure_Temps.html#tourbillon-section">3. Die Erfindung des Tourbillons & wichtige Innovationen</a></li>
+      </ul>
+    </div>
+
+    </div> <!-- Ende des Notebook-Containers -->
+
+  <footer>
+    © 2026 Swiss Time Expert. Alle Rechte vorbehalten. Zertifizierter Bildungsinhalt. Jegliche Vervielfältigung oder Kopie ist strengstens untersagt.
+  </footer>
+
+  <script>
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.onkeydown = function(e) {
+      if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 85 || e.keyCode === 83)) {
+        return false;
+      }
+    };
+  </script>
+<script src="../script.js"></script>
+</body>
 </html>
