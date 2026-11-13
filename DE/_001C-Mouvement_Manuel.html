@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../_stile.css">
   
   <style>
-    /* Allineamento forzato per sincronizzare Header e Notebook durante lo zoom */
+    /* Erzwungene Ausrichtung zur Synchronisierung von Header und Notebook beim Zoomen */
     .header-card, .notebook-container {
       max-width: 1100px !important;
       margin: 0 auto !important;
@@ -17,13 +17,13 @@
       box-sizing: border-box;
     }
 
-    /* Stili per le Lingue */
+    /* Sprachumschalter */
     .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
     .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
     .lang-btn:hover { background: rgba(255,255,255,0.3); }
     .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
 
-    /* Menu a Tendina */
+    /* Dropdown-Menü */
     .dropdown { position: relative; display: inline-block; margin-right: 15px; }
     .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
     .dropbtn:hover { background: rgba(255,255,255,0.3); }
@@ -32,17 +32,66 @@
     .dropdown-content a:last-child { border-bottom: none; }
     .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
     .dropdown:hover .dropdown-content { display: block; }
+
+    /* Vertiefungsbox mit grünem Balken links */
+    .tech-doc-box { 
+      background: #f8f9fa; 
+      border-left: 5px solid #27ae60; 
+      padding: 20px 25px; 
+      margin: 25px 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      font-size: 1em; 
+      line-height: 1.6; 
+      color: #2c3e50; 
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .tech-doc-box h3 { color: #1a365d; margin-top: 20px; font-size: 1.15em; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+    .tech-doc-box h3:first-child { margin-top: 0; }
+    .tech-doc-box h4 { color: #2980b9; margin-top: 15px; font-size: 1.05em; }
+    .formula-math { font-family: monospace; background: #eef2f7; padding: 4px 8px; border-radius: 4px; display: inline-block; font-weight: bold; color: #1a365d; }
+
+    /* Responsive Tabellenoptimierung */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 20px 0;
+    }
+    .table-custom {
+      width: 100%;
+      min-width: 550px;
+    }
+
+    /* Atelier- / Test-Schaltflächenstil */
+    .atelier-btn {
+      display: inline-block;
+      background: #1a365d;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.95em;
+      margin-top: 15px;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .atelier-btn:hover {
+      background: #27ae60;
+      transform: translateY(-1px);
+    }
   </style>
 </head>
 <body>
 
-  <!-- ================= HEADER A DUE COLONNE ================= -->
+  <!-- ================= ZWEI-SPALTIGES HEADER ================= -->
   <div class="header-card">
     
     <div class="header-left-block">
-      <div class="badge">Haute Horlogerie — Eidgenössisches Diplom</div>
-      <h1>1. Das Handaufzugswerk</h1>
-      <p class="subtitle">Uhrmachergutachten-Kurs — Verteilung & Regulierung</p>
+      <div class="badge">Haute Horlogerie — Eidgenössisches Fähigkeitszeugnis</div>
+      <h1>1C. Kraftverteilung und Regulation : Funktionsweise der Schweizer Ankerhemmung</h1>
+      <p class="subtitle">Uhrmacher-Fachexpertise — Verteilung & Regulation</p>
       
       <div class="header-controls">
         <div class="dropdown">
@@ -50,12 +99,12 @@
           <div class="dropdown-content">
             <a href="_001A-Mouvement_Manuel.html">1. Das Handaufzugswerk</a>
             <a href="_002-la-montre-automatique.html">2. Die Automatikuhr</a>
-            <a href="_003-Horloge_Electronique.html">3. Die Elektronische Uhr & Quarz</a>
+            <a href="_003-Horloge_Electronique.html">3. Elektronische Uhr & Quarz</a>
             <a href="_004-Complications.html">4. Komplikationen</a>
-            <a href="_005-Familles_Matieres.html">5. Die Werkstofffamilien</a>
-            <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen und -technologien</a>
-            <a href="_007-Habillage.html">7. Das Äußere der Uhr</a>
-            <a href="_008-Histoire_Mesure_Temps.html">8. Geschichte der Zeitmessung</a>
+            <a href="_005-Familles_Matieres.html">5. Werkstoffgruppen</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen & Technologien</a>
+            <a href="_007-Habillage.html">7. Die Uhrgehäuse-Ausstattung</a>
+            <a href="#">8. Geschichte der Zeitmessung</a>
           </div>
         </div>
 
@@ -78,85 +127,53 @@
     
     <div class="notebook-header">
       <div class="notebook-title-cell">
-        <h2 class="handwritten-heading">Modul 01 : Hemmung & Regulierorgan</h2>
+        <h2 class="handwritten-heading">Modul 01 : Hemmung & Gangregler</h2>
       </div>
-      <div class="tag-chic">✍️ Kursnotizen & Schemata</div>
+      <div class="tag-chic">✍️ Vorlesungsnotizen & Schemata</div>
     </div>
 
     <div class="handwritten-body" id="course-content-area">
 
       <!-- KAPITEL 7 -->
-      <h2 id="p7">7. Verteilung: Die Schweizer Ankerhemmung</h2>
+      <h2 id="p7">7. Verteilung : Wie funktioniert die Schweizer Ankerhemmung?</h2>
       <ul>
-        <li><strong>Hauptkomponenten:</strong> Steigrad, Schweizer Anker mit Palettensteinen (Rubinen), Doppelrolle mit Hebelstein (Ellipse).</li>
-        <li><strong>Funktion:</strong> Umwandlung der Drehbewegung in Schwingungen und Verteilung der Energie.</li>
+        <li><strong>Schlüsselkomponenten :</strong> Steigrad, Schweizer Anker mit Rubinen (Hebungssteine), Doppelrolle mit Ellipse (Hebungsstein).</li>
+        <li><strong>Funktion :</strong> Drehbewegung in Schwingungen umwandeln und Energie verteilen.</li>
       </ul>
-      <div class="img-always-visible">
-        <div class="interactive-wrapper" style="max-width: 480px;">
-          <img src="../echappement-ancre.jpg" alt="Hemmung">
-          <div class="pin-marker" style="top: 52%; left: 50%;">1</div>
-          <div class="pin-marker" style="top: 65%; left: 40%;">2</div>
-          <div class="pin-marker" style="top: 65%; left: 60%;">3</div>
-          <div class="pin-marker" style="top: 80%; left: 50%;">4</div>
-          <div class="pin-marker" style="top: 55%; left: 55%; background: #1b365d;">5</div>
-          <div class="pin-marker" style="top: 48%; left: 45%;">6</div>
-          <div class="pin-marker" style="top: 44%; left: 50%; background: #1b365d;">7</div>
-          <div class="pin-marker" style="top: 30%; left: 50%;">8</div>
-        </div>
-        <div class="legend-grid">
-          <div class="legend-item"><span class="badge-mini">1</span> Ankerkörper</div>
-          <div class="legend-item"><span class="badge-mini">2</span> Eingangspalette</div>
-          <div class="legend-item"><span class="badge-mini">3</span> Ausgangspalette</div>
-          <div class="legend-item"><span class="badge-mini">4</span> Steigrad</div>
-          <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">5</span> Sicherungsstift (Dard)</div>
-          <div class="legend-item"><span class="badge-mini">6</span> Ankergabel</div>
-          <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">7</span> Hebelscheibenstift</div>
-          <div class="legend-item"><span class="badge-mini">8</span> Doppelrolle</div>
-        </div>
-      </div>
-      <details class="image-popover">
-        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL (01-07) — Schweizer Ankerhemmung</summary>
-        <div class="img-container"><img src="../01-07 Regulation-l echappement.jpg" alt="Blatt 01-07"></div>
-      </details>
 
-      <!-- Inizio Modello 3D Interattivo - Scappamento -->
+      <!-- Interaktives 3D-Modell - Hemmung AN ERSTER STELLE -->
       <div style="margin: 25px 0; background: #ffffff; padding: 15px; border-radius: 8px; border: 1px solid #dcdcdc; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-        
         <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
-
         <model-viewer 
           id="escapement-model"
           src="../swiss_lever_escapement_mechanism.glb" 
-          alt="Swiss lever escapement - Swiss Time Expert" 
+          alt="Schweizer Ankerhemmung - Swiss Time Expert" 
           camera-controls 
-          animation-name="*"
+          autoplay
+          interaction-prompt="none"
+          shadow-intensity="0"
+          exposure="0.8"
+          environment-image="neutral"
           style="width: 100%; height: 420px; background-color: #ffffff;">
         </model-viewer>
-
-        <!-- Pulsante Play/Pause personalizzato -->
         <div style="text-align: center; margin-top: 10px;">
           <button id="play-pause-btn" style="background: #1b365d; color: white; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.9em;">⏸️ Pause</button>
         </div>
-
         <p style="text-align: center; font-family: inherit; font-size: 0.85em; color: #555; margin-top: 8px; font-style: italic;">
-          Interaktives 3D-Modell: Mit der Maus oder den Fingern ziehen, um zu drehen. | 3D-Modell: C. Yamahata (Sketchfab)
+          Interaktives 3D-Modell: zum Drehen gedrückt halten und ziehen. | 3D-Modell : C. Yamahata (Sketchfab)
         </p>
-
         <script>
           const modelViewer = document.querySelector('#escapement-model');
           const btn = document.querySelector('#play-pause-btn');
-
           modelViewer.addEventListener('load', () => {
-            const material = modelViewer.model.materials.find(m => m.name.toLowerCase().includes('ancora') || m.name.toLowerCase().includes('lever'));
-            
-            if (material) {
-              material.pbrMetallicRoughness.setBaseColorFactor([0.9, 0.75, 0.3, 1.0]);
-              material.pbrMetallicRoughness.setMetallicFactor(0.9);
-              material.pbrMetallicRoughness.setRoughnessFactor(0.2);
-            }
+            modelViewer.model.materials.forEach(material => {
+              if (material.pbrMetallicRoughness) {
+                material.pbrMetallicRoughness.setRoughnessFactor(0.65);
+                material.pbrMetallicRoughness.setMetallicFactor(0.2);
+              }
+            });
             modelViewer.play();
           });
-
           btn.addEventListener('click', () => {
             if (modelViewer.paused) {
               modelViewer.play();
@@ -168,101 +185,143 @@
           });
         </script>
       </div>
-      <!-- Fine Modello 3D -->
+
+      <details class="image-popover">
+        <summary>📷 ORIGINALES MANUSKRIPTBLATT (01-07) — Die Schweizer Ankerhemmung</summary>
+        <div class="img-container"><img src="../01-07 Regulation-l echappement.jpg" alt="Blatt 01-07"></div>
+      </details>
       
       <!-- 7B. VERTIEFUNG -->
-      <h2 id="f7b">7B. Technische Vertiefung: Funktionelle Anatomie des Regulierorgans</h2>
+      <h2 id="f7b">7B. Technische Vertiefung : Funktionale Anatomie des Gangreglers</h2>
       <p>
-        Das Regulierorgan ist das isochrone Herz der mechanischen Uhr. Es sorgt durch seine gleichmäßigen Schwingungen für eine präzise Zeiteinteilung. Die Beherrschung seiner Baugruppen (Verbindungen, Führungen und Impuls) ist für das Verständnis der Chronometrie unerlässlich.
+        Der Gangregler ist das isochrone Herz der mechanischen Uhr. Er sichert durch seine regelmässigen Schwingungen die präzise Unterteilung der Zeit. Die Beherrschung seiner Baugruppen (Verbindungen, Führungen und Impuls) ist unerlässlich, um die Chronometrie zu verstehen.
       </p>
 
       <div class="img-always-visible">
-        <img src="../Balancier-spiral_parties_2.jpg" alt="Detaillierte Anatomie von Unruh-Spirale und Komponenten">
-        <div class="img-caption">📷 WERKSTATT-TAFEL — Funktionelle Anatomie des Regulierorgans und der Unruh-Spirale-Einheit.</div>
+        <img src="../Balancier-spiral_parties_2.jpg" alt="Detaillierte Anatomie des Unruh-Spirale-Systems und seiner Komponenten">
+        <div class="img-caption">📷 WERKSTATT-TAFEL — Funktionale Anatomie des Gangreglers und der Unruh-Spirale-Baugruppe.</div>
       </div>
 
-      <p><strong>Detaillierte Beschreibung der Hauptkomponenten der Unruh-Spirale-Einheit:</strong></p>
+      <p><strong>Detaillierte Beschreibung der Schlüsselkomponenten des Unruh-Spirale-Systems :</strong></p>
       <ul>
-        <li>
-          <strong>1° Die Spiralklammer (Piton):</strong> Der feste Ankerstift, der das äußere Ende der Spirale auf dem Unruhkolben fixiert. Er bildet den festen äußeren Verankerungspunkt der elastischen Baugruppe.
-        </li>
-        <li>
-          <strong>2° Die Rolle (Virole):</strong> Ein kleiner zentraler Metallring, der mikrometrisch auf der Unruhwelle befestigt ist und in dem das innere Ende der Spirale fixiert ist. Sie sorgt für die direkte Verbindung zwischen Spiralfeder und beweglicher Welle.
-        </li>
-        <li>
-          <strong>3° Der Zapfen (Pivot):</strong> Das extrem feine und polierte Ende der Unruhwelle. Die Zapfen laufen in Rubinen (Lochsteinen) und sind bei Stößen extremen mechanischen Belastungen ausgesetzt, weshalb Schutzsysteme (wie Incabloc) lebenswichtig sind.
-        </li>
-        <li>
-          <strong>4° Die Spiralfeder (Spiral):</strong> Eine elastische Feder, die nach einer präzisen mathematischen Kurve gewickelt ist (meist aus antimagnetischer Nickel- oder Siliziumlegierung). Sie liefert das permanente elastische Rückstellmoment, das die Unruh konstant in ihre neutrale Gleichgewichtslage zurückführt.
-        </li>
-        <li>
-          <strong>5° Der Unruhreif (Serge du Balancier):</strong> Der kreisförmige äußere Ring der Unruh. Seine Masse und sein Durchmesser bestimmen das <i>Trägheitsmoment</i> des Teils. Auf dem Reif erfolgt die dynamische Auswuchtung (durch Regulierschrauben oder Gewichte).
-        </li>
-        <li>
-          <strong>6° Die Unruhstege (Bras):</strong> Die starren Speichen, die die zentrale Nabe (oder Welle) mit dem äußeren Reif verbinden und für maximale Steifigkeit bei minimalem Luftwiderstand und Gewicht sorgen.
-        </li>
-        <li>
-          <strong>7° Der Rücker (Raquette):</strong> Ein bewegliches Regulierorgan mit zwei Stiften, zwischen denen die Spirale gleitet. Durch Verschieben des Rückers verändert der Uhrmacher die <i>aktive Länge</i> der Spirale, wodurch der Gang präzise eingestellt werden kann (Vor- oder Nachgehen der Uhr).
-        </li>
-        <li>
-          <strong>8° Die Doppelrolle:</strong> Eine Doppelscheibe auf der Unruhwelle, die die Sicherungsaussparung enthält und als direkte Halterung für den Hebelstein dient.
-        </li>
-        <li>
-          <strong>9° Der Hebelstein / Die Ellipse (Ellipse):</strong> Ein kleiner, starrer Zylinder aus rotem synthetischem Rubin, der fest auf der Doppelrolle sitzt. Dies ist der entscheidende kinematische Kontaktpunkt: Die Ellipse erhält bei jeder Schwingung den Impuls von der Ankergabel (zum Antrieb der Bewegung) und gibt den Auslöseimpuls an den Anker ab.
-        </li>
+        <li><strong>1° Der Spiralklötzchen (Piton) :</strong> Der feste Ankerstift, der das äußere Ende der Spirale auf dem Unruhkolben fixiert.</li>
+        <li><strong>2° Die Rolle (Virole) :</strong> Kleiner metallischer Ring, der auf die Unruhachse aufgepresst ist und das innere Ende der Spirale hält.</li>
+        <li><strong>3° Der Zapfen (Pivot) :</strong> Das extrem feine und polierte Ende der Unruhachse, das in Lagersteinen (Rubinen) läuft.</li>
+        <li><strong>4° Die Spirale :</strong> Die elastische Feder, die das permanente Rückstellmoment liefert.</li>
+        <li><strong>5° Der Unruhreif (Serge) :</strong> Der äußere kreisförmige Ring, dessen Masse das Trägheitsmoment bestimmt.</li>
+        <li><strong>6° Die Unruharme :</strong> Steife Speichen, die die Nabe mit dem Unruhreif verbinden.</li>
+        <li><strong>7° Der Rücker (Raquette) :</strong> Bewegliches Regulierorgan zur Änderung der aktiven Länge der Spirale.</li>
+        <li><strong>8° Die Doppelrolle :</strong> Trägt die Sicherheitskerbe und die Ellipse.</li>
+        <li><strong>9° Die Ellipse :</strong> Der Rubin-Zylinder, der den Impuls zwischen Anker und Unruh aufnimmt und überträgt.</li>
       </ul>
 
-      <div class="formula-box">
-        ⏱️ <strong>Isochronismus-Prinzip:</strong> Die Schwingungsdauer der Unruh-Spirale hängt von ihrem Trägheitsmoment und der Federsteifigkeit ab. Jede Änderung der aktiven Spirallänge (über den Rücker) verändert sofort die Frequenz der Uhr.
+      <!-- KAPITEL 7C: TRÄGHEIT UND DAS TICK-TACK -->
+      <div class="tech-doc-box">
+        <h3>7C. Die Unruhträgheit und das Geheimnis des "Tick-Tacks"</h3>
+        
+        <h4 style="margin-top: 0; color: #1a365d; font-size: 15px;">1. Das Verständnis der Trägheit am Werkstatt-Prüfstand</h4>
+        <p style="font-size: 14px;">
+          Beim Hantieren mit einer Unruh spürt man sofort ihren Widerstand gegen Geschwindigkeitsänderungen: das ist <strong>die Trägheit</strong>. 
+          Für den Uhrmacher bedeutet Trägheit (<span class="formula-math">I = m · R²</span>), dass die Masse der Unruh nicht nur schwer sein darf, sondern vor allem möglichst weit außen (am Unruhreif) verteilt sein muss. 
+          Eine Unruh mit guter Trägheit verhält sich wie ein stabilisierendes Schwungrad: Sie ist weniger anfällig für Mikrostöße am Handgelenk oder Erschütterungen des Räderwerks.
+        </p>
+
+        <h4 style="margin-top: 15px; color: #2980b9; font-size: 15px;">2. Anatomie eines Schlags : Woher kommt das "Tick-Tack"?</h4>
+        <p style="font-size: 14px;">
+          Dieses charakteristische Geräusch, das man auf der Zeitwaage hört, ist kein einzelnes Geräusch, sondern die Summe zweier ultraschneller mechanischer Ereignisse bei jeder Halbschwingung :
+        </p>
+        
+        <!-- NEBENEINANDER LIEGENDE TICK- UND TACK-BILDER -->
+        <div style="display: flex; gap: 15px; margin: 20px 0; justify-content: center; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 260px; text-align: center; background: #fff; padding: 10px; border: 1px solid #dcdcdc; border-radius: 6px;">
+            <img src="../tic-scappamento.png" alt="Das Tick - Verriegelung auf dem Eingangshebungsstein" style="width: 100%; height: auto; border-radius: 4px;">
+            <div style="font-size: 13px; color: #1a365d; font-weight: bold; margin-top: 6px;">1. DAS "TICK" (Eingangs-Aufschlag)</div>
+            <div style="font-size: 12px; color: #555; font-style: italic;">Verriegelung des Steigrads auf dem Eingangshebungsstein.</div>
+          </div>
+          <div style="flex: 1; min-width: 260px; text-align: center; background: #fff; padding: 10px; border: 1px solid #dcdcdc; border-radius: 6px;">
+            <img src="../tac-scappamento.png" alt="Das Tack - Verriegelung auf dem Ausgangshebungsstein" style="width: 100%; height: auto; border-radius: 4px;">
+            <div style="font-size: 13px; color: #27ae60; font-weight: bold; margin-top: 6px;">2. DAS "TACK" (Ausgangs-Aufschlag)</div>
+            <div style="font-size: 12px; color: #555; font-style: italic;">Symmetrische Verriegelung auf dem Ausgangshebungsstein.</div>
+          </div>
+        </div>
+
+        <p style="font-size: 14px; margin-top: 10px;">
+          * <strong>Das "Tick" (Erster Aufschlag) :</strong> Entsteht, wenn der Zahn des Steigrads auf den Eingangshebungsstein des Ankers prallt und dort verriegelt wird.<br>
+          * <strong>Das "Tack" (Zweiter Aufschlag) :</strong> Entspricht der symmetrischen Verriegelung auf dem Ausgangshebungsstein auf der anderen Seite des Zyklus.<br>
+          Zwischen diesen beiden Geräuschen durchquert die Ellipse die Ankergabel in absolutem Schweigen. Das Tick-Tack zu hören bedeutet, der "Atmung" der Uhr zu lauschen: Ein gleichmäßiger Rhythmus bestätigt eine saubere Abfall- und Einsteckregulierung auf der Bank!
+        </p>
+
+        <h4 style="margin-top: 15px; color: #27ae60; font-size: 15px;">3. Die Harmonie der Schwingung : Die entmystifizierte Formel</h4>
+        <p style="font-size: 14px;">
+          Die Periode einer Unruh (<span class="formula-math">T = 2π · √(I / C)</span>) lässt sich einfach wie eine Waage verstehen :
+          <strong>I</strong> repräsentiert das Gewicht und dessen Verteilung (die Trägheit der Unruh), während <strong>C</strong> die Kraft der Feder (die Steifigkeit der Spirale) darstellt. 
+          Zur Regulierung der Uhr greift der Uhrmacher entweder am Rücker ein (um die aktive Länge der Spirale <i>C</i> zu verändern) oder an den Schrauben/Regulierschrauben der Unruh (um die Trägheit <i>I</i> anzupassen).
+        </p>
       </div>
       
       <!-- KAPITEL 8 -->
-      <h2 id="p8">8. Regulierung: Unruh-Spirale & Schwingungsfrequenzen</h2>
-      <table class="table-custom">
-        <thead><tr><th>Frequenz (A/h)</th><th>Kalibertyp</th><th>Beispiel</th><th>(Hz)</th><th>Schwingungen/Sek.</th></tr></thead>
-        <tbody>
-          <tr><td><strong>18'000 A/h</strong></td><td>Historisch / Taschenuhr</td><td>ETA 6497-1</td><td>2.5 Hz</td><td>5 Ticks/Sek.</td></tr>
-          <tr><td><strong>21'600 A/h</strong></td><td>Mittelhoch</td><td>ETA 6497-2</td><td>3.0 Hz</td><td>6 Ticks/Sek.</td></tr>
-          <tr><td><strong>28'800 A/h</strong></td><td>Moderner Standard</td><td>ETA 2824-2</td><td>4.0 Hz</td><td>8 Ticks/Sek.</td></tr>
-          <tr><td><strong>36'000 A/h</strong></td><td>Hochfrequenz</td><td>Zenith El Primero</td><td>5.0 Hz</td><td>10 Ticks/Sek.</td></tr>
-        </tbody>
-      </table>
-      <div class="img-always-visible">
-        <img src="../balancier-spiral.jpg" alt="Unruh-Spirale" style="max-height: 380px;">
+      <h2 id="p8">8. Regulation und Frequenz : Die Unruh-Spirale und Schwingungen pro Stunde (A/h)</h2>
+      
+      <!-- RESPONSIVE TABELLE -->
+      <div class="table-responsive">
+        <table class="table-custom">
+          <thead><tr><th>Frequenz (A/h)</th><th>Kalibertyp</th><th>Beispiel</th><th>(Hz)</th><th>Schwingungen/Sek</th></tr></thead>
+          <tbody>
+            <tr><td><strong>18'000 A/h</strong></td><td>Historisch / Taschenuhr</td><td>ETA 6497-1</td><td>2.5 Hz</td><td>5 Tics/Sek</td></tr>
+            <tr><td><strong>21'600 A/h</strong></td><td>Mittelstufe</td><td>ETA 6497-2</td><td>3.0 Hz</td><td>6 Tics/Sek</td></tr>
+            <tr><td><strong>28'800 A/h</strong></td><td>Moderner Standard</td><td>ETA 2824-2</td><td>4.0 Hz</td><td>8 Tics/Sek</td></tr>
+            <tr><td><strong>36'000 A/h</strong></td><td>Hochfrequenz</td><td>Zenith El Primero</td><td>5.0 Hz</td><td>10 Tics/Sek</td></tr>
+          </tbody>
+        </table>
       </div>
+
+      <!-- VERTIEFUNG 8A: HERTZ UND FREQUENZEN -->
+      <div class="tech-doc-box">
+        <h3>8A. Frequenz und Chronometrie : Hertz, Schwingungen und ihre Bedeutung verstehen</h3>
+        
+        <p style="font-size: 14px;">
+          In der Uhrmachersprache jongliert man ständig zwischen <strong>Schwingungen bzw. Alternanzen pro Stunde (A/h)</strong>, <strong>Hertz (Hz)</strong> und der Anzahl hörbarer Schläge. Bringen wir Licht ins Dunkel :
+        </p>
+
+        <ul style="margin: 0 0 15px 20px; padding: 0; font-size: 14px; line-height: 1.5;">
+          <li><strong>Das Hertz (Hz) :</strong> Entspricht einer vollständigen Schwingung (Hin- und Herweg) pro Sekunde. <em>1 Hz = 1 Zyklus/Sekunde</em>.</li>
+          <li><strong>Die Halbschwingung / Alternanz :</strong> Jede Hin- oder Herbewegung der Unruh setzt einen Hemmungsimpuls frei. Da ein kompletter Zyklus einen Hin- und Rückweg umfasst, <strong>erzeugt 1 Hz exakt 2 Alternanzen</strong> (ein "Tick" und ein "Tack").</li>
+          <li><em>Konkretes Beispiel :</em> Ein modernes Standardwerk mit einer Frequenz von <strong>4 Hz</strong> absolviert 4 Zyklen pro Sekunde, also <strong>8 Halbschwingungen pro Sekunde</strong> (4 × 2 = 8), was 28'800 Schwingungen pro Stunde ergibt (8 × 3600 Sek).</li>
+        </ul>
+
+        <h4 style="margin-top: 15px; color: #1a365d; font-size: 15px;">Vor- und Nachteile : Die Wahl der Frequenz</h4>
+        <p style="font-size: 14px;">
+          Die Wahl der Frequenz eines Kalibers ist niemals dem Zufall überlassen; sie ist das Resultat eines präzisen technischen Kompromisses zwischen chronometrischer Stabilität, Gangreserve und mechanischem Verschleiß :
+        </p>
+
+        <div style="display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 250px; background: #fff; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px;">
+            <strong style="color: #2980b9;">📉 Niedrige Frequenzen (z.B. 18'000 A/h / 2.5 Hz)</strong><br>
+            <span style="font-size: 13px;">
+              <em>Vorteile :</em> Geringere Reibung, reduzierter Verschleiß der Räder und ausgezeichnete Gangreserve (das Räderwerk verbraucht weniger Energie). Optisch ist die langsame Schwingung der großen Unruh ein großartiges Schauspiel der traditionellen Haute Horlogerie.<br>
+              <em>Nachteile :</em> Empfindlicher gegenüber Stößen und Handgelenksbewegungen; ein Mikrostoff stört den Gang der Uhr stärker.
+            </span>
+          </div>
+          
+          <div style="flex: 1; min-width: 250px; background: #fff; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px;">
+            <strong style="color: #27ae60;">📈 Hohe Frequenzen (z.B. 36'000 A/h / 5 Hz)</strong><br>
+            <span style="font-size: 13px;">
+              <em>Vorteile :</em> Außergewöhnliche chronometrische Stabilität. Dank der hohen Geschwindigkeit und Trägheit kehrt die Unruh nach einer Störung rasch in ihre Gleichgewichtslage zurück. Unverzichtbar für die Messung kurzer Zeiteinheiten (Hochpräzisions-Chronographen).<br>
+              <em>Nachteile :</em> Erhöhter Energiebedarf (erfordert kräftige Zugfedern), stärkere Belastung der Schmierung und beschleunigter mechanischer Verschleiß ohne moderne Werkstoffe (Silizium, Oberflächenbehandlungen).
+            </span>
+          </div>
+        </div>
+
+        <div style="margin-top: 20px; text-align: center;">
+          <a href="_001B-Mouvement_Manuel.html#p8" class="atelier-btn">🔬 Frequenztabelle aufrufen</a>
+        </div>
+      </div>
+
       <details class="image-popover">
-        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL (01-08) — Unruh-Spirale</summary>
+        <summary>📷 ORIGINALES MANUSKRIPTBLATT (01-08) — Unruh und Spirale</summary>
         <div class="img-container"><img src="../01-08 Regulation-Le balancier Spiral.jpg" alt="Blatt 01-08"></div>
       </details>
       
-      <!-- SKALIERUNGSBILD UNRUH / STREICHHOLZ -->
+      <!-- GRÖSSENVERGLEICH BILD UNRUH / ZÜNDHOLZ -->
       <div class="img-always-visible">
-        <img src="../Balance_wheels.jfif" alt="Größenvergleich einer Unruh-Spirale mit einem Streichholzkopf">
-        <div class="img-caption">📷 GRÖSSENVERGLEICH — Das Regulierorgan (Brücke, Unruh und Spirale) neben einem Streichholzkopf, was die extreme Miniaturisierung der uhrmacherischen Mikromechanik verdeutlicht.</div>
-      </div>
-
-      <!-- KAPITEL 9 -->
-      <h2 id="p9">9. Anatomie der Unruh & Stoßsicherung</h2>
-      <p>Die wesentliche Weiterentwicklung liegt im Schutz der Zapfen (0.07 mm) vor mechanischen Stößen.</p>
-      <div class="img-always-visible"><img src="../Incabloc_01.jpg" alt="Incabloc Anatomie"></div>
-      <div class="img-always-visible"><img src="../Incabloc_02.jpg" alt="Incabloc Montage"></div>
-      <div class="img-always-visible"><img src="../Incabloc_03.jpg" alt="Incabloc Dynamik"></div>
-      <ul>
-        <li><strong>Verbindungskomponenten:</strong> Rolle, Spiralklammer, Rücker.</li>
-      </ul>
-      <details class="image-popover">
-        <summary>📷 ORIGINALER HANDSCHRIFTLICHER ZETTEL (01-09) — Unruhteile</summary>
-        <div class="img-container"><img src="../01-09 Regulation-Le balancier Spiral.jpg" alt="Blatt 01-09"></div>
-      </details>
-
-    </div>
-  </div>
-  
-  <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
-    <a href="_001D-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Weiterlesen ➔</a>
-  </div>
-  
-  <footer>© 2026 Swiss Time Expert. Alle Rechte vorbehalten.</footer>
-  <script src="../script.js"></script>
-</body>
-</html>
+        <img src="../Balance_wheels.

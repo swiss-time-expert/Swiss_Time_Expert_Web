@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - 1. The Manual-Winding Movement</title>
+  
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+  
+  <!-- Script for 3D model-viewer (Gear train at the top) -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  
+  <style>
+    /* Forced alignment to synchronize Header and Notebook during zoom */
+    .header-card, .notebook-container {
+      max-width: 1100px !important;
+      margin: 0 auto !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Language Switcher Styles */
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(255,255,255,0.3); }
+    .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    /* Dropdown Menu */
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+  </style>
+</head>
+<body>
+
+  <div class="header-card">
+    
+    <!-- LEFT COLUMN: Texts and Navigation -->
+    <div class="header-left-block">
+      <div class="badge">Haute Horlogerie — Federal Diploma</div>
+      <h1>1. The Manual-Winding Movement</h1>
+      <p class="subtitle">Watchmaking Expertise Course — Energy & Mainspring Barrel</p>
+      
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Main Menu</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. The Manual-Winding Movement</a>
+            <a href="_002-la-montre-automatique.html">2. The Automatic Watch</a>
+            <a href="_003-Horloge_Electronique.html">3. Electronic Clock & Quartz</a>
+            <a href="_004-Complications.html">4. Complications</a>
+            <a href="_005-Familles_Matieres.html">5. Material Families</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Manufacturing Phases and Technologies</a>
+            <a href="_007-Habillage.html">7. Watch Exterior & Casing</a>
+            <a href="#">8. History of Time Measurement</a>
+          </div>
+        </div>
+
+        <div class="lang-switcher">
+          <a href="../FR/_001A-Mouvement_Manuel.html" class="lang-btn">FR</a>
+          <a href="#" class="lang-btn active">EN</a>
+          <a href="../DE/_001A-Mouvement_Manuel.html" class="lang-btn">DE</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- RIGHT COLUMN: Logo -->
+    <div class="header-right-block">
+      <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+    </div>
+
+  </div>
+
+  <div class="notebook-container" id="notebook-main">
+    
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Module 01 : Energy & Barrel</h2>
+      </div>
+      <div class="tag-chic">✍️ Lecture Notes & Schemas</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <h2 id="p1">1. Block Diagram of the Mechanical Movement</h2>
+      <p>The block diagram defines the fundamental functional architecture of the manual-winding mechanical watch. The accumulated energy is transmitted, distributed, and regulated continuously:</p>
+
+      <style>
+        .ste-container { max-width: 1000px; margin: 0 auto; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        .ste-image-wrapper { width: 100%; margin-bottom: 25px; }
+        .ste-base-img { width: 100%; height: auto; display: block; }
+        .ste-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .ste-card { background-color: #f8f9fa; padding: 18px; border-radius: 6px; border-top: 4px solid #1a365d; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .ste-step { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6c757d; letter-spacing: 1px; margin-bottom: 6px; }
+        .ste-title { font-size: 1.05rem; font-weight: bold; color: #1a365d; margin: 0 0 10px 0; line-height: 1.25; }
+        .ste-text { font-size: 0.85rem; line-height: 1.55; color: #333; margin: 0; text-align: left; }
+        @media (max-width: 768px) { .ste-grid { grid-template-columns: 1fr; gap: 15px; } }
+      </style>
+
+      <!-- 1. TOP INTERACTIVE 3D GEAR TRAIN MODEL -->
+      <div class="ste-container">
+        <div class="ste-image-wrapper">
+          <model-viewer src="../Train_fix.main_design.glb" alt="Complete 3D kinematic chain" auto-rotate camera-controls style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px;"></model-viewer>
+        </div>
+        
+        <div class="ste-grid">
+          <div class="ste-card">
+            <div class="ste-step">Step 1: Energy</div>
+            <h3 class="ste-title">The Mainspring & Barrel</h3>
+            <p class="ste-text">The watch's engine. The mainspring, housed inside the drum (1), stores mechanical energy during winding.</p>
+          </div>
+          <div class="ste-card">
+            <div class="ste-step">Step 2: Transmission</div>
+            <h3 class="ste-title">The Go-Train (Wheel Train)</h3>
+            <p class="ste-text">Force reduction and multiplication. The gear train (2) routes the energy forward.</p>
+          </div>
+          <div class="ste-card">
+            <div class="ste-step">Step 3: Distribution</div>
+            <h3 class="ste-title">The Escapement</h3>
+            <p class="ste-text">The kinematic converter. The escape wheel (3) transforms continuous rotational movement into impulses.</p>
+          </div>
+          <div class="ste-card">
+            <div class="ste-step">Step 4: Regulation</div>
+            <h3 class="ste-title">The Oscillator</h3>
+            <p class="ste-text">The isochronous heart. The balance-spring assembly (4) dictates the absolute rhythm.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. STATIC IMAGE WITH PINS -->
+      <div class="img-always-visible" style="background: #fff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <div class="interactive-wrapper" style="position: relative; width: 100%;">
+          <img src="../chaine-cinematique-mecanique.png" alt="Complete kinematic chain" style="width: 100%; height: auto; display: block; border-radius: 4px;">
+          <div class="pin-marker" style="top: 14%; left: 49%; position: absolute; z-index: 5;">1</div>
+          <div class="pin-marker" style="top: 46%; left: 51%; position: absolute; z-index: 5;">2</div>
+          <div class="pin-marker" style="top: 41%; left: 33%; position: absolute; z-index: 5;">3</div>
+          <div class="pin-marker" style="top: 56%; left: 44%; position: absolute; z-index: 5;">4</div>
+          <div class="pin-marker" style="top: 72%; left: 32%; position: absolute; z-index: 5;">5</div>
+          <div class="pin-marker" style="top: 76%; left: 59%; position: absolute; z-index: 5;">8</div>
+          <div class="pin-marker" style="top: 64%; left: 60%; position: absolute; z-index: 5;">9</div>
+          <div class="pin-marker" style="top: 38%; left: 81%; background: #1b365d; position: absolute; z-index: 5;">⚙️</div>
+        </div>
+      </div>
+
+      <div class="legend-grid">
+        <div class="legend-item"><span class="badge-mini">1</span> Barrel</div>
+        <div class="legend-item"><span class="badge-mini">2</span> Center wheel</div>
+        <div class="legend-item"><span class="badge-mini">3</span> Third wheel</div>
+        <div class="legend-item"><span class="badge-mini">4</span> Fourth wheel (Seconds)</div>
+        <div class="legend-item"><span class="badge-mini">5</span> Escape wheel</div>
+        <div class="legend-item"><span class="badge-mini">8</span> Balance wheel</div>
+        <div class="legend-item"><span class="badge-mini">9</span> Balance spring</div>
+        <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">⚙️</span> Keyless works (Winding mechanism)</div>
+      </div>
+
+      <details class="image-popover">
+        <summary>📷 ORIGINAL MANUSCRIPT SHEET (01-02) — Block Diagram & Introduction</summary>
+        <div class="img-container"><img src="../01-02 Scema Bloc-Energie-Trasmission-Distribution-Regulation.jpg" alt="Sheet 01-02"></div>
+      </details>
+
+      <h2 id="barillet">2. Motor Organ (Energy): The Barrel, Mainspring &amp; Torque Dynamics</h2>
+      <p>The barrel is the central component for storing potential energy in a mechanical movement. Atelier analysis reveals critical mechanical details regarding mainspring attachment and torque delivery curves.</p>
+
+      <!-- NOTEBOOK NOTES SECTION (FIG 4.4 P. 46) -->
+      <div style="background: #fdfdfd; border: 1px solid #dcdcdc; border-left: 5px solid #1a365d; padding: 20px; border-radius: 6px; margin-bottom: 25px;">
+        <h3 style="margin-top: 0; color: #1a365d; font-size: 17px;">📝 Atelier Notes: Mainspring Geometry & Torque Curve (Ref. Fig 4.4, p. 46)</h3>
+        <p style="font-size: 14px; line-height: 1.6; color: #333;">
+          <strong>1. Mainspring Attachment:</strong> The mainspring is held by a bridle (hook) located on the inside wall of the barrel drum. At the center, a hook is positioned on the barrel arbor to secure the inner end of the spring. Furthermore, the inner end of the mainspring features a dedicated fixing hole.
+        </p>
+        <p style="font-size: 14px; line-height: 1.6; color: #333;">
+          <strong>2. Torque Analysis (Arre p. 60, p. 311):</strong> During the first turns of winding, the delivered force/torque is remarkably low. Conversely, at full winding (top of the curve), the force is extremely high. This non-linear power curve requires regulation to ensure consistent amplitude across the movement's power reserve.
+        </p>
+      </div>
+
+      <!-- 3. INTERACTIVE 3D MODEL WITH EXPLODED VIEW AND LABELS -->
+      <div class="img-always-visible">
+        <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
+          
+          <!-- 3D Container and Name Tags -->
+          <div id="canvas-container-barillet" style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px; position: relative; overflow: hidden;">
+            
+            <!-- Floating component labels (Atelier Format) -->
+            <div id="label-arbre" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Arbor & Pinion</div>
+            <div id="label-tambour" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Drum & Wheel</div>
+            <div id="label-molla" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Mainspring</div>
+            <div id="label-coperchio" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Cover / Lid</div>
+
+          </div>
+
+          <!-- Explosion Control Slider -->
+          <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px; display: flex; align-items: center; gap: 15px;">
+            <label for="exploder-barillet" style="font-size: 14px; font-weight: bold; color: #1a365d; white-space: nowrap;">⚙️ Explosion Control:</label>
+            <input type="range" id="exploder-barillet" min="0" max="100" value="0" style="flex-grow: 1; cursor: pointer; accent-color: #1a365d;">
+            <span id="val-scale-barillet" style="font-size: 13px; font-weight: bold; color: #6c757d; min-width: 40px;">0%</span>
+          </div>
+
+          <div class="img-caption" style="margin-top: 10px;">📷 3D TECHNICAL VIEW — Anatomy of the barrel with dynamic labels.</div>
+        </div>
+      </div>
+
+      <!-- Clean Three.js Libraries -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+      <script>
+        let scene_barillet, camera_barillet, renderer_barillet, controls_barillet;
+        let parts_barillet = [];
+
+        const container_barillet = document.getElementById('canvas-container-barillet');
+
+        function initBarillet3D() {
+            if (!container_barillet) return;
+
+            scene_barillet = new THREE.Scene();
+            scene_barillet.background = new THREE.Color(0xffffff);
+
+            camera_barillet = new THREE.PerspectiveCamera(45, container_barillet.clientWidth / container_barillet.clientHeight, 0.1, 1000);
+            camera_barillet.position.set(0, 25, 40);
+
+            renderer_barillet = new THREE.WebGLRenderer({ antialias: true });
+            renderer_barillet.setSize(container_barillet.clientWidth, container_barillet.clientHeight);
+            renderer_barillet.setPixelRatio(window.devicePixelRatio);
+            renderer_barillet.shadowMap.enabled = true;
+            container_barillet.appendChild(renderer_barillet.domElement);
+
+            controls_barillet = new THREE.OrbitControls(camera_barillet, renderer_barillet.domElement);
+            controls_barillet.enableDamping = true;
+            controls_barillet.dampingFactor = 0.05;
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+            scene_barillet.add(ambientLight);
+
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.2);
+            dirLight1.position.set(20, 40, 20);
+            scene_barillet.add(dirLight1);
+
+            const dirLight2 = new THREE.DirectionalLight(0x88bbff, 0.6);
+            dirLight2.position.set(-20, -20, -20);
+            scene_barillet.add(dirLight2);
+
+            const loader = new THREE.GLTFLoader();
+            loader.load('../barillet_fix.glb', function (gltf) {
+                const model = gltf.scene;
+                scene_barillet.add(model);
+
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        const initialPos = child.position.clone();
+                        const name = child.name.toLowerCase();
+                        
+                        let targetOffset = 0;
+                        let labelType = 'tambour';
+
+                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion')) {
+                            targetOffset = 0;
+                            labelType = 'arbre';
+                        } else if (name.includes('coperchio') || name.includes('cover')) {
+                            targetOffset = 18;
+                            labelType = 'coperchio';
+                        } else if (name.includes('molla') || name.includes('spring')) {
+                            targetOffset = 6;
+                            labelType = 'molla';
+                        } else {
+                            targetOffset = -15;
+                            labelType = 'tambour';
+                        }
+
+                        parts_barillet.push({
+                            mesh: child,
+                            initialPos: initialPos,
+                            targetOffset: targetOffset,
+                            labelId: 'label-' + labelType
+                        });
+                    }
+                });
+            }, undefined, function (error) {
+                console.error('Error loading GLB file:', error);
+            });
+
+            const slider = document.getElementById('exploder-barillet');
+            if (slider) {
+                slider.addEventListener('input', (event) => {
+                    const t = event.target.value / 100;
+                    updateBarilletExplosion(t);
+                    document.getElementById('val-scale-barillet').innerText = event.target.value + '%';
+                });
+            }
+
+            window.addEventListener('resize', onWindowResizeBarillet, false);
+            animateBarillet();
+        }
+
+        function updateBarilletExplosion(t) {
+            parts_barillet.forEach(p => {
+                p.mesh.position.x = p.initialPos.x + (p.targetOffset * t);
+                p.mesh.position.y = p.initialPos.y;
+                p.mesh.position.z = p.initialPos.z;
+            });
+
+            const showLabels = t > 0.05;
+            ['label-arbre', 'label-tambour', 'label-molla', 'label-coperchio'].forEach(id => {
+                const lbl = document.getElementById(id);
+                if (lbl) lbl.style.display = showLabels ? 'block' : 'none';
+            });
+
+            if (showLabels) {
+                updateBarilletLabelsPosition();
+            }
+        }
+
+        function updateBarilletLabelsPosition() {
+            parts_barillet.forEach(p => {
+                const lbl = document.getElementById(p.labelId);
+                if (!lbl || lbl.style.display === 'none') return;
+
+                const tempV = p.mesh.position.clone();
+                tempV.project(camera_barillet);
+
+                const x = (tempV.x *  .5 + .5) * container_barillet.clientWidth;
+                const y = (tempV.y * -.5 + .5) * container_barillet.clientHeight;
+
+                lbl.style.left = (x - 30) + 'px';
+                lbl.style.top = (y - 15) + 'px';
+            });
+        }
+
+        function onWindowResizeBarillet() {
+            if (!container_barillet) return;
+            camera_barillet.aspect = container_barillet.clientWidth / container_barillet.clientHeight;
+            camera_barillet.updateProjectionMatrix();
+            renderer_barillet.setSize(container_barillet.clientWidth, container_barillet.clientHeight);
+        }
+
+        function animateBarillet() {
+            requestAnimationFrame(animateBarillet);
+            controls_barillet.update();
+            renderer_barillet.render(scene_barillet, camera_barillet);
+            
+            const sliderElem = document.getElementById('exploder-barillet');
+            if (sliderElem && sliderElem.value > 5) {
+                updateBarilletLabelsPosition();
+            }
+        }
+
+        if (document.readyState === 'complete') {
+            initBarillet3D();
+        } else {
+            window.addEventListener('load', initBarillet3D);
+        }
+      </script>
+
+      <div class="formula-box">
+        ⚙️ <strong>Atelier Rule:</strong> On an automatic movement, manual winding via the crown precisely simulates the maximum charge state achieved by the rotor.
+      </div>
+
+      <h2 id="croix-de-malte">3. Spring Attachment, Maltese Cross &amp; Torque Regulation</h2>
+      
+      <div style="background: #fdfdfd; border: 1px solid #dcdcdc; border-left: 5px solid #1a365d; padding: 20px; border-radius: 6px; margin-bottom: 25px;">
+        <h3 style="margin-top: 0; color: #1a365d; font-size: 17px;">📝 Atelier Notes: Maltese Cross & Fusee-Chain System</h3>
+        <p style="font-size: 14px; line-height: 1.6; color: #333;">
+          <strong>Maltese Cross (Croix de Malte):</strong> This mechanism blocks rotation at the extremes (preventing winding in the high-torque extreme zone and stopping unwinding before the dead zone). It forces the movement to exploit only the central linear part of the power curve. It is traditionally used in high-end repeating watches where extreme precision is required; however, it abrupts the winding limit ("hard stop").
+        </p>
+      </div>
+
+      <div class="img-always-visible">
+        <img src="../croix-de-malte.png" alt="Maltese cross operating principle">
+        <div class="img-caption">📷 TECHNICAL SCHEMATIC — The Maltese Cross: blocking rotation to exploit the linear torque range.</div>
+      </div>
+
+      <details class="image-popover">
+        <summary>📷 ORIGINAL MANUSCRIPT SHEET (01-03) — Spring Attachment, Maltese Cross &amp; Fusee</summary>
+        <div class="img-container"><img src="../01-03 Energie - Le Ressort (F4.4P46).jpg" alt="Sheet 01-03"></div>
+      </details>
+
+      <!-- FUSEE-CHAIN -->
+      <div style="display: flex; gap: 20px; align-items: center; background: #fff; padding: 20px; border: 1px solid #dcdcdc; border-radius: 8px; margin-top: 25px; margin-bottom: 25px;">
+        <div style="flex: 0 0 45%;">
+          <img src="../fusee-chaine.png" alt="Fusee-Chain System" style="width: 100%; height: auto; border-radius: 4px;">
+        </div>
+        <div style="flex: 1;">
+          <h4 style="margin-top: 0; color: #2c4d75; font-size: 16px;">Constant Force: The Fusee-Chain (Fusée-Chaîne)</h4>
+          <p style="font-size: 14px; margin-bottom: 10px;">
+            An additional mechanical system designed to transmit a constant torque to the gear train. 
+          </p>
+          <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
+            <li><strong>Pros (+):</strong> Traditional aesthetic and mechanical appeal; provides average constant force across all winding states (used historically up to 1980 for marine chronometry).</li>
+            <li><strong>Cons (-):</strong> Very expensive, extremely complex to manufacture, takes up a significant amount of space, and carries a high risk of failure/breakage.</li>
+          </ul>
+        </div>
+      </div>
+      
+    </div> 
+  </div> 
+
+  <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
+    <a href="_001B-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continue reading ➔</a>
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. All rights reserved.</footer>
+  <script src="../_ricerca.js"></script>
+  <script src="../script.js"></script>
+</body>
+</html>

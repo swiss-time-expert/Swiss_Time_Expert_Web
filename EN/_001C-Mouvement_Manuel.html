@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swiss Time Expert - 1. The Manual Winding Movement</title>
+  <title>Swiss Time Expert - 1. The Manual-Winding Movement</title>
   
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
@@ -17,7 +17,7 @@
       box-sizing: border-box;
     }
 
-    /* Language Styles */
+    /* Language Switcher Styles */
     .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
     .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
     .lang-btn:hover { background: rgba(255,255,255,0.3); }
@@ -32,6 +32,55 @@
     .dropdown-content a:last-child { border-bottom: none; }
     .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
     .dropdown:hover .dropdown-content { display: block; }
+
+    /* Technical documentation box with green left border */
+    .tech-doc-box { 
+      background: #f8f9fa; 
+      border-left: 5px solid #27ae60; 
+      padding: 20px 25px; 
+      margin: 25px 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      font-size: 1em; 
+      line-height: 1.6; 
+      color: #2c3e50; 
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .tech-doc-box h3 { color: #1a365d; margin-top: 20px; font-size: 1.15em; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+    .tech-doc-box h3:first-child { margin-top: 0; }
+    .tech-doc-box h4 { color: #2980b9; margin-top: 15px; font-size: 1.05em; }
+    .formula-math { font-family: monospace; background: #eef2f7; padding: 4px 8px; border-radius: 4px; display: inline-block; font-weight: bold; color: #1a365d; }
+
+    /* Mobile Table Optimization */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 20px 0;
+    }
+    .table-custom {
+      width: 100%;
+      min-width: 550px;
+    }
+
+    /* Atelier / Test Button Style */
+    .atelier-btn {
+      display: inline-block;
+      background: #1a365d;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.95em;
+      margin-top: 15px;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .atelier-btn:hover {
+      background: #27ae60;
+      transform: translateY(-1px);
+    }
   </style>
 </head>
 <body>
@@ -41,20 +90,20 @@
     
     <div class="header-left-block">
       <div class="badge">Haute Horlogerie — Federal Diploma</div>
-      <h1>1. The Manual Winding Movement</h1>
+      <h1>1C. Distribution and Regulation: How the Swiss Lever Escapement Works</h1>
       <p class="subtitle">Watchmaking Expertise Course — Distribution & Regulation</p>
       
       <div class="header-controls">
         <div class="dropdown">
           <button class="dropbtn">☰ Main Menu</button>
           <div class="dropdown-content">
-            <a href="_001A-Mouvement_Manuel.html">1. The Manual Winding Movement</a>
+            <a href="_001A-Mouvement_Manuel.html">1. The Manual-Winding Movement</a>
             <a href="_002-la-montre-automatique.html">2. The Automatic Watch</a>
-            <a href="_003-Horloge_Electronique.html">3. The Electronic & Quartz Clock</a>
+            <a href="_003-Horloge_Electronique.html">3. Electronic Clock & Quartz</a>
             <a href="_004-Complications.html">4. Complications</a>
             <a href="_005-Familles_Matieres.html">5. Material Families</a>
-            <a href="_006-Fhasses_Fabrication.html">6. Manufacturing Phases and Technologies</a>
-            <a href="_007-Habillage.html">7. The Habillage (Watch Exterior)</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Manufacturing Phases & Technologies</a>
+            <a href="_007-Habillage.html">7. Watch Exterior (Casing)</a>
             <a href="#">8. History of Time Measurement</a>
           </div>
         </div>
@@ -78,85 +127,53 @@
     
     <div class="notebook-header">
       <div class="notebook-title-cell">
-        <h2 class="handwritten-heading">Module 01: Escapement & Regulating Organ</h2>
+        <h2 class="handwritten-heading">Module 01: Escapement & Regulator</h2>
       </div>
-      <div class="tag-chic">✍️ Course Notes & Diagrams</div>
+      <div class="tag-chic">✍️ Lecture Notes & Diagrams</div>
     </div>
 
     <div class="handwritten-body" id="course-content-area">
 
       <!-- CHAPTER 7 -->
-      <h2 id="p7">7. Distribution: The Swiss Lever Escapement</h2>
+      <h2 id="p7">7. Distribution: How the Swiss Lever Escapement Works</h2>
       <ul>
-        <li><strong>Key Components:</strong> Escape wheel, Swiss lever with pallets (rubies), Double roller with impulse pin (ellipse).</li>
-        <li><strong>Function:</strong> To transform rotation into oscillations and distribute energy.</li>
+        <li><strong>Key Components:</strong> Escape wheel, Swiss lever with pallets (rubies), Roller table with impulse pin (ellipse).</li>
+        <li><strong>Function:</strong> Transform rotation into oscillations and distribute energy.</li>
       </ul>
-      <div class="img-always-visible">
-        <div class="interactive-wrapper" style="max-width: 480px;">
-          <img src="../echappement-ancre.jpg" alt="Escapement">
-          <div class="pin-marker" style="top: 52%; left: 50%;">1</div>
-          <div class="pin-marker" style="top: 65%; left: 40%;">2</div>
-          <div class="pin-marker" style="top: 65%; left: 60%;">3</div>
-          <div class="pin-marker" style="top: 80%; left: 50%;">4</div>
-          <div class="pin-marker" style="top: 55%; left: 55%; background: #1b365d;">5</div>
-          <div class="pin-marker" style="top: 48%; left: 45%;">6</div>
-          <div class="pin-marker" style="top: 44%; left: 50%; background: #1b365d;">7</div>
-          <div class="pin-marker" style="top: 30%; left: 50%;">8</div>
-        </div>
-        <div class="legend-grid">
-          <div class="legend-item"><span class="badge-mini">1</span> Lever body (Corps d'ancre)</div>
-          <div class="legend-item"><span class="badge-mini">2</span> Entry pallet (Levée d'entrée)</div>
-          <div class="legend-item"><span class="badge-mini">3</span> Exit pallet (Levée de sortie)</div>
-          <div class="legend-item"><span class="badge-mini">4</span> Escape wheel (Roue d'échappement)</div>
-          <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">5</span> Guard pin (Dard)</div>
-          <div class="legend-item"><span class="badge-mini">6</span> Fork (Fourchette)</div>
-          <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">7</span> Impulse pin / Ellipse (Cheville)</div>
-          <div class="legend-item"><span class="badge-mini">8</span> Double roller (Double plateau)</div>
-        </div>
-      </div>
-      <details class="image-popover">
-        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-07) — Swiss Lever Escapement</summary>
-        <div class="img-container"><img src="../01-07 Regulation-l echappement.jpg" alt="Note 01-07"></div>
-      </details>
 
-      <!-- Inizio Modello 3D Interattivo - Scappamento -->
+      <!-- Interactive 3D Model - Escapement IN FIRST POSITION -->
       <div style="margin: 25px 0; background: #ffffff; padding: 15px; border-radius: 8px; border: 1px solid #dcdcdc; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-        
         <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
-
         <model-viewer 
           id="escapement-model"
           src="../swiss_lever_escapement_mechanism.glb" 
-          alt="Swiss lever escapement - Swiss Time Expert" 
+          alt="Swiss Lever Escapement - Swiss Time Expert" 
           camera-controls 
-          animation-name="*"
+          autoplay
+          interaction-prompt="none"
+          shadow-intensity="0"
+          exposure="0.8"
+          environment-image="neutral"
           style="width: 100%; height: 420px; background-color: #ffffff;">
         </model-viewer>
-
-        <!-- Pulsante Play/Pause personalizzato -->
         <div style="text-align: center; margin-top: 10px;">
           <button id="play-pause-btn" style="background: #1b365d; color: white; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.9em;">⏸️ Pause</button>
         </div>
-
         <p style="text-align: center; font-family: inherit; font-size: 0.85em; color: #555; margin-top: 8px; font-style: italic;">
-          Interactive 3D model: drag with your mouse or fingers to rotate. | 3D Model: C. Yamahata (Sketchfab)[cite: 18]
+          Interactive 3D model: drag to rotate. | 3D Model: C. Yamahata (Sketchfab)
         </p>
-
         <script>
           const modelViewer = document.querySelector('#escapement-model');
           const btn = document.querySelector('#play-pause-btn');
-
           modelViewer.addEventListener('load', () => {
-            const material = modelViewer.model.materials.find(m => m.name.toLowerCase().includes('ancora') || m.name.toLowerCase().includes('lever'));
-            
-            if (material) {
-              material.pbrMetallicRoughness.setBaseColorFactor([0.9, 0.75, 0.3, 1.0]);
-              material.pbrMetallicRoughness.setMetallicFactor(0.9);
-              material.pbrMetallicRoughness.setRoughnessFactor(0.2);
-            }
+            modelViewer.model.materials.forEach(material => {
+              if (material.pbrMetallicRoughness) {
+                material.pbrMetallicRoughness.setRoughnessFactor(0.65);
+                material.pbrMetallicRoughness.setMetallicFactor(0.2);
+              }
+            });
             modelViewer.play();
           });
-
           btn.addEventListener('click', () => {
             if (modelViewer.paused) {
               modelViewer.play();
@@ -168,98 +185,168 @@
           });
         </script>
       </div>
-      <!-- Fine Modello 3D -->
+
+      <details class="image-popover">
+        <summary>📷 ORIGINAL MANUSCRIPT SHEET (01-07) — Swiss Lever Escapement</summary>
+        <div class="img-container"><img src="../01-07 Regulation-l echappement.jpg" alt="Sheet 01-07"></div>
+      </details>
       
-      <!-- 7B. IN-DEPTH -->
-      <h2 id="f7b">7B. Technical In-Depth: Functional Anatomy of the Regulating Organ</h2>
+      <!-- 7B. IN-DEPTH STUDY -->
+      <h2 id="f7b">7B. Technical In-Depth: Functional Anatomy of the Regulator</h2>
       <p>
-        The regulating organ is the isochronous heart of the mechanical watch. It ensures the rigorous division of time through its regular oscillations. Mastering its sub-assemblies (connections, guides, and impulse) is essential for understanding chronometry.
+        The regulator is the isochronous heart of the mechanical watch. It ensures the rigorous slicing of time through regular oscillations. Mastering its sub-assemblies (connections, guides, and impulse) is essential to understanding chronometry.
       </p>
 
       <div class="img-always-visible">
         <img src="../Balancier-spiral_parties_2.jpg" alt="Detailed anatomy of the balance-spring and its components">
-        <div class="img-caption">📷 WORKSHOP TECHNICAL BOARD — Functional anatomy of the regulating organ and the balance-spring assembly.</div>
+        <div class="img-caption">📷 WORKSHOP TECHNICAL TABLE — Functional anatomy of the regulator and balance-spring assembly.</div>
       </div>
 
       <p><strong>Detailed description of the key components of the balance-spring assembly:</strong></p>
       <ul>
-        <li>
-          <strong>1° The Stud (Piton):</strong> It is the fixed anchoring pin that immobilizes the outer end of the balance spring on the balance bridge. It constitutes the external fixed anchor point of the elastic assembly.
-        </li>
-        <li>
-          <strong>2° The Collet (Virole):</strong> A small central metallic ring micrometrically fitted onto the balance staff, in which the inner end of the spring is fixed and immobilized. It ensures the direct connection between the balance spring and the mobile staff.
-        </li>
-        <li>
-          <strong>3° The Pivot (Pivot):</strong> The extremely fine and polished end of the balance staff. The pivots rotate within rubies (jewel bearings) and undergo extreme mechanical stress in the event of a shock, hence the vital importance of protection systems (Incabloc type).
-        </li>
-        <li>
-          <strong>4° The Balance Spring (Spiral):</strong> An elastic spring wound in a precise mathematical curve (usually made of a non-magnetic nickel-based alloy or silicon). It provides the permanent elastic restoring torque that constantly returns the balance wheel to its neutral equilibrium position.
-        </li>
-        <li>
-          <strong>5° The Balance Rim (Serge du Balancier):</strong> The peripheral circular ring of the balance wheel. Its mass and diameter determine the <i>moment of inertia</i> of the part. Dynamic balancing (timing weights or regulating screws) is performed on the rim.
-        </li>
-        <li>
-          <strong>6° The Balance Arms (Bras du Balancier):</strong> The rigid connecting spokes linking the central hub (or staff) to the outer rim, designed to offer maximum rigidity while minimizing wind resistance and weight.
-        </li>
-        <li>
-          <strong>7° The Regulator (Raquette):</strong> A mobile regulating organ equipped with two pins between which the balance spring slides. By moving the regulator, the watchmaker changes the <i>active length</i> of the spring, which allows for precise adjustment of the rate (advancing or retarding the watch).
-        </li>
-        <li>
-          <strong>8° The Double Roller (Double Plateau):</strong> A double disk fitted on the balance staff, including the safety notch and serving as a direct support for the impulse pin.
-        </li>
-        <li>
-          <strong>9° The Impulse Pin / Ellipse (Cheville d'impulsion):</strong> A small rigid cylinder made of red synthetic ruby firmly planted on the double roller. It is the crucial kinematic contact point: the impulse pin receives the impulse from the lever fork at each oscillation (to maintain the movement) and gives the unlocking impulse to the lever.
-        </li>
+        <li><strong>1° The Stud:</strong> The fixed anchorage peg that secures the outer end of the hairspring on the balance bridge.</li>
+        <li><strong>2° The Collet (Roller):</strong> Small central metal ring crimped onto the balance staff, securing the inner end of the hairspring.</li>
+        <li><strong>3° The Pivot:</strong> The extremely fine and polished end of the balance staff rotating within jewel bearings.</li>
+        <li><strong>4° The Hairspring:</strong> Elastic spring providing the permanent returning torque.</li>
+        <li><strong>5° The Balance Rim:</strong> The peripheral circular ring whose mass determines the moment of inertia.</li>
+        <li><strong>6° The Balance Arms:</strong> Rigid connecting spokes linking the hub to the rim.</li>
+        <li><strong>7° The Regulator Index:</strong> Mobile regulating organ modifying the active length of the hairspring.</li>
+        <li><strong>8° The Roller Table:</strong> Supporting the safety notch and impulse pin.</li>
+        <li><strong>9° The Impulse Pin (Ellipse):</strong> Ruby cylinder receiving and transmitting the impulse between the lever and balance.</li>
       </ul>
 
-      <div class="formula-box">
-        ⏱️ <strong>Isochronous Principle:</strong> The oscillation period of the balance-spring assembly depends on its moment of inertia and the stiffness of the spring. Any variation in the active length of the spring (via the regulator) instantly changes the frequency of the watch.
+      <!-- CHAPTER 7C: INERTIA AND THE TICK-TOCK -->
+      <div class="tech-doc-box">
+        <h3>7C. Balance Inertia and the Secret of the "Tick-Tock"</h3>
+        
+        <h4 style="margin-top: 0; color: #1a365d; font-size: 15px;">1. Understanding Inertia at the Workshop Bench</h4>
+        <p style="font-size: 14px;">
+          When handling a balance wheel, one immediately perceives its resistance to changing speed: this is <strong>inertia</strong>. 
+          For a watchmaker, inertia (<span class="formula-math">I = m · R²</span>) means that the mass of the balance must not only be heavy, but above all distributed as far as possible from the center (on the rim). 
+          A balance equipped with good inertia acts like a stabilizing flywheel: it is less vulnerable to wrist micro-shocks or gear train jolts.
+        </p>
+
+        <h4 style="margin-top: 15px; color: #2980b9; font-size: 15px;">2. Anatomy of a Beat: Where Does the "Tick-Tock" Come From?</h4>
+        <p style="font-size: 14px;">
+          This characteristic sound, listened to on the timing machine, is not a single noise, but the sum of two ultra-fast mechanical events generated at each vibration/alternation:
+        </p>
+        
+        <!-- SIDE-BY-SIDE TICK AND TOCK IMAGES -->
+        <div style="display: flex; gap: 15px; margin: 20px 0; justify-content: center; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 260px; text-align: center; background: #fff; padding: 10px; border: 1px solid #dcdcdc; border-radius: 6px;">
+            <img src="../tic-scappamento.png" alt="The Tick - Locking on the entry pallet" style="width: 100%; height: auto; border-radius: 4px;">
+            <div style="font-size: 13px; color: #1a365d; font-weight: bold; margin-top: 6px;">1. THE "TICK" (Entry impact)</div>
+            <div style="font-size: 12px; color: #555; font-style: italic;">Locking of the wheel on the entry pallet.</div>
+          </div>
+          <div style="flex: 1; min-width: 260px; text-align: center; background: #fff; padding: 10px; border: 1px solid #dcdcdc; border-radius: 6px;">
+            <img src="../tac-scappamento.png" alt="The Tock - Locking on the exit pallet" style="width: 100%; height: auto; border-radius: 4px;">
+            <div style="font-size: 13px; color: #27ae60; font-weight: bold; margin-top: 6px;">2. THE "TOCK" (Exit impact)</div>
+            <div style="font-size: 12px; color: #555; font-style: italic;">Symmetric locking on the exit pallet.</div>
+          </div>
+        </div>
+
+        <p style="font-size: 14px; margin-top: 10px;">
+          * <strong>The "Tick" (First impact):</strong> Occurs when the escape wheel tooth rests and locks onto the entry pallet of the lever.<br>
+          * <strong>The "Tock" (Second impact):</strong> Corresponds to the symmetric locking on the exit pallet on the other side of the cycle.<br>
+          Between these two sounds, the impulse pin crosses the fork in absolute silence. Listening to the tick-tock means listening to the "breathing" of the watch: a regular rhythm confirms proper banking/beat setting on the bench!
+        </p>
+
+        <h4 style="margin-top: 15px; color: #27ae60; font-size: 15px;">3. The Harmony of Oscillation: The Formula Demystified</h4>
+        <p style="font-size: 14px;">
+          The period of a balance wheel (<span class="formula-math">T = 2π · √(I / C)</span>) is simply understood like a scale:
+          <strong>I</strong> represents weight and its distribution (balance inertia), while <strong>C</strong> represents spring force (hairspring stiffness). 
+          To adjust the watch, the watchmaker either acts on the regulator index (to modify the active length of the hairspring <i>C</i>) or on the balance screws/weights (to modify inertia <i>I</i>).
+        </p>
       </div>
       
       <!-- CHAPTER 8 -->
-      <h2 id="p8">8. Regulation: The Balance-Spring & Oscillation Frequencies</h2>
-      <table class="table-custom">
-        <thead><tr><th>Frequency (vph)</th><th>Caliber Type</th><th>Example</th><th>(Hz)</th><th>Vibrations/Sec</th></tr></thead>
-        <tbody>
-          <tr><td><strong>18,000 vph</strong></td><td>Historical / Pocket</td><td>ETA 6497-1</td><td>2.5 Hz</td><td>5 ticks/sec</td></tr>
-          <tr><td><strong>21,600 vph</strong></td><td>Intermediate</td><td>ETA 6497-2</td><td>3.0 Hz</td><td>6 ticks/sec</td></tr>
-          <tr><td><strong>28,800 vph</strong></td><td>Modern Standard</td><td>ETA 2824-2</td><td>4.0 Hz</td><td>8 ticks/sec</td></tr>
-          <tr><td><strong>36,000 vph</strong></td><td>High Frequency</td><td>Zenith El Primero</td><td>5.0 Hz</td><td>10 ticks/sec</td></tr>
-        </tbody>
-      </table>
-      <div class="img-always-visible">
-        <img src="../balancier-spiral.jpg" alt="Balance-spring" style="max-height: 380px;">
-      </div>
-      <details class="image-popover">
-        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-08) — Balance-Spring</summary>
-        <div class="img-container"><img src="../01-08 Regulation-Le balancier Spiral.jpg" alt="Note 01-08"></div>
-      </details>
+      <h2 id="p8">8. Regulation and Frequency: The Balance-Spring and Vibrations per Hour (vph)</h2>
       
-      <!-- SCALE IMAGE -->
-      <div class="img-always-visible">
-        <img src="../Balance_wheels.jfif" alt="Scale size of a balance-spring compared to a match head">
-        <div class="img-caption">📷 SCALE COMPARISON — The regulating organ (bridge, balance wheel, and spring) next to a match head, illustrating the extreme miniaturization of horological micromechanics.</div>
+      <!-- RESPONSIVE TABLE -->
+      <div class="table-responsive">
+        <table class="table-custom">
+          <thead><tr><th>Frequency (vph)</th><th>Caliber Type</th><th>Example</th><th>(Hz)</th><th>Vibrations/Sec</th></tr></thead>
+          <tbody>
+            <tr><td><strong>18,000 vph</strong></td><td>Historical / Pocket</td><td>ETA 6497-1</td><td>2.5 Hz</td><td>5 tics/sec</td></tr>
+            <tr><td><strong>21,600 vph</strong></td><td>Intermediate</td><td>ETA 6497-2</td><td>3.0 Hz</td><td>6 tics/sec</td></tr>
+            <tr><td><strong>28,800 vph</strong></td><td>Modern standard</td><td>ETA 2824-2</td><td>4.0 Hz</td><td>8 tics/sec</td></tr>
+            <tr><td><strong>36,000 vph</strong></td><td>High Frequency</td><td>Zenith El Primero</td><td>5.0 Hz</td><td>10 tics/sec</td></tr>
+          </tbody>
+        </table>
       </div>
 
+      <!-- IN-DEPTH 8A: HERTZ AND FREQUENCIES -->
+      <div class="tech-doc-box">
+        <h3>8A. Frequency and Chronometry: Understanding Hertz, Vibrations and Their Stakes</h3>
+        
+        <p style="font-size: 14px;">
+          In watchmaking terminology, we constantly juggle between <strong>Vibrations per hour (vph)</strong>, <strong>Hertz (Hz)</strong>, and the number of audible beats. Let's clarify to dispel any confusion:
+        </p>
+
+        <ul style="margin: 0 0 15px 20px; padding: 0; font-size: 14px; line-height: 1.5;">
+          <li><strong>The Hertz (Hz):</strong> Represents a complete oscillation (round trip) per second. <em>1 Hz = 1 cycle/second</em>.</li>
+          <li><strong>The Vibration / Semi-oscillation:</strong> Each forward or backward movement of the balance releases an escape impulse. Since a complete cycle includes a forward and a backward movement, <strong>1 Hz produces exactly 2 vibrations</strong> (a "tick" and a "tock").</li>
+          <li><em>Concrete example:</em> A standard modern movement oscillating at <strong>4 Hz</strong> performs 4 cycles per second, i.e., <strong>8 vibrations per second</strong> (4 × 2 = 8), yielding 28,800 vibrations per hour (8 × 3600 sec).</li>
+        </ul>
+
+        <h4 style="margin-top: 15px; color: #1a365d; font-size: 15px;">Advantages and Disadvantages: Choosing the Frequency</h4>
+        <p style="font-size: 14px;">
+          The choice of a caliber's frequency is never a matter of chance; it results from a sharp technical compromise between chronometric stability, power reserve, and mechanical wear:
+        </p>
+
+        <div style="display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 250px; background: #fff; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px;">
+            <strong style="color: #2980b9;">📉 Low Frequencies (e.g., 18,000 vph / 2.5 Hz)</strong><br>
+            <span style="font-size: 13px;">
+              <em>Advantages:</em> Less friction, reduced wear on wheel trains, and excellent power reserve (the gear train consumes less energy). Visually, the slow oscillation of the large balance wheel is a magnificent spectacle in traditional Haute Horlogerie.<br>
+              <em>Disadvantages:</em> More sensitive to shocks and wrist movements; a micro-shock disturbs the watch's rate more heavily.
+            </span>
+          </div>
+          
+          <div style="flex: 1; min-width: 250px; background: #fff; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px;">
+            <strong style="color: #27ae60;">📈 High Frequencies (e.g., 36,000 vph / 5 Hz)</strong><br>
+            <span style="font-size: 13px;">
+              <em>Advantages:</em> Exceptional chronometric stability. Thanks to high speed and high inertia, the balance recovers its equilibrium position blindingly fast after a disturbance. Essential for measuring short fractions of time (high-precision chronographs).<br>
+              <em>Disadvantages:</em> Increased energy consumption (requires powerful mainsprings), heavily stressed lubrication, and accelerated mechanical wear without modern materials (silicon, surface treatments).
+            </span>
+          </div>
+        </div>
+
+        <div style="margin-top: 20px; text-align: center;">
+          <a href="_001B-Mouvement_Manuel.html#p8" class="atelier-btn">🔬 View Frequency Table</a>
+        </div>
+      </div>
+
+      <details class="image-popover">
+        <summary>📷 ORIGINAL MANUSCRIPT SHEET (01-08) — Balance-Spring</summary>
+        <div class="img-container"><img src="../01-08 Regulation-Le balancier Spiral.jpg" alt="Sheet 01-08"></div>
+      </details>
+      
+      <!-- SCALE IMAGE BALANCE / MATCH -->
+      <div class="img-always-visible">
+        <img src="../Balance_wheels.jfif" alt="Scale comparison of a balance-spring next to a matchstick head">
+        <div class="img-caption">📷 SCALE COMPARISON — The regulator organ (bridge, balance wheel, and hairspring) next to a matchstick head, illustrating the extreme miniaturization of horological micromechanics.</div>
+      </div>
+     
       <!-- CHAPTER 9 -->
-      <h2 id="p9">9. Anatomy of the Balance Wheel & Protection Systems (Shock Absorbers)</h2>
-      <p>The major evolution lies in the protection of the pivots (0.07mm) against mechanical shocks.</p>
-      <div class="img-always-visible"><img src="../Incabloc_01.jpg" alt="Incabloc Anatomy"></div>
-      <div class="img-always-visible"><img src="../Incabloc_02.jpg" alt="Incabloc Assembly"></div>
-      <div class="img-always-visible"><img src="../Incabloc_03.jpg" alt="Incabloc Dynamics"></div>
+      <h2 id="p9">9. The Regulator: Balance Anatomy and Shock Protection Systems</h2>
+      <p>The major evolution lies in the protection of pivots (0.07mm) against mechanical shocks.</p>
+      <div class="img-always-visible"><img src="../Incabloc_01.jpg" alt="Incabloc anatomy"></div>
+      <div class="img-always-visible"><img src="../Incabloc_02.jpg" alt="Incabloc assembly"></div>
+      <div class="img-always-visible"><img src="../Incabloc_03.jpg" alt="Incabloc dynamics"></div>
       <ul>
-        <li><strong>Connecting Components:</strong> Collet, Stud, Regulator.</li>
+        <li><strong>Link Components:</strong> Collet, Stud, Regulator Index.</li>
       </ul>
       <details class="image-popover">
-        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-09) — Balance Wheel Components</summary>
-        <div class="img-container"><img src="../01-09 Regulation-Le balancier Spiral.jpg" alt="Note 01-09"></div>
+        <summary>📷 ORIGINAL MANUSCRIPT SHEET (01-09) — Balance Components</summary>
+        <div class="img-container"><img src="../01-09 Regulation-Le balancier Spiral.jpg" alt="Sheet 01-09"></div>
       </details>
 
     </div>
   </div>
   
   <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
-    <a href="_001D-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continue reading ➔</a>
+    <a href="_001D-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continue Reading ➔</a>
   </div>
   
   <footer>© 2026 Swiss Time Expert. All rights reserved.</footer>

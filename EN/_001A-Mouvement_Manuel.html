@@ -8,11 +8,10 @@
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
   
-  <!-- Script for 3D model-viewer (Gear train at the top) -->
+  <!-- Script for 3D model-viewer -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   
   <style>
-    /* Forced alignment to synchronize Header and Notebook during zoom */
     .header-card, .notebook-container {
       max-width: 1100px !important;
       margin: 0 auto !important;
@@ -20,13 +19,11 @@
       box-sizing: border-box;
     }
 
-    /* Language Switcher Styles */
     .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
     .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
     .lang-btn:hover { background: rgba(255,255,255,0.3); }
     .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
 
-    /* Dropdown Menu */
     .dropdown { position: relative; display: inline-block; margin-right: 15px; }
     .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
     .dropbtn:hover { background: rgba(255,255,255,0.3); }
@@ -35,17 +32,37 @@
     .dropdown-content a:last-child { border-bottom: none; }
     .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
     .dropdown:hover .dropdown-content { display: block; }
+
+    .tech-doc-box { 
+      background: #f8f9fa; 
+      border-left: 5px solid #27ae60; 
+      padding: 20px 25px; 
+      margin: 25px 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      font-size: 1em; 
+      line-height: 1.6; 
+      color: #2c3e50; 
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .tech-doc-box h3 { color: #1a365d; margin-top: 20px; font-size: 1.15em; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+    .tech-doc-box h3:first-child { margin-top: 0; }
+    .tech-doc-box h4 { color: #2980b9; margin-top: 15px; font-size: 1.05em; }
+    .tech-doc-box p, .tech-doc-box li { font-size: 0.98em; }
+    .formula-math { font-family: monospace; background: #eef2f7; padding: 8px 12px; border-radius: 4px; display: inline-block; font-weight: bold; color: #1a365d; margin: 8px 0; }
+    .tech-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95em; }
+    .tech-table th, .tech-table td { border: 1px solid #dcdcdc; padding: 10px; text-align: center; }
+    .tech-table th { background-color: #1a365d; color: white; }
   </style>
 </head>
 <body>
 
   <div class="header-card">
     
-    <!-- LEFT COLUMN: Texts and Navigation -->
     <div class="header-left-block">
       <div class="badge">Haute Horlogerie — Federal Diploma</div>
-      <h1>1. The Manual-Winding Movement</h1>
-      <p class="subtitle">Watchmaking Expertise Course — Energy & Mainspring Barrel</p>
+      <h1>1. The Manual-Winding Movement: How Does a Mechanical Watch Work?</h1>
+      <p class="subtitle">Watchmaking Expertise Course — Energy, Barrel & Train</p>
       
       <div class="header-controls">
         <div class="dropdown">
@@ -56,8 +73,8 @@
             <a href="_003-Horloge_Electronique.html">3. Electronic Clock & Quartz</a>
             <a href="_004-Complications.html">4. Complications</a>
             <a href="_005-Familles_Matieres.html">5. Material Families</a>
-            <a href="_006-Fhasses_Fabrication.html">6. Manufacturing Phases and Technologies</a>
-            <a href="_007-Habillage.html">7. Watch Exterior & Casing</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Manufacturing Phases & Technologies</a>
+            <a href="_007-Habillage.html">7. Watch Exterior (Casing)</a>
             <a href="#">8. History of Time Measurement</a>
           </div>
         </div>
@@ -70,7 +87,6 @@
       </div>
     </div>
     
-    <!-- RIGHT COLUMN: Logo -->
     <div class="header-right-block">
       <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
     </div>
@@ -81,14 +97,14 @@
     
     <div class="notebook-header">
       <div class="notebook-title-cell">
-        <h2 class="handwritten-heading">Module 01 : Energy & Barrel</h2>
+        <h2 class="handwritten-heading">Module 01: Energy, Barrel & Kinematic Train</h2>
       </div>
-      <div class="tag-chic">✍️ Lecture Notes & Schemas</div>
+      <div class="tag-chic">✍️ Lecture Notes & Diagrams</div>
     </div>
 
     <div class="handwritten-body" id="course-content-area">
 
-      <h2 id="p1">1. Block Diagram of the Mechanical Movement</h2>
+      <h2 id="p1">1. Block Diagram of the Mechanical Movement: Architecture and Fundamental Principles</h2>
       <p>The block diagram defines the fundamental functional architecture of the manual-winding mechanical watch. The accumulated energy is transmitted, distributed, and regulated continuously:</p>
 
       <style>
@@ -103,27 +119,27 @@
         @media (max-width: 768px) { .ste-grid { grid-template-columns: 1fr; gap: 15px; } }
       </style>
 
-      <!-- 1. TOP INTERACTIVE 3D GEAR TRAIN MODEL -->
+      <!-- 1. 3D INTERACTIVE TRAIN VIEWER -->
       <div class="ste-container">
         <div class="ste-image-wrapper">
-          <model-viewer src="../Train_fix.main_design.glb" alt="Complete 3D kinematic chain" auto-rotate camera-controls style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px;"></model-viewer>
+          <model-viewer src="../Train_fix.main_design.glb" alt="Complete 3D kinematic train" auto-rotate camera-controls style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px;"></model-viewer>
         </div>
         
         <div class="ste-grid">
           <div class="ste-card">
             <div class="ste-step">Step 1: Energy</div>
             <h3 class="ste-title">The Mainspring & Barrel</h3>
-            <p class="ste-text">The watch's engine. The mainspring, housed inside the drum (1), stores mechanical energy during winding.</p>
+            <p class="ste-text">The engine of the watch. The mainspring, housed inside the drum (1), stores mechanical energy during winding.</p>
           </div>
           <div class="ste-card">
             <div class="ste-step">Step 2: Transmission</div>
-            <h3 class="ste-title">The Go-Train (Wheel Train)</h3>
-            <p class="ste-text">Force reduction and multiplication. The gear train (2) routes the energy forward.</p>
+            <h3 class="ste-title">The Going Train</h3>
+            <p class="ste-text">Force multiplication. The gear train (2) routes the energy forward.</p>
           </div>
           <div class="ste-card">
             <div class="ste-step">Step 3: Distribution</div>
             <h3 class="ste-title">The Escapement</h3>
-            <p class="ste-text">The kinematic converter. The escape wheel (3) transforms continuous rotational movement into impulses.</p>
+            <p class="ste-text">Cinematic converter. The escape wheel (3) transforms continuous rotation into impulses.</p>
           </div>
           <div class="ste-card">
             <div class="ste-step">Step 4: Regulation</div>
@@ -152,11 +168,11 @@
         <div class="legend-item"><span class="badge-mini">1</span> Barrel</div>
         <div class="legend-item"><span class="badge-mini">2</span> Center wheel</div>
         <div class="legend-item"><span class="badge-mini">3</span> Third wheel</div>
-        <div class="legend-item"><span class="badge-mini">4</span> Fourth wheel (Seconds)</div>
+        <div class="legend-item"><span class="badge-mini">4</span> Fourth (seconds) wheel</div>
         <div class="legend-item"><span class="badge-mini">5</span> Escape wheel</div>
         <div class="legend-item"><span class="badge-mini">8</span> Balance wheel</div>
-        <div class="legend-item"><span class="badge-mini">9</span> Balance spring</div>
-        <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">⚙️</span> Keyless works (Winding mechanism)</div>
+        <div class="legend-item"><span class="badge-mini">9</span> Hairspring</div>
+        <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">⚙️</span> Winding mechanism</div>
       </div>
 
       <details class="image-popover">
@@ -164,47 +180,37 @@
         <div class="img-container"><img src="../01-02 Scema Bloc-Energie-Trasmission-Distribution-Regulation.jpg" alt="Sheet 01-02"></div>
       </details>
 
-      <h2 id="barillet">2. Motor Organ (Energy): The Barrel, Mainspring &amp; Torque Dynamics</h2>
-      <p>The barrel is the central component for storing potential energy in a mechanical movement. Atelier analysis reveals critical mechanical details regarding mainspring attachment and torque delivery curves.</p>
+      <h2 id="barillet">2. Motor Organ (Energy): The Barrel & Winding Systems</h2>
+      <p>The barrel is the central component for storing potential energy in a mechanical movement. The assembly consists of four fundamental elements:</p>
+      <ul>
+        <li><strong>The Drum:</strong> Cylindrical box housing the spring and bearing the outer teeth that mesh with the center pinion.</li>
+        <li><strong>The Mainspring:</strong> Elastic blade wound inside, whose outer end is fixed to the inner wall of the drum.</li>
+        <li><strong>The Barrel Arbor:</strong> Pivoting axis between the bridge and mainplate, equipped with a hook for the inner attachment of the mainspring.</li>
+        <li><strong>The Cover:</strong> Closing element ensuring axial guidance of the arbor and protecting the mechanism from dust.</li>
+      </ul>
 
-      <!-- NOTEBOOK NOTES SECTION (FIG 4.4 P. 46) -->
-      <div style="background: #fdfdfd; border: 1px solid #dcdcdc; border-left: 5px solid #1a365d; padding: 20px; border-radius: 6px; margin-bottom: 25px;">
-        <h3 style="margin-top: 0; color: #1a365d; font-size: 17px;">📝 Atelier Notes: Mainspring Geometry & Torque Curve (Ref. Fig 4.4, p. 46)</h3>
-        <p style="font-size: 14px; line-height: 1.6; color: #333;">
-          <strong>1. Mainspring Attachment:</strong> The mainspring is held by a bridle (hook) located on the inside wall of the barrel drum. At the center, a hook is positioned on the barrel arbor to secure the inner end of the spring. Furthermore, the inner end of the mainspring features a dedicated fixing hole.
-        </p>
-        <p style="font-size: 14px; line-height: 1.6; color: #333;">
-          <strong>2. Torque Analysis (Arre p. 60, p. 311):</strong> During the first turns of winding, the delivered force/torque is remarkably low. Conversely, at full winding (top of the curve), the force is extremely high. This non-linear power curve requires regulation to ensure consistent amplitude across the movement's power reserve.
-        </p>
-      </div>
-
-      <!-- 3. INTERACTIVE 3D MODEL WITH EXPLODED VIEW AND LABELS -->
+      <!-- 3. INTERACTIVE 3D BARREL -->
       <div class="img-always-visible">
         <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
           
-          <!-- 3D Container and Name Tags -->
           <div id="canvas-container-barillet" style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px; position: relative; overflow: hidden;">
-            
-            <!-- Floating component labels (Atelier Format) -->
             <div id="label-arbre" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Arbor & Pinion</div>
             <div id="label-tambour" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Drum & Wheel</div>
             <div id="label-molla" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Mainspring</div>
-            <div id="label-coperchio" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Cover / Lid</div>
-
+            <div id="label-coperchio" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Cover</div>
           </div>
 
-          <!-- Explosion Control Slider -->
           <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px; display: flex; align-items: center; gap: 15px;">
-            <label for="exploder-barillet" style="font-size: 14px; font-weight: bold; color: #1a365d; white-space: nowrap;">⚙️ Explosion Control:</label>
+            <label for="exploder-barillet" style="font-size: 14px; font-weight: bold; color: #1a365d; white-space: nowrap;">⚙️ Exploded View Control:</label>
             <input type="range" id="exploder-barillet" min="0" max="100" value="0" style="flex-grow: 1; cursor: pointer; accent-color: #1a365d;">
             <span id="val-scale-barillet" style="font-size: 13px; font-weight: bold; color: #6c757d; min-width: 40px;">0%</span>
           </div>
 
-          <div class="img-caption" style="margin-top: 10px;">📷 3D TECHNICAL VIEW — Anatomy of the barrel with dynamic labels.</div>
+          <div class="img-caption" style="margin-top: 10px;">📷 3D TECHNICAL VIEW — Barrel anatomy with dynamic labels.</div>
         </div>
       </div>
 
-      <!-- Clean Three.js Libraries -->
+      <!-- Three.js Libraries -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -356,26 +362,78 @@
         }
       </script>
 
-      <div class="formula-box">
-        ⚙️ <strong>Atelier Rule:</strong> On an automatic movement, manual winding via the crown precisely simulates the maximum charge state achieved by the rotor.
+      <!-- TECHNICAL DOCUMENTATION BOX -->
+      <div class="tech-doc-box">
+        <h3>4.1 Generalities and Role of the Energy Accumulator</h3>
+        <p>In a mechanical movement architecture, initial energy is supplied by the user winding the crown. The system acts as an accumulator converting kinetic energy into elastic potential energy.</p>
+        <p>The classical watchmaking functional chain breaks down into five major subsystems:</p>
+        <ul>
+          <li><strong>Energy Source:</strong> Manual or automatic winding.</li>
+          <li><strong>Accumulator:</strong> Barrel and mainspring.</li>
+          <li><strong>Counting & Transmission:</strong> Going train.</li>
+          <li><strong>Distribution:</strong> Escapement.</li>
+          <li><strong>Regulation & Display:</strong> Regulator and time display.</li>
+        </ul>
+
+        <h3>4.2 The Barrel and its Mainspring</h3>
+        <h4>4.2.1 Technical Description of the Assembly</h4>
+        <p>The barrel assembly typically consists of four fundamental parts:</p>
+        <ul>
+          <li><strong>Barrel Drum:</strong> Cylindrical box housing the spring and serving as the arbor pivot. A notch on the inner diameter secures the outer spring end to drive the drum.</li>
+          <li><strong>Mainspring:</strong> Elastic blade wound inside the drum.</li>
+          <li><strong>Barrel Arbor:</strong> Pivoting axis between the bridge and mainplate, featuring a hook to attach the inner end of the spring.</li>
+          <li><strong>Barrel Cover:</strong> Closure element that also aids in guiding and pivoting the arbor.</li>
+        </ul>
+
+        <h4>4.2.2 Physical Principle and Geometric Evolution</h4>
+        <p>The spring is a rectangular blade. By attempting to return to its initial form after being tightly coiled around the arbor hub, it produces the torque needed to power the movement.</p>
+        <p>Historically, the mainspring geometry evolved from a classic spiral wind to an S-shaped (reverse curve) bridle, optimized for the material's yield strength to ensure more linear energy delivery. The drum's peripheral teeth transmit this torque directly to the train.</p>
+
+        <h3>4.3 Kinematic Analysis: Number of Turns and Spring States</h3>
+        <p>To model spring behavior, three fundamental states of development are defined:</p>
+        <ul>
+          <li><strong>N'' :</strong> Number of turns when the spring is fully wound (tightly coiled around the arbor).</li>
+          <li><strong>N' :</strong> Number of turns when uncoiled inside the drum (resting against internal wall R).</li>
+          <li><strong>N₀ :</strong> Theoretical number of turns in free state (uncoiled outside the barrel).</li>
+        </ul>
+        <p>The difference between the arbor hub space (r) and internal drum radius (R) is calculated to reserve ~50% occupied surface and ~50% free surface, maximizing energy storage capacity.</p>
+        <p><strong>Fundamental Development Formulas:</strong></p>
+        <ul>
+          <li>Total development turns (ΔN_t): <div class="formula-math">ΔN_t = N'' - N₀</div></li>
+          <li>Useful turns in the barrel (ΔN_u): <div class="formula-math">ΔN_u = N'' - N'</div></li>
+        </ul>
+
+        <h3>4.4 Design Parameters and Engineering Formulas</h3>
+        <h4>4.4.1 Theoretical Spring Length</h4>
+        <p>The active length <em>L</em> of the spring depends on drum and hub geometry:</p>
+        <div class="formula-math">L ≈ (R² - r²) / (2 · e)</div>
+        <p><em>(Empirical workshop note: to optimize real energy, this theoretical length is generally increased by 10% to 33% depending on movement dimensions).</em></p>
+
+        <h4>4.4.2 Maximum Torque Moment (M_opmax)</h4>
+        <p>When the spring is fully wound around the hub, maximum torque is calculated as:</p>
+        <div class="formula-math">M_opmax = (E · h · e³) / (12 · L) · 2π · ΔN_t</div>
+        <p><strong>Where:</strong></p>
+        <ul>
+          <li><strong>E</strong> = Modulus of elasticity of the material (2.2 × 10⁵ to 2.3 × 10⁵ MPa or N·mm⁻²).</li>
+          <li><strong>h</strong> = Height (width) of the spring blade [mm].</li>
+          <li><strong>e</strong> = Blade thickness [mm].</li>
+          <li><strong>L</strong> = Spring length [mm].</li>
+          <li><strong>Δ N_t</strong> = Total development turns.</li>
+        </ul>
+
+        <h4>4.4.3 Material Properties</h4>
+        <p>Modern high-horology mainsprings use structural precipitation-hardening alloys based on cobalt, nickel, and chrome (e.g., Nivaflex). These antimagnetic materials offer high ductility, corrosion resistance, and withstand heavy elastic stress without permanent plastic deformation.</p>
+        <p><strong>Allowable stress limit (σ_max):</strong> Between 2840 MPa and 3340 MPa depending on grade.</p>
       </div>
 
-      <h2 id="croix-de-malte">3. Spring Attachment, Maltese Cross &amp; Torque Regulation</h2>
-      
-      <div style="background: #fdfdfd; border: 1px solid #dcdcdc; border-left: 5px solid #1a365d; padding: 20px; border-radius: 6px; margin-bottom: 25px;">
-        <h3 style="margin-top: 0; color: #1a365d; font-size: 17px;">📝 Atelier Notes: Maltese Cross & Fusee-Chain System</h3>
-        <p style="font-size: 14px; line-height: 1.6; color: #333;">
-          <strong>Maltese Cross (Croix de Malte):</strong> This mechanism blocks rotation at the extremes (preventing winding in the high-torque extreme zone and stopping unwinding before the dead zone). It forces the movement to exploit only the central linear part of the power curve. It is traditionally used in high-end repeating watches where extreme precision is required; however, it abrupts the winding limit ("hard stop").
-        </p>
-      </div>
-
+      <h2 id="croix-de-malte">3. Mainspring Fixation & Torque Regulation: The Maltese Cross</h2>
       <div class="img-always-visible">
-        <img src="../croix-de-malte.png" alt="Maltese cross operating principle">
-        <div class="img-caption">📷 TECHNICAL SCHEMATIC — The Maltese Cross: blocking rotation to exploit the linear torque range.</div>
+        <img src="../croix-de-malte.png" alt="Maltese Cross operating principle">
+        <div class="img-caption">📷 TECHNICAL DIAGRAM — The Maltese Cross: rotation blocking to exploit the linear torque range.</div>
       </div>
 
       <details class="image-popover">
-        <summary>📷 ORIGINAL MANUSCRIPT SHEET (01-03) — Spring Attachment, Maltese Cross &amp; Fusee</summary>
+        <summary>📷 ORIGINAL MANUSCRIPT SHEET (01-03) — Spring Fixation, Maltese Cross & Fusee</summary>
         <div class="img-container"><img src="../01-03 Energie - Le Ressort (F4.4P46).jpg" alt="Sheet 01-03"></div>
       </details>
 
@@ -385,13 +443,13 @@
           <img src="../fusee-chaine.png" alt="Fusee-Chain System" style="width: 100%; height: auto; border-radius: 4px;">
         </div>
         <div style="flex: 1;">
-          <h4 style="margin-top: 0; color: #2c4d75; font-size: 16px;">Constant Force: The Fusee-Chain (Fusée-Chaîne)</h4>
+          <h4 style="margin-top: 0; color: #2c4d75; font-size: 16px;">Constant Force: The Fusee-Chain System</h4>
           <p style="font-size: 14px; margin-bottom: 10px;">
-            An additional mechanical system designed to transmit a constant torque to the gear train. 
+            This historical mechanism acts like a continuously variable transmission gearbox to compensate for mainspring torque loss as it unwinds.
           </p>
           <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
-            <li><strong>Pros (+):</strong> Traditional aesthetic and mechanical appeal; provides average constant force across all winding states (used historically up to 1980 for marine chronometry).</li>
-            <li><strong>Cons (-):</strong> Very expensive, extremely complex to manufacture, takes up a significant amount of space, and carries a high risk of failure/breakage.</li>
+            <li><strong>Max Winding:</strong> Spring is strong; the chain pulls on the <em>small diameter</em> of the fusee (short lever arm).</li>
+            <li><strong>Unwinding:</strong> Spring weakens; the chain pulls on the <em>large diameter</em> of the fusee (long lever arm), perfectly equalizing the force transmitted to the escapement.</li>
           </ul>
         </div>
       </div>
@@ -400,7 +458,7 @@
   </div> 
 
   <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
-    <a href="_001B-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continue reading ➔</a>
+    <a href="_001B-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continue Reading ➔</a>
   </div>
   
   <footer>© 2026 Swiss Time Expert. All rights reserved.</footer>

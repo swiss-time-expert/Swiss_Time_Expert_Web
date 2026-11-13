@@ -3,27 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swiss Time Expert - 1. The Manual Winding Movement</title>
+  <title>Swiss Time Expert - 1. The Manual-Winding Movement</title>
   
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
   
   <style>
-    /* Forced alignment to synchronize Header and Notebook during zoom */
-    .header-card, .notebook-container {
-      max-width: 1100px !important;
-      margin: 0 auto !important;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    /* Language Styles */
+    /* Language switcher & dropdown styles */
     .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
     .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
     .lang-btn:hover { background: rgba(255,255,255,0.3); }
     .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
 
-    /* Dropdown Menu */
     .dropdown { position: relative; display: inline-block; margin-right: 15px; }
     .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
     .dropbtn:hover { background: rgba(255,255,255,0.3); }
@@ -32,6 +23,133 @@
     .dropdown-content a:last-child { border-bottom: none; }
     .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
     .dropdown:hover .dropdown-content { display: block; }
+
+    /* Technical documentation box with green left border */
+    .tech-doc-box { 
+      background: #f8f9fa; 
+      border-left: 5px solid #27ae60; 
+      padding: 20px 25px; 
+      margin: 25px 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      font-size: 1em; 
+      line-height: 1.6; 
+      color: #2c3e50; 
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .tech-doc-box h3 { color: #1a365d; margin-top: 20px; font-size: 1.15em; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+    .tech-doc-box h3:first-child { margin-top: 0; }
+    .tech-doc-box h4 { color: #2980b9; margin-top: 15px; font-size: 1.05em; }
+    .formula-math { font-family: monospace; background: #eef2f7; padding: 8px 12px; border-radius: 4px; display: inline-block; font-weight: bold; color: #1a365d; margin: 8px 0; }
+
+    /* Interactive Gear Lab Styles */
+    .lab-interactive-box {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 25px;
+      margin-top: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      border-left: 5px solid #27ae60;
+    }
+    .gear-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8f9fa;
+      padding: 10px 15px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+    }
+    .gear-label {
+      font-weight: bold;
+      color: #2c3e50;
+      font-size: 0.9em;
+    }
+    .gear-select, .gear-input {
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+      font-weight: bold;
+      color: #1a365d;
+      background: #fff;
+      font-size: 0.95em;
+    }
+    .gauge-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+    .clock-dial {
+      position: relative;
+      width: 180px;
+      height: 90px;
+      border-top-left-radius: 90px;
+      border-top-right-radius: 90px;
+      background: linear-gradient(90deg, rgba(59,130,246,0.15) 0%, rgba(34,197,94,0.2) 50%, rgba(239,68,68,0.15) 100%);
+      border: 2px solid #cbd5e1;
+      border-bottom: none;
+      overflow: hidden;
+    }
+    .dial-mark-center {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 3px;
+      height: 15px;
+      background: #27ae60;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+    .dial-mark {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      height: 8px;
+      background: #94a3b8;
+      transform-origin: bottom center;
+    }
+    .needle {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 4px;
+      height: 75px;
+      background: #1a365d;
+      transform-origin: bottom center;
+      transform: translateX(-50%) rotate(0deg);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 4px 4px 0 0;
+      z-index: 3;
+    }
+    .needle::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 12px;
+      background: #1a365d;
+      border-radius: 50%;
+      border: 2px solid #fff;
+    }
+    .dial-labels {
+      display: flex;
+      justify-content: space-between;
+      width: 200px;
+      font-size: 0.8em;
+      color: #64748b;
+      font-weight: bold;
+      margin-top: 6px;
+    }  
   </style>
 </head>
 <body>
@@ -41,21 +159,21 @@
     
     <div class="header-left-block">
       <div class="badge">Haute Horlogerie — Federal Diploma</div>
-      <h1>1. The Manual Winding Movement</h1>
+      <h1>1B. Transmission and Going Train: Calculating the Gear Train in Horology</h1>
       <p class="subtitle">Watchmaking Expertise Course — Technical Characteristics</p>
       
       <div class="header-controls">
         <div class="dropdown">
           <button class="dropbtn">☰ Main Menu</button>
           <div class="dropdown-content">
-            <a href="_001A-Mouvement_Manuel.html">1. The Manual Winding Movement</a>
+            <a href="_001A-Mouvement_Manuel.html">1. The Manual-Winding Movement</a>
             <a href="_002-la-montre-automatique.html">2. The Automatic Watch</a>
-            <a href="_003-Horloge_Electronique.html">3. The Electronic & Quartz Clock</a>
+            <a href="_003-Horloge_Electronique.html">3. Electronic Clock & Quartz</a>
             <a href="_004-Complications.html">4. Complications</a>
             <a href="_005-Familles_Matieres.html">5. Material Families</a>
-            <a href="_006-Fhasses_Fabrication.html">6. Manufacturing Phases and Technologies</a>
-            <a href="_007-Habillage.html">7. The Habillage (Watch Exterior)</a>
-            <a href="_008-Histoire_Mesure_Temps.html">8. History of Time Measurement</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Manufacturing Phases & Technologies</a>
+            <a href="_007-Habillage.html">7. Watch Exterior (Casing)</a>
+            <a href="#">8. History of Time Measurement</a>
           </div>
         </div>
 
@@ -78,16 +196,16 @@
     
     <div class="notebook-header">
       <div class="notebook-title-cell">
-        <h2 class="handwritten-heading">Module 01: The Mainspring (Cont.)</h2>
+        <h2 class="handwritten-heading">Module 01: The Mainspring (Continuation)</h2>
       </div>
-      <div class="tag-chic">✍️ Course Notes & Diagrams</div>
+      <div class="tag-chic">✍️ Lecture Notes & Diagrams</div>
     </div>
 
     <div class="handwritten-body" id="course-content-area">
 
       <!-- CHAPTER 4 -->
       <h2 id="p4">4. Technical Characteristics of Nivaflex® Material</h2>
-      <p>Metallurgical composition and properties of alloys for watch mainsprings:</p>
+      <p>Metallurgical composition and alloy properties for horological mainsprings:</p>
       <table class="table-custom">
         <thead><tr><th>Alloy</th><th>Co</th><th>Ni</th><th>Cr</th><th>Fe</th><th>W</th><th>Mo</th><th>Ti</th><th>Be</th></tr></thead>
         <tbody>
@@ -96,18 +214,18 @@
         </tbody>
       </table>
       <ul>
-        <li><strong>Physical Properties:</strong> Density 8.5 g/cm³, 100% Non-magnetic.</li>
-        <li><strong>Watchmaking Assets:</strong> Completely stainless, hardness (830 Vickers), high strength.</li>
+        <li><strong>Physical Properties:</strong> Density 8.5 g/cm³, 100% Antimagnetic.</li>
+        <li><strong>Watchmaking Benefits:</strong> Completely stainless, hardness (830 Vickers), high tensile strength.</li>
       </ul>
 
       <!-- CHAPTER 5 -->
-      <h2 id="p5">5. Transmission: Kinematic Train & Wheel Structure</h2>
+      <h2 id="p5">5. Transmission: Kinematic Chain & Wheel Train Structure</h2>
       <ul>
-        <li><strong>Kinematic Order:</strong><br><b>Barrel ➔ Center Wheel ➔ Third Wheel ➔ Seconds Wheel ➔ Escapement</b></li>
+        <li><strong>Kinematic Order:</strong><br><b>Barrel ➔ Center Wheel ➔ Third Wheel ➔ Fourth (Seconds) Wheel ➔ Escapement</b></li>
       </ul>
       <div class="img-always-visible">
         <div class="interactive-wrapper" style="max-width: 620px;">
-          <img src="../rouage-transmission.png" onerror="this.onerror=null; this.src='../rouage-transmission.jpg';" alt="Kinematic Train">
+          <img src="../rouage-transmission.png" onerror="this.onerror=null; this.src='../rouage-transmission.jpg';" alt="Gear train">
           <div class="pin-marker" style="top: 48%; left: 83%;">1</div>
           <div class="pin-marker" style="top: 42%; left: 96%;">2</div>
           <div class="pin-marker" style="top: 47%; left: 9%;">3</div>
@@ -118,49 +236,84 @@
           <div class="legend-item"><span class="badge-mini">1</span> B — Barrel</div>
           <div class="legend-item"><span class="badge-mini">2</span> C — Center wheel</div>
           <div class="legend-item"><span class="badge-mini">3</span> M — Third wheel</div>
-          <div class="legend-item"><span class="badge-mini">4</span> S — Seconds wheel</div>
-          <div class="legend-item"><span class="badge-mini">5</span> E — Escapement pinion</div>
+          <div class="legend-item"><span class="badge-mini">4</span> S — Fourth (seconds) wheel</div>
+          <div class="legend-item"><span class="badge-mini">5</span> E — Escape pinion</div>
         </div>
       </div>
       <ul>
-        <li><strong>Wheel Structure:</strong> Web/Plate (brass), Pinion (steel). Assembly by press-fit.</li>
-        <li><strong>Cutting / Profiling:</strong> Form milling (cycloidal profile).</li>
+        <li><strong>Wheel Train Structure:</strong> Rim/Plate (brass), Pinion (steel). Assembled by staking (press-fitting).</li>
+        <li><strong>Cutting:</strong> Form milling (cycloidal profile).</li>
         <li><strong>Treatment:</strong> Pivot burnishing for surface hardening.</li>
       </ul>
       <details class="image-popover">
-        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-05) — Transmission & Wheels</summary>
+        <summary>📷 ORIGINAL MANUSCRIPT SHEET (01-05) — Transmission & Wheel Trains</summary>
         <div class="img-container"><img src="../01-05 Trasmission-Chaine Cinematique Fabrication (P59).jpg" alt="Sheet 01-05"></div>
       </details>
 
-      <!-- CHAPTER 6 -->
-      <h2 id="p6">6. Significant Gear Ratios & Power Reserve Calculation</h2>
-      <h3>1° Calculation of Theoretical Power Reserve</h3>
-      <ul><li>Barrel = 96 teeth | Center pinion = 12 teeth | Winding turns = 6.5 turns max</li></ul>
-      <div class="formula-box">
-        📐 <strong>Formula:</strong><br>
-        1. Ratio: <b>96 / 12 = 8</b><br>
-        2. Autonomy: <b>8 × 6.5 = 52 hours</b>.
-      </div>
-      <h3>2° Center Wheel – Seconds Wheel Ratio (1/60)</h3>
-      <div class="formula-box">
-        ⚙️ <strong>Breakdown:</strong><br>
-        Center / Third Pinion: <b>80 / 10 = 8</b><br>
-        Third / Seconds Pinion: <b>60 / 8 = 7.5</b><br>
-        🎯 <strong>Global Ratio:</strong> <b>8 × 7.5 = 60</b>.
-      </div>
-      <details class="image-popover">
-        <summary>📷 ORIGINAL HANDWRITTEN NOTE (01-06) — Significant Ratios & Calculations</summary>
-        <div class="img-container"><img src="../01-06 Trasmission-Chaine Cinematique Rapport.jpg" alt="Sheet 01-06"></div>
-      </details>
+      <!-- IN-DEPTH TECHNICAL STUDY -->
+      <div class="tech-doc-box">
+        <h3>5.1 In-Depth Study of Wheels and Tooth Profile</h3>
+        <p>Detailed analysis of transmission components highlights strict geometric and tribological requirements to ensure optimal energy transfer efficiency (generally above 90% per wheel train level).</p>
 
-    </div>
-  </div>
+        <h3 id="p5-1">5.1.1 The Tooth Profile (Cycloidal Profile)</h3>
+        <p>Unlike industrial engineering which favors the involute tooth profile, Swiss watchmaking traditionally uses the <strong>cycloidal profile</strong> (specifically epicycloids for wheel teeth and hypocycloids for pinion flanks). This choice fulfills specific constraints:</p>
+        
+        <!-- 3D WORKSHOP MODEL (CYCLOIDAL PROFILE) -->
+        <div class="img-always-visible" style="text-align: center; margin: 25px 0;">
+          <div style="position: relative; display: inline-block; max-width: 580px; width: 100%; background: #fff; padding: 10px; border: 1px solid #dcdcdc; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.04);">
+            <img src="../profil-cycloide.png" alt="3D Modeling of Cycloidal Profile" style="width: 100%; height: auto; display: block; border-radius: 4px;">
+          </div>
+          <div class="img-caption" style="font-size: 13px; color: #555; margin-top: 8px; font-style: italic;">📷 WORKSHOP 3D MODELING — Close-up view of engagement: geometric interaction between wheel teeth and pinion leaves.</div>
+        </div>
 
-  <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
-    <a href="_001C-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continue reading ➔</a>
-  </div>
-  
-  <footer>© 2026 Swiss Time Expert. All rights reserved.</footer>
-<script src="../script.js"></script>
-</body>
-</html>
+        <ul>
+          <li><strong>Minimised Friction:</strong> Cycloidal engagement minimizes surface sliding during tooth entry and release. There is no contact on the line of centers.</li>
+          <li><strong>Tolerance to Center Distance Variations:</strong> Watch gear trains operate without heavy lubrication on intermediate trains; the profile tolerates slight variations in center distance without locking the train.</li>
+        </ul>
+
+        <h3 id="p5-2">5.1.2 Rigorous Calculations of Transmission Ratios</h3>
+        <p>To ensure kinematic precision, ratio calculations are based on the exact number of teeth Z on wheels and leaves N on pinions:</p>
+        
+        <div style="background: #fff; border: 1px solid #dcdcdc; padding: 15px; border-radius: 6px; margin: 15px 0;">
+          <h4 style="margin-top: 0; color: #1a365d; font-size: 15px;">1° Calculation of Theoretical Power Reserve</h4>
+          <p style="font-size: 14px; margin-bottom: 5px;"><strong>Parameters:</strong> Barrel = 84 teeth | Center pinion = 12 leaves | Useful turns = 6.5</p>
+          <div class="formula-math">Ratio (i) = 84 / 12 = 7</div>
+          <div class="formula-math" style="display: block; margin-top: 5px;">Total Autonomy = 7 × 6.5 = 45.5 hours</div>
+        </div>
+
+        <div style="background: #fff; border: 1px solid #dcdcdc; padding: 15px; border-radius: 6px; margin: 15px 0;">
+          <h4 style="margin-top: 0; color: #27ae60; font-size: 15px;">2° Global Ratio: From Center Wheel to Escapement</h4>
+          <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
+            <li>Center wheel → Third pinion: 80 / 10 = 8</li>
+            <li>Third wheel → Fourth pinion: 75 / 10 = 7.5</li>
+            <li>Fourth wheel → Escape pinion: 70 / 7 = 10</li>
+          </ul>
+          <div class="formula-math" style="margin-top: 8px;">Intermediate Global Ratio = 8 × 7.5 × 10 = 600</div>
+        </div>
+
+        <!-- VIRTUAL ATELIER: INTERACTIVE SIMULATOR -->
+      <div class="lab-interactive-box" id="p8">
+          <h3 style="margin-top:0; color:#1a365d; border-bottom: 2px solid #27ae60; padding-bottom: 8px;">⚙️ Virtual Atelier: Test Bench & Historical Calibers</h3>
+          <p class="intro" style="font-size: 0.9em; color: #4a5568;">Select a reference caliber or freely configure the gear trains. The control needle instantly indicates chronometric compliance.</p>
+
+          <!-- REFERENCE CALIBER SELECTOR -->
+          <div class="gear-row" style="background: #eef2f7; border-color: #cbd5e1;">
+            <span class="gear-label" style="color: #1a365d;">🏛️ Reference Caliber Selection:</span>
+            <select id="presetCalibre" class="gear-select" onchange="applyPreset()" style="background: #fff; color: #1a365d; border-color: #94a3b8;">
+              <option value="custom">-- Free Mode (Custom) --</option>
+              <option value="unitas">Standard Caliber 3 Hz (e.g. ETA / Unitas 6498)</option>
+              <option value="eta2824">Automatic Caliber 4 Hz (e.g. ETA 2824-2)</option>
+              <option value="elprimero">High-Frequency Caliber 5 Hz (e.g. Zenith El Primero)</option>
+              <option value="patek">High Horology Caliber (Patek Manufacture Inspiration)</option>
+            </select>
+          </div>
+
+          <!-- Escapement Frequency -->
+          <div class="gear-row" style="background: #e8f4fd; border-color: #bbe1fa;">
+            <span class="gear-label" style="color: #1d4ed8;">⚡ Balance / Escapement Frequency:</span>
+            <select id="frequence" class="gear-select" onchange="onManualChange()">
+              <option value="18000">18,000 vph (2.5 Hz)</option>
+              <option value="19800">19,800 vph (2.75 Hz)</option>
+              <option value="21600" selected>21,600 vph (3.0 Hz)</option>
+              <option value="28800">28,800 vph (4.0 Hz)</option>
+              <option value="36000">36,000
