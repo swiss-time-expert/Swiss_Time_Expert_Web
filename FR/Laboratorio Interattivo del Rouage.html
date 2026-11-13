@@ -102,7 +102,7 @@
       transition: all 0.3s ease;
     }
     
-    /* Stile per l'indicatore grafico / Ago della bilancia */
+    /* Stile per l'indicatore grafico / Ago della bilancia (Invertito: Blu a sinistra=Ritardo, Rosso a destra=Avanti) */
     .gauge-container {
       display: flex;
       flex-direction: column;
@@ -125,7 +125,7 @@
       height: 90px;
       border-top-left-radius: 90px;
       border-top-right-radius: 90px;
-      background: linear-gradient(90deg, rgba(239,68,68,0.15) 0%, rgba(34,197,94,0.2) 50%, rgba(59,130,246,0.15) 100%);
+      background: linear-gradient(90deg, rgba(59,130,246,0.15) 0%, rgba(34,197,94,0.2) 50%, rgba(239,68,68,0.15) 100%);
       border: 2px solid #cbd5e1;
       border-bottom: none;
       overflow: hidden;
@@ -189,7 +189,7 @@
 
   <div class="lab-container">
     <h2>⚙️ Atelier Virtuel : Banc d'Essai & Calibres Historiques</h2>
-    <p class="intro">Sélectionnez un calibre de référence (y compris le légendaire 5 Hz) ou composez librement les rouages. L'aiguille de contrôle indique instantanément la conformité chronométrique.</p>
+    <p class="intro">Sélectionnez un calibre de référence ou composez librement les rouages. L'aiguille de contrôle indique instantanément la conformité chronométrique.</p>
 
     <!-- SELETTORE CALIBRI STORICI / STANDARD -->
     <div class="gear-row" style="background: #eef2f7; border-color: #cbd5e1;">
@@ -291,7 +291,7 @@
         <span id="res_status" class="status-badge">Conforme (60s exactes)</span>
       </div>
 
-      <!-- AGUILLE DE LA BALANCE RIPULITA -->
+      <!-- AGUILLE DE LA BALANCE (INVERTITA: Blu a sinistra=Ritardo, Rosso a destra=Avanti) -->
       <div class="gauge-container">
         <div class="gauge-title">⚖️ Équilibre de Marche Chronométrique</div>
         <div class="clock-dial" id="dialBox">
@@ -303,9 +303,9 @@
           <div class="needle" id="gaugeNeedle"></div>
         </div>
         <div class="dial-labels">
-          <span style="color: #ef4444;">▲ Trop Rapide (Avance)</span>
-          <span style="color: #27ae60;">■ Zéro (60s)</span>
           <span style="color: #3b82f6;">▼ Trop Lent (Retard)</span>
+          <span style="color: #27ae60;">■ Zéro (60s)</span>
+          <span style="color: #ef4444;">▲ Trop Rapide (Avance)</span>
         </div>
       </div>
 
@@ -314,7 +314,6 @@
   </div>
 
   <script>
-    // PRESET DEI CALIBRI STORICI (inclus 5 Hz El Primero)
     const calibresPresets = {
       unitas: { freq: "21600", zB: "84", nC: "12", zC: "80", n3: "10", z3: "75", n4: "10", z4: "70", nE: "7", ref: 600 },
       eta2824: { freq: "28800", zB: "78", nC: "12", zC: "75", n3: "10", z3: "70", n4: "10", z4: "80", nE: "8", ref: 800 },
@@ -361,17 +360,14 @@
       let z4 = parseFloat(document.getElementById('z_quatrieme').value);
       let nE = parseFloat(document.getElementById('n_echappement').value);
 
-      // 1. Rapport Barillet
       let ratioBarillet = zB / nC;
       let autonomy = ratioBarillet * 6.5;
       
-      // 2. Rapport Global du train
       let stage1 = zC / n3;
       let stage2 = z3 / n4;
       let stage3 = z4 / nE;
       let globalRatio = stage1 * stage2 * stage3;
 
-      // 3. Référence idéale selon la fréquence (inclus 36000 A/h -> 5 Hz)
       let rapportIdealRef = 600; 
       if (freq === 18000) rapportIdealRef = 500;
       if (freq === 19800) rapportIdealRef = 550;
@@ -381,7 +377,6 @@
 
       let tempsTour = 60 * (globalRatio / rapportIdealRef);
 
-      // Mise à jour interface valeurs
       document.getElementById('res_barillet').innerText = ratioBarillet.toFixed(2);
       document.getElementById('res_autonomie').innerText = autonomy.toFixed(1) + " h";
       document.getElementById('res_global').innerText = globalRatio.toFixed(1);
@@ -393,15 +388,16 @@
       let needleEl = document.getElementById('gaugeNeedle');
       let resultsBoxEl = document.getElementById('resultsBox');
 
-      // Calcul de l'angle de l'aiguille (-75deg à +75deg)
+      // Inversione logica ago: 
+      // Se tempsTour < 60 (Troppo rapido / Avance) -> l'ago deve andare a DESTRA (angolo positivo).
+      // Se tempsTour > 60 (Troppo lento / Retard) -> l'ago deve andare a SINISTRA (angolo negativo).
       let diff = tempsTour - 60.0;
-      let angleDeg = diff * 3.5; 
+      let angleDeg = - (diff * 3.5); 
       if (angleDeg < -75) angleDeg = -75;
       if (angleDeg > 75) angleDeg = 75;
 
       needleEl.style.transform = `translateX(-50%) rotate(${angleDeg}deg)`;
 
-      // Application des couleurs dynamiques (Vert = Zéro, Rouge = Avance/Trop rapide, Bleu = Retard/Trop lent)
       if (Math.abs(tempsTour - 60.0) < 0.1) {
         statusEl.innerText = "Conforme (60s exactes)";
         statusEl.style.background = "#d1fae5";
