@@ -9,12 +9,21 @@
   <link rel="stylesheet" href="../_stile.css">
   
   <style>
-    /* Stili per le Lingue e Menu a Tendina */
+    /* Allineamento forzato per sincronizzare Header e Notebook durante lo zoom */
+    .header-card, .notebook-container {
+      max-width: 1100px !important;
+      margin: 0 auto !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Stili per le Lingue */
     .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
     .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
     .lang-btn:hover { background: rgba(255,255,255,0.3); }
     .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
 
+    /* Menu a Tendina */
     .dropdown { position: relative; display: inline-block; margin-right: 15px; }
     .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
     .dropbtn:hover { background: rgba(255,255,255,0.3); }
@@ -41,115 +50,6 @@
     .tech-doc-box h3:first-child { margin-top: 0; }
     .tech-doc-box h4 { color: #2980b9; margin-top: 15px; font-size: 1.05em; }
     .formula-math { font-family: monospace; background: #eef2f7; padding: 8px 12px; border-radius: 4px; display: inline-block; font-weight: bold; color: #1a365d; margin: 8px 0; }
-
-    /* Stili per il Laboratorio Interattivo dei Rouages */
-    .lab-interactive-box {
-      background: #ffffff;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 25px;
-      margin-top: 30px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      border-left: 5px solid #27ae60;
-    }
-    .gear-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #f8f9fa;
-      padding: 10px 15px;
-      margin: 8px 0;
-      border-radius: 6px;
-      border: 1px solid #e2e8f0;
-    }
-    .gear-label {
-      font-weight: bold;
-      color: #2c3e50;
-      font-size: 0.9em;
-    }
-    .gear-select, .gear-input {
-      padding: 5px 10px;
-      border-radius: 4px;
-      border: 1px solid #cbd5e1;
-      font-weight: bold;
-      color: #1a365d;
-      background: #fff;
-      font-size: 0.95em;
-    }
-    .gauge-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: #ffffff;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 15px;
-      margin-top: 20px;
-    }
-    .clock-dial {
-      position: relative;
-      width: 180px;
-      height: 90px;
-      border-top-left-radius: 90px;
-      border-top-right-radius: 90px;
-      background: linear-gradient(90deg, rgba(59,130,246,0.15) 0%, rgba(34,197,94,0.2) 50%, rgba(239,68,68,0.15) 100%);
-      border: 2px solid #cbd5e1;
-      border-bottom: none;
-      overflow: hidden;
-    }
-    .dial-mark-center {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      width: 3px;
-      height: 15px;
-      background: #27ae60;
-      transform: translateX(-50%);
-      z-index: 2;
-    }
-    .dial-mark {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      width: 2px;
-      height: 8px;
-      background: #94a3b8;
-      transform-origin: bottom center;
-    }
-    .needle {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      width: 4px;
-      height: 75px;
-      background: #1a365d;
-      transform-origin: bottom center;
-      transform: translateX(-50%) rotate(0deg);
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 4px 4px 0 0;
-      z-index: 3;
-    }
-    .needle::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 12px;
-      height: 12px;
-      background: #1a365d;
-      border-radius: 50%;
-      border: 2px solid #fff;
-    }
-    .dial-labels {
-      display: flex;
-      justify-content: space-between;
-      width: 200px;
-      font-size: 0.8em;
-      color: #64748b;
-      font-weight: bold;
-      margin-top: 6px;
-    }  
   </style>
 </head>
 <body>
@@ -160,7 +60,7 @@
     <div class="header-left-block">
       <div class="badge">Haute Horlogerie — Brevet Fédéral</div>
       <h1>1. Le Mouvement à Remontage Manuel</h1>
-      <p class="subtitle">Cours d'expertise horlogère — Caractéristiques Techniques</p>
+      <p class="subtitle">Cours d'expertise horlogère — Distribution & Régulation</p>
       
       <div class="header-controls">
         <div class="dropdown">
@@ -179,14 +79,14 @@
 
         <div class="lang-switcher">
           <a href="#" class="lang-btn active">FR</a>
-          <a href="../EN/_001B-Mouvement_Manuel.html" class="lang-btn">EN</a>
-          <a href="../DE/_001B-Mouvement_Manuel.html" class="lang-btn">DE</a>
+          <a href="../EN/_001C-Mouvement_Manuel.html" class="lang-btn">EN</a>
+          <a href="../DE/_001C-Mouvement_Manuel.html" class="lang-btn">DE</a>
         </div>
       </div>
     </div>
     
     <div class="header-right-block">
-     <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+      <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
     </div>
 
   </div>
@@ -203,32 +103,85 @@
 
     <div class="handwritten-body" id="course-content-area">
 
-      <!-- VIDEO IN PRIMA POSIZIONE -->
-      <div class="img-always-visible" style="text-align: center; margin: 25px 0;">
-        <div style="position: relative; display: inline-block; max-width: 620px; width: 100%; background: #fff; padding: 10px; border: 1px solid #dcdcdc; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.04);">
-          <video autoplay muted loop playsinline style="width: 100%; height: auto; border-radius: 4px;">
-            <source src="../path-del-video-bilanciere.mp4" type="video/mp4">
-            Votre navigateur ne supporte pas la lecture de vidéos.
-          </video>
+      <!-- CHAPITRE 7 -->
+      <h2 id="p7">7. Distribution : L'Échappement à Ancre Suisse</h2>
+      <ul>
+        <li><strong>Composants Clés :</strong> Roue d'échappement, Ancre suisse avec rubis, Double plateau avec ellipse.</li>
+        <li><strong>Fonction :</strong> Transformer la rotation en oscillations et distribuer l'énergie.</li>
+      </ul>
+
+      <!-- Modello 3D Interattivo - Scappamento IN PRIMA POSIZIONE -->
+      <div style="margin: 25px 0; background: #ffffff; padding: 15px; border-radius: 8px; border: 1px solid #dcdcdc; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+        <model-viewer 
+          id="escapement-model"
+          src="../swiss_lever_escapement_mechanism.glb" 
+          alt="Échappement à ancre suisse - Swiss Time Expert" 
+          camera-controls 
+          animation-name="*"
+          style="width: 100%; height: 420px; background-color: #ffffff;">
+        </model-viewer>
+        <div style="text-align: center; margin-top: 10px;">
+          <button id="play-pause-btn" style="background: #1b365d; color: white; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.9em;">⏸️ Pause</button>
         </div>
-        <div class="img-caption" style="font-size: 13px; color: #555; margin-top: 8px; font-style: italic;">🎥 Modèle 3D Interactif — Vue dynamique du balancier et de l'échappement en action.</div>
+        <p style="text-align: center; font-family: inherit; font-size: 0.85em; color: #555; margin-top: 8px; font-style: italic;">
+          Modèle 3D interactif : faites glisser pour pivoter. | Modèle 3D : C. Yamahata (Sketchfab)
+        </p>
+        <script>
+          const modelViewer = document.querySelector('#escapement-model');
+          const btn = document.querySelector('#play-pause-btn');
+          modelViewer.addEventListener('load', () => {
+            const material = modelViewer.model.materials.find(m => m.name.toLowerCase().includes('ancora') || m.name.toLowerCase().includes('lever'));
+            if (material) {
+              material.pbrMetallicRoughness.setBaseColorFactor([0.9, 0.75, 0.3, 1.0]);
+              material.pbrMetallicRoughness.setMetallicFactor(0.9);
+              material.pbrMetallicRoughness.setRoughnessFactor(0.2);
+            }
+            modelViewer.play();
+          });
+          btn.addEventListener('click', () => {
+            if (modelViewer.paused) {
+              modelViewer.play();
+              btn.textContent = '⏸️ Pause';
+            } else {
+              modelViewer.pause();
+              btn.textContent = '▶️ Play';
+            }
+          });
+        </script>
       </div>
 
       <details class="image-popover">
         <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-07) — Échappement à Ancre Suisse</summary>
-        <div class="img-container"><img src="../01-07 Echappement a Ancre Suisse.jpg" alt="Fiche 01-07"></div>
+        <div class="img-container"><img src="../01-07 Regulation-l echappement.jpg" alt="Fiche 01-07"></div>
       </details>
+      
+      <!-- 7B. APPROFONDISSEMENT -->
+      <h2 id="f7b">7B. Approfondissement Technique : Anatomie Fonctionnelle de l'Organe Réglant</h2>
+      <p>
+        L'organe réglant est le cœur isochrone de la montre mécanique. Il assure le découpage rigoureux du temps par ses oscillations régulières. La maîtrise de ses sous-ensembles (liaisons, guidages et impulsion) est indispensable pour comprendre la chronométrie.
+      </p>
 
-      <!-- SEZIONE APPROFONDIMENTO ANATOMIA -->
-      <h2 id="p7b">7B. Approfondissement Technique : Anatomie Fonctionnelle de l'Organe Réglant</h2>
-      <p>L'organe réglant est le cœur isochrone de la montre mécanique. Il assure le découpage rigoureux du temps par ses oscillations régulières.</p>
+      <div class="img-always-visible">
+        <img src="../Balancier-spiral_parties_2.jpg" alt="Anatomie détaillée du balancier-spiral et de ses composants">
+        <div class="img-caption">📷 TAVOLA TECNICA D'ATELIER — Anatomie fonctionnelle de l'organe réglant et de l'ensemble balancier-spiral.</div>
+      </div>
 
-      <!-- SECONDA IMMAGINE: TAVOLA TECNICA CON I COMPONENTI -->
-      <div class="img-always-visible" style="text-align: center; margin: 25px 0;">
-        <div style="position: relative; display: inline-block; max-width: 650px; width: 100%; background: #fff; padding: 10px; border: 1px solid #dcdcdc; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.04);">
-          <img src="../anatomie-fonctionnelle-organe-reglant.png" alt="Anatomie fonctionnelle de l'ensemble balancier-spiral" style="width: 100%; height: auto; display: block; border-radius: 4px;">
-        </div>
-        <div class="img-caption" style="font-size: 13px; color: #555; margin-top: 8px; font-style: italic;">📷 TAVOLA TECNICA D'ATELIER — Anatomie fonctionnelle de l'ensemble balancier-spiral (Piton, Virole, Pivot, Spiral, Serge du balancier, Double plateau, Ellipse, Bras du balancier, Raquette).</div>
+      <p><strong>Description détaillée des composants clés de l'ensemble balancier-spiral :</strong></p>
+      <ul>
+        <li><strong>1° Le Piton :</strong> C'est la cheville d'ancrage fixe qui immobilise l'extrémité extérieure du spiral sur le pont de balancier. Il constitue le point d'ancrage fixe externe de l'ensemble élastique.</li>
+        <li><strong>2° La Virole :</strong> Petit anneau métallique central serti de manière micrométrique sur l'axe du balancier, dans lequel est fixée et immobilisée l'extrémité intérieure du spiral. Elle assure la liaison directe entre le ressort spiral et l'axe mobile.</li>
+        <li><strong>3° Le Pivot :</strong> L'extrémité extrêmement fine et polie de l'axe du balancier. Les pivots tournent au sein de rubis (coussinets) et subissent des contraintes mécaniques extrêmes en cas de choc, d'où l'importance vitale des systèmes de protection (type Incabloc).</li>
+        <li><strong>4° Le Spiral :</strong> Ressort élastique enroulé selon une courbe mathématique précise (généralement en alliage amagnétique à base de nickel ou de silicium). Il fournit le couple de rappel élastique permanent qui ramène constamment le balancier à sa position d'équilibre neutre.</li>
+        <li><strong>5° La Serge du Balancier :</strong> L'anneau circulaire périphérique du balancier. Sa masse et son diamètre déterminent le <i>moment d'inertie</i> de la pièce. C'est sur la serge que l'on pratique l'équilibrage dynamique (masselottes ou vis de réglage).</li>
+        <li><strong>6° Les Bras du Balancier :</strong> Les rayons de liaison rigides reliant le moyeu central (ou l'axe) à la serge extérieure, conçus pour offrir une rigidité maximale tout en minimisant la prise au vent et le poids.</li>
+        <li><strong>7° La Raquette :</strong> Organe de réglage mobile doté de deux goupilles entre lesquelles glisse le spiral. En déplaçant la raquette, l'horloger modifie la <i>longueur active</i> de la spirale, ce qui permet d'ajuster précisément la marche (avancer ou retarder la montre).</li>
+        <li><strong>8° Le Double Plateau :</strong> Double disque calé sur l'axe du balancier, comprenant l'encoche de sécurité et servant de support direct à l'ellipse d'impulsion.</li>
+        <li><strong>9° L'Ellipse (Cheville d'impulsion) :</strong> Un petit cylindre rigide en rubis synthétique rouge solidement planté sur le double plateau. C'est le point de contact cinématique crucial : l'ellipse reçoit l'impulsion de la fourchette de l'ancre à chaque oscillation (pour entretenir le mouvement) et donne l'impulsion de déclenchement à l'ancre.</li>
+      </ul>
+
+      <div class="formula-box">
+        ⏱️ <strong>Principe Isocrate :</strong> La période d'oscillation du balancier-spiral dépend de son moment d'inertie et de la raideur du ressort. Toute variation de la longueur active de la spirale (via la raquette) modifie instantanément la fréquence de la montre.
       </div>
 
       <!-- NUOVO CAPITOLO 7C: APPROFONDIMENTO ESAUSTIVO SULL'INERZIA DEL BILANCIERE -->
@@ -244,7 +197,7 @@
         <h4 style="margin-top: 15px; color: #2980b9; font-size: 15px;">2° Influence sur la Période d'Oscillation et l'Isochronisme</h4>
         <p style="font-size: 14px;">La période propre d'oscillation <i>T</i> de l'oscillateur balancier-spiral est régie par la formule fondamentale dérivée de la dynamique de rotation :</p>
         <div class="formula-math">T = 2π · √(I / C)</div>
-        <p style="font-size: 14px; margin-top: 8px;">Où <strong>I</strong> est le moment d'inertie du balancier et <strong>C</strong> est le moment de rappel élastique (la raideur) du spiral. Pour qu'un mouvement soit rigoureusement isochrone (c'est-à-dire que la durée des oscillations demeure rigoureusement identique quelle que soit l'amplitude du balancier), le rapport <i>I/C</i> doit rester absolu et insensible aux variations thermiques ou aux frot-tements.</p>
+        <p style="font-size: 14px; margin-top: 8px;">Où <strong>I</strong> est le moment d'inertie du balancier et <strong>C</strong> est le moment de rappel élastique (la raideur) du spiral. Pour qu'un mouvement soit rigoureusement isochrone (c'est-à-dire que la durée des oscillations demeure rigoureusement identique quelle que soit l'amplitude du balancier), le rapport <i>I/C</i> doit rester absolu et insensible aux variations thermiques ou aux frottements.</p>
 
         <h4 style="margin-top: 15px; color: #27ae60; font-size: 15px;">3° Balancier à Inertie Variable vs. Raquetterie Traditionnelle</h4>
         <p style="font-size: 14px; margin-bottom: 5px;">On distingue deux grands principes d'ajustement de la marche :</p>
@@ -253,297 +206,53 @@
           <li><strong>Par Inertie Variable (Masses ou Vis sur la serge) :</strong> On conserve la longueur active du spiral fixe (meilleur isochronisme géométrique) et l'on fait varier subtilement le rayon effectif ou la position des masselottes sur le balancier pour ajuster l'inertie <i>I</i>. C'est le standard de Haute Horlogerie (ex: Gyromax chez Patek Philippe, Microstella chez Rolex).</li>
         </ul>
       </div>
-
-      <!-- APPROFONDIMENTO TECNICO: ORGANES DE TRANSMISSION & RAPPORTS (Dal capitolo precedente) -->
-      <div class="tech-doc-box">
-        <h3>5.1 Étude Approfondie des Mobiles et de la Denture</h3>
-        <p>L'analyse détaillée des organes de transmission met en lumière des impératifs géométriques et tribologiques stricts pour garantir un rendement énergétique optimal (généralement supérieur à 90 % par mobile).</p>
-
-        <h3 id="p5-1">5.1.1 Le Profil de Denture (Profil Cycloïdal)</h3>
-        <p>Contrairement à la mécanique industrielle qui privilégie le profil de denture développante de cercle, l'horlogerie suisse utilise traditionnellement le <strong>profil cycloïdal</strong> (et particulièrement l'épicycloïde pour les dents de la roue et l'hypocycloïde pour les flancs du pignon). Ce choix répond à des contraintes spécifiques :</p>
-        
-        <!-- IMMAGINE 3D D'ATELIER (PROFILO CICLOIDALE) -->
-        <div class="img-always-visible" style="text-align: center; margin: 25px 0;">
-          <div style="position: relative; display: inline-block; max-width: 580px; width: 100%; background: #fff; padding: 10px; border: 1px solid #dcdcdc; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.04);">
-            <img src="../profil-cycloide.png" alt="Modélisation 3D du Profil Cycloïdal" style="width: 100%; height: auto; display: block; border-radius: 4px;">
-          </div>
-          <div class="img-caption" style="font-size: 13px; color: #555; margin-top: 8px; font-style: italic;">📷 MODÉLISATION 3D D'ATELIER — Vue rapprochée de l'engrènement : interaction géométrique entre les dents de la roue et le pignon.</div>
-        </div>
-
-        <ul>
-          <li><strong>Frottement réduit au minimum :</strong> L'engrènement cycloïdal minimise le glissement des surfaces au moment de l'attaque et du dégagement des dents. Il n'y a pas de contact sur la ligne de centres.</li>
-          <li><strong>Tolérance au jeu d'engrènement :</strong> Les mobiles horlogers fonctionnent sans lubrification lourde sur les rouages intermédiaires ; le profil tolère de légères variations d'inter-axes sans bloquer le train.</li>
-        </ul>
-
-        <h3 id="p5-2">5.1.2 Calculs Rigoureux des Rapports de Transmission</h3>
-        <p>Pour garantir la rigueur de la chaîne cinématique, le calcul des rapports s'appuie sur le nombre exact de dents Z des roues et d'ailes des pignons N :</p>
-        
-        <div style="background: #fff; border: 1px solid #dcdcdc; padding: 15px; border-radius: 6px; margin: 15px 0;">
-          <h4 style="margin-top: 0; color: #1a365d; font-size: 15px;">1° Calcul de la Réserve de Marche Théorique</h4>
-          <p style="font-size: 14px; margin-bottom: 5px;"><strong>Paramètres :</strong> Barillet = 84 dents | Pignon de centre = 12 dents | Tours utiles = 6.5</p>
-          <div class="formula-math">Rapport (i) = 84 / 12 = 7</div>
-          <div class="formula-math" style="display: block; margin-top: 5px;">Autonomie totale = 7 × 6.5 = 45.5 heures</div>
-        </div>
-
-        <div style="background: #fff; border: 1px solid #dcdcdc; padding: 15px; border-radius: 6px; margin: 15px 0;">
-          <h4 style="margin-top: 0; color: #27ae60; font-size: 15px;">2° Rapport Global : De la Roue de Centre à l'Échappement</h4>
-          <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
-            <li>Roue de centre → Pignon de troisième : 80 / 10 = 8</li>
-            <li>Roue de troisième → Pignon de quatrième : 75 / 10 = 7.5</li>
-            <li>Roue de quatrième → Pignon d'échappement : 70 / 7 = 10</li>
-          </ul>
-          <div class="formula-math" style="margin-top: 8px;">Rapport Global Intermédiaire = 8 × 7.5 × 10 = 600</div>
-        </div>
-
-        <!-- ATELIER VIRTUEL : SIMULATEUR INTERACTIF -->
-        <div class="lab-interactive-box">
-          <h3 style="margin-top:0; color:#1a365d; border-bottom: 2px solid #27ae60; padding-bottom: 8px;">⚙️ Atelier Virtuel : Banc d'Essai & Calibres Historiques</h3>
-          <p class="intro" style="font-size: 0.9em; color: #4a5568;">Sélectionnez un calibre de référence ou composez librement les rouages. L'aiguille de contrôle indique instantanément la conformité chronométrique.</p>
-
-          <!-- SELETTORE CALIBRI STORICI / STANDARD -->
-          <div class="gear-row" style="background: #eef2f7; border-color: #cbd5e1;">
-            <span class="gear-label" style="color: #1a365d;">🏛️ Sélection du Calibre de Référence :</span>
-            <select id="presetCalibre" class="gear-select" onchange="applyPreset()" style="background: #fff; color: #1a365d; border-color: #94a3b8;">
-              <option value="custom">-- Mode Libre (Personnalisé) --</option>
-              <option value="unitas">Calibre Standard 3 Hz (ex: ETA / Unitas 6498)</option>
-              <option value="eta2824">Calibre Automatique 4 Hz (ex: ETA 2824-2)</option>
-              <option value="elprimero">Calibre Haute Fréquence 5 Hz (ex: Zenith El Primero)</option>
-              <option value="patek">Calibre Haute Horlogerie (Inspiration Patek Manifattura)</option>
-            </select>
-          </div>
-
-          <!-- Fréquence de l'échappement -->
-          <div class="gear-row" style="background: #e8f4fd; border-color: #bbe1fa;">
-            <span class="gear-label" style="color: #1d4ed8;">⚡ Fréquence du Balancier / Échappement :</span>
-            <select id="frequence" class="gear-select" onchange="onManualChange()">
-              <option value="18000">18'000 A/h (2.5 Hz)</option>
-              <option value="19800">19'800 A/h (2.75 Hz)</option>
-              <option value="21600" selected>21'600 A/h (3.0 Hz)</option>
-              <option value="28800">28'800 A/h (4.0 Hz)</option>
-              <option value="36000">36'000 A/h (5.0 Hz - El Primero)</option>
-            </select>
-          </div>
-
-          <!-- Barillet -->
-          <div class="gear-row">
-            <span class="gear-label">1. Barillet (Dents Z1) :</span>
-            <select id="z_barillet" class="gear-select" onchange="onManualChange()">
-              <option value="72">72 dents</option>
-              <option value="78">78 dents</option>
-              <option value="80">80 dents</option>
-              <option value="84" selected>84 dents</option>
-              <option value="90">90 dents</option>
-            </select>
-          </div>
-
-          <!-- Pignon de Centre -->
-          <div class="gear-row">
-            <span class="gear-label">2. Pignon de Centre (Ailes N1) :</span>
-            <select id="n_centre" class="gear-select" onchange="onManualChange()">
-              <option value="10">10 ailes</option>
-              <option value="12" selected>12 ailes</option>
-              <option value="14">14 ailes</option>
-            </select>
-          </div>
-
-          <!-- Roue de Centre -> Pignon de Troisième -->
-          <div class="gear-row">
-            <span class="gear-label">3. Roue de Centre / Pignon 3e (Z2 / N2) :</span>
-            <div>
-              Roue: <input type="number" id="z_centre" value="80" class="gear-input" style="width: 70px;" oninput="onManualChange()"> 
-              Pignon: <input type="number" id="n_troisieme" value="10" class="gear-input" style="width: 70px;" oninput="onManualChange()">
-            </div>
-          </div>
-
-          <!-- Roue de Troisième -> Pignon de Quatrième -->
-          <div class="gear-row">
-            <span class="gear-label">4. Roue 3e / Pignon 4e (Z3 / N3) :</span>
-            <div>
-              Roue: <input type="number" id="z_troisieme" value="75" class="gear-input" style="width: 70px;" oninput="onManualChange()"> 
-              Pignon: <input type="number" id="n_quatrieme" value="10" class="gear-input" style="width: 70px;" oninput="onManualChange()">
-            </div>
-          </div>
-
-          <!-- Roue de Quatrième -> Pignon d'Échappement -->
-          <div class="gear-row">
-            <span class="gear-label">5. Roue 4e / Pignon Échappement (Z4 / N4) :</span>
-            <div>
-              Roue: <input type="number" id="z_quatrieme" value="70" class="gear-input" style="width: 70px;" oninput="onManualChange()"> 
-              Pignon: <input type="number" id="n_echappement" value="7" class="gear-input" style="width: 70px;" oninput="onManualChange()">
-            </div>
-          </div>
-
-          <!-- Box dei Risultati in Tempo Reale -->
-          <div class="results-box" id="resultsBox" style="background: #eef2f7; border: 1px solid #cbd5e1; padding: 15px; border-radius: 6px; margin-top: 20px;">
-            <h4 style="margin-top: 0; color: #1a365d; font-size: 1.05em; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px;">📊 Résultats & Aiguille de Contrôle</h4>
-            
-            <div class="result-line" style="display: flex; justify-content: space-between; margin: 6px 0; font-size: 0.95em;">
-              <span>Rapport Barillet ➔ Centre :</span>
-              <span id="res_barillet" class="result-value" style="font-family: monospace; font-weight: bold; padding: 2px 8px; border-radius: 4px; background: #fff; color: #1a365d; border: 1px solid #cbd5e1;">7.00</span>
-            </div>
-            <div class="result-line" style="display: flex; justify-content: space-between; margin: 6px 0; font-size: 0.95em;">
-              <span>Autonomie Théorique :</span>
-              <span id="res_autonomie" class="result-value" style="font-family: monospace; font-weight: bold; padding: 2px 8px; border-radius: 4px; background: #fff; color: #1a365d; border: 1px solid #cbd5e1;">45.5 h</span>
-            </div>
-            <div class="result-line" style="display: flex; justify-content: space-between; margin: 6px 0; font-size: 0.95em;">
-              <span>Rapport Global Intermédiaire :</span>
-              <span id="res_global" class="result-value" style="font-family: monospace; font-weight: bold; padding: 2px 8px; border-radius: 4px; background: #fff; color: #1a365d; border: 1px solid #cbd5e1;">600.0</span>
-            </div>
-            
-            <div class="result-line" style="display: flex; justify-content: space-between; margin-top: 10px; border-top: 1px dashed #cbd5e1; padding-top: 10px; font-size: 0.95em;">
-              <span><strong>Temps réel d'un tour de Seconde :</strong></span>
-              <span id="res_temps_tour" class="result-value" style="font-family: monospace; font-weight: bold; padding: 2px 8px; border-radius: 4px; font-size: 1.05em; border: 1px solid #cbd5e1;">60.00 s</span>
-            </div>
-            
-            <div class="result-line" style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.95em;">
-              <span>Statut Chronométrique :</span>
-              <span id="res_status" class="status-badge" style="font-size: 0.85em; padding: 4px 10px; border-radius: 4px; font-weight: bold;">Conforme (60s exactes)</span>
-            </div>
-
-            <!-- AGUILLE DE LA BALANCE -->
-            <div class="gauge-container">
-              <div class="gauge-title" style="font-weight: bold; color: #1a365d; font-size: 0.9em; margin-bottom: 8px;">⚖️ Équilibre de Marche Chronométrique</div>
-              <div class="clock-dial" id="dialBox">
-                <div class="dial-mark" style="transform: translateX(-50%) rotate(-60deg);"></div>
-                <div class="dial-mark" style="transform: translateX(-50%) rotate(-30deg);"></div>
-                <div class="dial-mark-center"></div>
-                <div class="dial-mark" style="transform: translateX(-50%) rotate(30deg);"></div>
-                <div class="dial-mark" style="transform: translateX(-50%) rotate(60deg);"></div>
-                <div class="needle" id="gaugeNeedle"></div>
-              </div>
-              <div class="dial-labels" style="display: flex; justify-content: space-between; width: 180px; font-size: 0.75em; font-weight: bold; margin-top: 5px;">
-                <span style="color: #3b82f6;">▼ Retard</span>
-                <span style="color: #27ae60;">■ Zéro</span>
-                <span style="color: #ef4444;">▲ Avance</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
+      
+      <!-- CHAPITRE 8 -->
+      <h2 id="p8">8. Régulation : Le Balancier-Spiral & Fréquences d'Oscillation</h2>
+      <table class="table-custom">
+        <thead><tr><th>Fréquence (Ah)</th><th>Type de Calibre</th><th>Exemple</th><th>(Hz)</th><th>Alternances/Sec</th></tr></thead>
+        <tbody>
+          <tr><td><strong>18'000 Ah</strong></td><td>Historique / Poche</td><td>ETA 6497-1</td><td>2.5 Hz</td><td>5 tics/sec</td></tr>
+          <tr><td><strong>21'600 Ah</strong></td><td>Intermédiaire</td><td>ETA 6497-2</td><td>3.0 Hz</td><td>6 tics/sec</td></tr>
+          <tr><td><strong>28'800 Ah</strong></td><td>Standard moderne</td><td>ETA 2824-2</td><td>4.0 Hz</td><td>8 tics/sec</td></tr>
+          <tr><td><strong>36'000 Ah</strong></td><td>Haute Fréquence</td><td>Zenith El Primero</td><td>5.0 Hz</td><td>10 tics/sec</td></tr>
+        </tbody>
+      </table>
+      <div class="img-always-visible">
+        <img src="../balancier-spiral.jpg" alt="Balancier-spiral" style="max-height: 380px;">
       </div>
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-08) — Balancier-Spiral</summary>
+        <div class="img-container"><img src="../01-08 Regulation-Le balancier Spiral.jpg" alt="Fiche 01-08"></div>
+      </details>
+      <!-- IMAGE ÉCHELLE BALANCIER / ALLUMETTE -->
+      <div class="img-always-visible">
+        <img src="../Balance_wheels.jfif" alt="Échelle de grandeur d'un balancier-spiral comparé à une tête d'allumette">
+        <div class="img-caption">📷 MISE EN ÉCHELLE — L'organe régulateur (pont, balancier et spiral) à côté d'une tête d'allumette, illustrant l'extrême miniaturisation de la micromécanique horlogère.</div>
+      </div>
+     
+      <!-- CHAPITRE 9 -->
+      <h2 id="p9">9. Anatomie du Balancier & Systèmes de Protection (Antichocs)</h2>
+      <p>L'évolution majeure réside dans la protection des pivots (0.07mm) contre les chocs mécaniques.</p>
+      <div class="img-always-visible"><img src="../Incabloc_01.jpg" alt="Anatomie Incabloc"></div>
+      <div class="img-always-visible"><img src="../Incabloc_02.jpg" alt="Montage Incabloc"></div>
+      <div class="img-always-visible"><img src="../Incabloc_03.jpg" alt="Dynamique Incabloc"></div>
+      <ul>
+        <li><strong>Composants de Liaison :</strong> Virole, Piton, Raquette.</li>
+      </ul>
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-09) — Composants du Balancier</summary>
+        <div class="img-container"><img src="../01-09 Regulation-Le balancier Spiral.jpg" alt="Fiche 01-09"></div>
+      </details>
 
-    </div>  
-  </div>  
-
+    </div>
+  </div>
+  
   <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
-    <a href="_001C-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continuer la lecture ➔</a>
+    <a href="_001D-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continuer la lecture ➔</a>
   </div>
   
   <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
-  
   <script src="../script.js"></script>
-
-  <script>
-    const calibresPresets = {
-      unitas: { freq: "21600", zB: "84", nC: "12", zC: "80", n3: "10", z3: "75", n4: "10", z4: "70", nE: "7", ref: 600 },
-      eta2824: { freq: "28800", zB: "78", nC: "12", zC: "75", n3: "10", z3: "70", n4: "10", z4: "80", nE: "8", ref: 800 },
-      elprimero: { freq: "36000", zB: "80", nC: "10", zC: "80", n3: "10", z3: "75", n4: "10", z4: "100", nE: "10", ref: 1000 },
-      patek: { freq: "21600", zB: "88", nC: "12", zC: "80", n3: "10", z3: "72", n4: "10", z4: "75", nE: "7.5", ref: 600 }
-    };
-
-    function applyPreset() {
-      let val = document.getElementById('presetCalibre').value;
-      if (val === 'custom') return;
-
-      let p = calibresPresets[val];
-      if (p) {
-        document.getElementById('frequence').value = p.freq;
-        document.getElementById('z_barillet').value = p.zB;
-        document.getElementById('n_centre').value = p.nC;
-        document.getElementById('z_centre').value = p.zC;
-        document.getElementById('n_troisieme').value = p.n3;
-        document.getElementById('z_troisieme').value = p.z3;
-        document.getElementById('n_quatrieme').value = p.n4;
-        document.getElementById('z_quatrieme').value = p.z4;
-        document.getElementById('n_echappement').value = p.nE;
-        
-        calculateRouage();
-      }
-    }
-
-    function onManualChange() {
-      document.getElementById('presetCalibre').value = 'custom';
-      calculateRouage();
-    }
-
-    function calculateRouage() {
-      let freq = parseFloat(document.getElementById('frequence').value);
-      let zB = parseFloat(document.getElementById('z_barillet').value);
-      let nC = parseFloat(document.getElementById('n_centre').value);
-      
-      let zC = parseFloat(document.getElementById('z_centre').value);
-      let n3 = parseFloat(document.getElementById('n_troisieme').value);
-      
-      let z3 = parseFloat(document.getElementById('z_troisieme').value);
-      let n4 = parseFloat(document.getElementById('n_quatrieme').value);
-      
-      let z4 = parseFloat(document.getElementById('z_quatrieme').value);
-      let nE = parseFloat(document.getElementById('n_echappement').value);
-
-      let ratioBarillet = zB / nC;
-      let autonomy = ratioBarillet * 6.5;
-      
-      let stage1 = zC / n3;
-      let stage2 = z3 / n4;
-      let stage3 = z4 / nE;
-      let globalRatio = stage1 * stage2 * stage3;
-
-      let rapportIdealRef = 600; 
-      if (freq === 18000) rapportIdealRef = 500;
-      if (freq === 19800) rapportIdealRef = 550;
-      if (freq === 21600) rapportIdealRef = 600;
-      if (freq === 28800) rapportIdealRef = 800;
-      if (freq === 36000) rapportIdealRef = 1000;
-
-      let tempsTour = 60 * (globalRatio / rapportIdealRef);
-
-      document.getElementById('res_barillet').innerText = ratioBarillet.toFixed(2);
-      document.getElementById('res_autonomie').innerText = autonomy.toFixed(1) + " h";
-      document.getElementById('res_global').innerText = globalRatio.toFixed(1);
-      
-      let timeValEl = document.getElementById('res_temps_tour');
-      timeValEl.innerText = tempsTour.toFixed(2) + " s";
-
-      let statusEl = document.getElementById('res_status');
-      let needleEl = document.getElementById('gaugeNeedle');
-      let resultsBoxEl = document.getElementById('resultsBox');
-
-      let diff = tempsTour - 60.0;
-      let angleDeg = - (diff * 3.5); 
-      if (angleDeg < -75) angleDeg = -75;
-      if (angleDeg > 75) angleDeg = 75;
-
-      needleEl.style.transform = `translateX(-50%) rotate(${angleDeg}deg)`;
-
-      if (Math.abs(tempsTour - 60.0) < 0.1) {
-        statusEl.innerText = "Conforme (60s exactes)";
-        statusEl.style.background = "#d1fae5";
-        statusEl.style.color = "#065f46";
-        timeValEl.style.background = "#d1fae5";
-        timeValEl.style.color = "#065f46";
-        resultsBoxEl.style.borderColor = "#27ae60";
-        resultsBoxEl.style.background = "#f0fdf4";
-      } else if (tempsTour < 60.0) {
-        statusEl.innerText = "Avance (Trop Rapide)";
-        statusEl.style.background = "#fee2e2";
-        statusEl.style.color = "#991b1b";
-        timeValEl.style.background = "#fee2e2";
-        timeValEl.style.color = "#991b1b";
-        resultsBoxEl.style.borderColor = "#ef4444";
-        resultsBoxEl.style.background = "#fef2f2";
-      } else {
-        statusEl.innerText = "Retard (Trop Lent)";
-        statusEl.style.background = "#dbeafe";
-        statusEl.style.color = "#1e40af";
-        timeValEl.style.background = "#dbeafe";
-        timeValEl.style.color = "#1e40af";
-        resultsBoxEl.style.borderColor = "#3b82f6";
-        resultsBoxEl.style.background = "#eff6ff";
-      }
-    }
-
-    window.onload = calculateRouage;
-  </script>
 </body>
 </html>
