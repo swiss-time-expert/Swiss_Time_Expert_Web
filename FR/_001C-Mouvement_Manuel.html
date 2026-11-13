@@ -50,6 +50,18 @@
     .tech-doc-box h3:first-child { margin-top: 0; }
     .tech-doc-box h4 { color: #2980b9; margin-top: 15px; font-size: 1.05em; }
     .formula-math { font-family: monospace; background: #eef2f7; padding: 4px 8px; border-radius: 4px; display: inline-block; font-weight: bold; color: #1a365d; }
+
+    /* Ottimizzazione Tabella Mobile */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 20px 0;
+    }
+    .table-custom {
+      width: 100%;
+      min-width: 550px;
+    }
   </style>
 </head>
 <body>
@@ -184,7 +196,7 @@
         <li><strong>9° L'Ellipse :</strong> Cylindre en rubis recevant et transmettant l'impulsion entre l'ancre et le balancier.</li>
       </ul>
 
-      <!-- NUOVO CAPITOLO 7C: INERZIA E IL TIC-TAC -->
+      <!-- CAPITOLO 7C: INERZIA E IL TIC-TAC -->
       <div class="tech-doc-box">
         <h3>7C. L'Inertie du Balancier et le Secret du "Tic-Tac"</h3>
         
@@ -217,7 +229,7 @@
         <p style="font-size: 14px; margin-top: 10px;">
           * <strong>Le "Tic" (Premier impact) :</strong> Se produit lorsque la dent de la roue d'échappement vient s'appuyer et se verrouiller sur la lévée d'entrée de l'ancre.<br>
           * <strong>Le "Tac" (Second impact) :</strong> Correspond au verrouillage symétrique sur la lévée de sortie de l'autre côté du cycle.<br>
-          Entre ces deux sons, l'ellipse traverse la fourchette dans un silence absolu. Écouter le tic-tac, c'est écouter la "respiration" de la montre : un rythme régulier confirme un bon repérage au banco!
+          Entre ces deux sons, l'ellipse traverse la fourchette dans un silence absolu. Écouter le tic-tac, c'est écouter la "respiration" de la montre : un rythme régulier confirme un bon repérage au banc !
         </p>
 
         <h4 style="margin-top: 15px; color: #27ae60; font-size: 15px;">3. L'Harmonie de l'Oscillation : La Formule Démystifiée</h4>
@@ -230,34 +242,21 @@
       
       <!-- CHAPITRE 8 -->
       <h2 id="p8">8. Régulation : Le Balancier-Spiral & Fréquences d'Oscillation</h2>
-      <table class="table-custom">
-        <thead><tr><th>Fréquence (Ah)</th><th>Type de Calibre</th><th>Exemple</th><th>(Hz)</th><th>Alternances/Sec</th></tr></thead>
-        <tbody>
-          <tr><td><strong>18'000 Ah</strong></td><td>Historique / Poche</td><td>ETA 6497-1</td><td>2.5 Hz</td><td>5 tics/sec</td></tr>
-          <tr><td><strong>21'600 Ah</strong></td><td>Intermédiaire</td><td>ETA 6497-2</td><td>3.0 Hz</td><td>6 tics/sec</td></tr>
-          <tr><td><strong>28'800 Ah</strong></td><td>Standard moderne</td><td>ETA 2824-2</td><td>4.0 Hz</td><td>8 tics/sec</td></tr>
-          <tr><td><strong>36'000 Ah</strong></td><td>Haute Fréquence</td><td>Zenith El Primero</td><td>5.0 Hz</td><td>10 tics/sec</td></tr>
-        </tbody>
-      </table>
-      <div class="img-always-visible">
-        <img src="../balancier-spiral.jpg" alt="Balancier-spiral" style="max-height: 380px;">
+      
+      <!-- TABELLA RESPONSIVE -->
+      <div class="table-responsive">
+        <table class="table-custom">
+          <thead><tr><th>Fréquence (Ah)</th><th>Type de Calibre</th><th>Exemple</th><th>(Hz)</th><th>Alternances/Sec</th></tr></thead>
+          <tbody>
+            <tr><td><strong>18'000 Ah</strong></td><td>Historique / Poche</td><td>ETA 6497-1</td><td>2.5 Hz</td><td>5 tics/sec</td></tr>
+            <tr><td><strong>21'600 Ah</strong></td><td>Intermédiaire</td><td>ETA 6497-2</td><td>3.0 Hz</td><td>6 tics/sec</td></tr>
+            <tr><td><strong>28'800 Ah</strong></td><td>Standard moderne</td><td>ETA 2824-2</td><td>4.0 Hz</td><td>8 tics/sec</td></tr>
+            <tr><td><strong>36'000 Ah</strong></td><td>Haute Fréquence</td><td>Zenith El Primero</td><td>5.0 Hz</td><td>10 tics/sec</td></tr>
+          </tbody>
+        </table>
       </div>
-      <details class="image-popover">
-        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-08) — Balancier-Spiral</summary>
-        <div class="img-container"><img src="../01-08 Regulation-Le balancier Spiral.jpg" alt="Fiche 01-08"></div>
-      </details>
-      <!-- IMAGE ÉCHELLE BALANCIER / ALLUMETTE -->
-      <div class="img-always-visible">
-        <img src="../Balance_wheels.jfif" alt="Échelle de grandeur d'un balancier-spiral comparé à une tête d'allumette">
-        <div class="img-caption">📷 MISE EN ÉCHELLE — L'organe régulateur (pont, balancier et spiral) à côté d'une tête d'allumette, illustrant l'extrême miniaturisation de la micromécanique horlogère.</div>
-      </div>
-<!-- IMAGE ÉCHELLE BALANCIER / ALLUMETTE -->
-      <div class="img-always-visible">
-        <img src="../Balance_wheels.jfif" alt="Échelle de grandeur d'un balancier-spiral comparé à une tête d'allumette">
-        <div class="img-caption">📷 MISE EN ÉCHELLE — L'organe régulateur (pont, balancier et spiral) à côté d'une tête d'allumette, illustrant l'extrême miniaturisation de la micromécanique horlogère.</div>
-      </div>
-     
-      <!-- NUOVO APPROFONDIMENTO 7D: HERTZ E FREQUENZE -->
+
+      <!-- APPROFONDISSEMENT HERTZ SUBITO DOPO LA TABELLA -->
       <div class="tech-doc-box">
         <h3>7D. Fréquence et Chronométrie : Comprendre les Hertz, les Alternances et leurs Enjeux</h3>
         
@@ -295,8 +294,16 @@
         </div>
       </div>
 
-      <!-- CHAPITRE 9 -->
-      <h2 id="p9">9. Anatomie du Balancier & Systèmes de Protection (Antichocs)</h2>
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-08) — Balancier-Spiral</summary>
+        <div class="img-container"><img src="../01-08 Regulation-Le balancier Spiral.jpg" alt="Fiche 01-08"></div>
+      </details>
+      
+      <!-- IMAGE ÉCHELLE BALANCIER / ALLUMETTE (UNICA, SENZA DUPLICAZIONE) -->
+      <div class="img-always-visible">
+        <img src="../Balance_wheels.jfif" alt="Échelle de grandeur d'un balancier-spiral comparé à une tête d'allumette">
+        <div class="img-caption">📷 MISE EN ÉCHELLE — L'organe régulateur (pont, balancier et spiral) à côté d'une tête d'allumette, illustrant l'extrême miniaturisation de la micromécanique horlogère.</div>
+      </div>
      
       <!-- CHAPITRE 9 -->
       <h2 id="p9">9. Anatomie du Balancier & Systèmes de Protection (Antichocs)</h2>
