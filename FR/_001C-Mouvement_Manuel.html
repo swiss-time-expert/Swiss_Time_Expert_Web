@@ -51,17 +51,24 @@
     .tech-doc-box h4 { color: #2980b9; margin-top: 15px; font-size: 1.05em; }
     .formula-math { font-family: monospace; background: #eef2f7; padding: 4px 8px; border-radius: 4px; display: inline-block; font-weight: bold; color: #1a365d; }
 
-    /* Ottimizzazione Tabella Mobile */
-    .table-responsive {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      margin: 20px 0;
-    }
-    .table-custom {
-      width: 100%;
-      min-width: 550px;
-    }
+/* Ottimizzazione Tabella Mobile (Aggiornata) */
+.table-responsive {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 20px 0;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.table-custom, .timeline-table {
+  width: 100%;
+  min-width: 580px; /* Leggermente ampliato per dare respiro alle colonne */
+  margin: 0 !important;
+}
 
     /* Stile Pulsante Atelier / Test */
     .atelier-btn {
