@@ -7,6 +7,9 @@
   
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
+
+  <!-- Script per il visualizzatore 3D nativo dei file .glb/.gltf -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   
   <style>
     .header-card, .notebook-container {
@@ -55,6 +58,23 @@
     
     .wip-tag { display: inline-block; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; margin-left: 6px; text-decoration: none; }
     .wip-tag:hover { background: #fde68a; color: #92400e; }
+
+    /* Stile per il box del visualizzatore 3D */
+    .viewer-container {
+      width: 100%;
+      height: 450px;
+      background: #1e293b;
+      border-radius: 8px;
+      margin-top: 15px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    }
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      background-color: #1e293b;
+    }
   </style>
 </head>
 <body>
@@ -217,7 +237,7 @@
         </table>
       </div>
 
-      <!-- FOCUS D'ATELIER : LE TOURBILLON (1801) -->
+      <!-- FOCUS D'ATELIER : LE TOURBILLON (1801) + INTERACTIVE 3D VIEWER -->
       <div class="tech-doc-box" id="tourbillon-section">
         <h3>Masterclass d'Atelier : Le Tourbillon d'Abraham-Louis Breguet (1801)</h3>
         <p>
@@ -234,6 +254,21 @@
           Breguet imagina d'enfermer tout l'organe réglant (échappement, ancre, balancier et spiral) à l'intérieur d'une <strong>cage mobile qui effectue un tour complet en une minute</strong>. 
           En tournant ainsi en continu sur 360 degrés, les erreurs de position s'annulent mutuellement et se moyennent, garantissant une isochronie parfaite quelle que soit la position verticale de la montre.
         </p>
+
+        <!-- FENETRA INTERATTIVA PER IL MODELLO 3D .GLB -->
+        <h4 style="margin-top: 25px; color: #1a365d;">🔍 Modèle 3D Interactif : Le Tourbillon Swiss Time Expert</h4>
+        <p style="font-size: 14px;">
+          Explorez en 3D le mécanisme assemblé du tourbillon (gâchette, échappement, ancre et balancier spiral). Vous pouvez faire pivoter, zoomer et observer la disposition micromécanique.
+        </p>
+
+        <div class="viewer-container">
+          <model-viewer src="../tourbillon_web.glb" 
+                        alt="Modèle 3D du Tourbillon - Swiss Time Expert" 
+                        auto-rotate 
+                        camera-controls 
+                        ar>
+          </model-viewer>
+        </div>
 
         <div style="background: #fff; border: 1px solid #dcdcdc; padding: 15px; border-radius: 6px; margin-top: 15px;">
           <h4 style="margin-top: 0; color: #1a365d; font-size: 15px;">⚙️ Le Défi d'Exécution</h4>
