@@ -408,34 +408,4 @@
           cameraEta.position.set(0, 3.2, 4.6);
 
           const rendererEta = new THREE.WebGLRenderer({ antialias: true });
-          rendererEta.setSize(etaContainer.clientWidth, etaContainer.clientHeight);
-          rendererEta.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-          rendererEta.toneMapping = THREE.ACESFilmicToneMapping;
-          rendererEta.toneMappingExposure = 1.15;
-          etaContainer.appendChild(rendererEta.domElement);
-
-          const pmremEta = new THREE.PMREMGenerator(rendererEta);
-          sceneEta.environment = pmremEta.fromScene(new RoomEnvironment(), 0.04).texture;
-
-          const lightTop = new THREE.DirectionalLight(0xffffff, 1.8);
-          lightTop.position.set(5, 10, 7);
-          sceneEta.add(lightTop);
-
-          const lightFill = new THREE.DirectionalLight(0xdbe8ff, 0.9);
-          lightFill.position.set(-6, -4, -5);
-          sceneEta.add(lightFill);
-
-          const controlsEta = new OrbitControls(cameraEta, rendererEta.domElement);
-          controlsEta.enableDamping = true;
-          controlsEta.dampingFactor = 0.06;
-
-          let etaModelRoot = null;
-          const etaExplodeItems = [];
-          const etaPickableMeshes = [];
-          const etaInitialCamPos = new THREE.Vector3();
-
-          let etaSelectedMesh = null;
-          let etaPrevEmissive = null;
-          let etaPrevEmissiveIntensity = 0;
-
-          const selected
+          rendererEta.setSize(etaContainer.clientWidth
