@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ETA 6498-1 — Vue Éclatée 3D | Swiss Time Expert</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: radial-gradient(circle at center, #1e2229 0%, #0d0f12 100%);
+      color: #f0f2f5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+    #canvas-container {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Header & Info */
+    .hud-top {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      pointer-events: none;
+    }
+    .title-box {
+      background: rgba(18, 20, 26, 0.75);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 14px 20px;
+      border-radius: 12px;
+      pointer-events: auto;
+    }
+    .title-box h1 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #e2c07d;
+    }
+    .title-box p {
+      font-size: 0.8rem;
+      color: #9aa3b2;
+      margin-top: 4px;
+    }
+
+    .mode-box {
+      background: rgba(18, 20, 26, 0.75);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 14px;
+      border-radius: 12px;
+      pointer-events: auto;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+    .mode-box select, .mode-box button {
+      background: #252a34;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .mode-box button:hover {
+      background: #323846;
+    }
+
+    /* Slider Esploso in basso */
+    .controls-bottom {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(540px, 90vw);
+      background: rgba(18, 20, 26, 0.82);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 192, 125, 0.3);
+      padding: 16px 24px;
+      border-radius: 16px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+    }
+    .slider-header span.value {
+      color: #e2c07d;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      background: #2c323d;
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #e2c07d;
+      border: 2px solid #12141a;
+      box-shadow: 0 0 10px rgba(226, 192, 125, 0.6);
+      cursor: grab;
+    }
+    input[type="range"]::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(1.1);
+    }
+
+    /* Loader */
+    #loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #0d0f12;
+      z-index: 20;
+      transition: opacity 0.4s ease;
+    }
+    .spinner {
+      width: 42px;
+      height: 42px;
+      border: 3px solid rgba(226, 192, 125, 0.2);
+      border-top-color: #e2c07d;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin-bottom: 14px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    #part-tooltip {
+      position: absolute;
+      bottom: 115px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(18, 20, 26, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      color: #cfd6e2;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+  </style>
+
+  <!-- Import Map per Three.js -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <div id="loader">
+    <div class="spinner"></div>
+    <div id="loader-text">Chargement du calibre ETA 6498-1...</div>
+  </div>
+
+  <div class="hud-top">
+    <div class="title-box">
+      <h1>CALIBRE ETA 6498-1</h1>
+      <p>Clic gauche : pivoter • Molette : zoomer • Clic droit : déplacer</p>
+    </div>
+
+    <div class="mode-box">
+      <label for="explode-axis">Axe :</label>
+      <select id="explode-axis">
+        <option value="vertical-y" selected>Vertical (Axe Y)</option>
+        <option value="vertical-z">Vertical (Axe Z)</option>
+        <option value="radial">Radial 3D</option>
+      </select>
+      <button id="reset-cam">Centrer</button>
+    </div>
+  </div>
+
+  <div id="part-tooltip">Composant</div>
+
+  <div class="controls-bottom">
+    <div class="slider-header">
+      <span>VUE ÉCLATÉE (EXPLOSÉ)</span>
+      <span class="value" id="explode-val">0%</span>
+    </div>
+    <input type="range" id="explode-slider" min="0" max="100" value="0" step="0.5" />
+  </div>
+
+  <div id="canvas-container"></div>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+    // Percorso del file GLB nella cartella principale (un livello sopra la cartella "fr")
+    const MODEL_URL = '../ETA6498-1%20Web.glb';
+
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.01, 1000);
+    camera.position.set(0, 3.2, 4.2);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    container.appendChild(renderer.domElement);
+
+    // Illuminazione realistica da studio orologiero
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.8);
+    dirLight1.position.set(5, 10, 7);
+    scene.add(dirLight1);
+
+    const dirLight2 = new THREE.DirectionalLight(0xdbe8ff, 0.8);
+    dirLight2.position.set(-6, -4, -5);
+    scene.add(dirLight2);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+
+    // Variabili per l'esploso
+    let modelGroup = null;
+    const explodeItems = [];
+    let initialCamPos = new THREE.Vector3();
+
+    const loader = new GLTFLoader();
+    loader.load(
+      MODEL_URL,
+      (gltf) => {
+        modelGroup = gltf.scene;
+
+        // Calcola il bounding box globale per centrare e scalare automaticamente il movimento
+        const box = new THREE.Box3().setFromObject(modelGroup);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+
+        // Normalizza la scala del modello a circa 3 unità nella scena
+        const scaleFactor = 3.0 / maxDim;
+        modelGroup.scale.setScalar(scaleFactor);
+
+        // Ricentra il modello sull'origine (0,0,0)
+        box.setFromObject(modelGroup);
+        box.getCenter(center);
+        modelGroup.position.sub(center);
+
+        scene.add(modelGroup);
+
+        // Aggiorna matrice mondiale prima di leggere le posizioni dei singoli componenti
+        modelGroup.updateMatrixWorld(true);
+
+        const globalCenter = new THREE.Vector3(0, 0, 0);
+
+        // Raccoglie tutte le mesh individuali per l'esploso
+        modelGroup.traverse((child) => {
+          if (child.isMesh) {
+            if (child.material) {
+              child.material.needsUpdate = true;
+            }
+
+            const meshBox = new THREE.Box3().setFromObject(child);
+            const meshCenterWorld = meshBox.getCenter(new THREE.Vector3());
+
+            // Vettore dal centro del calibro al centro del singolo componente
+            const dirFromCenter = meshCenterWorld.clone().sub(globalCenter);
+
+            explodeItems.push({
+              mesh: child,
+              origPos: child.position.clone(),
+              worldOffset: dirFromCenter,
+              parent: child.parent
+            });
+          }
+        });
+
+        // Posiziona la camera in modo ottimale
+        camera.position.set(0, 2.8, 3.8);
+        initialCamPos.copy(camera.position);
+        controls.target.set(0, 0, 0);
+        controls.update();
+
+        // Nascondi loader
+        const loaderEl = document.getElementById('loader');
+        loaderEl.style.opacity = '0';
+        setTimeout(() => loaderEl.remove(), 400);
+      },
+      (xhr) => {
+        if (xhr.total > 0) {
+          const pct = Math.round((xhr.loaded / xhr.total) * 100);
+          document.getElementById('loader-text').textContent = `Chargement : ${pct}%`;
+        }
+      },
+      (error) => {
+        console.error('Erreur de chargement GLB:', error);
+        document.getElementById('loader-text').innerHTML =
+          'Erreur : fichier introuvable.<br><small>Vérifiez que "ETA6498-1 Web.glb" est bien à la racine du dépôt.</small>';
+      }
+    );
+
+    // Logica Slider Esploso
+    const slider = document.getElementById('explode-slider');
+    const valDisplay = document.getElementById('explode-val');
+    const axisSelect = document.getElementById('explode-axis');
+
+    function updateExplode() {
+      const factor = parseFloat(slider.value) / 100;
+      valDisplay.textContent = `${Math.round(factor * 100)}%`;
+      const mode = axisSelect.value;
+
+      explodeItems.forEach((item) => {
+        if (factor === 0) {
+          item.mesh.position.copy(item.origPos);
+          return;
+        }
+
+        const shiftWorld = new THREE.Vector3();
+        const spread = factor * 2.2;
+
+        if (mode === 'vertical-y') {
+          shiftWorld.set(
+            item.worldOffset.x * spread * 0.15,
+            item.worldOffset.y * spread * 2.2,
+            item.worldOffset.z * spread * 0.15
+          );
+        } else if (mode === 'vertical-z') {
+          shiftWorld.set(
+            item.worldOffset.x * spread * 0.15,
+            item.worldOffset.y * spread * 0.15,
+            item.worldOffset.z * spread * 2.2
+          );
+        } else {
+          shiftWorld.copy(item.worldOffset).multiplyScalar(spread * 1.4);
+        }
+
+        if (item.parent) {
+          const parentScale = new THREE.Vector3();
+          item.parent.getWorldScale(parentScale);
+          const localShift = shiftWorld.clone();
+          localShift.x /= parentScale.x || 1;
+          localShift.y /= parentScale.y || 1;
+          localShift.z /= parentScale.z || 1;
+
+          const parentQuat = new THREE.Quaternion();
+          item.parent.getWorldQuaternion(parentQuat);
+          localShift.applyQuaternion(parentQuat.invert());
+
+          item.mesh.position.copy(item.origPos).add(localShift);
+        }
+      });
+    }
+
+    slider.addEventListener('input', updateExplode);
+    axisSelect.addEventListener('change', updateExplode);
+
+    document.getElementById('reset-cam').addEventListener('click', () => {
+      camera.position.copy(initialCamPos);
+      controls.target.set(0, 0, 0);
+      controls.update();
+    });
+
+    // Resize finestra
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Render loop
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
