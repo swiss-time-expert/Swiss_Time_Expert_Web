@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swiss Time Expert - Inhaltsverzeichnis</title>
+  <title>Swiss Time Expert - 8. Geschichte der Zeitmessung</title>
   
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
 
+  <!-- Skript für den nativen 3D-Viewer für .glb/.gltf-Dateien -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  
   <style>
-    /* Erzwungene Ausrichtung */
     .header-card, .notebook-container {
       max-width: 1100px !important;
       margin: 0 auto !important;
@@ -17,191 +19,298 @@
       box-sizing: border-box;
     }
 
-    /* Sprachumschalter-Stil */
-    .lang-switcher { display: flex; gap: 8px; }
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
     .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
     .lang-btn:hover { background: rgba(255,255,255,0.3); }
     .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+
+    .tech-doc-box { 
+      background: #f8f9fa; 
+      border: 1px solid #e2e8f0;
+      padding: 20px 25px; 
+      margin: 25px 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      font-size: 1em; 
+      line-height: 1.6; 
+      color: #2c3e50; 
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .tech-doc-box h3 { color: #1a365d; margin-top: 20px; font-size: 1.15em; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+    .tech-doc-box h3:first-child { margin-top: 0; }
     
-    .header-controls { display: flex; align-items: center; gap: 20px; }
+    .timeline-table { width: 100%; border-collapse: collapse; margin: 25px 0; font-size: 0.95em; background: #fff; }
+    .timeline-table th, .timeline-table td { border: 1px solid #dcdcdc; padding: 12px 15px; text-align: left; }
+    .timeline-table th { background-color: #1a365d; color: white; text-align: center; }
+    .timeline-table td.year { font-weight: bold; color: #27ae60; text-align: center; white-space: nowrap; }
+    
+    .timeline-table a { color: #1a365d; text-decoration: none; font-weight: bold; }
+    .timeline-table a:hover { color: #d9534f; text-decoration: underline; }
+    
+    .wip-tag { display: inline-block; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; margin-left: 6px; text-decoration: none; }
+    .wip-tag:hover { background: #fde68a; color: #92400e; }
+
+    /* Stil für den 3D-Viewer */
+    .viewer-container {
+      width: 100%;
+      height: 450px;
+      background: #1e293b;
+      border-radius: 8px;
+      margin-top: 15px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    }
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      background-color: #1e293b;
+    }
   </style>
 </head>
 <body>
 
-  <!-- ================= HEADER ================= -->
   <div class="header-card">
     <div class="header-left-block">
-      <div class="badge">Haute Horlogerie — Eidgenössisches Fähigkeitszeugnis</div>
-      <h1>Swiss Time Expert — Inhaltsverzeichnis</h1>
-      <p class="subtitle">Interaktiver Index und Schnellnavigation zu den Kursmodulen</p>
+      <div class="badge">Haute Horlogerie — Eidgenössischer Fachausweis</div>
+      <h1 id="intro">8. Geschichte der Zeitmessung</h1>
+      <p class="subtitle">Fachkurs für Uhrmacherei — Chronometrie & Historische Entwicklung</p>
       
-      <div class="header-controls" style="margin-top: 15px;">
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Hauptmenü</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. Das Handaufzugswerk</a>
+            <a href="_002-la-montre-automatique.html">2. Die Automatikuhr</a>
+            <a href="_003-Horloge_Electronique.html">3. Elektronische Uhr & Quarz</a>
+            <a href="_004-Complications.html">4. Komplikationen</a>
+            <a href="_005-Familles_Matieres.html">5. Werkstoffgruppen</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen & Technologien</a>
+            <a href="_007-Habillage.html">7. Die Uhrgehäuse-Ausstattung</a>
+            <a href="_008-Histoire_Mesure_Temps.html">8. Geschichte der Zeitmessung</a>
+          </div>
+        </div>
+
         <div class="lang-switcher">
-          <a href="../FR/index.html" class="lang-btn">FR</a>
-          <a href="../EN/index.html" class="lang-btn">EN</a>
+          <a href="../FR/_008-Histoire_Mesure_Temps.html" class="lang-btn">FR</a>
+          <a href="../EN/_008-Histoire_Mesure_Temps.html" class="lang-btn">EN</a>
           <a href="#" class="lang-btn active">DE</a>
         </div>
       </div>
     </div>
-    
+
     <div class="header-right-block">
-     <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+      <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
     </div>
   </div>
 
-  <!-- ================= NOTEBOOK CONTAINER ================= -->
-  <div class="notebook-container">
+  <div class="notebook-container" id="notebook-main">
     
     <div class="notebook-header">
       <div class="notebook-title-cell">
-        <h2 class="handwritten-heading">Interaktive Werkstatt-Übersicht</h2>
+        <h2 class="handwritten-heading">Chronologische Zeitleiste: Von den Ursprüngen bis in die Moderne</h2>
       </div>
-      <div class="tag-chic">🧭 Direkter Zugriff nach Themen</div>
+      <div class="tag-chic">📜 Historische Meilensteine & Erfindungen</div>
     </div>
 
-    <!-- MODUL 1 -->
-    <div class="menu-card">
-      <a href="_001A-Mouvement_Manuel.html" class="module-header-link">
-        <h2>• 1. Das Handaufzugswerk</h2>
-        <span class="btn-open-module">Kurs öffnen ➔</span>
-      </a>
-      <ul class="subtopics-grid">
-        <li class="subtopic-item"><a href="_001A-Mouvement_Manuel.html#p1">1. Blockschaltbild des mechanischen Werks</a></li>
-        <li class="subtopic-item"><a href="_001A-Mouvement_Manuel.html#p2">2. Antriebsorgan : Das Federhaus</a></li>
-        <li class="subtopic-item"><a href="_001A-Mouvement_Manuel.html#p3">3. Federbefestigung, MALTESERKREUZ & Schnecke</a></li>
-        <li class="subtopic-item"><a href="_001B-Mouvement_Manuel.html#p4">4. Nivaflex®-Eigenschaften</a></li>
-        <li class="subtopic-item"><a href="_001B-Mouvement_Manuel.html#p5">5. Übertragung : Die kinematische Kette</a></li>
-        <li class="subtopic-item"><a href="_001B-Mouvement_Manuel.html#p6">6. Übersetzungsverhältnisse & Gangreserve</a></li>
-        <li class="subtopic-item"><a href="_001C-Mouvement_Manuel.html#p7">7. Hemmung : Die Schweizer Ankerhemmung</a></li>
-        <li class="subtopic-item"><a href="_001C-Mouvement_Manuel.html#p8">8. Regulierung : Unruh-Spirale & Frequenzen</a></li>
-        <li class="subtopic-item"><a href="_001C-Mouvement_Manuel.html#p9">9. Unruhanatomie & Stoßsicherung</a></li>
-        <li class="subtopic-item"><a href="_001D-Mouvement_Manuel.html#p10">10. Die Spiralfeder & Regulierungsmethoden</a></li>
-        <li class="subtopic-item"><a href="_001D-Mouvement_Manuel.html#p11">11. Anzeige & Zeigerwerkmechanismus</a></li>
-        <li class="subtopic-item"><a href="_001D-Mouvement_Manuel.html#p12">12. Die Krone & Winkelhebel-Kinematik</a></li>
-        <li class="subtopic-item"><a href="_001D-Mouvement_Manuel.html#p13">13. Selbsteinschätzung & Interaktives Quiz</a></li>
-      </ul>
+    <div class="handwritten-body" id="course-content-area">
+
+      <h2>Einführung in die chronometrische Entwicklung</h2>
+      <p>
+        Die Geschichte der Zeitmessung ist ein unaufhörliches Streben nach Präzision, Miniaturisierung und Autonomie. 
+        Von imposanten mittelalterlichen Turmuhren bis hin zu zeitgenössischen ultraflachen Kalibern hat jede grosse technische Erfindung unser Verhältnis zur Zeit neu definiert und die Grenzen der Mikromechanik verschoben.
+      </p>
+
+      <div class="tech-doc-box" id="chronologie">
+        <h3>Grundlegende Chronologie der mechanischen und elektronischen Uhrmacherei</h3>
+        <p>Die folgende Tabelle listet die wichtigsten Meilensteine, bedeutenden Erfindungen und Pioniere auf, welche die Haute Horlogerie geprägt haben, direkt verknüpft mit den Fachkapiteln des Kurses:</p>
+        
+        <table class="timeline-table">
+          <thead>
+            <tr>
+              <th>Datum / Epoche</th>
+              <th>Innovation / Bedeutendes Ereignis & Werkstatt-Bezug</th>
+              <th>Urheber / Kontext</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="year">Um 1000</td>
+              <td><strong>Erste Uhrwerksmechanismen</strong> : Bau der ersten schmiedeeisernen Mechanismen (Gewicht von 300 bis 600 kg) durch Schmiede ohne Verwendung von Schrauben. <a href="#wip-section" class="wip-tag">WIP</a></td>
+              <td>Mittelalterliche Schmiede</td>
+            </tr>
+            <tr>
+              <td class="year">~1500</td>
+              <td><a href="_001A-Mouvement_Manuel.html#p2">Federhaus und Zugfeder</a> : Die Erfindung von Federhaus und Zugfeder macht Antriebsgewichte überflüssig und ebnet den Weg für tragbare Uhren.</td>
+              <td>Mitteleuropäische Uhrmacherei</td>
+            </tr>
+            <tr>
+              <td class="year">~1540</td>
+              <td><a href="_005-Familles_Matieres.html#m1">Einführung der Schraube</a> : Schrauben werden erstmals als standardisierte Befestigungselemente im Uhrenbau eingesetzt.</td>
+              <td>Uhrmachermeister der Renaissance</td>
+            </tr>
+            <tr>
+              <td class="year">1580–1680</td>
+              <td><a href="_007-Habillage.html">Fioritura Estetica (Künstlerisches Goldenes Zeitalter)</a> : Entwicklung von Gehäusen in kunstvollen und skulpturalen Formen, getragen als Anhänger oder Schmuckstücke.</td>
+              <td>Kunstjuweliere & Uhrmacher</td>
+            </tr>
+            <tr>
+              <td class="year">1657</td>
+              <td><strong>Das Pendel</strong> : Anwendung des Pendels auf Uhren, was die Ganggenauigkeit drastisch verbessert und zur Einführung des Sekundenzeigers führt. <a href="#wip-section" class="wip-tag">WIP</a></td>
+              <td>Christiaan Huygens</td>
+            </tr>
+            <tr>
+              <td class="year">1675</td>
+              <td><a href="_001C-Mouvement_Manuel.html#p8">Unruh und Spiralfeder</a> : Erfindung der mit der Unruh gekoppelten Spiralfeder, die den Grundstein für die moderne Präzisionsuhr legt.</td>
+              <td>Christiaan Huygens</td>
+            </tr>
+            <tr>
+              <td class="year">1770</td>
+              <td><a href="_002-la-montre-automatique.html#a1">Das erste Schüttel-Automatiksystem</a> : Erster automatischer Aufzugsmechanismus mit Schwungmasse für Taschenuhren.</td>
+              <td>Abraham-Louis Perrelet</td>
+            </tr>
+            <tr>
+              <td class="year" id="tourbillon">1801</td>
+              <td><a href="#tourbillon-section">Das Tourbillon</a> : Patentierung des Tourbillons zur Neutralisierung von Gangabweichungen durch die Erdanziehungskraft.</td>
+              <td>Abraham-Louis Breguet</td>
+            </tr>
+            <tr>
+              <td class="year">1845</td>
+              <td><a href="_001D-Mouvement_Manuel.html#p12">Aufzugs- und Zeigerstellkrone</a> : Revolutionäres Patent, das das Aufziehen der Zugfeder und das Stellen der Uhrzeit direkt über die Krone ohne Schlüssel ermöglicht.</td>
+              <td>Adrien Philippe (Patek Philippe)</td>
+            </tr>
+            <tr>
+              <td class="year">1914</td>
+              <td><a href="_007-Habillage.html">Geburtsstunde der Armbanduhr</a> : Anpassung von Taschenuhren mit angelöteten Bandanstössen zur Ausstattung von Offizieren an der Front.</td>
+              <td>Militärischer & industrieller Einsatz</td>
+            </tr>
+            <tr>
+              <td class="year">1925</td>
+              <td><a href="_002-la-montre-automatique.html">Erste automatische Armbanduhr</a> : Kommerzialisierung des Systems mit schwingendem Werk (Zeigerstellung über die Lünette).</td>
+              <td>John Harwood</td>
+            </tr>
+            <tr>
+              <td class="year">1926–1927</td>
+              <td><a href="_007-Habillage.html">Erste Wasserdichtheitssysteme</a> : Einführung von Dichtungen (ursprünglich Kork) und verschraubten Gehäusen zum Schutz der Werke vor Feuchtigkeit.</td>
+              <td>Schweizer Uhrenindustrie</td>
+            </tr>
+            <tr>
+              <td class="year">1928 (Pat. 1933)</td>
+              <td><a href="_001C-Mouvement_Manuel.html#p9">Die Stosssicherung (Incabloc)</a> : Erfindung der elastischen Aufhängungsfeder zum Schutz der empfindlichen Unruhwellenzapfen.</td>
+              <td>Porte & Burger (Incabloc)</td>
+            </tr>
+            <tr>
+              <td class="year">1931</td>
+              <td><a href="_004-Complications.html">Die Reverso</a> : Kreation des ikonischen Wendegehäuses zum Schutz des Uhrenglases bei Polospielen.</td>
+              <td>Jaeger-LeCoultre</td>
+            </tr>
+            <tr>
+              <td class="year">1958</td>
+              <td><a href="_003-Horloge_Electronique.html#e1">Die elektromechanische Ära</a> : Lancierung der Hamilton Ventura, die elektrische Energie (Batterie) und mechanischen Oszillator verbindet.</td>
+              <td>Hamilton</td>
+            </tr>
+            <tr>
+              <td class="year">1960</td>
+              <td><a href="_003-Horloge_Electronique.html">Die Stimmgabel-Technologie</a> : Die Bulova Accutron schwingt mit 300 Hz und bietet eine für ihre Zeit unerreichte Präzision.</td>
+              <td>Bulova</td>
+            </tr>
+            <tr>
+              <td class="year">1968</td>
+              <td><a href="_003-Horloge_Electronique.html">Die Quarz-Herausforderung</a> : Entwicklung des Kalibers Beta 21 (32'768 Hz) durch ein Konsortium von 21 Schweizer Marken als Antwort auf die Quarztechnologie.</td>
+              <td>Centre Electronique Horloger (CEH)</td>
+            </tr>
+            <tr>
+              <td class="year">1978</td>
+              <td><strong>Ultraflache Ingenieurskunst</strong> : *La Délirium* verschiebt die Grenzen der Miniaturisierung und erreicht Rekordbauhöhen (2 mm, später 0,98 mm). <a href="#wip-section" class="wip-tag">WIP</a></td>
+              <td>Schweizer Uhrenkollektion</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- WERKSTATT-MASTERCLASS: DAS TOURBILLON (1801) + INTERAKTIVER 3D-VIEWER -->
+      <div class="tech-doc-box" id="tourbillon-section">
+        <h3>Werkstatt-Masterclass: Das Tourbillon von Abraham-Louis Breguet (1801)</h3>
+        <p>
+          Am 26. Juni 1801 (7. Messidor des Jahres IX) patentiert, ist das Tourbillon das Meisterwerk von Abraham-Louis Breguet. Entgegen einer weit verbreiteten Meinung handelt es sich dabei nicht um eine Anzeigekomplikation (es fügt dem Zifferblatt keine Funktion hinzu), sondern um eine höchste <strong>Reguliervorrichtung</strong>.
+        </p>
+        
+        <h4>1. Das physikalische Problem: Die Schwerkraft</h4>
+        <p>
+          Zu Breguets Zeiten waren getragene Uhren vorwiegend Taschenuhren. Senkrecht in einer Westentasche getragen, unterlag die Uhr der Erdanziehungskraft, was den Schwerpunkt der Unruh-Spirale-Einheit verlagerte und je nach Trageposition permanente Gangabweichungen verursachte.
+        </p>
+
+        <h4>2. Die mechanische Lösung: Der rotierende Käfig</h4>
+        <p>
+          Breguet ersann die Lösung, das gesamte Regulierorgan (Hemmungsrad, Anker, Unruh und Spiralfeder) in einem <strong>beweglichen Käfig einzuschliessen, der sich einmal pro Minute um die eigene Achse dreht</strong>. 
+          Durch diese kontinuierliche Rotation um 360 Grad heben sich die Lagenfehler gegenseitig auf und mitteln sich aus, was unabhängig von der vertikalen Position der Uhr einen perfekten Isochronismus garantiert.
+        </p>
+
+        <!-- INTERAKTIVER 3D-VIEWER FÜR DAS .GLB-MODELL -->
+        <h4 style="margin-top: 25px; color: #1a365d;">🔍 Interaktives 3D-Modell: Das Tourbillon von Swiss Time Expert</h4>
+        <p style="font-size: 14px;">
+          Erkunden Sie den montierten Tourbillon-Mechanismus in 3D (Käfig, Hemmungsrad, Anker und Unruh-Spirale). Sie können das Modell frei drehen, heranzoomen und die mikromechanische Anordnung im Detail betrachten.
+        </p>
+
+        <div class="viewer-container">
+          <model-viewer src="../tourbillon_web.glb" 
+                        alt="3D-Modell des Tourbillons - Swiss Time Expert" 
+                        auto-rotate 
+                        camera-controls 
+                        touch-action="pan-y"
+                        interaction-prompt="auto"
+                        max-camera-orbit="auto auto 5m"
+                        min-camera-orbit="auto auto 0.2m"
+                        ar>
+          </model-viewer>
+        </div>
+
+        <!-- OPEN-SOURCE-QUELLENANGABE -->
+        <p style="font-size: 11pt; color: #64748b; font-style: italic; margin-top: 8px; text-align: right;">
+          Ursprüngliches 3D-Modell basierend auf der Arbeit von VTX (Audemars Piguet Royal Oak Tourbillon)[cite: 8], optimiert und überarbeitet für Swiss Time Expert.
+        </p>
+
+        <div style="background: #fff; border: 1px solid #dcdcdc; padding: 15px; border-radius: 6px; margin-top: 15px;">
+          <h4 style="margin-top: 0; color: #1a365d; font-size: 15px;">⚙️ Die Herausforderung der Ausführung</h4>
+          <p style="font-size: 14px; margin-bottom: 0;">
+            Die Fertigung eines Tourbillons erfordert die Herstellung Dutzender mikroskopisch kleiner Bauteile, die in einem Käfig montiert werden, dessen Gesamtgewicht oft nur wenige Zehntelgramm beträgt, um das Trägheitsmoment des Werks nicht zu belasten. Deshalb gilt es als das absolute Symbol höchster Meisterschaft in der Haute Horlogerie.
+          </p>
+        </div>
+      </div>
+
+      <!-- WORK IN PROGRESS BEREICH -->
+      <div class="tech-doc-box" id="wip-section" style="background: #fffbeb; border-color: #fcd34d;">
+        <h3 style="color: #92400e;">🚧 Kommende Masterclasses in Vorbereitung (Work in Progress)</h3>
+        <p style="font-size: 14px; color: #78350f; margin-bottom: 0;">
+          Die Kapitel über John Harrisons Marinechronometer, mittelalterliche Turmuhren und historische Quarzkaliber werden in Kürze in diese interaktive Zeitleiste integriert.
+        </p>
+      </div>
+
+      <h2>Fazit und Ausblick</h2>
+      <p>
+        Die Geschichte der Zeitmessung zeigt, dass kein technologischer Umbruch die traditionelle mechanische Uhrmacherkunst je verdrängt hat – im Gegenteil, er hat sie in den Rang einer aussergewöhnlichen Haute Horlogerie erhoben.
+      </p>
+
     </div>
+  </div>
 
-    <!-- MODUL 2 -->
-    <div class="menu-card">
-      <a href="_002-la-montre-automatique.html" class="module-header-link">
-        <h2>• 2. Die Automatikuhr</h2>
-        <span class="btn-open-module">Kurs öffnen ➔</span>
-      </a>
-      <ul class="subtopics-grid">
-        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a1">1. Geschichte des automatischen Aufzugs</a></li>
-        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a2">2. Mechanismus-Typen (Schwungmassen)</a></li>
-        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a3">3. Bauteile : Die Schwungmasse</a></li>
-        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a4">4. Die Wechsler : Das kinematische Herz</a></li>
-        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a5">5. Typologie und Rolle der Wechsler</a></li>
-        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a6">6. Das Reduktionsgetriebe (1/150)</a></li>
-        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a7">7. Automatik-Brücke & Auskupplung</a></li>
-        <li class="subtopic-item"><a href="_002-la-montre-automatique.html#a8">8. Sicherheit : Die Gleitzapfenfeder (Zaum)</a></li>
-      </ul>
-    </div>
-
-    <!-- MODUL 3 -->
-    <div class="menu-card">
-      <a href="_003-Horloge_Electronique.html" class="module-header-link">
-        <h2>• 3. Elektronische Uhr & Quarz</h2>
-        <span class="btn-open-module">Kurs öffnen ➔</span>
-      </a>
-      <ul class="subtopics-grid">
-        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e1">1. Geschichte der elektronischen Uhrmacherei</a></li>
-        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e2">2. Anzeigearchitekturen (Analog/LCD)</a></li>
-        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e3">3. Leiterplatte, IC & Quarz</a></li>
-        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e4">4. Quartz-Chronometer & Thermo-Kompensation</a></li>
-        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e5">5. Die Uhrenbatterie & EOL-Warnung</a></li>
-        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e6">6. Lavet-Schrittmotor & Räderwerk</a></li>
-        <li class="subtopic-item"><a href="_003-Horloge_Electronique.html#e7">7. Ausgleich & Hybridsysteme</a></li>
-      </ul>
-    </div>
-
-    <!-- MODUL 4 -->
-    <div class="menu-card">
-      <a href="_004-Complications.html" class="module-header-link">
-        <h2>• 4. Komplikationen</h2>
-        <span class="btn-open-module">Kurs öffnen ➔</span>
-      </a>
-     <ul class="subtopics-grid">
-        <li class="subtopic-item"><a href="_004-Complications.html#dates">1. Datumsanzeigen (Kalender)</a></li>
-        <li class="subtopic-item"><a href="_004-Complications.html#astronomie">2. Astronomische Komplikationen & komplexe Kalender</a></li>
-        <li class="subtopic-item"><a href="_004-Complications.html#chronographes">3. Chronographen & Schlagwerke</a></li>
-      </ul>
-    </div>
-
-    <!-- MODUL 5 -->
-    <div class="menu-card">
-      <a href="_005-Familles_Matieres.html" class="module-header-link">
-        <h2>• 5. Werkstoffgruppen</h2>
-        <span class="btn-open-module">Kurs öffnen ➔</span>
-      </a>
-      <ul class="subtopics-grid">
-        <li class="subtopic-item"><a href="_005-Familles_Matieres.html#m1">1° Eisenbasis : Stähle, Härtung & Durnico®</a></li>
-        <li class="subtopic-item"><a href="_005-Familles_Matieres.html#m2">2° Kupferlegierungen : Messing, Neusilber, Bronze & Glucydur®</a></li>
-        <li class="subtopic-item"><a href="_005-Familles_Matieres.html#m3">3° Korund (Rubin/Saphir), Nickelbasis & Silizium</a></li>
-        <li class="subtopic-item"><a href="_005-Familles_Matieres.html#m4">Vergleichstabelle : Vickers-Härten & Dichten</a></li>
-      </ul>
-    </div>
-
-    <!-- MODUL 6 -->
-    <div class="menu-card">
-      <a href="_006-Fhasses_Fabrication.html" class="module-header-link">
-        <h2>• 6. Fertigungsphasen & Technologien</h2>
-        <span class="btn-open-module">Kurs öffnen ➔</span>
-      </a>
-      <ul class="subtopics-grid">
-        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f1">1. Die drei Hauptschritte der Fertigung</a></li>
-        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f2">2. Vergleich : Fräsen, Eroodieren & LIGA</a></li>
-        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f3">3. Drahterosion, Wasserstrahl & Laser</a></li>
-        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f4">4. UV-LIGA-Technologie & Mimetal™-Verfahren</a></li>
-        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f5">5. Pulvermetallurgie & Sintern (RECONIT®)</a></li>
-        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f6">6. Rubin-Herstellung (La Pierrette)</a></li>
-        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f7">7. Veredelungen & Dekorationen der Haute Horlogerie</a></li>
-        <li class="subtopic-item"><a href="_006-Fhasses_Fabrication.html#f8">8. Siliziumteil-Fertigung (DRIE)</a></li>
-      </ul>
-    </div>
-
-    <!-- MODUL 7 -->
-    <div class="menu-card">
-      <a href="_007-Habillage.html" class="module-header-link">
-        <h2>• 7. Die Uhrgehäuse-Ausstattung</h2>
-        <span class="btn-open-module">Kurs öffnen ➔</span>
-      </a>
-      <ul class="subtopics-grid">
-        <li class="subtopic-item"><a href="_007-Habillage.html#boite">1. Das Gehäuse und seine Komponenten</a></li>
-        <li class="subtopic-item"><a href="_007-Habillage.html#glaces">2. Gläser und Wasserdichtheit</a></li>
-        <li class="subtopic-item"><a href="_007-Habillage.html#cadrans">3. Zifferblätter, Zeiger & Veredelungen</a></li>
-      </ul>
-    </div>
-
-    <!-- MODUL 8 -->
-    <div class="menu-card">
-      <a href="_008-Histoire_Mesure_Temps.html" class="module-header-link">
-        <h2>• 8. Geschichte der Zeitmessung</h2>
-        <span class="btn-open-module">Kurs öffnen ➔</span>
-      </a>
-      <ul class="subtopics-grid">
-        <li class="subtopic-item"><a href="_008-Histoire_Mesure_Temps.html#intro">1. Einführung in die chronometrische Entwicklung</a></li>
-        <li class="subtopic-item"><a href="_008-Histoire_Mesure_Temps.html#chronologie">2. Grundlegende Chronologie (1000 - 1978 n. Chr.)</a></li>
-        <li class="subtopic-item"><a href="_008-Histoire_Mesure_Temps.html#tourbillon-section">3. Die Erfindung des Tourbillons & wichtige Innovationen</a></li>
-      </ul>
-    </div>
-
-    </div> <!-- Ende des Notebook-Containers -->
-
-  <footer>
-    © 2026 Swiss Time Expert. Alle Rechte vorbehalten. Zertifizierter Bildungsinhalt. Jegliche Vervielfältigung oder Kopie ist strengstens untersagt.
-  </footer>
-
-  <script>
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.onkeydown = function(e) {
-      if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 85 || e.keyCode === 83)) {
-        return false;
-      }
-    };
-  </script>
-<script src="../script.js"></script>
+  <div class="notebook-container" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; display: flex; justify-content: space-between; align-items: center;">
+    <a href="_007-Habillage.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt; text-decoration: none; border-radius: 6px;">⬅ Zurück zu Modul 07</a>
+    <a href="index.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt; text-decoration: none; border-radius: 6px;">📋 Zurück zum Hauptverzeichnis</a>
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. Alle Rechte vorbehalten.</footer>
+  
+  <script src="../_ricerca.js"></script>
+  <script src="../script.js"></script>
 </body>
 </html>
