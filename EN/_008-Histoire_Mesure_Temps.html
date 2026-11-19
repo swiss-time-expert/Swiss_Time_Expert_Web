@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
 
-  <!-- Script for the native 3D .glb/.gltf model viewer -->
+  <!-- Script for native 3D viewer of .glb/.gltf files -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   
   <style>
@@ -59,7 +59,7 @@
     .wip-tag { display: inline-block; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; margin-left: 6px; text-decoration: none; }
     .wip-tag:hover { background: #fde68a; color: #92400e; }
 
-    /* Stile per il visualizzatore 3D */
+    /* Style for the 3D viewer box */
     .viewer-container {
       width: 100%;
       height: 450px;
@@ -117,5 +117,199 @@
     
     <div class="notebook-header">
       <div class="notebook-title-cell">
-        <h2 class="handwritten-heading">Chronological Timeline: From Origins to the Modern Era</h2>
+        <h2 class="handwritten-heading">Timeline: From Origins to the Modern Era</h2>
       </div>
+      <div class="tag-chic">📜 Historical Milestones & Inventions</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <h2>Introduction to Chronometric Evolution</h2>
+      <p>
+        The history of time measurement is a relentless quest for precision, miniaturization, and autonomy. 
+        From imposing medieval public clocks to contemporary ultra-thin calibres, every major technical invention has redefined our relationship with time and pushed the boundaries of micromechanics.
+      </p>
+
+      <div class="tech-doc-box" id="chronologie">
+        <h3>Fundamental Timeline of Mechanical and Electronic Watchmaking</h3>
+        <p>The table below lists the key milestones, major inventions, and pioneers that shaped Haute Horlogerie, linked directly to the specialized chapters of the course:</p>
+        
+        <table class="timeline-table">
+          <thead>
+            <tr>
+              <th>Date / Period</th>
+              <th>Innovation / Major Event &amp; Workshop Milestones</th>
+              <th>Author / Context</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="year">Year 1000</td>
+              <td><strong>First clock mechanisms</strong>: Construction of the earliest wrought-iron mechanisms (weighing 300 to 600 kg) by blacksmiths without the use of screws. <a href="#wip-section" class="wip-tag">WIP</a></td>
+              <td>Medieval blacksmiths</td>
+            </tr>
+            <tr>
+              <td class="year">~1500</td>
+              <td><a href="_001A-Mouvement_Manuel.html#p2">The Barrel and Mainspring</a>: The invention of the barrel and mainspring eliminates driving weights, paving the way for portability.</td>
+              <td>Central European watchmaking</td>
+            </tr>
+            <tr>
+              <td class="year">~1540</td>
+              <td><a href="_005-Familles_Matieres.html#m1">Introduction of the Screw</a>: Screws are used for the first time as standardized fastening elements in watchmaking construction.</td>
+              <td>Renaissance master watchmakers</td>
+            </tr>
+            <tr>
+              <td class="year">1580–1680</td>
+              <td><a href="_007-Habillage.html">Aesthetic Flourishing (Artistic Golden Age)</a>: Evolution of cases into artistic and sculpted shapes, worn as pendants or jewelry.</td>
+              <td>Jeweler-artisans &amp; watchmakers</td>
+            </tr>
+            <tr>
+              <td class="year">1657</td>
+              <td><strong>The Pendulum</strong>: Application of the pendulum to clocks, drastically improving accuracy and introducing the seconds hand. <a href="#wip-section" class="wip-tag">WIP</a></td>
+              <td>Christiaan Huygens</td>
+            </tr>
+            <tr>
+              <td class="year">1675</td>
+              <td><a href="_001C-Mouvement_Manuel.html#p8">The Balance Wheel and Hairspring</a>: Invention of the spiral hairspring coupled with the balance wheel, laying the foundations of the modern precision watch.</td>
+              <td>Christiaan Huygens</td>
+            </tr>
+            <tr>
+              <td class="year">1770</td>
+              <td><a href="_002-la-montre-automatique.html#a1">First Pedometer-Style Automatic System</a>: First self-winding mechanism using an oscillating weight for pocket watches.</td>
+              <td>Abraham-Louis Perrelet</td>
+            </tr>
+            <tr>
+              <td class="year" id="tourbillon">1801</td>
+              <td><a href="#tourbillon-section">The Tourbillon</a>: Patent of the tourbillon to neutralize rate variations caused by Earth's gravity.</td>
+              <td>Abraham-Louis Breguet</td>
+            </tr>
+            <tr>
+              <td class="year">1845</td>
+              <td><a href="_001D-Mouvement_Manuel.html#p12">Winding and Setting Crown</a>: Revolutionary patent allowing the mainspring to be wound and the time set without a key.</td>
+              <td>Adrien Philippe (Patek Philippe)</td>
+            </tr>
+            <tr>
+              <td class="year">1914</td>
+              <td><a href="_007-Habillage.html">Birth of the Wristwatch</a>: Adaptation of pocket watches with soldered lugs for officers on the front lines.</td>
+              <td>Military and industrial use</td>
+            </tr>
+            <tr>
+              <td class="year">1925</td>
+              <td><a href="_002-la-montre-automatique.html">First Self-Winding Wristwatch</a>: Commercialization of the bumper oscillating-weight system (time-setting via the bezel).</td>
+              <td>John Harwood</td>
+            </tr>
+            <tr>
+              <td class="year">1926–1927</td>
+              <td><a href="_007-Habillage.html">First Water-Resistance Systems</a>: Introduction of gaskets and screw-down cases to protect movements from moisture.</td>
+              <td>Swiss watchmaking industry</td>
+            </tr>
+            <tr>
+              <td class="year">1928 (Pat. 1933)</td>
+              <td><a href="_001C-Mouvement_Manuel.html#p9">The Shock-Absorber System (Incabloc)</a>: Invention of the elastic lyre-shaped suspension spring protecting balance-staff pivots.</td>
+              <td>Porte &amp; Burger (Incabloc)</td>
+            </tr>
+            <tr>
+              <td class="year">1931</td>
+              <td><a href="_004-Complications.html">The Reverso</a>: Creation of the iconic reversible case designed to protect the crystal during polo matches.</td>
+              <td>Jaeger-LeCoultre</td>
+            </tr>
+            <tr>
+              <td class="year">1958</td>
+              <td><a href="_003-Horloge_Electronique.html#e1">The Electromechanical Era</a>: Launch of the Hamilton Ventura, combining electric power with a mechanical balance oscillator.</td>
+              <td>Hamilton</td>
+            </tr>
+            <tr>
+              <td class="year">1960</td>
+              <td><a href="_003-Horloge_Electronique.html">Tuning-Fork Technology</a>: The Bulova Accutron oscillating at 300 Hz, delivering unprecedented accuracy.</td>
+              <td>Bulova</td>
+            </tr>
+            <tr>
+              <td class="year">1968</td>
+              <td><a href="_003-Horloge_Electronique.html">The Quartz Challenge</a>: Development of the Beta 21 calibre (32,768 Hz) to counter the rise of quartz technology.</td>
+              <td>Centre Electronique Horloger (CEH)</td>
+            </tr>
+            <tr>
+              <td class="year">1978</td>
+              <td><strong>Ultra-Thin Engineering</strong>: <em>La Delirium</em> pushes the boundaries of miniaturization by reaching a thickness of 0.98 mm. <a href="#wip-section" class="wip-tag">WIP</a></td>
+              <td>Swiss watchmaking consortium</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- WORKSHOP FOCUS: THE TOURBILLON (1801) + INTERACTIVE 3D VIEWER -->
+      <div class="tech-doc-box" id="tourbillon-section">
+        <h3>Workshop Masterclass: Abraham-Louis Breguet's Tourbillon (1801)</h3>
+        <p>
+          Patented on June 26, 1801 (7 Messidor Year IX), the tourbillon is the masterwork of Abraham-Louis Breguet. Contrary to popular belief, it is not a display complication (it adds no indication to the dial), but a supreme <strong>regulating device</strong>.
+        </p>
+        
+        <h4>1. The Physical Problem: Gravity</h4>
+        <p>
+          In Breguet's era, watches were predominantly carried as pocket watches. Held vertically inside a waistcoat pocket, the watch was subjected to Earth's gravitational pull, which shifted the center of gravity of the balance-hairspring assembly and created constant rate errors depending on wearing position.
+        </p>
+
+        <h4>2. The Mechanical Solution: The Rotating Carriage</h4>
+        <p>
+          Breguet conceived the idea of housing the entire regulating organ (escape wheel, pallet fork, balance wheel, and hairspring) inside a <strong>mobile carriage that completes one full revolution every minute</strong>. 
+          By rotating continuously through 360 degrees, positional errors cancel each other out and average to zero, ensuring true isochronism regardless of the watch's vertical orientation.
+        </p>
+
+        <!-- INTERACTIVE WINDOW FOR THE 3D .GLB MODEL -->
+        <h4 style="margin-top: 25px; color: #1a365d;">🔍 Interactive 3D Model: The Swiss Time Expert Tourbillon</h4>
+        <p style="font-size: 14px;">
+          Explore the assembled tourbillon mechanism in 3D (carriage, escape wheel, pallet fork, and balance-hairspring). You can rotate, zoom, and examine the micromechanical layout.
+        </p>
+
+        <div class="viewer-container">
+          <model-viewer src="../tourbillon_web.glb" 
+                        alt="3D Tourbillon Model - Swiss Time Expert" 
+                        auto-rotate 
+                        camera-controls 
+                        touch-action="pan-y"
+                        interaction-prompt="auto"
+                        max-camera-orbit="auto auto 5m"
+                        min-camera-orbit="auto auto 0.2m">
+          </model-viewer>
+        </div>
+
+        <!-- OPEN SOURCE ATTRIBUTION NOTE -->
+        <p style="font-size: 11pt; color: #64748b; font-style: italic; margin-top: 8px; text-align: right;">
+          Original 3D model based on the work of VTX (Audemars Piguet Royal Oak Tourbillon), optimized and adapted for Swiss Time Expert.
+        </p>
+
+        <div style="background: #fff; border: 1px solid #dcdcdc; padding: 15px; border-radius: 6px; margin-top: 15px;">
+          <h4 style="margin-top: 0; color: #1a365d; font-size: 15px;">⚙️ The Execution Challenge</h4>
+          <p style="font-size: 14px; margin-bottom: 0;">
+            Crafting a tourbillon requires manufacturing dozens of microscopic components assembled inside a carriage whose total weight often does not exceed a few tenths of a gram, so as not to burden the movement's moment of inertia. That is why it remains the ultimate symbol of mastery in Haute Horlogerie.
+          </p>
+        </div>
+      </div>
+
+      <!-- WORK IN PROGRESS SECTION FOR UPCOMING DEEP DIVES -->
+      <div class="tech-doc-box" id="wip-section" style="background: #fffbeb; border-color: #fcd34d;">
+        <h3 style="color: #92400e;">🚧 Upcoming Masterclasses in Preparation (Work in Progress)</h3>
+        <p style="font-size: 14px; color: #78350f; margin-bottom: 0;">
+          Chapters dedicated to John Harrison's Marine Chronometer, medieval public tower clocks, and historic quartz calibres will soon be integrated into this interactive timeline.
+        </p>
+      </div>
+
+      <h2>Conclusion and Perspectives</h2>
+      <p>
+        The history of time measurement demonstrates that each technological breakthrough has never erased traditional mechanical artistry; on the contrary, it has elevated it to the rank of exceptional Haute Horlogerie.
+      </p>
+
+    </div>
+  </div>
+
+  <div class="notebook-container" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; display: flex; justify-content: space-between; align-items: center;">
+    <a href="_007-Habillage.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt; text-decoration: none; border-radius: 6px;">⬅ Back to Module 07</a>
+    <a href="index.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt; text-decoration: none; border-radius: 6px;">📋 Back to Main Index</a>
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. All rights reserved.</footer>
+  
+  <script src="../_ricerca.js"></script>
+  <script src="../script.js"></script>
+</body>
+</html>
