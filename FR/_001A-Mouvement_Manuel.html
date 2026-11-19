@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -171,6 +171,12 @@
       font-weight: 700;
       color: #1a365d;
       word-break: break-word;
+    }
+    #eta-selected-raw {
+      font-size: 0.76rem;
+      color: #6c757d;
+      margin-left: 6px;
+      font-weight: 400;
     }
     #eta-clear-btn {
       background: #ffffff;
@@ -345,7 +351,7 @@
         <div class="eta-top-bar">
           <div>
             <h3 class="eta-heading">🔧 Vue Éclatée Interactive 3D — Calibre ETA 6498-1</h3>
-            <p class="eta-subhint">Clic gauche : pivoter • Clic sur un composant : afficher son nom • Molette : zoom • Clic droit : déplacer</p>
+            <p class="eta-subhint">Clic gauche : pivoter • Clic sur un composant : afficher son nom en français • Molette : zoom • Clic droit : déplacer</p>
           </div>
           <div class="eta-toolbar">
             <label for="eta-explode-axis">Axe :</label>
@@ -368,7 +374,7 @@
         <div id="eta-selected-bar" aria-live="polite">
           <div>
             <span id="eta-selected-label">Pièce sélectionnée</span>
-            <span id="eta-selected-name">—</span>
+            <span id="eta-selected-name">—</span><span id="eta-selected-raw"></span>
           </div>
           <button type="button" id="eta-clear-btn">Désélectionner</button>
         </div>
@@ -440,9 +446,64 @@
 
           const selectedBar = document.getElementById('eta-selected-bar');
           const selectedNameEl = document.getElementById('eta-selected-name');
+          const selectedRawEl = document.getElementById('eta-selected-raw');
           const clearBtn = document.getElementById('eta-clear-btn');
           const loaderEl = document.getElementById('eta-loader');
           const loaderTextEl = document.getElementById('eta-loader-text');
+
+          // Dizionario terminologico orologiero EN -> FR per i componenti dell'ETA 6498-1
+          const HOROLOGY_DICT_FR = [
+            // Platina e Ponti
+            [/ main\s*plate | base\s*plate | plate /i, 'Platine'],
+            [/ barrel\s*bridge /i, 'Pont de barillet'],
+            [/ train\s*(wheel\s*)?bridge | gear\s*train\s*bridge /i, 'Pont de rouage'],
+            [/ balance\s*(cock|bridge) /i, 'Coq de balancier'],
+            [/ pallet\s*(fork\s*)?(cock|bridge) | escapement\s*bridge /i, "Pont d'ancre"],
+            [/ bridge /i, 'Pont'],
+
+            // Barillet & Carica
+            [/ barrel\s*drum | drum /i, 'Tambour de barillet'],
+            [/ barrel\s*cover | cover /i, 'Couvercle de barillet'],
+            [/ barrel\s*arbor | arbor /i, 'Arbre de barillet'],
+            [/ mainspring | main\s*spring /i, 'Ressort-moteur'],
+            [/ barrel /i, 'Barillet'],
+            [/ ratchet\s*wheel | ratchet /i, 'Rochet'],
+            [/ crown\s*wheel /i, 'Roue de couronne'],
+            [/ winding\s*stem | stem /i, 'Tige de remontoir'],
+            [/ winding\s*pinion /i, 'Pignon de remontoir'],
+            [/ sliding\s*pinion | clutch\s*wheel /i, 'Pignon coulant'],
+            [/ setting\s*lever /i, 'Tirette'],
+            [/ yoke /i, 'Bascule'],
+            [/ click\s*spring /i, 'Ressort de cliquet'],
+            [/ click /i, 'Cliquet'],
+            [/ setting\s*wheel /i, 'Roue de mise à l’heure'],
+            [/ minute\s*wheel /i, 'Roue de minuterie'],
+            [/ hour\s*wheel /i, 'Roue des heures'],
+            [/ cannon\s*pinion /i, 'Chaussée'],
+
+            // Ruotismo
+            [/ center\s*wheel | centre\s*wheel /i, 'Roue de centre'],
+            [/ third\s*wheel /i, 'Roue de troisième'],
+            [/ fourth\s*wheel | second\s*wheel /i, 'Roue de seconde'],
+            [/ escape\s*wheel | escapement\s*wheel /i, "Roue d'échappement"],
+            [/ wheel /i, 'Roue'],
+            [/ pinion /i, 'Pignon'],
+
+            // Scappamento e Organo Regolatore
+            [/ pallet\s*fork | pallet | anchor /i, 'Ancre'],
+            [/ balance\s*wheel | balance /i, 'Balancier'],
+            [/ hairspring | balance\s*spring | spiral /i, 'Spiral'],
+            [/ regulator | index /i, 'Raquette'],
+            [/ stud /i, 'Piton'],
+            [/ incabloc | shock\s*absorber /i, 'Antichoc (Incabloc)'],
+            [/ jewel | ruby /i, 'Rubis / Pierre'],
+
+            // Minuteria e Viti
+            [/ screw /i, 'Vis'],
+            [/ spring /i, 'Ressort'],
+            [/ washer /i, 'Rondelle'],
+            [/ pin /i, 'Goupille']
+          ];
 
           function cleanEtaName(raw) {
             if (!raw) return 'Composant sans nom';
@@ -450,19 +511,36 @@
               .replace(/\.(sldprt|sldasm|igs|iges|step|stp|glb|gltf|blend)$/i, '')
               .replace(/[_-]+/g, ' ')
               .replace(/\s*\.\d+$/, '')
+              .replace(/\s+/g, ' ')
               .trim() || 'Composant sans nom';
+          }
+
+          function translatePartToFrench(cleanName) {
+            for (const [pattern, frLabel] of HOROLOGY_DICT_FR) {
+              if (pattern.test(cleanName)) {
+                return frLabel;
+              }
+            }
+            return cleanName;
           }
 
           function resolveEtaPartName(mesh) {
             let cur = mesh;
             const genericRe = /^(mesh|object|node|part|solid|group|body|untitled)(_|\s|-|\d|\.)*$/i;
+            let rawFound = '';
             while (cur && cur !== etaModelRoot) {
               if (cur.name && !genericRe.test(cur.name.trim())) {
-                return cleanEtaName(cur.name);
+                rawFound = cur.name;
+                break;
               }
               cur = cur.parent;
             }
-            return cleanEtaName(mesh.name || mesh.parent?.name || '');
+            if (!rawFound) {
+              rawFound = mesh.name || mesh.parent?.name || '';
+            }
+            const cleaned = cleanEtaName(rawFound);
+            const translated = translatePartToFrench(cleaned);
+            return { translated, cleaned };
           }
 
           function clearEtaSelection() {
@@ -473,6 +551,7 @@
             etaSelectedMesh = null;
             etaPrevEmissive = null;
             selectedNameEl.textContent = '—';
+            selectedRawEl.textContent = '';
             selectedBar.classList.remove('visible');
           }
 
@@ -481,7 +560,9 @@
             clearEtaSelection();
 
             etaSelectedMesh = mesh;
-            selectedNameEl.textContent = resolveEtaPartName(mesh);
+            const { translated, cleaned } = resolveEtaPartName(mesh);
+            selectedNameEl.textContent = translated;
+            selectedRawEl.textContent = translated.toLowerCase() !== cleaned.toLowerCase() ? `(${cleaned})` : '';
             selectedBar.classList.add('visible');
 
             if (mesh.material && 'emissive' in mesh.material) {
