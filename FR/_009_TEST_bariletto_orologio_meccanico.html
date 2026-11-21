@@ -166,7 +166,7 @@
     const loader = new GLTFLoader();
 
     // MODIFICA QUI il percorso se tourbillon_web.glb è in un'altra sottocartella
-    loader.load('./tourbillon_web.glb', (gltf) => {
+   loader.load('../tourbillon_web.glb', (gltf) => {
       const model = gltf.scene;
       scene.add(model);
 
