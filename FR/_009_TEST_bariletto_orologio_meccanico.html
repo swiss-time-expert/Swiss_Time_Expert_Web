@@ -189,4 +189,118 @@
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    container.appendChild(renderer.domElement);
+
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+
+    const parts = [];
+    const loader = new GLTFLoader();
+
+    loader.load(
+      '../tourbillon_web.glb',
+      (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        model.updateMatrixWorld(true);
+
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z) || 1;
+
+        camera.near = maxDim / 500;
+        camera.far = maxDim * 100;
+        camera.position.set(center.x, center.y, center.z + maxDim * 2.1);
+        camera.updateProjectionMatrix();
+
+        controls.target.copy(center);
+        controls.update();
+
+        model.traverse((child) => {
+          if (child.isMesh) {
+            const meshBox = new THREE.Box3().setFromObject(child);
+            const meshCenter = meshBox.getCenter(new THREE.Vector3());
+
+            parts.push({
+              mesh: child,
+              startPos: child.position.clone(),
+              deltaZ: meshCenter.z - center.z
+            });
+          }
+        });
+
+        statusMsg.style.display = 'none';
+      },
+      undefined,
+      (error) => {
+        console.error('Erreur chargement GLB:', error);
+        statusMsg.textContent = 'Erreur lors du chargement de tourbillon_web.glb';
+      }
+    );
+
+    slider.addEventListener('input', () => {
+      const pct = Number(slider.value);
+      valueLabel.textContent = pct + '%';
+
+      // Regola qui la corsa dell'esploso lungo l'asse dei pignoni (Z)
+      const spreadFactor = (pct / 100) * 2.2;
+
+      for (const item of parts) {
+        item.mesh.position.copy(item.startPos);
+        item.mesh.updateMatrixWorld(true);
+
+        const targetWorldPos = item.mesh.getWorldPosition(new THREE.Vector3());
+        targetWorldPos.z += item.deltaZ * spreadFactor;
+
+        if (item.mesh.parent) {
+          item.mesh.position.copy(item.mesh.parent.worldToLocal(targetWorldPos));
+        } else {
+          item.mesh.position.copy(targetWorldPos);
+        }
+      }
+    });
+
+    btnFullscreen.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        wrapper.requestFullscreen().catch((err) => console.error(err));
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      btnFullscreen.textContent = document.fullscreenElement
+        ? '✕ Quitter plein écran'
+        : '⛶ Plein écran';
+      onResize();
+    });
+
+    function onResize() {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      if (!w || !h) return;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+
+    window.addEventListener('resize', onResize);
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
