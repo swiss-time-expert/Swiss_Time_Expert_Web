@@ -1,23 +1,263 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Home Principale & Indici Lingua -->
   <url>
     <loc>https://swiss-time-expert.ch/</loc>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://swiss-time-expert.ch/FR/</loc>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://swiss-time-expert.ch/EN/</loc>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://swiss-time-expert.ch/DE/</loc>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
+
+  <!-- Modulo 01A: Mouvement à Remontage Manuel (Train du temps / Rouage) -->
+  <url>
+    <loc>https://swiss-time-expert.ch/FR/_001A-Mouvement_Manuel.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_001A-Mouvement_Manuel.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_001A-Mouvement_Manuel.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_001A-Mouvement_Manuel.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/EN/_001A-Mouvement_Manuel.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_001A-Mouvement_Manuel.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_001A-Mouvement_Manuel.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_001A-Mouvement_Manuel.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/DE/_001A-Mouvement_Manuel.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_001A-Mouvement_Manuel.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_001A-Mouvement_Manuel.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_001A-Mouvement_Manuel.html"/>
+  </url>
+
+  <!-- Modulo 02: La Montre Automatique (Mouvement ETA) -->
+  <url>
+    <loc>https://swiss-time-expert.ch/FR/_002-la-montre-automatique.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_002-la-montre-automatique.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_002-la-montre-automatique.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_002-la-montre-automatique.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/EN/_002-la-montre-automatique.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_002-la-montre-automatique.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_002-la-montre-automatique.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_002-la-montre-automatique.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/DE/_002-la-montre-automatique.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_002-la-montre-automatique.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_002-la-montre-automatique.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_002-la-montre-automatique.html"/>
+  </url>
+
+  <!-- Modulo 03: L'Horloge Électronique & Quartz -->
+  <url>
+    <loc>https://swiss-time-expert.ch/FR/_003-Horloge_Electronique.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_003-Horloge_Electronique.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_003-Horloge_Electronique.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_003-Horloge_Electronique.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/EN/_003-Horloge_Electronique.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_003-Horloge_Electronique.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_003-Horloge_Electronique.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_003-Horloge_Electronique.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/DE/_003-Horloge_Electronique.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_003-Horloge_Electronique.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_003-Horloge_Electronique.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_003-Horloge_Electronique.html"/>
+  </url>
+
+  <!-- Modulo 04: Les Complications -->
+  <url>
+    <loc>https://swiss-time-expert.ch/FR/_004-Complications.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_004-Complications.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_004-Complications.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_004-Complications.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/EN/_004-Complications.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_004-Complications.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_004-Complications.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_004-Complications.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/DE/_004-Complications.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_004-Complications.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_004-Complications.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_004-Complications.html"/>
+  </url>
+
+  <!-- Modulo 05: Les Familles de Matières -->
+  <url>
+    <loc>https://swiss-time-expert.ch/FR/_005-Familles_Matieres.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_005-Familles_Matieres.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_005-Familles_Matieres.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_005-Familles_Matieres.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/EN/_005-Familles_Matieres.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_005-Familles_Matieres.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_005-Familles_Matieres.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_005-Familles_Matieres.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/DE/_005-Familles_Matieres.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_005-Familles_Matieres.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_005-Familles_Matieres.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_005-Familles_Matieres.html"/>
+  </url>
+
+  <!-- Modulo 06: Phases et Technologies de Fabrication -->
+  <url>
+    <loc>https://swiss-time-expert.ch/FR/_006-Fhasses_Fabrication.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_006-Fhasses_Fabrication.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_006-Fhasses_Fabrication.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_006-Fhasses_Fabrication.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/EN/_006-Fhasses_Fabrication.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_006-Fhasses_Fabrication.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_006-Fhasses_Fabrication.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_006-Fhasses_Fabrication.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/DE/_006-Fhasses_Fabrication.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_006-Fhasses_Fabrication.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_006-Fhasses_Fabrication.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_006-Fhasses_Fabrication.html"/>
+  </url>
+
+  <!-- Modulo 07: L'Habillage de la Montre -->
+  <url>
+    <loc>https://swiss-time-expert.ch/FR/_007-Habillage.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_007-Habillage.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_007-Habillage.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_007-Habillage.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/EN/_007-Habillage.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_007-Habillage.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_007-Habillage.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_007-Habillage.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/DE/_007-Habillage.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_007-Habillage.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_007-Habillage.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_007-Habillage.html"/>
+  </url>
+
+  <!-- Modulo 08: Histoire de la Mesure du Temps & Tourbillon 3D Interactif -->
+  <url>
+    <loc>https://swiss-time-expert.ch/FR/_008-Histoire_Mesure_Temps.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_008-Histoire_Mesure_Temps.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_008-Histoire_Mesure_Temps.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_008-Histoire_Mesure_Temps.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/EN/_008-Histoire_Mesure_Temps.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_008-Histoire_Mesure_Temps.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_008-Histoire_Mesure_Temps.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_008-Histoire_Mesure_Temps.html"/>
+  </url>
+  <url>
+    <loc>https://swiss-time-expert.ch/DE/_008-Histoire_Mesure_Temps.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_008-Histoire_Mesure_Temps.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_008-Histoire_Mesure_Temps.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_008-Histoire_Mesure_Temps.html"/>
+  </url>
+
 </urlset>
