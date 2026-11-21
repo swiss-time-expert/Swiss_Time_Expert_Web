@@ -3,13 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swiss Time Expert - 8. Geschichte der Zeitmessung</title>
+  <title>Swiss Time Expert - 8. Geschichte der Zeitmessung &amp; 3D-Tourbillon</title>
+  <meta name="description" content="Entdecken Sie die Geschichte der Zeitmessung und ein interaktives 3D-Modell des Tourbillons von Abraham-Louis Breguet mit Explosionsansicht entlang der Triebachse und Vollbildmodus.">
+  <link rel="canonical" href="https://swiss-time-expert.ch/DE/_008-Histoire_Mesure_Temps.html">
+  <link rel="alternate" hreflang="fr" href="https://swiss-time-expert.ch/FR/_008-Histoire_Mesure_Temps.html">
+  <link rel="alternate" hreflang="en" href="https://swiss-time-expert.ch/EN/_008-Histoire_Mesure_Temps.html">
+  <link rel="alternate" hreflang="de" href="https://swiss-time-expert.ch/DE/_008-Histoire_Mesure_Temps.html">
+  <link rel="alternate" hreflang="x-default" href="https://swiss-time-expert.ch/FR/_008-Histoire_Mesure_Temps.html">
   
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
 
-  <!-- Skript für den nativen 3D-Viewer für .glb/.gltf-Dateien -->
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <!-- Strukturierte JSON-LD-Daten für die Google-Indexierung -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Das Tourbillon von Abraham-Louis Breguet — Interaktives 3D-Modell & Explosionsansicht",
+    "description": "Entdecken Sie ein interaktives 3D-Tourbillon der Haute Horlogerie mit Explosionsansicht entlang der Triebachse, Vollbildansicht, Drehgestell, Unruh-Spirale und Hemmung.",
+    "inLanguage": "de",
+    "url": "https://swiss-time-expert.ch/DE/_008-Histoire_Mesure_Temps.html#tourbillon-section",
+    "author": {
+      "@type": "Organization",
+      "name": "Swiss Time Expert"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Swiss Time Expert"
+    },
+    "about": [
+      "Interaktives 3D-Tourbillon",
+      "Haute Horlogerie",
+      "Abraham-Louis Breguet",
+      "Explosionsansicht Uhrmacherei",
+      "Hemmung und Unruh-Spirale",
+      "Chronometrie"
+    ]
+  }
+  </script>
+
+  <!-- Import Map für Three.js (Interaktiver 3D-Viewer + Explosionsansicht) -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/"
+      }
+    }
+  </script>
   
   <style>
     .header-card, .notebook-container {
@@ -59,21 +100,110 @@
     .wip-tag { display: inline-block; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; margin-left: 6px; text-decoration: none; }
     .wip-tag:hover { background: #fde68a; color: #92400e; }
 
-    /* Stil für den 3D-Viewer */
-    .viewer-container {
-      width: 100%;
-      height: 450px;
-      background: #1e293b;
-      border-radius: 8px;
-      margin-top: 15px;
+    /* Erweiterter Three.js 3D-Viewer */
+    #tourbillon-wrapper {
       position: relative;
+      width: 100%;
+      height: 580px;
+      margin-top: 15px;
+      background: radial-gradient(circle at center, #253446 0%, #111822 100%);
+      border-radius: 10px;
       overflow: hidden;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.22);
     }
-    model-viewer {
+
+    #tourbillon-wrapper:fullscreen {
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+    }
+
+    #canvas-container {
       width: 100%;
       height: 100%;
-      background-color: #1e293b;
+      cursor: grab;
+    }
+
+    #canvas-container:active {
+      cursor: grabbing;
+    }
+
+    #btn-fullscreen {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 10;
+      background: rgba(15, 23, 42, 0.82);
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    #btn-fullscreen:hover {
+      background: rgba(30, 41, 59, 0.96);
+    }
+
+    #btn-fullscreen:active {
+      transform: scale(0.98);
+    }
+
+    .controls-bar {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: min(92%, 560px);
+      background: rgba(15, 23, 42, 0.85);
+      color: #f8fafc;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .controls-bar label {
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    #explode-slider {
+      flex: 1;
+      accent-color: #eab308;
+      cursor: pointer;
+    }
+
+    #explode-value {
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      min-width: 40px;
+      text-align: right;
+      color: #facc15;
+      font-weight: 700;
+    }
+
+    #status-msg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      color: #cbd5e1;
+      font-size: 14px;
+      text-align: center;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -83,7 +213,7 @@
     <div class="header-left-block">
       <div class="badge">Haute Horlogerie — Eidgenössischer Fachausweis</div>
       <h1 id="intro">8. Geschichte der Zeitmessung</h1>
-      <p class="subtitle">Fachkurs für Uhrmacherei — Chronometrie & Historische Entwicklung</p>
+      <p class="subtitle">Fachkurs für Uhrmacherei — Chronometrie &amp; Historische Entwicklung</p>
       
       <div class="header-controls">
         <div class="dropdown">
@@ -91,10 +221,10 @@
           <div class="dropdown-content">
             <a href="_001A-Mouvement_Manuel.html">1. Das Handaufzugswerk</a>
             <a href="_002-la-montre-automatique.html">2. Die Automatikuhr</a>
-            <a href="_003-Horloge_Electronique.html">3. Elektronische Uhr & Quarz</a>
+            <a href="_003-Horloge_Electronique.html">3. Elektronische Uhr &amp; Quarz</a>
             <a href="_004-Complications.html">4. Komplikationen</a>
             <a href="_005-Familles_Matieres.html">5. Werkstoffgruppen</a>
-            <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen & Technologien</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen &amp; Technologien</a>
             <a href="_007-Habillage.html">7. Die Uhrgehäuse-Ausstattung</a>
             <a href="_008-Histoire_Mesure_Temps.html">8. Geschichte der Zeitmessung</a>
           </div>
@@ -119,7 +249,7 @@
       <div class="notebook-title-cell">
         <h2 class="handwritten-heading">Chronologische Zeitleiste: Von den Ursprüngen bis in die Moderne</h2>
       </div>
-      <div class="tag-chic">📜 Historische Meilensteine & Erfindungen</div>
+      <div class="tag-chic">📜 Historische Meilensteine &amp; Erfindungen</div>
     </div>
 
     <div class="handwritten-body" id="course-content-area">
@@ -138,7 +268,7 @@
           <thead>
             <tr>
               <th>Datum / Epoche</th>
-              <th>Innovation / Bedeutendes Ereignis & Werkstatt-Bezug</th>
+              <th>Innovation / Bedeutendes Ereignis &amp; Werkstatt-Bezug</th>
               <th>Urheber / Kontext</th>
             </tr>
           </thead>
@@ -161,7 +291,7 @@
             <tr>
               <td class="year">1580–1680</td>
               <td><a href="_007-Habillage.html">Fioritura Estetica (Künstlerisches Goldenes Zeitalter)</a> : Entwicklung von Gehäusen in kunstvollen und skulpturalen Formen, getragen als Anhänger oder Schmuckstücke.</td>
-              <td>Kunstjuweliere & Uhrmacher</td>
+              <td>Kunstjuweliere &amp; Uhrmacher</td>
             </tr>
             <tr>
               <td class="year">1657</td>
@@ -191,7 +321,7 @@
             <tr>
               <td class="year">1914</td>
               <td><a href="_007-Habillage.html">Geburtsstunde der Armbanduhr</a> : Anpassung von Taschenuhren mit angelöteten Bandanstössen zur Ausstattung von Offizieren an der Front.</td>
-              <td>Militärischer & industrieller Einsatz</td>
+              <td>Militärischer &amp; industrieller Einsatz</td>
             </tr>
             <tr>
               <td class="year">1925</td>
@@ -206,7 +336,7 @@
             <tr>
               <td class="year">1928 (Pat. 1933)</td>
               <td><a href="_001C-Mouvement_Manuel.html#p9">Die Stosssicherung (Incabloc)</a> : Erfindung der elastischen Aufhängungsfeder zum Schutz der empfindlichen Unruhwellenzapfen.</td>
-              <td>Porte & Burger (Incabloc)</td>
+              <td>Porte &amp; Burger (Incabloc)</td>
             </tr>
             <tr>
               <td class="year">1931</td>
@@ -255,31 +385,30 @@
           Durch diese kontinuierliche Rotation um 360 Grad heben sich die Lagenfehler gegenseitig auf und mitteln sich aus, was unabhängig von der vertikalen Position der Uhr einen perfekten Isochronismus garantiert.
         </p>
 
-        <!-- INTERAKTIVER 3D-VIEWER FÜR DAS .GLB-MODELL -->
+        <!-- ERWEITERTER INTERAKTIVER 3D-VIEWER FÜR DAS .GLB-MODELL -->
         <h4 style="margin-top: 25px; color: #1a365d;">🔍 Interaktives 3D-Modell: Das Tourbillon von Swiss Time Expert</h4>
         <p style="font-size: 14px;">
-          Erkunden Sie den montierten Tourbillon-Mechanismus in 3D (Käfig, Hemmungsrad, Anker und Unruh-Spirale). Sie können das Modell frei drehen, heranzoomen und die mikromechanische Anordnung im Detail betrachten.
+          Erkunden Sie den montierten Tourbillon-Mechanismus von Abraham-Louis Breguet in 3D (Drehkäfig, Hemmungsrad, Anker, Triebe und Unruh-Spirale). Drehen, zoomen, in den Vollbildmodus wechseln oder die Explosionsansicht entlang der Triebachse nutzen, um den mikromechanischen Aufbau zu analysieren.
         </p>
 
-        <div class="viewer-container">
-          <model-viewer src="../tourbillon_web.glb" 
-                        alt="3D-Modell des Tourbillons - Swiss Time Expert" 
-                        auto-rotate 
-                        camera-controls 
-                        touch-action="pan-y"
-                        interaction-prompt="auto"
-                        max-camera-orbit="auto auto 5m"
-                        min-camera-orbit="auto auto 0.2m"
-                        ar>
-          </model-viewer>
+        <div id="tourbillon-wrapper">
+          <div id="status-msg">3D-Modell wird geladen…</div>
+          <button id="btn-fullscreen" type="button">⛶ Vollbild</button>
+          <div id="canvas-container"></div>
+
+          <div class="controls-bar">
+            <label for="explode-slider">Explosionsansicht (Triebachse)</label>
+            <input id="explode-slider" type="range" min="0" max="100" value="0" />
+            <span id="explode-value">0%</span>
+          </div>
         </div>
 
         <!-- OPEN-SOURCE-QUELLENANGABE -->
-        <p style="text-align: left !important; margin-left: 0 !important; font-style: italic;">
-  3D-Modell: „Tourbillon“ von banyuanxui über
-  <a href="https://grabcad.com/library/tourbillon--1" target="_blank" rel="noopener noreferrer">GrabCAD</a>
-  (Bildungs- / nicht-kommerzielle Nutzung).
-</p>
+        <p style="text-align: left !important; margin-left: 0 !important; margin-top: 10px; font-style: italic; font-size: 13.5px;">
+          3D-Modell: „Tourbillon“ von banyuanxui über
+          <a href="https://grabcad.com/library/tourbillon--1" target="_blank" rel="noopener noreferrer">GrabCAD</a>
+          (Bildungs- / nicht-kommerzielle Nutzung).
+        </p>
 
         <div style="background: #fff; border: 1px solid #dcdcdc; padding: 15px; border-radius: 6px; margin-top: 15px;">
           <h4 style="margin-top: 0; color: #1a365d; font-size: 15px;">⚙️ Die Herausforderung der Ausführung</h4>
@@ -311,6 +440,142 @@
   </div>
   
   <footer>© 2026 Swiss Time Expert. Alle Rechte vorbehalten.</footer>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+    const wrapper = document.getElementById('tourbillon-wrapper');
+    const container = document.getElementById('canvas-container');
+    const btnFullscreen = document.getElementById('btn-fullscreen');
+    const slider = document.getElementById('explode-slider');
+    const valueLabel = document.getElementById('explode-value');
+    const statusMsg = document.getElementById('status-msg');
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      40,
+      container.clientWidth / container.clientHeight,
+      0.001,
+      1000
+    );
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    container.appendChild(renderer.domElement);
+
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+
+    const parts = [];
+    const loader = new GLTFLoader();
+
+    loader.load(
+      '../tourbillon_web.glb',
+      (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        model.updateMatrixWorld(true);
+
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z) || 1;
+
+        camera.near = maxDim / 500;
+        camera.far = maxDim * 100;
+        camera.position.set(center.x, center.y, center.z + maxDim * 2.1);
+        camera.updateProjectionMatrix();
+
+        controls.target.copy(center);
+        controls.update();
+
+        model.traverse((child) => {
+          if (child.isMesh) {
+            const meshBox = new THREE.Box3().setFromObject(child);
+            const meshCenter = meshBox.getCenter(new THREE.Vector3());
+
+            parts.push({
+              mesh: child,
+              startPos: child.position.clone(),
+              deltaZ: meshCenter.z - center.z
+            });
+          }
+        });
+
+        statusMsg.style.display = 'none';
+      },
+      undefined,
+      (error) => {
+        console.error('GLB-Ladefehler:', error);
+        statusMsg.textContent = 'Fehler beim Laden von tourbillon_web.glb';
+      }
+    );
+
+    slider.addEventListener('input', () => {
+      const pct = Number(slider.value);
+      valueLabel.textContent = pct + '%';
+
+      const spreadFactor = (pct / 100) * 2.2;
+
+      for (const item of parts) {
+        item.mesh.position.copy(item.startPos);
+        item.mesh.updateMatrixWorld(true);
+
+        const targetWorldPos = item.mesh.getWorldPosition(new THREE.Vector3());
+        targetWorldPos.z += item.deltaZ * spreadFactor;
+
+        if (item.mesh.parent) {
+          item.mesh.position.copy(item.mesh.parent.worldToLocal(targetWorldPos));
+        } else {
+          item.mesh.position.copy(targetWorldPos);
+        }
+      }
+    });
+
+    btnFullscreen.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        wrapper.requestFullscreen().catch((err) => console.error(err));
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      btnFullscreen.textContent = document.fullscreenElement
+        ? '✕ Vollbild beenden'
+        : '⛶ Vollbild';
+      onResize();
+    });
+
+    function onResize() {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      if (!w || !h) return;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+
+    window.addEventListener('resize', onResize);
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
   
   <script src="../_ricerca.js"></script>
   <script src="../script.js"></script>
