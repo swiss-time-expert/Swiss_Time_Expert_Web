@@ -5,27 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Test Tourbillon 3D — Swiss Time Expert</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       padding: 24px;
       background: #f4f6f9;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       color: #1e293b;
     }
 
     #tourbillon-wrapper {
       position: relative;
       width: 100%;
-      max-width: 1100px;
-      height: 620px;
+      max-width: 1120px;
+      height: 640px;
       margin: 0 auto;
-      background: radial-gradient(circle at center, #263547 0%, #151e29 100%);
-      border-radius: 12px;
+      background: radial-gradient(circle at center, #253446 0%, #111822 100%);
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+      box-shadow: 0 14px 36px rgba(15, 23, 42, 0.24);
     }
 
-    /* Quando è attivo il Tutto Schermo */
     #tourbillon-wrapper:fullscreen {
       max-width: none;
       width: 100vw;
@@ -43,70 +46,97 @@
       cursor: grabbing;
     }
 
-    /* Pulsante Fullscreen in alto a destra */
     #btn-fullscreen {
       position: absolute;
       top: 16px;
       right: 16px;
       z-index: 10;
-      background: rgba(15, 23, 42, 0.78);
+      background: rgba(15, 23, 42, 0.82);
       color: #f8fafc;
       border: 1px solid rgba(255, 255, 255, 0.22);
       border-radius: 8px;
-      padding: 8px 14px;
+      padding: 9px 14px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      backdrop-filter: blur(6px);
-      transition: background 0.2s;
+      backdrop-filter: blur(8px);
+      transition: background 0.2s ease, transform 0.15s ease;
     }
 
     #btn-fullscreen:hover {
-      background: rgba(30, 41, 59, 0.95);
+      background: rgba(30, 41, 59, 0.96);
     }
 
-    /* Barra di controllo Esploso in basso */
+    #btn-fullscreen:active {
+      transform: scale(0.98);
+    }
+
     .controls-bar {
       position: absolute;
-      bottom: 16px;
+      bottom: 18px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 10;
       display: flex;
       align-items: center;
       gap: 14px;
-      width: min(90%, 540px);
-      background: rgba(15, 23, 42, 0.82);
+      width: min(92%, 580px);
+      background: rgba(15, 23, 42, 0.85);
       color: #f8fafc;
-      padding: 10px 18px;
+      padding: 11px 18px;
       border-radius: 999px;
       border: 1px solid rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(8px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     }
 
     .controls-bar label {
       font-size: 13px;
       font-weight: 600;
       white-space: nowrap;
+      user-select: none;
     }
 
     #explode-slider {
       flex: 1;
-      accent-color: #d4af37;
+      accent-color: #eab308;
       cursor: pointer;
     }
 
     #explode-value {
       font-size: 13px;
       font-variant-numeric: tabular-nums;
-      min-width: 38px;
+      min-width: 40px;
       text-align: right;
       color: #facc15;
-      font-weight: 600;
+      font-weight: 700;
+    }
+
+    #status-msg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      color: #cbd5e1;
+      font-size: 14px;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .credits-box {
+      max-width: 1120px;
+      margin: 12px auto 0;
+      font-size: 13px;
+      color: #475569;
+    }
+
+    .credits-box a {
+      color: #1d4ed8;
+      text-decoration: underline;
     }
   </style>
 
-  <!-- Import map per Three.js -->
   <script type="importmap">
     {
       "imports": {
@@ -119,14 +149,21 @@
 <body>
 
   <div id="tourbillon-wrapper">
+    <div id="status-msg">Chargement du modèle 3D…</div>
     <button id="btn-fullscreen" type="button">⛶ Plein écran</button>
     <div id="canvas-container"></div>
 
     <div class="controls-bar">
-      <label for="explode-slider">Vue éclatée (Axe X)</label>
+      <label for="explode-slider">Vue éclatée (Axe des pignons)</label>
       <input id="explode-slider" type="range" min="0" max="100" value="0" />
       <span id="explode-value">0%</span>
     </div>
+  </div>
+
+  <div class="credits-box">
+    Modèle 3D : « Tourbillon » par banyuanxui via
+    <a href="https://grabcad.com/" target="_blank" rel="noopener noreferrer">GrabCAD</a>
+    (Usage éducatif / non commercial).
   </div>
 
   <script type="module">
@@ -140,110 +177,16 @@
     const btnFullscreen = document.getElementById('btn-fullscreen');
     const slider = document.getElementById('explode-slider');
     const valueLabel = document.getElementById('explode-value');
+    const statusMsg = document.getElementById('status-msg');
 
-    // 1. Scena, Camera e Renderer
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.01, 100);
-    camera.position.set(0, 0.15, 0.45);
+    const camera = new THREE.PerspectiveCamera(
+      40,
+      container.clientWidth / container.clientHeight,
+      0.001,
+      1000
+    );
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
-    container.appendChild(renderer.domElement);
-
-    // Ambiente riflettente per esaltare acciaio, oro, blu e rubini
-    const pmremGenerator = new THREE.PMREMGenerator(renderer);
-    scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.06;
-
-    // 2. Caricamento del modello e preparazione esploso sull'asse orizzontale (X)
-    const parts = [];
-    const loader = new GLTFLoader();
-
-    // MODIFICA QUI il percorso se tourbillon_web.glb è in un'altra sottocartella
-   loader.load('../tourbillon_web.glb', (gltf) => {
-      const model = gltf.scene;
-      scene.add(model);
-
-      // Calcola il centro complessivo del modello
-      const box = new THREE.Box3().setFromObject(model);
-      const center = box.getCenter(new THREE.Vector3());
-      const size = box.getSize(new THREE.Vector3());
-      const maxDim = Math.max(size.x, size.y, size.z);
-
-      // Adatta la distanza della camera alle dimensioni reali del modello
-      camera.position.set(center.x, center.y + maxDim * 0.2, center.z + maxDim * 1.9);
-      controls.target.copy(center);
-      controls.update();
-
-      // Registra ogni singola mesh e la sua posizione di partenza rispetto al centro
-      model.updateMatrixWorld(true);
-      model.traverse((child) => {
-        if (child.isMesh) {
-          const meshBox = new THREE.Box3().setFromObject(child);
-          const meshCenter = meshBox.getCenter(new THREE.Vector3());
-
-          // Distanza del singolo pezzo dal centro lungo l'asse X (orizzontale)
-          const deltaX = meshCenter.x - center.x;
-
-          parts.push({
-            mesh: child,
-            baseX: child.position.x,
-            offsetX: deltaX
-          });
-        }
-      });
-    });
-
-    // 3. Controllo Slider Esploso (0% -> 100%)
-    slider.addEventListener('input', () => {
-      const pct = Number(slider.value);
-      valueLabel.textContent = pct + '%';
-
-      // Fattore di apertura (aumenta a 2.5 o 3.0 se vuoi un esploso più ampio)
-      const spreadFactor = (pct / 100) * 2.2;
-
-      for (const item of parts) {
-        item.mesh.position.x = item.baseX + item.offsetX * spreadFactor;
-      }
-    });
-
-    // 4. Gestione Fullscreen
-    btnFullscreen.addEventListener('click', () => {
-      if (!document.fullscreenElement) {
-        wrapper.requestFullscreen().catch(() => {});
-      } else {
-        document.exitFullscreen();
-      }
-    });
-
-    document.addEventListener('fullscreenchange', () => {
-      btnFullscreen.textContent = document.fullscreenElement ? '✕ Quitter plein écran' : '⛶ Plein écran';
-      onResize();
-    });
-
-    // 5. Resize responsive e ciclo di rendering
-    function onResize() {
-      const w = container.clientWidth;
-      const h = container.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    }
-
-    window.addEventListener('resize', onResize);
-
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    }
-    animate();
-  </script>
-</body>
-</html>
+    renderer.setPixelRatio(Math.min
