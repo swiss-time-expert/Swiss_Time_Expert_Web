@@ -89,35 +89,34 @@
       font-size: 0.8rem;
       color: #94a3b8;
     }
-    .train-studio-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
-    }
     .train-btn {
-      background: #1e293b;
+      background: rgba(30, 41, 59, 0.92);
       color: #f8fafc;
-      border: 1px solid #334155;
+      border: 1px solid #3b4c66;
       padding: 6px 11px;
       border-radius: 6px;
       font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s, border-color 0.2s, transform 0.1s;
+      user-select: none;
+      transition: background 0.15s, border-color 0.15s, transform 0.08s;
     }
     .train-btn:hover {
       background: #2c3e55;
       border-color: #d4af37;
+    }
+    .train-btn:active {
+      transform: scale(0.96);
     }
     .train-btn.active {
       background: #b8860b;
       border-color: #f3c64f;
       color: #ffffff;
     }
+
     #canvas-container-train {
       width: 100%;
-      height: 480px;
+      height: 500px;
       background: radial-gradient(circle at center, #1b263b 0%, #090d16 100%);
       border-radius: 8px;
       border: 1px solid #1e293b;
@@ -130,9 +129,6 @@
     #canvas-container-train.mode-pan:active {
       cursor: grabbing;
     }
-    #canvas-container-train.mode-zoom {
-      cursor: zoom-in;
-    }
     #canvas-container-train:fullscreen,
     #canvas-container-train:-webkit-full-screen {
       width: 100vw !important;
@@ -140,6 +136,45 @@
       border-radius: 0;
       border: none;
     }
+
+    /* Barra comandi HUD interna al canvas: sempre visibile anche in Plein Écran */
+    .train-hud-dock {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      background: rgba(13, 19, 31, 0.88);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      border-radius: 10px;
+      padding: 7px 10px;
+      z-index: 25;
+      max-width: calc(100% - 24px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+    }
+    .train-hud-sep {
+      width: 1px;
+      height: 20px;
+      background: rgba(148, 163, 184, 0.25);
+      margin: 0 2px;
+    }
+    #canvas-container-train:fullscreen .train-hud-dock,
+    #canvas-container-train:-webkit-full-screen .train-hud-dock {
+      bottom: 24px;
+      padding: 10px 14px;
+      gap: 8px;
+    }
+    #canvas-container-train:fullscreen .train-hud-dock .train-btn,
+    #canvas-container-train:-webkit-full-screen .train-hud-dock .train-btn {
+      padding: 9px 14px;
+      font-size: 0.92rem;
+    }
+
     #train-loader {
       position: absolute;
       inset: 0;
@@ -148,7 +183,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 20;
+      z-index: 30;
       color: #e2e8f0;
       font-size: 0.9rem;
       font-weight: 600;
@@ -167,19 +202,19 @@
     /* Popup scheda tecnica componente al clic */
     #train-spec-popup {
       position: absolute;
-      top: 18px;
-      left: 18px;
+      top: 16px;
+      left: 16px;
       width: 340px;
-      max-width: calc(100% - 36px);
+      max-width: calc(100% - 32px);
       background: rgba(13, 19, 31, 0.95);
       backdrop-filter: blur(10px);
       border: 1px solid #d4af37;
       border-left: 5px solid #d4af37;
       border-radius: 10px;
-      padding: 16px 18px;
+      padding: 15px 17px;
       color: #f8fafc;
       box-shadow: 0 12px 30px rgba(0,0,0,0.6);
-      z-index: 25;
+      z-index: 26;
       display: none;
       animation: popupFadeIn 0.2s ease-out;
     }
@@ -187,7 +222,7 @@
       display: block;
     }
 
-    /* Scala maggiore e leggibilità perfetta in modalità Plein Écran */
+    /* Scala maggiore in modalità Plein Écran */
     #canvas-container-train:fullscreen #train-spec-popup,
     #canvas-container-train:-webkit-full-screen #train-spec-popup {
       top: 28px;
@@ -270,20 +305,6 @@
       color: #f8fafc;
       font-weight: 700;
       text-align: right;
-    }
-
-    #train-fs-exit-btn {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      z-index: 25;
-      display: none;
-      padding: 9px 15px;
-      font-size: 0.92rem;
-    }
-    #canvas-container-train:fullscreen #train-fs-exit-btn,
-    #canvas-container-train:-webkit-full-screen #train-fs-exit-btn {
-      display: inline-block;
     }
 
     /* Visualizzatore 3D ETA 6498-1 (Tema chiaro) */
@@ -542,21 +563,13 @@
         @media (max-width: 768px) { .ste-grid { grid-template-columns: 1fr; gap: 15px; } }
       </style>
 
-      <!-- 1. MODELLO 3D INTERATTIVO DEL TRENO IN ALTO (DARK STUDIO + FULLSCREEN + POPUP) -->
+      <!-- 1. MODELLO 3D INTERATTIVO DEL TRENO IN ALTO (DARK STUDIO + FULLSCREEN + POPUP + HUD) -->
       <div class="ste-container">
         <div class="train-studio-card">
           <div class="train-studio-header">
             <div>
               <h3 class="train-studio-title">⚙️ Chaîne Cinématique Interactive 3D — Finition Haute Horlogerie</h3>
-              <p class="train-studio-hint" id="train-mode-hint">Clic sur une pièce : fiche technique • Glisser : pivoter • Molette : zoom</p>
-            </div>
-            <div class="train-studio-actions">
-              <button type="button" class="train-btn active" id="train-tool-orbit" title="Pivoter le modèle">⟳ Pivoter</button>
-              <button type="button" class="train-btn" id="train-tool-pan" title="Déplacer latéralement (style Blender)">✋ Déplacer</button>
-              <button type="button" class="train-btn" id="train-tool-zoom" title="Zoomer en glissant haut/bas (style Blender)">🔍 Zoom</button>
-              <button type="button" class="train-btn active" id="train-autorotate-btn" title="Rotation automatique">↻ Auto</button>
-              <button type="button" class="train-btn" id="train-reset-btn" title="Recentrer la vue">Centrer</button>
-              <button type="button" class="train-btn" id="train-fullscreen-btn" title="Plein écran">⛶ Plein Écran</button>
+              <p class="train-studio-hint" id="train-mode-hint">Clic sur une pièce : fiche technique • Glisser : pivoter • Boutons 🔍 + / − : zoom</p>
             </div>
           </div>
 
@@ -565,8 +578,6 @@
               <div class="train-spinner"></div>
               <div id="train-loader-text">Chargement de la chaîne cinématique 3D...</div>
             </div>
-
-            <button type="button" class="train-btn" id="train-fs-exit-btn">✕ Quitter Plein Écran</button>
 
             <!-- Popup scheda tecnica al clic -->
             <div id="train-spec-popup" role="dialog" aria-live="polite">
@@ -587,6 +598,19 @@
                 <span class="train-popup-key">Fonction</span>
                 <span class="train-popup-val" id="train-popup-role">—</span>
               </div>
+            </div>
+
+            <!-- Barra strumenti HUD interna: sempre visibile anche a schermo intero -->
+            <div class="train-hud-dock">
+              <button type="button" class="train-btn active" id="train-tool-orbit" title="Pivoter le modèle">⟳ Pivoter</button>
+              <button type="button" class="train-btn" id="train-tool-pan" title="Déplacer latéralement">✋ Déplacer</button>
+              <span class="train-hud-sep"></span>
+              <button type="button" class="train-btn" id="train-zoom-in" title="Zoom avant (maintenir appuyé)">🔍 +</button>
+              <button type="button" class="train-btn" id="train-zoom-out" title="Zoom arrière (maintenir appuyé)">🔍 −</button>
+              <span class="train-hud-sep"></span>
+              <button type="button" class="train-btn active" id="train-autorotate-btn" title="Rotation automatique">↻ Auto</button>
+              <button type="button" class="train-btn" id="train-reset-btn" title="Recentrer la vue">Centrer</button>
+              <button type="button" class="train-btn" id="train-fullscreen-btn" title="Plein écran">⛶ Plein Écran</button>
             </div>
           </div>
         </div>
@@ -877,60 +901,71 @@
       controlsTrain.autoRotate = true;
       controlsTrain.autoRotateSpeed = 1.35;
 
-      // Strumenti stile Blender: 'orbit' | 'pan' | 'zoom'
-      let activeTool = 'orbit';
+      // Strumenti interazione: 'orbit' | 'pan' + pulsanti lente 🔍 + e 🔍 − (anche a pressione continua)
       const toolOrbitBtn = document.getElementById('train-tool-orbit');
       const toolPanBtn = document.getElementById('train-tool-pan');
-      const toolZoomBtn = document.getElementById('train-tool-zoom');
+      const zoomInBtn = document.getElementById('train-zoom-in');
+      const zoomOutBtn = document.getElementById('train-zoom-out');
       const modeHintEl = document.getElementById('train-mode-hint');
 
       function setBlenderTool(tool) {
-        activeTool = tool;
         toolOrbitBtn.classList.toggle('active', tool === 'orbit');
         toolPanBtn.classList.toggle('active', tool === 'pan');
-        toolZoomBtn.classList.toggle('active', tool === 'zoom');
-
-        trainContainer.classList.remove('mode-pan', 'mode-zoom');
+        trainContainer.classList.toggle('mode-pan', tool === 'pan');
 
         if (tool === 'orbit') {
           controlsTrain.enableRotate = true;
           controlsTrain.enablePan = true;
-          controlsTrain.enableZoom = true;
           controlsTrain.mouseButtons = {
             LEFT: THREE.MOUSE.ROTATE,
             MIDDLE: THREE.MOUSE.DOLLY,
             RIGHT: THREE.MOUSE.PAN
           };
-          modeHintEl.textContent = 'Clic sur une pièce : fiche technique • Glisser : pivoter • Molette : zoom';
-        } else if (tool === 'pan') {
-          trainContainer.classList.add('mode-pan');
+          modeHintEl.textContent = 'Clic sur une pièce : fiche technique • Glisser : pivoter • Boutons 🔍 + / − : zoom';
+        } else {
           controlsTrain.enableRotate = false;
           controlsTrain.enablePan = true;
-          controlsTrain.enableZoom = true;
           controlsTrain.mouseButtons = {
             LEFT: THREE.MOUSE.PAN,
             MIDDLE: THREE.MOUSE.DOLLY,
             RIGHT: THREE.MOUSE.PAN
           };
-          modeHintEl.textContent = 'Mode Déplacer (style Blender) : glisser pour déplacer la vue • Molette : zoom';
-        } else if (tool === 'zoom') {
-          trainContainer.classList.add('mode-zoom');
-          controlsTrain.enableRotate = false;
-          controlsTrain.enablePan = false;
-          controlsTrain.enableZoom = true;
-          controlsTrain.mouseButtons = {
-            LEFT: THREE.MOUSE.DOLLY,
-            MIDDLE: THREE.MOUSE.DOLLY,
-            RIGHT: THREE.MOUSE.PAN
-          };
-          modeHintEl.textContent = 'Mode Zoom (style Blender) : glisser haut/bas pour zoomer • Molette : zoom';
+          modeHintEl.textContent = 'Mode Déplacer actif : glisser pour déplacer la vue latéralement';
         }
       }
 
       toolOrbitBtn.addEventListener('click', () => setBlenderTool('orbit'));
       toolPanBtn.addEventListener('click', () => setBlenderTool('pan'));
-      toolZoomBtn.addEventListener('click', () => setBlenderTool('zoom'));
       setBlenderTool('orbit');
+
+      function applyCameraZoom(scaleFactor) {
+        const offset = cameraTrain.position.clone().sub(controlsTrain.target);
+        const newDist = THREE.MathUtils.clamp(offset.length() * scaleFactor, 0.7, 14.0);
+        offset.setLength(newDist);
+        cameraTrain.position.copy(controlsTrain.target).add(offset);
+        controlsTrain.update();
+      }
+
+      let zoomHoldInterval = null;
+      function bindZoomButton(btn, scaleFactor) {
+        const startZoom = (e) => {
+          e.preventDefault();
+          applyCameraZoom(scaleFactor);
+          clearInterval(zoomHoldInterval);
+          zoomHoldInterval = setInterval(() => applyCameraZoom(scaleFactor), 65);
+        };
+        const stopZoom = () => {
+          clearInterval(zoomHoldInterval);
+          zoomHoldInterval = null;
+        };
+        btn.addEventListener('pointerdown', startZoom);
+        btn.addEventListener('pointerup', stopZoom);
+        btn.addEventListener('pointerleave', stopZoom);
+        btn.addEventListener('pointercancel', stopZoom);
+      }
+
+      bindZoomButton(zoomInBtn, 0.88);
+      bindZoomButton(zoomOutBtn, 1.14);
 
       const trainPickableMeshes = [];
       const trainInitialCamPos = new THREE.Vector3(0, 1.4, 4.2);
@@ -1251,7 +1286,6 @@
       });
 
       const fsBtn = document.getElementById('train-fullscreen-btn');
-      const fsExitBtn = document.getElementById('train-fs-exit-btn');
 
       function toggleTrainFullscreen() {
         if (!document.fullscreenElement) {
@@ -1262,10 +1296,13 @@
       }
 
       fsBtn.addEventListener('click', toggleTrainFullscreen);
-      fsExitBtn.addEventListener('click', toggleTrainFullscreen);
 
       function resizeTrainViewer() {
         if (!trainContainer) return;
+        const isFs = Boolean(document.fullscreenElement);
+        fsBtn.textContent = isFs ? '✕ Quitter' : '⛶ Plein Écran';
+        fsBtn.classList.toggle('active', isFs);
+
         const w = trainContainer.clientWidth || window.innerWidth;
         const h = trainContainer.clientHeight || window.innerHeight;
         cameraTrain.aspect = w / h;
