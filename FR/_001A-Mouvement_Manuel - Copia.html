@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -57,7 +57,198 @@
     .tech-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95em; }
     .tech-table th, .tech-table td { border: 1px solid #dcdcdc; padding: 10px; text-align: center; }
     .tech-table th { background-color: #1a365d; color: white; }
+
+    /* Visualizzatore 3D ETA 6498-1 (Tema chiaro) */
+    .eta-module-wrapper {
+      background: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-radius: 8px;
+      padding: 18px;
+      margin: 25px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .eta-top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .eta-heading {
+      margin: 0;
+      color: #1a365d;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .eta-subhint {
+      margin: 2px 0 0 0;
+      color: #5a6778;
+      font-size: 0.82rem;
+    }
+    .eta-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #1a365d;
+    }
+    .eta-toolbar select, .eta-toolbar button {
+      background: #f8f9fa;
+      color: #1a365d;
+      border: 1px solid #c5d0de;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .eta-toolbar select:hover, .eta-toolbar button:hover {
+      background: #e9eef5;
+    }
+    #canvas-container-eta {
+      width: 100%;
+      height: 480px;
+      background-color: #ffffff;
+      border: 1px solid #e4e8ee;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    #eta-loader {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.92);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 15;
+      color: #1a365d;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: opacity 0.35s ease;
+      text-align: center;
+      padding: 16px;
+    }
+    .eta-spinner {
+      width: 34px;
+      height: 34px;
+      border: 3px solid #d9e2ec;
+      border-top-color: #1a365d;
+      border-radius: 50%;
+      animation: etaSpin 0.85s linear infinite;
+      margin-bottom: 10px;
+    }
+    @keyframes etaSpin {
+      to { transform: rotate(360deg); }
+    }
+    #eta-selected-bar {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: #f4f7fb;
+      border-left: 4px solid #1a365d;
+      border-radius: 6px;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    #eta-selected-bar.visible {
+      display: flex;
+    }
+    #eta-selected-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #5a6778;
+      display: block;
+    }
+    #eta-selected-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1a365d;
+      word-break: break-word;
+    }
+    #eta-selected-raw {
+      font-size: 0.76rem;
+      color: #6c757d;
+      margin-left: 6px;
+      font-weight: 400;
+    }
+    #eta-clear-btn {
+      background: #ffffff;
+      color: #1a365d;
+      border: 1px solid #c5d0de;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    #eta-clear-btn:hover {
+      background: #e9eef5;
+    }
+    .eta-slider-box {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: #f8f9fa;
+      border: 1px solid #e4e8ee;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .eta-slider-box label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #1a365d;
+      white-space: nowrap;
+    }
+    .eta-slider-box input[type="range"] {
+      flex-grow: 1;
+      cursor: pointer;
+      accent-color: #1a365d;
+    }
+    .eta-slider-val {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #1a365d;
+      min-width: 44px;
+      text-align: right;
+    }
+    .eta-credits-box {
+      margin-top: 12px;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border: 1px solid #e2e6ec;
+      border-radius: 6px;
+      font-size: 0.83rem;
+      line-height: 1.55;
+      color: #3a4654;
+    }
+    .eta-credits-box a {
+      color: #1a365d;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+    .eta-credits-box a:hover {
+      color: #d9534f;
+    }
   </style>
+
+  <!-- Import Map isolato per Three.js r160 (visualizzatore ETA 6498-1) -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
 </head>
 <body>
 
@@ -154,6 +345,398 @@
           </div>
         </div>
       </div>
+
+      <!-- 1B. MODELLO 3D INTERATTIVO MOVIMENTO COMPLETO ETA 6498-1 SUBITO DOPO IL TRENO -->
+      <div class="eta-module-wrapper" id="eta-6498-section">
+        <div class="eta-top-bar">
+          <div>
+            <h3 class="eta-heading">🔧 Vue Éclatée Interactive 3D — Calibre ETA 6498-1</h3>
+            <p class="eta-subhint">Clic gauche : pivoter • Clic sur un composant : afficher son nom en français • Molette : zoom • Clic droit : déplacer</p>
+          </div>
+          <div class="eta-toolbar">
+            <label for="eta-explode-axis">Axe :</label>
+            <select id="eta-explode-axis">
+              <option value="vertical-y" selected>Vertical (Axe Y)</option>
+              <option value="vertical-z">Vertical (Axe Z)</option>
+              <option value="radial">Radial 3D</option>
+            </select>
+            <button type="button" id="eta-reset-cam">Centrer</button>
+          </div>
+        </div>
+
+        <div id="canvas-container-eta">
+          <div id="eta-loader">
+            <div class="eta-spinner"></div>
+            <div id="eta-loader-text">Chargement du calibre ETA 6498-1...</div>
+          </div>
+        </div>
+
+        <div id="eta-selected-bar" aria-live="polite">
+          <div>
+            <span id="eta-selected-label">Pièce sélectionnée</span>
+            <span id="eta-selected-name">—</span><span id="eta-selected-raw"></span>
+          </div>
+          <button type="button" id="eta-clear-btn">Désélectionner</button>
+        </div>
+
+        <div class="eta-slider-box">
+          <label for="eta-explode-slider">⚙️ Contrôle de l'Exploso :</label>
+          <input type="range" id="eta-explode-slider" min="0" max="100" value="0" step="0.5">
+          <span class="eta-slider-val" id="eta-explode-val">0%</span>
+        </div>
+
+        <div class="eta-credits-box">
+          <strong>Crédits, source &amp; licence :</strong> Modèle CAD de référence <em>ETA 6498-1 Complete Watch Movement</em> disponible sur
+          <a href="https://grabcad.com/library/eta-6498-1-complete-watch-movement-1" target="_blank" rel="noopener noreferrer">GrabCAD (bibliothèque communautaire)</a>.
+          Veuillez vérifier les conditions d'utilisation et la licence associées au fichier d'origine sur la fiche GrabCAD. Préparation, exportation glTF/GLB et intégration interactive 3D réalisées pour <strong>Swiss Time Expert</strong>.
+        </div>
+      </div>
+
+      <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+        const ETA_MODEL_URL = '../ETA6498-1_Web.glb';
+        const etaContainer = document.getElementById('canvas-container-eta');
+
+        if (etaContainer) {
+          const sceneEta = new THREE.Scene();
+          sceneEta.background = new THREE.Color(0xffffff);
+
+          const cameraEta = new THREE.PerspectiveCamera(
+            40,
+            etaContainer.clientWidth / etaContainer.clientHeight,
+            0.01,
+            1000
+          );
+          cameraEta.position.set(0, 3.2, 4.6);
+
+          const rendererEta = new THREE.WebGLRenderer({ antialias: true });
+          rendererEta.setSize(etaContainer.clientWidth, etaContainer.clientHeight);
+          rendererEta.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+          rendererEta.toneMapping = THREE.ACESFilmicToneMapping;
+          rendererEta.toneMappingExposure = 1.15;
+          etaContainer.appendChild(rendererEta.domElement);
+
+          const pmremEta = new THREE.PMREMGenerator(rendererEta);
+          sceneEta.environment = pmremEta.fromScene(new RoomEnvironment(), 0.04).texture;
+
+          const lightTop = new THREE.DirectionalLight(0xffffff, 1.8);
+          lightTop.position.set(5, 10, 7);
+          sceneEta.add(lightTop);
+
+          const lightFill = new THREE.DirectionalLight(0xdbe8ff, 0.9);
+          lightFill.position.set(-6, -4, -5);
+          sceneEta.add(lightFill);
+
+          const controlsEta = new OrbitControls(cameraEta, rendererEta.domElement);
+          controlsEta.enableDamping = true;
+          controlsEta.dampingFactor = 0.06;
+
+          let etaModelRoot = null;
+          const etaExplodeItems = [];
+          const etaPickableMeshes = [];
+          const etaInitialCamPos = new THREE.Vector3();
+
+          let etaSelectedMesh = null;
+          let etaPrevEmissive = null;
+          let etaPrevEmissiveIntensity = 0;
+
+          const selectedBar = document.getElementById('eta-selected-bar');
+          const selectedNameEl = document.getElementById('eta-selected-name');
+          const selectedRawEl = document.getElementById('eta-selected-raw');
+          const clearBtn = document.getElementById('eta-clear-btn');
+          const loaderEl = document.getElementById('eta-loader');
+          const loaderTextEl = document.getElementById('eta-loader-text');
+
+          // Dizionario terminologico orologiero EN -> FR per i componenti dell'ETA 6498-1
+          const HOROLOGY_DICT_FR = [
+            // Platina e Ponti
+            [/ main\s*plate | base\s*plate | plate /i, 'Platine'],
+            [/ barrel\s*bridge /i, 'Pont de barillet'],
+            [/ train\s*(wheel\s*)?bridge | gear\s*train\s*bridge /i, 'Pont de rouage'],
+            [/ balance\s*(cock|bridge) /i, 'Coq de balancier'],
+            [/ pallet\s*(fork\s*)?(cock|bridge) | escapement\s*bridge /i, "Pont d'ancre"],
+            [/ bridge /i, 'Pont'],
+
+            // Barillet & Carica
+            [/ barrel\s*drum | drum /i, 'Tambour de barillet'],
+            [/ barrel\s*cover | cover /i, 'Couvercle de barillet'],
+            [/ barrel\s*arbor | arbor /i, 'Arbre de barillet'],
+            [/ mainspring | main\s*spring /i, 'Ressort-moteur'],
+            [/ barrel /i, 'Barillet'],
+            [/ ratchet\s*wheel | ratchet /i, 'Rochet'],
+            [/ crown\s*wheel /i, 'Roue de couronne'],
+            [/ winding\s*stem | stem /i, 'Tige de remontoir'],
+            [/ winding\s*pinion /i, 'Pignon de remontoir'],
+            [/ sliding\s*pinion | clutch\s*wheel /i, 'Pignon coulant'],
+            [/ setting\s*lever /i, 'Tirette'],
+            [/ yoke /i, 'Bascule'],
+            [/ click\s*spring /i, 'Ressort de cliquet'],
+            [/ click /i, 'Cliquet'],
+            [/ setting\s*wheel /i, 'Roue de mise à l’heure'],
+            [/ minute\s*wheel /i, 'Roue de minuterie'],
+            [/ hour\s*wheel /i, 'Roue des heures'],
+            [/ cannon\s*pinion /i, 'Chaussée'],
+
+            // Ruotismo
+            [/ center\s*wheel | centre\s*wheel /i, 'Roue de centre'],
+            [/ third\s*wheel /i, 'Roue de troisième'],
+            [/ fourth\s*wheel | second\s*wheel /i, 'Roue de seconde'],
+            [/ escape\s*wheel | escapement\s*wheel /i, "Roue d'échappement"],
+            [/ wheel /i, 'Roue'],
+            [/ pinion /i, 'Pignon'],
+
+            // Scappamento e Organo Regolatore
+            [/ pallet\s*fork | pallet | anchor /i, 'Ancre'],
+            [/ balance\s*wheel | balance /i, 'Balancier'],
+            [/ hairspring | balance\s*spring | spiral /i, 'Spiral'],
+            [/ regulator | index /i, 'Raquette'],
+            [/ stud /i, 'Piton'],
+            [/ incabloc | shock\s*absorber /i, 'Antichoc (Incabloc)'],
+            [/ jewel | ruby /i, 'Rubis / Pierre'],
+
+            // Minuteria e Viti
+            [/ screw /i, 'Vis'],
+            [/ spring /i, 'Ressort'],
+            [/ washer /i, 'Rondelle'],
+            [/ pin /i, 'Goupille']
+          ];
+
+          function cleanEtaName(raw) {
+            if (!raw) return 'Composant sans nom';
+            return raw
+              .replace(/\.(sldprt|sldasm|igs|iges|step|stp|glb|gltf|blend)$/i, '')
+              .replace(/[_-]+/g, ' ')
+              .replace(/\s*\.\d+$/, '')
+              .replace(/\s+/g, ' ')
+              .trim() || 'Composant sans nom';
+          }
+
+          function translatePartToFrench(cleanName) {
+            for (const [pattern, frLabel] of HOROLOGY_DICT_FR) {
+              if (pattern.test(cleanName)) {
+                return frLabel;
+              }
+            }
+            return cleanName;
+          }
+
+          function resolveEtaPartName(mesh) {
+            let cur = mesh;
+            const genericRe = /^(mesh|object|node|part|solid|group|body|untitled)(_|\s|-|\d|\.)*$/i;
+            let rawFound = '';
+            while (cur && cur !== etaModelRoot) {
+              if (cur.name && !genericRe.test(cur.name.trim())) {
+                rawFound = cur.name;
+                break;
+              }
+              cur = cur.parent;
+            }
+            if (!rawFound) {
+              rawFound = mesh.name || mesh.parent?.name || '';
+            }
+            const cleaned = cleanEtaName(rawFound);
+            const translated = translatePartToFrench(cleaned);
+            return { translated, cleaned };
+          }
+
+          function clearEtaSelection() {
+            if (etaSelectedMesh && etaSelectedMesh.material && 'emissive' in etaSelectedMesh.material) {
+              etaSelectedMesh.material.emissive.copy(etaPrevEmissive);
+              etaSelectedMesh.material.emissiveIntensity = etaPrevEmissiveIntensity;
+            }
+            etaSelectedMesh = null;
+            etaPrevEmissive = null;
+            selectedNameEl.textContent = '—';
+            selectedRawEl.textContent = '';
+            selectedBar.classList.remove('visible');
+          }
+
+          function selectEtaMesh(mesh) {
+            if (etaSelectedMesh === mesh) return;
+            clearEtaSelection();
+
+            etaSelectedMesh = mesh;
+            const { translated, cleaned } = resolveEtaPartName(mesh);
+            selectedNameEl.textContent = translated;
+            selectedRawEl.textContent = translated.toLowerCase() !== cleaned.toLowerCase() ? `(${cleaned})` : '';
+            selectedBar.classList.add('visible');
+
+            if (mesh.material && 'emissive' in mesh.material) {
+              mesh.material = mesh.material.clone();
+              etaPrevEmissive = mesh.material.emissive.clone();
+              etaPrevEmissiveIntensity = mesh.material.emissiveIntensity ?? 1;
+              mesh.material.emissive.setHex(0x8c6928);
+              mesh.material.emissiveIntensity = 0.65;
+            }
+          }
+
+          clearBtn.addEventListener('click', clearEtaSelection);
+
+          const etaLoader = new GLTFLoader();
+          etaLoader.load(
+            ETA_MODEL_URL,
+            (gltf) => {
+              etaModelRoot = gltf.scene;
+
+              const box = new THREE.Box3().setFromObject(etaModelRoot);
+              const center = box.getCenter(new THREE.Vector3());
+              const size = box.getSize(new THREE.Vector3());
+              const maxDim = Math.max(size.x, size.y, size.z) || 1;
+
+              etaModelRoot.scale.setScalar(3.0 / maxDim);
+              box.setFromObject(etaModelRoot);
+              box.getCenter(center);
+              etaModelRoot.position.sub(center);
+
+              sceneEta.add(etaModelRoot);
+              etaModelRoot.updateMatrixWorld(true);
+
+              const origin = new THREE.Vector3(0, 0, 0);
+
+              etaModelRoot.traverse((child) => {
+                if (child.isMesh) {
+                  if (child.material) {
+                    child.material.needsUpdate = true;
+                  }
+                  etaPickableMeshes.push(child);
+
+                  const mBox = new THREE.Box3().setFromObject(child);
+                  const mCenter = mBox.getCenter(new THREE.Vector3());
+                  etaExplodeItems.push({
+                    mesh: child,
+                    origPos: child.position.clone(),
+                    worldOffset: mCenter.clone().sub(origin),
+                    parent: child.parent
+                  });
+                }
+              });
+
+              cameraEta.position.set(0, 3.1, 4.4);
+              etaInitialCamPos.copy(cameraEta.position);
+              controlsEta.target.set(0, 0, 0);
+              controlsEta.update();
+
+              loaderEl.style.opacity = '0';
+              setTimeout(() => loaderEl.remove(), 350);
+            },
+            (xhr) => {
+              if (xhr.total > 0 && loaderTextEl) {
+                loaderTextEl.textContent = `Chargement : ${Math.round((xhr.loaded / xhr.total) * 100)}%`;
+              }
+            },
+            (err) => {
+              console.error('Erreur chargement ETA 6498-1 GLB:', err);
+              if (loaderTextEl) {
+                loaderTextEl.innerHTML =
+                  'Erreur de chargement du fichier 3D.<br><small>Vérifiez la présence de "ETA6498-1_Web.glb" dans le dossier parent.</small>';
+              }
+            }
+          );
+
+          const etaRaycaster = new THREE.Raycaster();
+          const etaPointer = new THREE.Vector2();
+          let etaDownPos = { x: 0, y: 0 };
+
+          rendererEta.domElement.addEventListener('pointerdown', (ev) => {
+            if (ev.button !== 0) return;
+            etaDownPos = { x: ev.clientX, y: ev.clientY };
+          });
+
+          rendererEta.domElement.addEventListener('pointerup', (ev) => {
+            if (ev.button !== 0) return;
+            const dist = Math.hypot(ev.clientX - etaDownPos.x, ev.clientY - etaDownPos.y);
+            if (dist > 5 || etaPickableMeshes.length === 0) return;
+
+            const rect = rendererEta.domElement.getBoundingClientRect();
+            etaPointer.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+            etaPointer.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+
+            etaRaycaster.setFromCamera(etaPointer, cameraEta);
+            const hits = etaRaycaster.intersectObjects(etaPickableMeshes, false);
+            if (hits.length > 0) {
+              selectEtaMesh(hits[0].object);
+            }
+          });
+
+          const etaSlider = document.getElementById('eta-explode-slider');
+          const etaValText = document.getElementById('eta-explode-val');
+          const etaAxisSel = document.getElementById('eta-explode-axis');
+
+          function updateEtaExplode() {
+            const factor = parseFloat(etaSlider.value) / 100;
+            etaValText.textContent = `${Math.round(factor * 100)}%`;
+            const mode = etaAxisSel.value;
+
+            etaExplodeItems.forEach((item) => {
+              if (factor === 0) {
+                item.mesh.position.copy(item.origPos);
+                return;
+              }
+
+              const shift = new THREE.Vector3();
+              const spread = factor * 3.4;
+
+              if (mode === 'vertical-y') {
+                shift.set(
+                  item.worldOffset.x * spread * 0.28,
+                  item.worldOffset.y * spread * 2.5,
+                  item.worldOffset.z * spread * 0.28
+                );
+              } else if (mode === 'vertical-z') {
+                shift.set(
+                  item.worldOffset.x * spread * 0.28,
+                  item.worldOffset.y * spread * 0.28,
+                  item.worldOffset.z * spread * 2.5
+                );
+              } else {
+                shift.copy(item.worldOffset).multiplyScalar(spread * 1.85);
+              }
+
+              if (item.parent) {
+                const pScale = new THREE.Vector3();
+                item.parent.getWorldScale(pScale);
+                const localShift = shift.clone();
+                localShift.x /= pScale.x || 1;
+                localShift.y /= pScale.y || 1;
+                localShift.z /= pScale.z || 1;
+
+                const pQuat = new THREE.Quaternion();
+                item.parent.getWorldQuaternion(pQuat);
+                localShift.applyQuaternion(pQuat.invert());
+
+                item.mesh.position.copy(item.origPos).add(localShift);
+              }
+            });
+          }
+
+          etaSlider.addEventListener('input', updateEtaExplode);
+          etaAxisSel.addEventListener('change', updateEtaExplode);
+
+          document.getElementById('eta-reset-cam').addEventListener('click', () => {
+            cameraEta.position.copy(etaInitialCamPos);
+            controlsEta.target.set(0, 0, 0);
+            controlsEta.update();
+          });
+
+          window.addEventListener('resize', () => {
+            if (!etaContainer) return;
+            cameraEta.aspect = etaContainer.clientWidth / etaContainer.clientHeight;
+            cameraEta.updateProjectionMatrix();
+            rendererEta.setSize(etaContainer.clientWidth, etaContainer.clientHeight);
+          });
+
+          function animateEta() {
+            requestAnimationFrame(animateEta);
+            controlsEta.update();
+            rendererEta.render(sceneEta, cameraEta);
+          }
+          animateEta();
+        }
+      </script>
 
       <!-- 2. IMMAGINE STATICA CON PIN -->
       <div class="img-always-visible" style="background: #fff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
