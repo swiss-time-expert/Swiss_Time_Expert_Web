@@ -9,9 +9,6 @@
   <link rel="shortcut icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
   
-  <!-- Script per il visualizzatore 3D model-viewer (Treno in alto) -->
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-  
   <style>
     /* Allineamento forzato per sincronizzare Header e Notebook durante lo zoom */
     .header-card, .notebook-container {
@@ -58,6 +55,192 @@
     .tech-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95em; }
     .tech-table th, .tech-table td { border: 1px solid #dcdcdc; padding: 10px; text-align: center; }
     .tech-table th { background-color: #1a365d; color: white; }
+
+    /* =========================================================================
+       VISUALIZZATORE 3D DARK STUDIO — CHAÎNE CINÉMATIQUE (TRENO DEL TEMPO)
+       ========================================================================= */
+    .train-studio-card {
+      background: #0d131f;
+      border: 1px solid #24324a;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 28px rgba(10, 18, 32, 0.22);
+      color: #f1f5f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .train-studio-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .train-studio-title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: 0.01em;
+    }
+    .train-studio-hint {
+      margin: 2px 0 0 0;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+    .train-studio-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .train-btn {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .train-btn:hover {
+      background: #2c3e55;
+      border-color: #d4af37;
+    }
+    .train-btn.active {
+      background: #b8860b;
+      border-color: #f3c64f;
+      color: #ffffff;
+    }
+    #canvas-container-train {
+      width: 100%;
+      height: 480px;
+      background: radial-gradient(circle at center, #1b263b 0%, #090d16 100%);
+      border-radius: 8px;
+      border: 1px solid #1e293b;
+      position: relative;
+      overflow: hidden;
+    }
+    #canvas-container-train:fullscreen,
+    #canvas-container-train:-webkit-full-screen {
+      width: 100vw !important;
+      height: 100vh !important;
+      border-radius: 0;
+      border: none;
+    }
+    #train-loader {
+      position: absolute;
+      inset: 0;
+      background: rgba(9, 13, 22, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: opacity 0.35s ease;
+    }
+    .train-spinner {
+      width: 34px;
+      height: 34px;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-top-color: #d4af37;
+      border-radius: 50%;
+      animation: etaSpin 0.85s linear infinite;
+      margin-bottom: 10px;
+    }
+
+    /* Popup scheda tecnica componente al clic */
+    #train-spec-popup {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      max-width: 310px;
+      background: rgba(13, 19, 31, 0.94);
+      backdrop-filter: blur(8px);
+      border: 1px solid #d4af37;
+      border-left: 4px solid #d4af37;
+      border-radius: 8px;
+      padding: 14px 16px;
+      color: #f8fafc;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.55);
+      z-index: 25;
+      display: none;
+      animation: popupFadeIn 0.2s ease-out;
+    }
+    #train-spec-popup.visible {
+      display: block;
+    }
+    @keyframes popupFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .train-popup-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .train-popup-badge {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #f3c64f;
+      font-weight: 700;
+    }
+    .train-popup-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 2px;
+    }
+    .train-popup-close:hover {
+      color: #ffffff;
+    }
+    .train-popup-title {
+      margin: 2px 0 10px 0;
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .train-popup-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.83rem;
+      padding: 5px 0;
+      border-top: 1px solid rgba(148, 163, 184, 0.18);
+    }
+    .train-popup-key {
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    .train-popup-val {
+      color: #f8fafc;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    /* Pulsante esci da schermo intero visibile dentro al canvas in fullscreen */
+    #train-fs-exit-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 25;
+      display: none;
+    }
+    #canvas-container-train:fullscreen #train-fs-exit-btn,
+    #canvas-container-train:-webkit-full-screen #train-fs-exit-btn {
+      display: inline-block;
+    }
 
     /* Visualizzatore 3D ETA 6498-1 (Tema chiaro) */
     .eta-module-wrapper {
@@ -241,7 +424,7 @@
     }
   </style>
 
-  <!-- Import Map unico per Three.js r160 (condiviso tra ETA 6498-1 e Barillet senza duplicati) -->
+  <!-- Import Map unico per Three.js r160 (condiviso tra Treno, ETA 6498-1 e Barillet senza duplicati) -->
   <script type="importmap">
     {
       "imports": {
@@ -307,8 +490,6 @@
 
       <style>
         .ste-container { max-width: 1000px; margin: 0 auto; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
-        .ste-image-wrapper { width: 100%; margin-bottom: 25px; }
-        .ste-base-img { width: 100%; height: auto; display: block; }
         .ste-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
         .ste-card { background-color: #f8f9fa; padding: 18px; border-radius: 6px; border-top: 4px solid #1a365d; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
         .ste-step { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6c757d; letter-spacing: 1px; margin-bottom: 6px; }
@@ -317,10 +498,50 @@
         @media (max-width: 768px) { .ste-grid { grid-template-columns: 1fr; gap: 15px; } }
       </style>
 
-      <!-- 1. MODELLO 3D INTERATTIVO DEL TRENO IN ALTO -->
+      <!-- 1. MODELLO 3D INTERATTIVO DEL TRENO IN ALTO (DARK STUDIO + FULLSCREEN + POPUP) -->
       <div class="ste-container">
-        <div class="ste-image-wrapper">
-          <model-viewer src="../Train_fix.main_design.glb" alt="Chaîne cinématique complète 3D" auto-rotate camera-controls style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px;"></model-viewer>
+        <div class="train-studio-card">
+          <div class="train-studio-header">
+            <div>
+              <h3 class="train-studio-title">⚙️ Chaîne Cinématique Interactive 3D — Finition Haute Horlogerie</h3>
+              <p class="train-studio-hint">Clic sur un composant : fiche technique (nom, dents, matériau) • Clic gauche : pivoter • Molette : zoom</p>
+            </div>
+            <div class="train-studio-actions">
+              <button type="button" class="train-btn active" id="train-autorotate-btn">⟳ Rotation Auto</button>
+              <button type="button" class="train-btn" id="train-reset-btn">Centrer</button>
+              <button type="button" class="train-btn" id="train-fullscreen-btn">⛶ Plein Écran</button>
+            </div>
+          </div>
+
+          <div id="canvas-container-train">
+            <div id="train-loader">
+              <div class="train-spinner"></div>
+              <div id="train-loader-text">Chargement de la chaîne cinématique 3D...</div>
+            </div>
+
+            <button type="button" class="train-btn" id="train-fs-exit-btn">✕ Quitter Plein Écran</button>
+
+            <!-- Popup scheda tecnica al clic -->
+            <div id="train-spec-popup" role="dialog" aria-live="polite">
+              <div class="train-popup-top">
+                <span class="train-popup-badge">Fiche Composant</span>
+                <button type="button" class="train-popup-close" id="train-popup-close" aria-label="Fermer">✕</button>
+              </div>
+              <div class="train-popup-title" id="train-popup-name">—</div>
+              <div class="train-popup-row">
+                <span class="train-popup-key">Nombre de dents (Z)</span>
+                <span class="train-popup-val" id="train-popup-teeth">—</span>
+              </div>
+              <div class="train-popup-row">
+                <span class="train-popup-key">Matériau &amp; Finition</span>
+                <span class="train-popup-val" id="train-popup-material">—</span>
+              </div>
+              <div class="train-popup-row">
+                <span class="train-popup-key">Fonction</span>
+                <span class="train-popup-val" id="train-popup-role">—</span>
+              </div>
+            </div>
+          </div>
         </div>
         
         <div class="ste-grid">
@@ -555,12 +776,375 @@
   
   <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
 
-  <!-- Script unificato Three.js r160 per Calibre ETA 6498-1 e Barillet -->
+  <!-- Script unico Three.js r160 per Treno del Tempo, ETA 6498-1 e Barillet -->
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+    // =========================================================================
+    // 0. VISUALIZZATORE 3D DARK STUDIO — CHAÎNE CINÉMATIQUE (TRENO DEL TEMPO)
+    // =========================================================================
+    const TRAIN_MODEL_URL = '../Train_fix.main_design.glb';
+    const trainContainer = document.getElementById('canvas-container-train');
+    let sharedEnvMap = null;
+
+    if (trainContainer) {
+      const sceneTrain = new THREE.Scene();
+
+      const cameraTrain = new THREE.PerspectiveCamera(
+        38,
+        trainContainer.clientWidth / trainContainer.clientHeight,
+        0.01,
+        1000
+      );
+      cameraTrain.position.set(0, 1.4, 4.2);
+
+      const rendererTrain = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      rendererTrain.setSize(trainContainer.clientWidth, trainContainer.clientHeight);
+      rendererTrain.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      rendererTrain.toneMapping = THREE.ACESFilmicToneMapping;
+      rendererTrain.toneMappingExposure = 1.25;
+      trainContainer.appendChild(rendererTrain.domElement);
+
+      const pmremTrain = new THREE.PMREMGenerator(rendererTrain);
+      sharedEnvMap = pmremTrain.fromScene(new RoomEnvironment(), 0.04).texture;
+      sceneTrain.environment = sharedEnvMap;
+
+      // Luci da studio su fondo scuro per far brillare ottone, acciaio, viti blu e rubini
+      const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+      keyLight.position.set(5, 8, 6);
+      sceneTrain.add(keyLight);
+
+      const rimLight = new THREE.DirectionalLight(0x9ec5ff, 1.2);
+      rimLight.position.set(-6, 4, -5);
+      sceneTrain.add(rimLight);
+
+      const warmFill = new THREE.PointLight(0xffdf9e, 1.0, 20);
+      warmFill.position.set(0, -3, 4);
+      sceneTrain.add(warmFill);
+
+      const controlsTrain = new OrbitControls(cameraTrain, rendererTrain.domElement);
+      controlsTrain.enableDamping = true;
+      controlsTrain.dampingFactor = 0.06;
+      controlsTrain.autoRotate = true;
+      controlsTrain.autoRotateSpeed = 1.35;
+
+      const trainPickableMeshes = [];
+      const trainInitialCamPos = new THREE.Vector3(0, 1.4, 4.2);
+      let trainSelectedMesh = null;
+      let trainPrevEmissive = null;
+      let trainPrevEmissiveIntensity = 0;
+
+      const trainLoaderEl = document.getElementById('train-loader');
+      const trainLoaderText = document.getElementById('train-loader-text');
+      const popupEl = document.getElementById('train-spec-popup');
+      const popupNameEl = document.getElementById('train-popup-name');
+      const popupTeethEl = document.getElementById('train-popup-teeth');
+      const popupMatEl = document.getElementById('train-popup-material');
+      const popupRoleEl = document.getElementById('train-popup-role');
+      const popupCloseBtn = document.getElementById('train-popup-close');
+
+      // Schede tecniche orologiere (nome, denti tipici calibro meccanico 18'000 / 21'600 A/h, materiale, funzione)
+      const TRAIN_SPECS_FR = [
+        {
+          match: /tambour|barillet|barrel/i,
+          name: 'Tambour de Barillet',
+          teeth: '72 à 80 dents',
+          material: 'Laiton doré (CuZn37)',
+          role: 'Stockage et restitution du couple moteur'
+        },
+        {
+          match: /arbre|albero|shaft|asse/i,
+          name: 'Arbre de Barillet',
+          teeth: 'Carré de remontoir',
+          material: 'Acier trempé poli',
+          role: 'Pivotement et armage du ressort-moteur'
+        },
+        {
+          match: /centre|center|grande\s*moyenne/i,
+          name: 'Roue de Centre (Grande Moyenne)',
+          teeth: '64 à 80 dents (1 tour / heure)',
+          material: 'Laiton doré & pignon acier',
+          role: 'Transmission principale & entraînement minuterie'
+        },
+        {
+          match: /troisi[eè]me|third|petite\s*moyenne/i,
+          name: 'Roue de Troisième (Petite Moyenne)',
+          teeth: '60 à 75 dents',
+          material: 'Laiton doré & pignon acier trempé',
+          role: 'Démultiplication intermédiaire du rouage'
+        },
+        {
+          match: /seconde|fourth|second/i,
+          name: 'Roue de Seconde',
+          teeth: '60 à 70 dents (1 tour / minute)',
+          material: 'Laiton doré & pignon acier trempé',
+          role: 'Affichage des secondes & liaison échappement'
+        },
+        {
+          match: /[eé]chappement|escape/i,
+          name: "Roue d'Échappement",
+          teeth: '15 dents inclinées',
+          material: 'Acier trempé haute dureté',
+          role: 'Distribution des impulsions à l’ancre'
+        },
+        {
+          match: /ancre|pallet|palette|lev[eé]e/i,
+          name: 'Ancre Suisse & Levées',
+          teeth: '2 palettes (entrée / sortie)',
+          material: 'Acier poli & Rubis synthétique (Corindon)',
+          role: 'Verrouillage et entretien des oscillations'
+        },
+        {
+          match: /balancier|balance/i,
+          name: 'Balancier Annulaire',
+          teeth: 'Sans denture (organe oscillant)',
+          material: 'Glucydur / Laiton doré & axe acier',
+          role: 'Base de temps isochrone (2,5 – 4 Hz)'
+        },
+        {
+          match: /spiral|hairspring/i,
+          name: 'Spiral Régulateur',
+          teeth: '12 à 16 spires concentriques',
+          material: 'Alliage Nivarox / Acier bleui',
+          role: 'Couple de rappel élastique du balancier'
+        },
+        {
+          match: /aiguille|lancetta|hand|index/i,
+          name: 'Aiguille / Index Indicateur',
+          teeth: 'Canon ajusté sur axe',
+          material: 'Acier bleui à la flamme',
+          role: 'Lecture visuelle de la rotation'
+        },
+        {
+          match: /pignon|pinion/i,
+          name: 'Pignon de Finissage',
+          teeth: '8 à 12 ailes (profil épicycloïdal)',
+          material: 'Acier trempé poli-miroir',
+          role: 'Réception du couple entre mobiles'
+        },
+        {
+          match: /rubis|ruby|pierre|jewel/i,
+          name: 'Coussinet / Palette Rubis',
+          teeth: 'Sans denture',
+          material: 'Rubis synthétique (Al₂O₃)',
+          role: 'Réduction minimale des frottements'
+        }
+      ];
+
+      function detectMaterialLabel(mesh) {
+        const matName = (mesh.material?.name || '').toLowerCase();
+        if (matName.includes('ottone') || matName.includes('brass') || matName.includes('gold')) {
+          return 'Laiton doré (CuZn)';
+        }
+        if (matName.includes('azzurr') || matName.includes('blue')) {
+          return 'Acier bleui thermiquement';
+        }
+        if (matName.includes('rubin') || matName.includes('ruby')) {
+          return 'Rubis synthétique (Corindon)';
+        }
+        if (matName.includes('acciaio') || matName.includes('steel') || matName.includes('rodiat')) {
+          return 'Acier trempé rhodié';
+        }
+        // Deduzione dal colore base se il materiale non ha il prefisso STE_
+        if (mesh.material?.color) {
+          const c = mesh.material.color;
+          if (c.r > 0.55 && c.g < 0.2 && c.b < 0.2) return 'Rubis synthétique (Corindon)';
+          if (c.b > 0.45 && c.r < 0.25) return 'Acier bleui thermiquement';
+          if (c.r > 0.65 && c.g > 0.45 && c.b < 0.35) return 'Laiton doré (CuZn)';
+        }
+        return 'Acier horloger trempé';
+      }
+
+      function resolveTrainComponentInfo(mesh) {
+        let fullHierarchyName = '';
+        let cur = mesh;
+        while (cur) {
+          if (cur.name) fullHierarchyName += ' ' + cur.name;
+          cur = cur.parent;
+        }
+        const cleanRaw = (mesh.name || mesh.parent?.name || 'Composant du rouage')
+          .replace(/\.(glb|gltf|blend|step|stp)$/i, '')
+          .replace(/[_-]+/g, ' ')
+          .replace(/\s*\.\d+$/, '')
+          .trim();
+
+        // Estrae eventuale numero di denti scritto nel nome in Blender (es. "Z80", "72d", "80_denti")
+        const explicitTeethMatch = fullHierarchyName.match(/(?:\bz\s*(\d{1,3})\b|\b(\d{1,3})\s*(?:dents|denti|teeth|d)\b)/i);
+        const explicitTeeth = explicitTeethMatch ? `${explicitTeethMatch[1] || explicitTeethMatch[2]} dents` : null;
+
+        for (const spec of TRAIN_SPECS_FR) {
+          if (spec.match.test(fullHierarchyName)) {
+            return {
+              name: spec.name,
+              teeth: explicitTeeth || spec.teeth,
+              material: spec.material,
+              role: spec.role
+            };
+          }
+        }
+
+        return {
+          name: cleanRaw || 'Mobile du train de rouage',
+          teeth: explicitTeeth || 'Engrenage horloger',
+          material: detectMaterialLabel(mesh),
+          role: 'Transmission cinématique du mouvement'
+        };
+      }
+
+      function clearTrainSelection() {
+        if (trainSelectedMesh && trainSelectedMesh.material && 'emissive' in trainSelectedMesh.material) {
+          trainSelectedMesh.material.emissive.copy(trainPrevEmissive);
+          trainSelectedMesh.material.emissiveIntensity = trainPrevEmissiveIntensity;
+        }
+        trainSelectedMesh = null;
+        trainPrevEmissive = null;
+        popupEl.classList.remove('visible');
+      }
+
+      function selectTrainMesh(mesh) {
+        clearTrainSelection();
+        trainSelectedMesh = mesh;
+
+        const info = resolveTrainComponentInfo(mesh);
+        popupNameEl.textContent = info.name;
+        popupTeethEl.textContent = info.teeth;
+        popupMatEl.textContent = info.material;
+        popupRoleEl.textContent = info.role;
+        popupEl.classList.add('visible');
+
+        if (mesh.material && 'emissive' in mesh.material) {
+          mesh.material = mesh.material.clone();
+          trainPrevEmissive = mesh.material.emissive.clone();
+          trainPrevEmissiveIntensity = mesh.material.emissiveIntensity ?? 1;
+          mesh.material.emissive.setHex(0xd4af37);
+          mesh.material.emissiveIntensity = 0.55;
+        }
+      }
+
+      popupCloseBtn.addEventListener('click', clearTrainSelection);
+
+      const trainLoader = new GLTFLoader();
+      trainLoader.load(
+        TRAIN_MODEL_URL,
+        (gltf) => {
+          const trainRoot = gltf.scene;
+
+          const box = new THREE.Box3().setFromObject(trainRoot);
+          const center = box.getCenter(new THREE.Vector3());
+          const size = box.getSize(new THREE.Vector3());
+          const maxDim = Math.max(size.x, size.y, size.z) || 1;
+
+          trainRoot.scale.setScalar(3.3 / maxDim);
+          box.setFromObject(trainRoot);
+          box.getCenter(center);
+          trainRoot.position.sub(center);
+
+          sceneTrain.add(trainRoot);
+
+          trainRoot.traverse((child) => {
+            if (child.isMesh) {
+              if (child.material) {
+                child.material.needsUpdate = true;
+              }
+              trainPickableMeshes.push(child);
+            }
+          });
+
+          cameraTrain.position.copy(trainInitialCamPos);
+          controlsTrain.target.set(0, 0, 0);
+          controlsTrain.update();
+
+          trainLoaderEl.style.opacity = '0';
+          setTimeout(() => trainLoaderEl.remove(), 350);
+        },
+        (xhr) => {
+          if (xhr.total > 0 && trainLoaderText) {
+            trainLoaderText.textContent = `Chargement : ${Math.round((xhr.loaded / xhr.total) * 100)}%`;
+          }
+        },
+        (err) => {
+          console.error('Erreur chargement Train GLB:', err);
+          if (trainLoaderText) {
+            trainLoaderText.innerHTML = 'Erreur de chargement de "Train_fix.main_design.glb".';
+          }
+        }
+      );
+
+      // Raycasting al clic sul treno del tempo
+      const trainRaycaster = new THREE.Raycaster();
+      const trainPointer = new THREE.Vector2();
+      let trainDownPos = { x: 0, y: 0 };
+
+      rendererTrain.domElement.addEventListener('pointerdown', (ev) => {
+        if (ev.button !== 0) return;
+        trainDownPos = { x: ev.clientX, y: ev.clientY };
+      });
+
+      rendererTrain.domElement.addEventListener('pointerup', (ev) => {
+        if (ev.button !== 0) return;
+        const dist = Math.hypot(ev.clientX - trainDownPos.x, ev.clientY - trainDownPos.y);
+        if (dist > 5 || trainPickableMeshes.length === 0) return;
+
+        const rect = rendererTrain.domElement.getBoundingClientRect();
+        trainPointer.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+        trainPointer.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+
+        trainRaycaster.setFromCamera(trainPointer, cameraTrain);
+        const hits = trainRaycaster.intersectObjects(trainPickableMeshes, false);
+        if (hits.length > 0) {
+          selectTrainMesh(hits[0].object);
+        }
+      });
+
+      // Controlli toolbar: Rotation Auto, Centrer, Plein Écran
+      const autoRotateBtn = document.getElementById('train-autorotate-btn');
+      autoRotateBtn.addEventListener('click', () => {
+        controlsTrain.autoRotate = !controlsTrain.autoRotate;
+        autoRotateBtn.classList.toggle('active', controlsTrain.autoRotate);
+      });
+
+      document.getElementById('train-reset-btn').addEventListener('click', () => {
+        cameraTrain.position.copy(trainInitialCamPos);
+        controlsTrain.target.set(0, 0, 0);
+        controlsTrain.update();
+      });
+
+      const fsBtn = document.getElementById('train-fullscreen-btn');
+      const fsExitBtn = document.getElementById('train-fs-exit-btn');
+
+      function toggleTrainFullscreen() {
+        if (!document.fullscreenElement) {
+          trainContainer.requestFullscreen?.().catch((e) => console.warn(e));
+        } else {
+          document.exitFullscreen?.();
+        }
+      }
+
+      fsBtn.addEventListener('click', toggleTrainFullscreen);
+      fsExitBtn.addEventListener('click', toggleTrainFullscreen);
+
+      function resizeTrainViewer() {
+        if (!trainContainer) return;
+        const w = trainContainer.clientWidth || window.innerWidth;
+        const h = trainContainer.clientHeight || window.innerHeight;
+        cameraTrain.aspect = w / h;
+        cameraTrain.updateProjectionMatrix();
+        rendererTrain.setSize(w, h);
+      }
+
+      document.addEventListener('fullscreenchange', resizeTrainViewer);
+      window.addEventListener('resize', resizeTrainViewer);
+
+      function animateTrain() {
+        requestAnimationFrame(animateTrain);
+        controlsTrain.update();
+        rendererTrain.render(sceneTrain, cameraTrain);
+      }
+      animateTrain();
+    }
 
     // =========================================================================
     // 1. VISUALIZZATORE 3D CALIBRE ETA 6498-1
@@ -587,8 +1171,10 @@
       rendererEta.toneMappingExposure = 1.15;
       etaContainer.appendChild(rendererEta.domElement);
 
-      const pmremEta = new THREE.PMREMGenerator(rendererEta);
-      const sharedEnvMap = pmremEta.fromScene(new RoomEnvironment(), 0.04).texture;
+      if (!sharedEnvMap) {
+        const pmremEta = new THREE.PMREMGenerator(rendererEta);
+        sharedEnvMap = pmremEta.fromScene(new RoomEnvironment(), 0.04).texture;
+      }
       sceneEta.environment = sharedEnvMap;
 
       const lightTop = new THREE.DirectionalLight(0xffffff, 1.8);
