@@ -6,10 +6,8 @@
   <title>Swiss Time Expert - 1. Das Handaufzugswerk</title>
   
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="shortcut icon" type="image/png" href="../favicon.png?v=2">
   <link rel="stylesheet" href="../_stile.css">
-  
-  <!-- Script für den 3D Model-Viewer (Räderwerk oben) -->
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   
   <style>
     /* Erzwungene Ausrichtung zur Synchronisierung von Header und Notebook beim Zoomen */
@@ -57,6 +55,257 @@
     .tech-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95em; }
     .tech-table th, .tech-table td { border: 1px solid #dcdcdc; padding: 10px; text-align: center; }
     .tech-table th { background-color: #1a365d; color: white; }
+
+    /* =========================================================================
+       DARK STUDIO 3D-VIEWER — KINEMATISCHE KETTE (RÄDERWERK)
+       ========================================================================= */
+    .train-studio-card {
+      background: #0d131f;
+      border: 1px solid #24324a;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 28px rgba(10, 18, 32, 0.22);
+      color: #f1f5f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .train-studio-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .train-studio-title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: 0.01em;
+    }
+    .train-studio-hint {
+      margin: 2px 0 0 0;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+    .train-btn {
+      background: rgba(30, 41, 59, 0.92);
+      color: #f8fafc;
+      border: 1px solid #3b4c66;
+      padding: 6px 11px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s, border-color 0.15s, transform 0.08s;
+    }
+    .train-btn:hover {
+      background: #2c3e55;
+      border-color: #d4af37;
+    }
+    .train-btn:active {
+      transform: scale(0.96);
+    }
+    .train-btn.active {
+      background: #b8860b;
+      border-color: #f3c64f;
+      color: #ffffff;
+    }
+
+    #canvas-container-train {
+      width: 100%;
+      height: 500px;
+      background: radial-gradient(circle at center, #1b263b 0%, #090d16 100%);
+      border-radius: 8px;
+      border: 1px solid #1e293b;
+      position: relative;
+      overflow: hidden;
+    }
+    #canvas-container-train.mode-pan {
+      cursor: grab;
+    }
+    #canvas-container-train.mode-pan:active {
+      cursor: grabbing;
+    }
+    #canvas-container-train:fullscreen,
+    #canvas-container-train:-webkit-full-screen {
+      width: 100vw !important;
+      height: 100vh !important;
+      border-radius: 0;
+      border: none;
+    }
+
+    /* Interne HUD-Befehlsleiste: auch im Vollbildmodus stets sichtbar */
+    .train-hud-dock {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      background: rgba(13, 19, 31, 0.88);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      border-radius: 10px;
+      padding: 7px 10px;
+      z-index: 25;
+      max-width: calc(100% - 24px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+    }
+    .train-hud-sep {
+      width: 1px;
+      height: 20px;
+      background: rgba(148, 163, 184, 0.25);
+      margin: 0 2px;
+    }
+    #canvas-container-train:fullscreen .train-hud-dock,
+    #canvas-container-train:-webkit-full-screen .train-hud-dock {
+      bottom: 24px;
+      padding: 10px 14px;
+      gap: 8px;
+    }
+    #canvas-container-train:fullscreen .train-hud-dock .train-btn,
+    #canvas-container-train:-webkit-full-screen .train-hud-dock .train-btn {
+      padding: 9px 14px;
+      font-size: 0.92rem;
+    }
+
+    #train-loader {
+      position: absolute;
+      inset: 0;
+      background: rgba(9, 13, 22, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: opacity 0.35s ease;
+    }
+    .train-spinner {
+      width: 34px;
+      height: 34px;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-top-color: #d4af37;
+      border-radius: 50%;
+      animation: etaSpin 0.85s linear infinite;
+      margin-bottom: 10px;
+    }
+
+    /* Bauteilkarte-Popup bei Klick */
+    #train-spec-popup {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 340px;
+      max-width: calc(100% - 32px);
+      background: rgba(13, 19, 31, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid #d4af37;
+      border-left: 5px solid #d4af37;
+      border-radius: 10px;
+      padding: 15px 17px;
+      color: #f8fafc;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+      z-index: 26;
+      display: none;
+      animation: popupFadeIn 0.2s ease-out;
+    }
+    #train-spec-popup.visible {
+      display: block;
+    }
+
+    /* Vergrößerte Darstellung im Vollbildmodus */
+    #canvas-container-train:fullscreen #train-spec-popup,
+    #canvas-container-train:-webkit-full-screen #train-spec-popup {
+      top: 28px;
+      left: 28px;
+      width: 440px;
+      max-width: calc(100% - 56px);
+      padding: 22px 26px;
+      border-radius: 12px;
+      border-left-width: 6px;
+    }
+    #canvas-container-train:fullscreen .train-popup-badge,
+    #canvas-container-train:-webkit-full-screen .train-popup-badge {
+      font-size: 0.82rem;
+    }
+    #canvas-container-train:fullscreen .train-popup-title,
+    #canvas-container-train:-webkit-full-screen .train-popup-title {
+      font-size: 1.35rem;
+      margin-bottom: 14px;
+    }
+    #canvas-container-train:fullscreen .train-popup-row,
+    #canvas-container-train:-webkit-full-screen .train-popup-row {
+      font-size: 1.02rem;
+      padding: 8px 0;
+    }
+    #canvas-container-train:fullscreen .train-popup-close,
+    #canvas-container-train:-webkit-full-screen .train-popup-close {
+      font-size: 1.45rem;
+    }
+
+    @keyframes popupFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .train-popup-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .train-popup-badge {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #f3c64f;
+      font-weight: 700;
+    }
+    .train-popup-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.15rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 2px;
+    }
+    .train-popup-close:hover {
+      color: #ffffff;
+    }
+    .train-popup-title {
+      margin: 2px 0 10px 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .train-popup-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.84rem;
+      padding: 6px 0;
+      border-top: 1px solid rgba(148, 163, 184, 0.18);
+    }
+    .train-popup-key {
+      color: #94a3b8;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .train-popup-val {
+      color: #f8fafc;
+      font-weight: 700;
+      text-align: right;
+    }
 
     /* 3D-Viewer ETA 6498-1 (Helles Design) */
     .eta-module-wrapper {
@@ -240,7 +489,7 @@
     }
   </style>
 
-  <!-- Isolierte Import Map für Three.js r160 (ETA 6498-1 Viewer) -->
+  <!-- Einheitliche Import Map für Three.js r160 (geteilt für Räderwerk, ETA 6498-1 und Federhaus) -->
   <script type="importmap">
     {
       "imports": {
@@ -258,7 +507,7 @@
     <div class="header-left-block">
       <div class="badge">Haute Horlogerie — Brevet Fédéral</div>
       <h1>1. Das Handaufzugswerk: Wie funktioniert eine mechanische Uhr?</h1>
-      <p class="subtitle">Uhrmacher-Fachexpertise — Energie, Federhaus & Räderwerk</p>
+      <p class="subtitle">Uhrmacher-Fachexpertise — Energie, Federhaus &amp; Räderwerk</p>
       
       <div class="header-controls">
         <div class="dropdown">
@@ -266,10 +515,10 @@
           <div class="dropdown-content">
             <a href="_001A-Mouvement_Manuel.html">1. Das Handaufzugswerk</a>
             <a href="_002-la-montre-automatique.html">2. Die Automatikuhr</a>
-            <a href="_003-Horloge_Electronique.html">3. Elektronische Uhr & Quarz</a>
+            <a href="_003-Horloge_Electronique.html">3. Elektronische Uhr &amp; Quarz</a>
             <a href="_004-Complications.html">4. Komplikationen</a>
             <a href="_005-Familles_Matieres.html">5. Werkstoffgruppen</a>
-            <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen & Technologien</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Fertigungsphasen &amp; Technologien</a>
             <a href="_007-Habillage.html">7. Die Uhrgehäuse-Ausstattung</a>
             <a href="_008-Histoire_Mesure_Temps.html">8. Geschichte der Zeitmessung</a>
           </div>
@@ -294,9 +543,9 @@
     
     <div class="notebook-header">
       <div class="notebook-title-cell">
-        <h2 class="handwritten-heading">Modul 01: Energie, Federhaus & Kinematische Kette</h2>
+        <h2 class="handwritten-heading">Modul 01: Energie, Federhaus &amp; Kinematische Kette</h2>
       </div>
-      <div class="tag-chic">✍️ Vorlesungsnotizen & Schemata</div>
+      <div class="tag-chic">✍️ Vorlesungsnotizen &amp; Schemata</div>
     </div>
 
     <div class="handwritten-body" id="course-content-area">
@@ -306,8 +555,6 @@
 
       <style>
         .ste-container { max-width: 1000px; margin: 0 auto; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
-        .ste-image-wrapper { width: 100%; margin-bottom: 25px; }
-        .ste-base-img { width: 100%; height: auto; display: block; }
         .ste-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
         .ste-card { background-color: #f8f9fa; padding: 18px; border-radius: 6px; border-top: 4px solid #1a365d; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
         .ste-step { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6c757d; letter-spacing: 1px; margin-bottom: 6px; }
@@ -316,16 +563,62 @@
         @media (max-width: 768px) { .ste-grid { grid-template-columns: 1fr; gap: 15px; } }
       </style>
 
-      <!-- 1. 3D INTERACTIVE TRAIN VIEWER -->
+      <!-- 1. 3D INTERACTIVE TRAIN VIEWER (DARK STUDIO + FULLSCREEN + POPUP + HUD) -->
       <div class="ste-container">
-        <div class="ste-image-wrapper">
-          <model-viewer src="../Train_fix.main_design.glb" alt="Vollständiger kinematischer Zug 3D" auto-rotate camera-controls style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px;"></model-viewer>
+        <div class="train-studio-card">
+          <div class="train-studio-header">
+            <div>
+              <h3 class="train-studio-title">⚙️ Interaktive 3D-Kinematikkette — Haute-Horlogerie-Veredelung</h3>
+              <p class="train-studio-hint" id="train-mode-hint">Klick auf ein Bauteil: Bauteilkarte • Ziehen: drehen • 🔍 + / − Tasten: zoomen</p>
+            </div>
+          </div>
+
+          <div id="canvas-container-train">
+            <div id="train-loader">
+              <div class="train-spinner"></div>
+              <div id="train-loader-text">3D-Kinematikkette wird geladen...</div>
+            </div>
+
+            <!-- Bauteilkarte-Popup bei Klick -->
+            <div id="train-spec-popup" role="dialog" aria-live="polite">
+              <div class="train-popup-top">
+                <span class="train-popup-badge">Bauteilkarte</span>
+                <button type="button" class="train-popup-close" id="train-popup-close" aria-label="Schließen">✕</button>
+              </div>
+              <div class="train-popup-title" id="train-popup-name">—</div>
+              <div class="train-popup-row">
+                <span class="train-popup-key">Zähnezahl (Z)</span>
+                <span class="train-popup-val" id="train-popup-teeth">—</span>
+              </div>
+              <div class="train-popup-row">
+                <span class="train-popup-key">Werkstoff &amp; Veredelung</span>
+                <span class="train-popup-val" id="train-popup-material">—</span>
+              </div>
+              <div class="train-popup-row">
+                <span class="train-popup-key">Funktion</span>
+                <span class="train-popup-val" id="train-popup-role">—</span>
+              </div>
+            </div>
+
+            <!-- Interne HUD-Befehlsleiste: auch im Vollbildmodus stets sichtbar -->
+            <div class="train-hud-dock">
+              <button type="button" class="train-btn active" id="train-tool-orbit" title="Modell drehen">⟳ Drehen</button>
+              <button type="button" class="train-btn" id="train-tool-pan" title="Ansicht verschieben">✋ Verschieben</button>
+              <span class="train-hud-sep"></span>
+              <button type="button" class="train-btn" id="train-zoom-in" title="Heranzoomen (gedrückt halten)">🔍 +</button>
+              <button type="button" class="train-btn" id="train-zoom-out" title="Herauszoomen (gedrückt halten)">🔍 −</button>
+              <span class="train-hud-sep"></span>
+              <button type="button" class="train-btn active" id="train-autorotate-btn" title="Automatische Drehung">↻ Auto</button>
+              <button type="button" class="train-btn" id="train-reset-btn" title="Ansicht zentrieren">Zentrieren</button>
+              <button type="button" class="train-btn" id="train-fullscreen-btn" title="Vollbildmodus">⛶ Vollbild</button>
+            </div>
+          </div>
         </div>
         
         <div class="ste-grid">
           <div class="ste-card">
             <div class="ste-step">Schritt 1: Energie</div>
-            <h3 class="ste-title">Feder & Federhaus</h3>
+            <h3 class="ste-title">Feder &amp; Federhaus</h3>
             <p class="ste-text">Der Motor der Uhr. Die Zugfeder, im Inneren der Trommel (1) untergebracht, speichert beim Aufziehen mechanische Energie.</p>
           </div>
           <div class="ste-card">
@@ -392,352 +685,6 @@
         </div>
       </div>
 
-      <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-        import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-
-        const ETA_MODEL_URL = '../ETA6498-1_Web.glb';
-        const etaContainer = document.getElementById('canvas-container-eta');
-
-        if (etaContainer) {
-          const sceneEta = new THREE.Scene();
-          sceneEta.background = new THREE.Color(0xffffff);
-
-          const cameraEta = new THREE.PerspectiveCamera(
-            40,
-            etaContainer.clientWidth / etaContainer.clientHeight,
-            0.01,
-            1000
-          );
-          cameraEta.position.set(0, 3.2, 4.6);
-
-          const rendererEta = new THREE.WebGLRenderer({ antialias: true });
-          rendererEta.setSize(etaContainer.clientWidth, etaContainer.clientHeight);
-          rendererEta.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-          rendererEta.toneMapping = THREE.ACESFilmicToneMapping;
-          rendererEta.toneMappingExposure = 1.15;
-          etaContainer.appendChild(rendererEta.domElement);
-
-          const pmremEta = new THREE.PMREMGenerator(rendererEta);
-          sceneEta.environment = pmremEta.fromScene(new RoomEnvironment(), 0.04).texture;
-
-          const lightTop = new THREE.DirectionalLight(0xffffff, 1.8);
-          lightTop.position.set(5, 10, 7);
-          sceneEta.add(lightTop);
-
-          const lightFill = new THREE.DirectionalLight(0xdbe8ff, 0.9);
-          lightFill.position.set(-6, -4, -5);
-          sceneEta.add(lightFill);
-
-          const controlsEta = new OrbitControls(cameraEta, rendererEta.domElement);
-          controlsEta.enableDamping = true;
-          controlsEta.dampingFactor = 0.06;
-
-          let etaModelRoot = null;
-          const etaExplodeItems = [];
-          const etaPickableMeshes = [];
-          const etaInitialCamPos = new THREE.Vector3();
-
-          let etaSelectedMesh = null;
-          let etaPrevEmissive = null;
-          let etaPrevEmissiveIntensity = 0;
-
-          const selectedBar = document.getElementById('eta-selected-bar');
-          const selectedNameEl = document.getElementById('eta-selected-name');
-          const selectedRawEl = document.getElementById('eta-selected-raw');
-          const clearBtn = document.getElementById('eta-clear-btn');
-          const loaderEl = document.getElementById('eta-loader');
-          const loaderTextEl = document.getElementById('eta-loader-text');
-
-          // Uhrmacher-Fachwörterbuch EN -> DE für die Bauteile des Kalibers ETA 6498-1
-          const HOROLOGY_DICT_DE = [
-            // Werkplatte und Brücken
-            [/\bmain\s*plate\b|\bbase\s*plate\b|\bplate\b/i, 'Werkplatte (Platine)'],
-            [/\bbarrel\s*bridge\b/i, 'Federhausbrücke'],
-            [/\btrain\s*(wheel\s*)?bridge\b|\bgear\s*train\s*bridge\b/i, 'Räderwerkbrücke'],
-            [/\bbalance\s*(cock|bridge)\b/i, 'Unruhkloben'],
-            [/\bpallet\s*(fork\s*)?(cock|bridge)\b|\bescapement\s*bridge\b/i, 'Ankerkloben'],
-            [/\bbridge\b/i, 'Brücke'],
-
-            // Federhaus & Aufzug
-            [/\bbarrel\s*drum\b|\bdrum\b/i, 'Federhaustrommel'],
-            [/\bbarrel\s*cover\b|\bcover\b/i, 'Federhausdeckel'],
-            [/\bbarrel\s*arbor\b|\barbor\b/i, 'Federhauswelle'],
-            [/\bmainspring\b|\bmain\s*spring\b/i, 'Zugfeder'],
-            [/\bbarrel\b/i, 'Federhaus'],
-            [/\bratchet\s*wheel\b|\bratchet\b/i, 'Sperrrad'],
-            [/\bcrown\s*wheel\b/i, 'Kronrad'],
-            [/\bwinding\s*stem\b|\bstem\b/i, 'Aufzugwelle'],
-            [/\bwinding\s*pinion\b/i, 'Aufzugtrieb'],
-            [/\bsliding\s*pinion\b|\bclutch\s*wheel\b/i, 'Kupplungstrieb'],
-            [/\bsetting\s*lever\b/i, 'Winkelhebel'],
-            [/\byoke\b/i, 'Kupplungshebel (Wippe)'],
-            [/\bclick\s*spring\b/i, 'Sperrklinkenfeder'],
-            [/\bclick\b/i, 'Sperrklinke'],
-            [/\bsetting\s*wheel\b/i, 'Stellrad'],
-            [/\bminute\s*wheel\b/i, 'Wechselrad'],
-            [/\bhour\s*wheel\b/i, 'Stundenrad'],
-            [/\bcannon\s*pinion\b/i, 'Minutenrohr'],
-
-            // Räderwerk
-            [/\bcenter\s*wheel\b|\bcentre\s*wheel\b/i, 'Minutenrad (Zentrumsrad)'],
-            [/\bthird\s*wheel\b/i, 'Kleinbodenrad (Drittes Rad)'],
-            [/\bfourth\s*wheel\b|\bsecond\s*wheel\b/i, 'Sekundenrad'],
-            [/\bescape\s*wheel\b|\bescapement\s*wheel\b/i, 'Hemmungsrad (Steigrad)'],
-            [/\bwheel\b/i, 'Rad'],
-            [/\bpinion\b/i, 'Trieb'],
-
-            // Hemmung und Schwingsystem
-            [/\bpallet\s*fork\b|\bpallet\b|\banchor\b/i, 'Anker'],
-            [/\bbalance\s*wheel\b|\bbalance\b/i, 'Unruh'],
-            [/\bhairspring\b|\bbalance\s*spring\b|\bspiral\b/i, 'Spiralfeder'],
-            [/\bregulator\b|\bindex\b/i, 'Rückerzeiger'],
-            [/\bstud\b/i, 'Spiralklötzchen'],
-            [/\bincabloc\b|\bshock\s*absorber\b/i, 'Stoßsicherung (Incabloc)'],
-            [/\bjewel\b|\bruby\b/i, 'Lagerstein (Rubin)'],
-
-            // Kleinteile und Schrauben
-            [/\bscrew\b/i, 'Schraube'],
-            [/\bspring\b/i, 'Feder'],
-            [/\bwasher\b/i, 'Unterlegscheibe'],
-            [/\bpin\b/i, 'Stift']
-          ];
-
-          function cleanEtaName(raw) {
-            if (!raw) return 'Unbenanntes Bauteil';
-            return raw
-              .replace(/\.(sldprt|sldasm|igs|iges|step|stp|glb|gltf|blend)$/i, '')
-              .replace(/[_-]+/g, ' ')
-              .replace(/\s*\.\d+$/, '')
-              .replace(/\s+/g, ' ')
-              .trim() || 'Unbenanntes Bauteil';
-          }
-
-          function translatePartToGerman(cleanName) {
-            for (const [pattern, deLabel] of HOROLOGY_DICT_DE) {
-              if (pattern.test(cleanName)) {
-                return deLabel;
-              }
-            }
-            return cleanName;
-          }
-
-          function resolveEtaPartName(mesh) {
-            let cur = mesh;
-            const genericRe = /^(mesh|object|node|part|solid|group|body|untitled)(_|\s|-|\d|\.)*$/i;
-            let rawFound = '';
-            while (cur && cur !== etaModelRoot) {
-              if (cur.name && !genericRe.test(cur.name.trim())) {
-                rawFound = cur.name;
-                break;
-              }
-              cur = cur.parent;
-            }
-            if (!rawFound) {
-              rawFound = mesh.name || mesh.parent?.name || '';
-            }
-            const cleaned = cleanEtaName(rawFound);
-            const translated = translatePartToGerman(cleaned);
-            return { translated, cleaned };
-          }
-
-          function clearEtaSelection() {
-            if (etaSelectedMesh && etaSelectedMesh.material && 'emissive' in etaSelectedMesh.material) {
-              etaSelectedMesh.material.emissive.copy(etaPrevEmissive);
-              etaSelectedMesh.material.emissiveIntensity = etaPrevEmissiveIntensity;
-            }
-            etaSelectedMesh = null;
-            etaPrevEmissive = null;
-            selectedNameEl.textContent = '—';
-            selectedRawEl.textContent = '';
-            selectedBar.classList.remove('visible');
-          }
-
-          function selectEtaMesh(mesh) {
-            if (etaSelectedMesh === mesh) return;
-            clearEtaSelection();
-
-            etaSelectedMesh = mesh;
-            const { translated, cleaned } = resolveEtaPartName(mesh);
-            selectedNameEl.textContent = translated;
-            selectedRawEl.textContent = translated.toLowerCase() !== cleaned.toLowerCase() ? `(${cleaned})` : '';
-            selectedBar.classList.add('visible');
-
-            if (mesh.material && 'emissive' in mesh.material) {
-              mesh.material = mesh.material.clone();
-              etaPrevEmissive = mesh.material.emissive.clone();
-              etaPrevEmissiveIntensity = mesh.material.emissiveIntensity ?? 1;
-              mesh.material.emissive.setHex(0x8c6928);
-              mesh.material.emissiveIntensity = 0.65;
-            }
-          }
-
-          clearBtn.addEventListener('click', clearEtaSelection);
-
-          const etaLoader = new GLTFLoader();
-          etaLoader.load(
-            ETA_MODEL_URL,
-            (gltf) => {
-              etaModelRoot = gltf.scene;
-
-              const box = new THREE.Box3().setFromObject(etaModelRoot);
-              const center = box.getCenter(new THREE.Vector3());
-              const size = box.getSize(new THREE.Vector3());
-              const maxDim = Math.max(size.x, size.y, size.z) || 1;
-
-              etaModelRoot.scale.setScalar(3.0 / maxDim);
-              box.setFromObject(etaModelRoot);
-              box.getCenter(center);
-              etaModelRoot.position.sub(center);
-
-              sceneEta.add(etaModelRoot);
-              etaModelRoot.updateMatrixWorld(true);
-
-              const origin = new THREE.Vector3(0, 0, 0);
-
-              etaModelRoot.traverse((child) => {
-                if (child.isMesh) {
-                  if (child.material) {
-                    child.material.needsUpdate = true;
-                  }
-                  etaPickableMeshes.push(child);
-
-                  const mBox = new THREE.Box3().setFromObject(child);
-                  const mCenter = mBox.getCenter(new THREE.Vector3());
-                  etaExplodeItems.push({
-                    mesh: child,
-                    origPos: child.position.clone(),
-                    worldOffset: mCenter.clone().sub(origin),
-                    parent: child.parent
-                  });
-                }
-              });
-
-              cameraEta.position.set(0, 3.1, 4.4);
-              etaInitialCamPos.copy(cameraEta.position);
-              controlsEta.target.set(0, 0, 0);
-              controlsEta.update();
-
-              loaderEl.style.opacity = '0';
-              setTimeout(() => loaderEl.remove(), 350);
-            },
-            (xhr) => {
-              if (xhr.total > 0 && loaderTextEl) {
-                loaderTextEl.textContent = `Ladevorgang: ${Math.round((xhr.loaded / xhr.total) * 100)}%`;
-              }
-            },
-            (err) => {
-              console.error('Fehler beim Laden der ETA 6498-1 GLB-Datei:', err);
-              if (loaderTextEl) {
-                loaderTextEl.innerHTML =
-                  'Fehler beim Laden der 3D-Datei.<br><small>Bitte prüfen Sie, ob "ETA6498-1_Web.glb" im Hauptverzeichnis liegt.</small>';
-              }
-            }
-          );
-
-          const etaRaycaster = new THREE.Raycaster();
-          const etaPointer = new THREE.Vector2();
-          let etaDownPos = { x: 0, y: 0 };
-
-          rendererEta.domElement.addEventListener('pointerdown', (ev) => {
-            if (ev.button !== 0) return;
-            etaDownPos = { x: ev.clientX, y: ev.clientY };
-          });
-
-          rendererEta.domElement.addEventListener('pointerup', (ev) => {
-            if (ev.button !== 0) return;
-            const dist = Math.hypot(ev.clientX - etaDownPos.x, ev.clientY - etaDownPos.y);
-            if (dist > 5 || etaPickableMeshes.length === 0) return;
-
-            const rect = rendererEta.domElement.getBoundingClientRect();
-            etaPointer.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
-            etaPointer.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
-
-            etaRaycaster.setFromCamera(etaPointer, cameraEta);
-            const hits = etaRaycaster.intersectObjects(etaPickableMeshes, false);
-            if (hits.length > 0) {
-              selectEtaMesh(hits[0].object);
-            }
-          });
-
-          const etaSlider = document.getElementById('eta-explode-slider');
-          const etaValText = document.getElementById('eta-explode-val');
-          const etaAxisSel = document.getElementById('eta-explode-axis');
-
-          function updateEtaExplode() {
-            const factor = parseFloat(etaSlider.value) / 100;
-            etaValText.textContent = `${Math.round(factor * 100)}%`;
-            const mode = etaAxisSel.value;
-
-            etaExplodeItems.forEach((item) => {
-              if (factor === 0) {
-                item.mesh.position.copy(item.origPos);
-                return;
-              }
-
-              const shift = new THREE.Vector3();
-              const spread = factor * 3.4;
-
-              if (mode === 'vertical-y') {
-                shift.set(
-                  item.worldOffset.x * spread * 0.28,
-                  item.worldOffset.y * spread * 2.5,
-                  item.worldOffset.z * spread * 0.28
-                );
-              } else if (mode === 'vertical-z') {
-                shift.set(
-                  item.worldOffset.x * spread * 0.28,
-                  item.worldOffset.y * spread * 0.28,
-                  item.worldOffset.z * spread * 2.5
-                );
-              } else {
-                shift.copy(item.worldOffset).multiplyScalar(spread * 1.85);
-              }
-
-              if (item.parent) {
-                const pScale = new THREE.Vector3();
-                item.parent.getWorldScale(pScale);
-                const localShift = shift.clone();
-                localShift.x /= pScale.x || 1;
-                localShift.y /= pScale.y || 1;
-                localShift.z /= pScale.z || 1;
-
-                const pQuat = new THREE.Quaternion();
-                item.parent.getWorldQuaternion(pQuat);
-                localShift.applyQuaternion(pQuat.invert());
-
-                item.mesh.position.copy(item.origPos).add(localShift);
-              }
-            });
-          }
-
-          etaSlider.addEventListener('input', updateEtaExplode);
-          etaAxisSel.addEventListener('change', updateEtaExplode);
-
-          document.getElementById('eta-reset-cam').addEventListener('click', () => {
-            cameraEta.position.copy(etaInitialCamPos);
-            controlsEta.target.set(0, 0, 0);
-            controlsEta.update();
-          });
-
-          window.addEventListener('resize', () => {
-            if (!etaContainer) return;
-            cameraEta.aspect = etaContainer.clientWidth / etaContainer.clientHeight;
-            cameraEta.updateProjectionMatrix();
-            rendererEta.setSize(etaContainer.clientWidth, etaContainer.clientHeight);
-          });
-
-          function animateEta() {
-            requestAnimationFrame(animateEta);
-            controlsEta.update();
-            rendererEta.render(sceneEta, cameraEta);
-          }
-          animateEta();
-        }
-      </script>
-
       <!-- 2. STATIC IMAGE WITH PINS -->
       <div class="img-always-visible" style="background: #fff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
         <div class="interactive-wrapper" style="position: relative; width: 100%;">
@@ -765,7 +712,7 @@
       </div>
 
       <details class="image-popover">
-        <summary>📷 ORIGINALES MANUSKRIPTBLATT (01-02) — Blockschema & Einführung</summary>
+        <summary>📷 ORIGINALES MANUSKRIPTBLATT (01-02) — Blockschema &amp; Einführung</summary>
         <div class="img-container"><img src="../01-02 Scema Bloc-Energie-Trasmission-Distribution-Regulation.jpg" alt="Blatt 01-02"></div>
       </details>
 
@@ -774,8 +721,8 @@
       <ul>
         <li><strong>Die Federhaustrommel:</strong> Zylindrisches Gehäuse, das die Zugfeder aufnimmt und die äußere Verzahnung trägt, die in das Minuten- bzw. Zentrumstrieb eingreift.</li>
         <li><strong>Die Zugfeder:</strong> Im Inneren aufgerollte elastische Bandfeder, deren äußeres Ende an der Trommelinnenwand fixiert ist.</li>
-        <li><strong>Die Federhauswelle:</strong> Zwischen Brücke und Platine gelagerte Welle mit einem Haken zur Befestigung des inneren Federendes.</li>
-        <li><strong>Der Federhausdeckel:</strong> Verschlussplatte, die auch zur axialen Führung der Welle beiträgt und das Innere vor Staub schützt.</li>
+        <li><strong>Die Federhauswelle:</strong> Zwischen Brücke und Werkplatte gelagerte Achse mit einem Federhauskern, der mit einem Haken zur Befestigung des inneren Federendes versehen ist.</li>
+        <li><strong>Der Federhausdeckel:</strong> Verschlusselement der Trommel, das ebenfalls zur Führung und Lagerung der Welle beiträgt.</li>
       </ul>
 
       <!-- 3. INTERACTIVE 3D BARREL -->
@@ -783,8 +730,8 @@
         <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
           
           <div id="canvas-container-barillet" style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px; position: relative; overflow: hidden;">
-            <div id="label-arbre" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Federhauswelle & Trieb</div>
-            <div id="label-tambour" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Trommel & Rad</div>
+            <div id="label-arbre" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Federhauswelle &amp; Trieb</div>
+            <div id="label-tambour" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Trommel &amp; Rad</div>
             <div id="label-molla" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Zugfeder</div>
             <div id="label-coperchio" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Federhausdeckel</div>
           </div>
@@ -798,158 +745,6 @@
           <div class="img-caption" style="margin-top: 10px;">📷 TECHNISCHE 3D-ANSICHT — Anatomie des Federhauses mit dynamischen Beschriftungen.</div>
         </div>
       </div>
-
-      <!-- Three.js Bibliotheken für das Federhaus -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-
-      <script>
-        let scene_barillet, camera_barillet, renderer_barillet, controls_barillet;
-        let parts_barillet = [];
-
-        const container_barillet = document.getElementById('canvas-container-barillet');
-
-        function initBarillet3D() {
-            if (!container_barillet) return;
-
-            scene_barillet = new THREE.Scene();
-            scene_barillet.background = new THREE.Color(0xffffff);
-
-            camera_barillet = new THREE.PerspectiveCamera(45, container_barillet.clientWidth / container_barillet.clientHeight, 0.1, 1000);
-            camera_barillet.position.set(0, 25, 40);
-
-            renderer_barillet = new THREE.WebGLRenderer({ antialias: true });
-            renderer_barillet.setSize(container_barillet.clientWidth, container_barillet.clientHeight);
-            renderer_barillet.setPixelRatio(window.devicePixelRatio);
-            renderer_barillet.shadowMap.enabled = true;
-            container_barillet.appendChild(renderer_barillet.domElement);
-
-            controls_barillet = new THREE.OrbitControls(camera_barillet, renderer_barillet.domElement);
-            controls_barillet.enableDamping = true;
-            controls_barillet.dampingFactor = 0.05;
-
-            const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
-            scene_barillet.add(ambientLight);
-
-            const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.2);
-            dirLight1.position.set(20, 40, 20);
-            scene_barillet.add(dirLight1);
-
-            const dirLight2 = new THREE.DirectionalLight(0x88bbff, 0.6);
-            dirLight2.position.set(-20, -20, -20);
-            scene_barillet.add(dirLight2);
-
-            const loader = new THREE.GLTFLoader();
-            loader.load('../barillet_fix.glb', function (gltf) {
-                const model = gltf.scene;
-                scene_barillet.add(model);
-
-                model.traverse((child) => {
-                    if (child.isMesh) {
-                        const initialPos = child.position.clone();
-                        const name = child.name.toLowerCase();
-                        
-                        let targetOffset = 0;
-                        let labelType = 'tambour';
-
-                        if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion')) {
-                            targetOffset = 0;
-                            labelType = 'arbre';
-                        } else if (name.includes('coperchio') || name.includes('cover')) {
-                            targetOffset = 18;
-                            labelType = 'coperchio';
-                        } else if (name.includes('molla') || name.includes('spring')) {
-                            targetOffset = 6;
-                            labelType = 'molla';
-                        } else {
-                            targetOffset = -15;
-                            labelType = 'tambour';
-                        }
-
-                        parts_barillet.push({
-                            mesh: child,
-                            initialPos: initialPos,
-                            targetOffset: targetOffset,
-                            labelId: 'label-' + labelType
-                        });
-                    }
-                });
-            }, undefined, function (error) {
-                console.error('Error loading GLB file:', error);
-            });
-
-            const slider = document.getElementById('exploder-barillet');
-            if (slider) {
-                slider.addEventListener('input', (event) => {
-                    const t = event.target.value / 100;
-                    updateBarilletExplosion(t);
-                    document.getElementById('val-scale-barillet').innerText = event.target.value + '%';
-                });
-            }
-
-            window.addEventListener('resize', onWindowResizeBarillet, false);
-            animateBarillet();
-        }
-
-        function updateBarilletExplosion(t) {
-            parts_barillet.forEach(p => {
-                p.mesh.position.x = p.initialPos.x + (p.targetOffset * t);
-                p.mesh.position.y = p.initialPos.y;
-                p.mesh.position.z = p.initialPos.z;
-            });
-
-            const showLabels = t > 0.05;
-            ['label-arbre', 'label-tambour', 'label-molla', 'label-coperchio'].forEach(id => {
-                const lbl = document.getElementById(id);
-                if (lbl) lbl.style.display = showLabels ? 'block' : 'none';
-            });
-
-            if (showLabels) {
-                updateBarilletLabelsPosition();
-            }
-        }
-
-        function updateBarilletLabelsPosition() {
-            parts_barillet.forEach(p => {
-                const lbl = document.getElementById(p.labelId);
-                if (!lbl || lbl.style.display === 'none') return;
-
-                const tempV = p.mesh.position.clone();
-                tempV.project(camera_barillet);
-
-                const x = (tempV.x *  .5 + .5) * container_barillet.clientWidth;
-                const y = (tempV.y * -.5 + .5) * container_barillet.clientHeight;
-
-                lbl.style.left = (x - 30) + 'px';
-                lbl.style.top = (y - 15) + 'px';
-            });
-        }
-
-        function onWindowResizeBarillet() {
-            if (!container_barillet) return;
-            camera_barillet.aspect = container_barillet.clientWidth / container_barillet.clientHeight;
-            camera_barillet.updateProjectionMatrix();
-            renderer_barillet.setSize(container_barillet.clientWidth, container_barillet.clientHeight);
-        }
-
-        function animateBarillet() {
-            requestAnimationFrame(animateBarillet);
-            controls_barillet.update();
-            renderer_barillet.render(scene_barillet, camera_barillet);
-            
-            const sliderElem = document.getElementById('exploder-barillet');
-            if (sliderElem && sliderElem.value > 5) {
-                updateBarilletLabelsPosition();
-            }
-        }
-
-        if (document.readyState === 'complete') {
-            initBarillet3D();
-        } else {
-            window.addEventListener('load', initBarillet3D);
-        }
-      </script>
 
       <!-- VERTIEFUNGSBLOCK MIT GRÜNEM BALKEN LINKS -->
       <div class="tech-doc-box">
@@ -1051,6 +846,970 @@
   </div>
   
   <footer>© 2026 Swiss Time Expert. Alle Rechte vorbehalten.</footer>
+
+  <!-- Einheitliches Three.js r160 Skript für Räderwerk, ETA 6498-1 und Federhaus -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+    // =========================================================================
+    // 0. DARK STUDIO 3D-VIEWER — KINEMATISCHE KETTE (RÄDERWERK, DEUTSCH)
+    // =========================================================================
+    const TRAIN_MODEL_URL = '../Train_fix.main_design.glb';
+    const trainContainer = document.getElementById('canvas-container-train');
+    let sharedEnvMap = null;
+
+    if (trainContainer) {
+      const sceneTrain = new THREE.Scene();
+
+      const cameraTrain = new THREE.PerspectiveCamera(
+        38,
+        trainContainer.clientWidth / trainContainer.clientHeight,
+        0.01,
+        1000
+      );
+      cameraTrain.position.set(0, 1.4, 4.2);
+
+      const rendererTrain = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      rendererTrain.setSize(trainContainer.clientWidth, trainContainer.clientHeight);
+      rendererTrain.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      rendererTrain.toneMapping = THREE.ACESFilmicToneMapping;
+      rendererTrain.toneMappingExposure = 1.25;
+      trainContainer.appendChild(rendererTrain.domElement);
+
+      const pmremTrain = new THREE.PMREMGenerator(rendererTrain);
+      sharedEnvMap = pmremTrain.fromScene(new RoomEnvironment(), 0.04).texture;
+      sceneTrain.environment = sharedEnvMap;
+
+      const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+      keyLight.position.set(5, 8, 6);
+      sceneTrain.add(keyLight);
+
+      const rimLight = new THREE.DirectionalLight(0x9ec5ff, 1.2);
+      rimLight.position.set(-6, 4, -5);
+      sceneTrain.add(rimLight);
+
+      const warmFill = new THREE.PointLight(0xffdf9e, 1.0, 20);
+      warmFill.position.set(0, -3, 4);
+      sceneTrain.add(warmFill);
+
+      const controlsTrain = new OrbitControls(cameraTrain, rendererTrain.domElement);
+      controlsTrain.enableDamping = true;
+      controlsTrain.dampingFactor = 0.06;
+      controlsTrain.autoRotate = true;
+      controlsTrain.autoRotateSpeed = 1.35;
+
+      // Bedienwerkzeuge: 'orbit' | 'pan' + 🔍 + und 🔍 − Zoom-Tasten (auch gedrückt haltbar)
+      const toolOrbitBtn = document.getElementById('train-tool-orbit');
+      const toolPanBtn = document.getElementById('train-tool-pan');
+      const zoomInBtn = document.getElementById('train-zoom-in');
+      const zoomOutBtn = document.getElementById('train-zoom-out');
+      const modeHintEl = document.getElementById('train-mode-hint');
+
+      function setBlenderTool(tool) {
+        toolOrbitBtn.classList.toggle('active', tool === 'orbit');
+        toolPanBtn.classList.toggle('active', tool === 'pan');
+        trainContainer.classList.toggle('mode-pan', tool === 'pan');
+
+        if (tool === 'orbit') {
+          controlsTrain.enableRotate = true;
+          controlsTrain.enablePan = true;
+          controlsTrain.mouseButtons = {
+            LEFT: THREE.MOUSE.ROTATE,
+            MIDDLE: THREE.MOUSE.DOLLY,
+            RIGHT: THREE.MOUSE.PAN
+          };
+          modeHintEl.textContent = 'Klick auf ein Bauteil: Bauteilkarte • Ziehen: drehen • 🔍 + / − Tasten: zoomen';
+        } else {
+          controlsTrain.enableRotate = false;
+          controlsTrain.enablePan = true;
+          controlsTrain.mouseButtons = {
+            LEFT: THREE.MOUSE.PAN,
+            MIDDLE: THREE.MOUSE.DOLLY,
+            RIGHT: THREE.MOUSE.PAN
+          };
+          modeHintEl.textContent = 'Modus Verschieben aktiv: ziehen, um die Ansicht seitlich zu verschieben';
+        }
+      }
+
+      toolOrbitBtn.addEventListener('click', () => setBlenderTool('orbit'));
+      toolPanBtn.addEventListener('click', () => setBlenderTool('pan'));
+      setBlenderTool('orbit');
+
+      function applyCameraZoom(scaleFactor) {
+        const offset = cameraTrain.position.clone().sub(controlsTrain.target);
+        const newDist = THREE.MathUtils.clamp(offset.length() * scaleFactor, 0.7, 14.0);
+        offset.setLength(newDist);
+        cameraTrain.position.copy(controlsTrain.target).add(offset);
+        controlsTrain.update();
+      }
+
+      let zoomHoldInterval = null;
+      function bindZoomButton(btn, scaleFactor) {
+        const startZoom = (e) => {
+          e.preventDefault();
+          applyCameraZoom(scaleFactor);
+          clearInterval(zoomHoldInterval);
+          zoomHoldInterval = setInterval(() => applyCameraZoom(scaleFactor), 65);
+        };
+        const stopZoom = () => {
+          clearInterval(zoomHoldInterval);
+          zoomHoldInterval = null;
+        };
+        btn.addEventListener('pointerdown', startZoom);
+        btn.addEventListener('pointerup', stopZoom);
+        btn.addEventListener('pointerleave', stopZoom);
+        btn.addEventListener('pointercancel', stopZoom);
+      }
+
+      bindZoomButton(zoomInBtn, 0.88);
+      bindZoomButton(zoomOutBtn, 1.14);
+
+      const trainPickableMeshes = [];
+      const trainInitialCamPos = new THREE.Vector3(0, 1.4, 4.2);
+      let trainSelectedMesh = null;
+      let trainPrevEmissive = null;
+      let trainPrevEmissiveIntensity = 0;
+
+      const trainLoaderEl = document.getElementById('train-loader');
+      const trainLoaderText = document.getElementById('train-loader-text');
+      const popupEl = document.getElementById('train-spec-popup');
+      const popupNameEl = document.getElementById('train-popup-name');
+      const popupTeethEl = document.getElementById('train-popup-teeth');
+      const popupMatEl = document.getElementById('train-popup-material');
+      const popupRoleEl = document.getElementById('train-popup-role');
+      const popupCloseBtn = document.getElementById('train-popup-close');
+
+      const TRAIN_SPECS_DE = [
+        {
+          match: /tambour|barillet|barrel|drum|federhaus/i,
+          name: 'Federhaustrommel',
+          teeth: '72 bis 80 Zähne',
+          material: 'Vergoldetes Messing (CuZn37)',
+          role: 'Speicherung und Abgabe des Zugfeder-Drehmoments'
+        },
+        {
+          match: /arbre|albero|shaft|asse|arbor|welle/i,
+          name: 'Federhauswelle',
+          teeth: 'Aufzugvierkant',
+          material: 'Vergüteter polierter Stahl',
+          role: 'Lagerung und Aufziehen der Zugfeder'
+        },
+        {
+          match: /centre|center|grande\s*moyenne|minuten/i,
+          name: 'Minutenrad (Zentrumsrad)',
+          teeth: '64 bis 80 Zähne (1 Umdr. / Stunde)',
+          material: 'Vergoldetes Messing & Stahltrieb',
+          role: 'Hauptkraftübertragung & Zeigerwerkantrieb'
+        },
+        {
+          match: /troisi[eè]me|third|petite\s*moyenne|kleinboden|dritt/i,
+          name: 'Kleinbodenrad (Drittes Rad)',
+          teeth: '60 bis 75 Zähne',
+          material: 'Vergoldetes Messing & vergütetes Stahltrieb',
+          role: 'Zwischenübersetzung im Räderwerk'
+        },
+        {
+          match: /seconde|fourth|second|sekund/i,
+          name: 'Sekundenrad',
+          teeth: '60 bis 70 Zähne (1 Umdr. / Minute)',
+          material: 'Vergoldetes Messing & vergütetes Stahltrieb',
+          role: 'Sekundenanzeige & Anbindung an die Hemmung'
+        },
+        {
+          match: /[eé]chappement|escape|steigrad|hemmungsrad/i,
+          name: 'Hemmungsrad (Steigrad)',
+          teeth: '15 geneigte Sperr-/Impulszähne',
+          material: 'Gehärteter vergüteter Stahl',
+          role: 'Impulsübertragung auf den Anker'
+        },
+        {
+          match: /ancre|pallet|palette|lev[eé]e/i,
+          name: 'Schweizer Anker & Hebesteine',
+          teeth: '2 Hebesteine (Eingang / Ausgang)',
+          material: 'Polierter Stahl & Synthetischer Rubin (Korund)',
+          role: 'Sperren und Aufrechterhalten der Unruhschwingung'
+        },
+        {
+          match: /balancier|balance|unruh/i,
+          name: 'Unruhreif (Unruh)',
+          teeth: 'Ohne Verzahnung (Schwingsystem)',
+          material: 'Glucydur / Vergoldetes Messing & Unruhwelle',
+          role: 'Isochroner Taktgeber (2,5 – 4 Hz)'
+        },
+        {
+          match: /spiral|hairspring/i,
+          name: 'Spiralfeder (Unruhspirale)',
+          teeth: '12 bis 16 konzentrische Umgänge',
+          material: 'Nivarox-Legierung / Gebläuter Stahl',
+          role: 'Rückstellmoment für die Unruhschwingung'
+        },
+        {
+          match: /aiguille|lancetta|hand|index|zeiger/i,
+          name: 'Anzeigezeiger / Index',
+          teeth: 'Auf Welle aufgesetzt',
+          material: 'Flammengebläuter Stahl',
+          role: 'Visuelle Anzeige der Drehbewegung'
+        },
+        {
+          match: /pignon|pinion|trieb/i,
+          name: 'Feintrieb (Ritzel)',
+          teeth: '8 bis 12 Triebstöcke (Epizykloidenprofil)',
+          material: 'Spiegelpolierter vergüteter Stahl',
+          role: 'Drehmomentaufnahme zwischen den Rädern'
+        },
+        {
+          match: /rubis|ruby|pierre|jewel|lagerstein/i,
+          name: 'Lagerstein / Hebestein (Rubin)',
+          teeth: 'Ohne Verzahnung',
+          material: 'Synthetischer Rubin (Al₂O₃)',
+          role: 'Minimale Reibung an Lager- und Impulsflächen'
+        }
+      ];
+
+      function formatGermanComponentLabel(rawText) {
+        let s = (rawText || 'Bauteil des Räderwerks')
+          .replace(/\.(glb|gltf|blend|step|stp|sldprt|sldasm)$/i, '')
+          .replace(/\s*\.\d+$/, '')
+          .replace(/[_-]+/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        const replacements = [
+          [/\btamburo\b/gi, 'Trommel'],
+          [/\bcorona\b/gi, 'Kronrad'],
+          [/\bdenti\b/gi, 'Zähne'],
+          [/\bdente\b/gi, 'Zahn'],
+          [/\bfermo\b/gi, 'Sperre'],
+          [/\bgola\b/gi, 'Nut'],
+          [/\bcoperchio\b/gi, 'Deckel'],
+          [/\bottone\d*\b/gi, 'Messing'],
+          [/\balbero\b/gi, 'Welle'],
+          [/\basse\b/gi, 'Achse'],
+          [/\bmolla\b/gi, 'Feder'],
+          [/\bruota\b/gi, 'Rad'],
+          [/\baiguille\b/gi, 'Zeiger'],
+          [/\blancetta\b/gi, 'Zeiger'],
+          [/\bbarillet\b/gi, 'Federhaus'],
+          [/\broue\b/gi, 'Rad'],
+          [/\bpignon\b/gi, 'Trieb'],
+          [/\bressort\b/gi, 'Feder'],
+          [/\blaiton\b/gi, 'Messing'],
+          [/\bacier\b/gi, 'Stahl'],
+          [/\brubis\b/gi, 'Rubin'],
+          [/\bdents\b/gi, 'Zähne'],
+          [/\bdent\b/gi, 'Zahn'],
+          [/\bwheel\b/gi, 'Rad'],
+          [/\bpinion\b/gi, 'Trieb'],
+          [/\bdrum\b/gi, 'Trommel'],
+          [/\bcover\b/gi, 'Deckel'],
+          [/\barbor\b/gi, 'Welle'],
+          [/\bshaft\b/gi, 'Welle'],
+          [/\bspring\b/gi, 'Feder'],
+          [/\bbrass\b/gi, 'Messing'],
+          [/\bsteel\b/gi, 'Stahl'],
+          [/\bruby\b/gi, 'Rubin'],
+          [/\bteeth\b/gi, 'Zähne'],
+          [/\btooth\b/gi, 'Zahn']
+        ];
+
+        for (const [re, deReplacement] of replacements) {
+          s = s.replace(re, deReplacement);
+        }
+
+        s = s.replace(/\s*—\s*Messing$/i, '').replace(/\s+/g, ' ').trim();
+        return s ? s.charAt(0).toUpperCase() + s.slice(1) : 'Bauteil des Räderwerks';
+      }
+
+      function detectMaterialLabelDE(mesh) {
+        const matName = (mesh.material?.name || '').toLowerCase();
+        if (matName.includes('ottone') || matName.includes('brass') || matName.includes('laiton') || matName.includes('messing') || matName.includes('gold')) {
+          return 'Vergoldetes Messing (CuZn)';
+        }
+        if (matName.includes('azzurr') || matName.includes('blue') || matName.includes('bleui') || matName.includes('gebläut')) {
+          return 'Thermisch gebläuter Stahl';
+        }
+        if (matName.includes('rubin') || matName.includes('ruby') || matName.includes('rubis')) {
+          return 'Synthetischer Rubin (Korund)';
+        }
+        if (matName.includes('acciaio') || matName.includes('steel') || matName.includes('acier') || matName.includes('stahl') || matName.includes('rodiat')) {
+          return 'Rhodinierter vergüteter Stahl';
+        }
+        if (mesh.material?.color) {
+          const c = mesh.material.color;
+          if (c.r > 0.55 && c.g < 0.2 && c.b < 0.2) return 'Synthetischer Rubin (Korund)';
+          if (c.b > 0.45 && c.r < 0.25) return 'Thermisch gebläuter Stahl';
+          if (c.r > 0.65 && c.g > 0.45 && c.b < 0.35) return 'Vergoldetes Messing (CuZn)';
+        }
+        return 'Vergüteter Uhrmacherstahl';
+      }
+
+      function resolveTrainComponentInfoDE(mesh) {
+        let fullHierarchyName = '';
+        let cur = mesh;
+        while (cur) {
+          if (cur.name) fullHierarchyName += ' ' + cur.name;
+          cur = cur.parent;
+        }
+
+        const explicitTeethMatch = fullHierarchyName.match(/(?:\bz\s*(\d{1,3})\b|\b(\d{1,3})\s*(?:dents|denti|teeth|zähne|zahn|d)\b)/i);
+        const explicitTeeth = explicitTeethMatch ? `${explicitTeethMatch[1] || explicitTeethMatch[2]} Zähne` : null;
+
+        for (const spec of TRAIN_SPECS_DE) {
+          if (spec.match.test(fullHierarchyName)) {
+            return {
+              name: spec.name,
+              teeth: explicitTeeth || spec.teeth,
+              material: spec.material,
+              role: spec.role
+            };
+          }
+        }
+
+        const germanName = formatGermanComponentLabel(mesh.name || mesh.parent?.name);
+        return {
+          name: germanName,
+          teeth: explicitTeeth || 'Präzisionsverzahnung',
+          material: detectMaterialLabelDE(mesh),
+          role: 'Kinematische Kraftübertragung'
+        };
+      }
+
+      function clearTrainSelection() {
+        if (trainSelectedMesh && trainSelectedMesh.material && 'emissive' in trainSelectedMesh.material) {
+          trainSelectedMesh.material.emissive.copy(trainPrevEmissive);
+          trainSelectedMesh.material.emissiveIntensity = trainPrevEmissiveIntensity;
+        }
+        trainSelectedMesh = null;
+        trainPrevEmissive = null;
+        popupEl.classList.remove('visible');
+      }
+
+      function selectTrainMesh(mesh) {
+        clearTrainSelection();
+        trainSelectedMesh = mesh;
+
+        const info = resolveTrainComponentInfoDE(mesh);
+        popupNameEl.textContent = info.name;
+        popupTeethEl.textContent = info.teeth;
+        popupMatEl.textContent = info.material;
+        popupRoleEl.textContent = info.role;
+        popupEl.classList.add('visible');
+
+        if (mesh.material && 'emissive' in mesh.material) {
+          mesh.material = mesh.material.clone();
+          trainPrevEmissive = mesh.material.emissive.clone();
+          trainPrevEmissiveIntensity = mesh.material.emissiveIntensity ?? 1;
+          mesh.material.emissive.setHex(0xd4af37);
+          mesh.material.emissiveIntensity = 0.55;
+        }
+      }
+
+      popupCloseBtn.addEventListener('click', clearTrainSelection);
+
+      const trainLoader = new GLTFLoader();
+      trainLoader.load(
+        TRAIN_MODEL_URL,
+        (gltf) => {
+          const trainRoot = gltf.scene;
+
+          const box = new THREE.Box3().setFromObject(trainRoot);
+          const center = box.getCenter(new THREE.Vector3());
+          const size = box.getSize(new THREE.Vector3());
+          const maxDim = Math.max(size.x, size.y, size.z) || 1;
+
+          trainRoot.scale.setScalar(3.3 / maxDim);
+          box.setFromObject(trainRoot);
+          box.getCenter(center);
+          trainRoot.position.sub(center);
+
+          sceneTrain.add(trainRoot);
+
+          trainRoot.traverse((child) => {
+            if (child.isMesh) {
+              if (child.material) {
+                child.material.needsUpdate = true;
+              }
+              trainPickableMeshes.push(child);
+            }
+          });
+
+          cameraTrain.position.copy(trainInitialCamPos);
+          controlsTrain.target.set(0, 0, 0);
+          controlsTrain.update();
+
+          trainLoaderEl.style.opacity = '0';
+          setTimeout(() => trainLoaderEl.remove(), 350);
+        },
+        (xhr) => {
+          if (xhr.total > 0 && trainLoaderText) {
+            trainLoaderText.textContent = `Ladevorgang: ${Math.round((xhr.loaded / xhr.total) * 100)}%`;
+          }
+        },
+        (err) => {
+          console.error('Fehler beim Laden der Train-GLB-Datei:', err);
+          if (trainLoaderText) {
+            trainLoaderText.innerHTML = 'Fehler beim Laden von "Train_fix.main_design.glb".';
+          }
+        }
+      );
+
+      const trainRaycaster = new THREE.Raycaster();
+      const trainPointer = new THREE.Vector2();
+      let trainDownPos = { x: 0, y: 0 };
+
+      rendererTrain.domElement.addEventListener('pointerdown', (ev) => {
+        if (ev.button !== 0) return;
+        trainDownPos = { x: ev.clientX, y: ev.clientY };
+      });
+
+      rendererTrain.domElement.addEventListener('pointerup', (ev) => {
+        if (ev.button !== 0) return;
+        const dist = Math.hypot(ev.clientX - trainDownPos.x, ev.clientY - trainDownPos.y);
+        if (dist > 5 || trainPickableMeshes.length === 0) return;
+
+        const rect = rendererTrain.domElement.getBoundingClientRect();
+        trainPointer.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+        trainPointer.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+
+        trainRaycaster.setFromCamera(trainPointer, cameraTrain);
+        const hits = trainRaycaster.intersectObjects(trainPickableMeshes, false);
+        if (hits.length > 0) {
+          selectTrainMesh(hits[0].object);
+        }
+      });
+
+      const autoRotateBtn = document.getElementById('train-autorotate-btn');
+      autoRotateBtn.addEventListener('click', () => {
+        controlsTrain.autoRotate = !controlsTrain.autoRotate;
+        autoRotateBtn.classList.toggle('active', controlsTrain.autoRotate);
+      });
+
+      document.getElementById('train-reset-btn').addEventListener('click', () => {
+        cameraTrain.position.copy(trainInitialCamPos);
+        controlsTrain.target.set(0, 0, 0);
+        setBlenderTool('orbit');
+        controlsTrain.update();
+      });
+
+      const fsBtn = document.getElementById('train-fullscreen-btn');
+
+      function toggleTrainFullscreen() {
+        if (!document.fullscreenElement) {
+          trainContainer.requestFullscreen?.().catch((e) => console.warn(e));
+        } else {
+          document.exitFullscreen?.();
+        }
+      }
+
+      fsBtn.addEventListener('click', toggleTrainFullscreen);
+
+      function resizeTrainViewer() {
+        if (!trainContainer) return;
+        const isFs = Boolean(document.fullscreenElement);
+        fsBtn.textContent = isFs ? '✕ Beenden' : '⛶ Vollbild';
+        fsBtn.classList.toggle('active', isFs);
+
+        const w = trainContainer.clientWidth || window.innerWidth;
+        const h = trainContainer.clientHeight || window.innerHeight;
+        cameraTrain.aspect = w / h;
+        cameraTrain.updateProjectionMatrix();
+        rendererTrain.setSize(w, h);
+      }
+
+      document.addEventListener('fullscreenchange', resizeTrainViewer);
+      window.addEventListener('resize', resizeTrainViewer);
+
+      function animateTrain() {
+        requestAnimationFrame(animateTrain);
+        controlsTrain.update();
+        rendererTrain.render(sceneTrain, cameraTrain);
+      }
+      animateTrain();
+    }
+
+    // =========================================================================
+    // 1. INTERAKTIVE 3D-EXPLOSIONSANSICHT — KALIBER ETA 6498-1
+    // =========================================================================
+    const ETA_MODEL_URL = '../ETA6498-1_Web.glb';
+    const etaContainer = document.getElementById('canvas-container-eta');
+
+    if (etaContainer) {
+      const sceneEta = new THREE.Scene();
+      sceneEta.background = new THREE.Color(0xffffff);
+
+      const cameraEta = new THREE.PerspectiveCamera(
+        40,
+        etaContainer.clientWidth / etaContainer.clientHeight,
+        0.01,
+        1000
+      );
+      cameraEta.position.set(0, 3.2, 4.6);
+
+      const rendererEta = new THREE.WebGLRenderer({ antialias: true });
+      rendererEta.setSize(etaContainer.clientWidth, etaContainer.clientHeight);
+      rendererEta.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      rendererEta.toneMapping = THREE.ACESFilmicToneMapping;
+      rendererEta.toneMappingExposure = 1.15;
+      etaContainer.appendChild(rendererEta.domElement);
+
+      if (!sharedEnvMap) {
+        const pmremEta = new THREE.PMREMGenerator(rendererEta);
+        sharedEnvMap = pmremEta.fromScene(new RoomEnvironment(), 0.04).texture;
+      }
+      sceneEta.environment = sharedEnvMap;
+
+      const lightTop = new THREE.DirectionalLight(0xffffff, 1.8);
+      lightTop.position.set(5, 10, 7);
+      sceneEta.add(lightTop);
+
+      const lightFill = new THREE.DirectionalLight(0xdbe8ff, 0.9);
+      lightFill.position.set(-6, -4, -5);
+      sceneEta.add(lightFill);
+
+      const controlsEta = new OrbitControls(cameraEta, rendererEta.domElement);
+      controlsEta.enableDamping = true;
+      controlsEta.dampingFactor = 0.06;
+
+      let etaModelRoot = null;
+      const etaExplodeItems = [];
+      const etaPickableMeshes = [];
+      const etaInitialCamPos = new THREE.Vector3();
+
+      let etaSelectedMesh = null;
+      let etaPrevEmissive = null;
+      let etaPrevEmissiveIntensity = 0;
+
+      const selectedBar = document.getElementById('eta-selected-bar');
+      const selectedNameEl = document.getElementById('eta-selected-name');
+      const selectedRawEl = document.getElementById('eta-selected-raw');
+      const clearBtn = document.getElementById('eta-clear-btn');
+      const loaderEl = document.getElementById('eta-loader');
+      const loaderTextEl = document.getElementById('eta-loader-text');
+
+      const HOROLOGY_DICT_DE = [
+        [/\bmain\s*plate\b|\bbase\s*plate\b|\bplate\b/i, 'Werkplatte (Platine)'],
+        [/\bbarrel\s*bridge\b/i, 'Federhausbrücke'],
+        [/\btrain\s*(wheel\s*)?bridge\b|\bgear\s*train\s*bridge\b/i, 'Räderwerkbrücke'],
+        [/\bbalance\s*(cock|bridge)\b/i, 'Unruhkloben'],
+        [/\bpallet\s*(fork\s*)?(cock|bridge)\b|\bescapement\s*bridge\b/i, 'Ankerkloben'],
+        [/\bbridge\b/i, 'Brücke'],
+        [/\bbarrel\s*drum\b|\bdrum\b/i, 'Federhaustrommel'],
+        [/\bbarrel\s*cover\b|\bcover\b/i, 'Federhausdeckel'],
+        [/\bbarrel\s*arbor\b|\barbor\b/i, 'Federhauswelle'],
+        [/\bmainspring\b|\bmain\s*spring\b/i, 'Zugfeder'],
+        [/\bbarrel\b/i, 'Federhaus'],
+        [/\bratchet\s*wheel\b|\bratchet\b/i, 'Sperrrad'],
+        [/\bcrown\s*wheel\b/i, 'Kronrad'],
+        [/\bwinding\s*stem\b|\bstem\b/i, 'Aufzugwelle'],
+        [/\bwinding\s*pinion\b/i, 'Aufzugtrieb'],
+        [/\bsliding\s*pinion\b|\bclutch\s*wheel\b/i, 'Kupplungstrieb'],
+        [/\bsetting\s*lever\b/i, 'Winkelhebel'],
+        [/\byoke\b/i, 'Kupplungshebel (Wippe)'],
+        [/\bclick\s*spring\b/i, 'Sperrklinkenfeder'],
+        [/\bclick\b/i, 'Sperrklinke'],
+        [/\bsetting\s*wheel\b/i, 'Stellrad'],
+        [/\bminute\s*wheel\b/i, 'Wechselrad'],
+        [/\bhour\s*wheel\b/i, 'Stundenrad'],
+        [/\bcannon\s*pinion\b/i, 'Minutenrohr'],
+        [/\bcenter\s*wheel\b|\bcentre\s*wheel\b/i, 'Minutenrad (Zentrumsrad)'],
+        [/\bthird\s*wheel\b/i, 'Kleinbodenrad (Drittes Rad)'],
+        [/\bfourth\s*wheel\b|\bsecond\s*wheel\b/i, 'Sekundenrad'],
+        [/\bescape\s*wheel\b|\bescapement\s*wheel\b/i, 'Hemmungsrad (Steigrad)'],
+        [/\bwheel\b/i, 'Rad'],
+        [/\bpinion\b/i, 'Trieb'],
+        [/\bpallet\s*fork\b|\bpallet\b|\banchor\b/i, 'Anker'],
+        [/\bbalance\s*wheel\b|\bbalance\b/i, 'Unruh'],
+        [/\bhairspring\b|\bbalance\s*spring\b|\bspiral\b/i, 'Spiralfeder'],
+        [/\bregulator\b|\bindex\b/i, 'Rückerzeiger'],
+        [/\bstud\b/i, 'Spiralklötzchen'],
+        [/\bincabloc\b|\bshock\s*absorber\b/i, 'Stoßsicherung (Incabloc)'],
+        [/\bjewel\b|\bruby\b/i, 'Lagerstein (Rubin)'],
+        [/\bscrew\b/i, 'Schraube'],
+        [/\bspring\b/i, 'Feder'],
+        [/\bwasher\b/i, 'Unterlegscheibe'],
+        [/\bpin\b/i, 'Stift']
+      ];
+
+      function cleanEtaName(raw) {
+        if (!raw) return 'Unbenanntes Bauteil';
+        return raw
+          .replace(/\.(sldprt|sldasm|igs|iges|step|stp|glb|gltf|blend)$/i, '')
+          .replace(/[_-]+/g, ' ')
+          .replace(/\s*\.\d+$/, '')
+          .replace(/\s+/g, ' ')
+          .trim() || 'Unbenanntes Bauteil';
+      }
+
+      function translatePartToGerman(cleanName) {
+        for (const [pattern, deLabel] of HOROLOGY_DICT_DE) {
+          if (pattern.test(cleanName)) {
+            return deLabel;
+          }
+        }
+        return cleanName;
+      }
+
+      function resolveEtaPartName(mesh) {
+        let cur = mesh;
+        const genericRe = /^(mesh|object|node|part|solid|group|body|untitled)(_|\s|-|\d|\.)*$/i;
+        let rawFound = '';
+        while (cur && cur !== etaModelRoot) {
+          if (cur.name && !genericRe.test(cur.name.trim())) {
+            rawFound = cur.name;
+            break;
+          }
+          cur = cur.parent;
+        }
+        if (!rawFound) {
+          rawFound = mesh.name || mesh.parent?.name || '';
+        }
+        const cleaned = cleanEtaName(rawFound);
+        const translated = translatePartToGerman(cleaned);
+        return { translated, cleaned };
+      }
+
+      function clearEtaSelection() {
+        if (etaSelectedMesh && etaSelectedMesh.material && 'emissive' in etaSelectedMesh.material) {
+          etaSelectedMesh.material.emissive.copy(etaPrevEmissive);
+          etaSelectedMesh.material.emissiveIntensity = etaPrevEmissiveIntensity;
+        }
+        etaSelectedMesh = null;
+        etaPrevEmissive = null;
+        selectedNameEl.textContent = '—';
+        selectedRawEl.textContent = '';
+        selectedBar.classList.remove('visible');
+      }
+
+      function selectEtaMesh(mesh) {
+        if (etaSelectedMesh === mesh) return;
+        clearEtaSelection();
+
+        etaSelectedMesh = mesh;
+        const { translated, cleaned } = resolveEtaPartName(mesh);
+        selectedNameEl.textContent = translated;
+        selectedRawEl.textContent = translated.toLowerCase() !== cleaned.toLowerCase() ? `(${cleaned})` : '';
+        selectedBar.classList.add('visible');
+
+        if (mesh.material && 'emissive' in mesh.material) {
+          mesh.material = mesh.material.clone();
+          etaPrevEmissive = mesh.material.emissive.clone();
+          etaPrevEmissiveIntensity = mesh.material.emissiveIntensity ?? 1;
+          mesh.material.emissive.setHex(0x8c6928);
+          mesh.material.emissiveIntensity = 0.65;
+        }
+      }
+
+      clearBtn.addEventListener('click', clearEtaSelection);
+
+      const etaLoader = new GLTFLoader();
+      etaLoader.load(
+        ETA_MODEL_URL,
+        (gltf) => {
+          etaModelRoot = gltf.scene;
+
+          const box = new THREE.Box3().setFromObject(etaModelRoot);
+          const center = box.getCenter(new THREE.Vector3());
+          const size = box.getSize(new THREE.Vector3());
+          const maxDim = Math.max(size.x, size.y, size.z) || 1;
+
+          etaModelRoot.scale.setScalar(3.0 / maxDim);
+          box.setFromObject(etaModelRoot);
+          box.getCenter(center);
+          etaModelRoot.position.sub(center);
+
+          sceneEta.add(etaModelRoot);
+          etaModelRoot.updateMatrixWorld(true);
+
+          const origin = new THREE.Vector3(0, 0, 0);
+
+          etaModelRoot.traverse((child) => {
+            if (child.isMesh) {
+              if (child.material) {
+                child.material.needsUpdate = true;
+              }
+              etaPickableMeshes.push(child);
+
+              const mBox = new THREE.Box3().setFromObject(child);
+              const mCenter = mBox.getCenter(new THREE.Vector3());
+              etaExplodeItems.push({
+                mesh: child,
+                origPos: child.position.clone(),
+                worldOffset: mCenter.clone().sub(origin),
+                parent: child.parent
+              });
+            }
+          });
+
+          cameraEta.position.set(0, 3.1, 4.4);
+          etaInitialCamPos.copy(cameraEta.position);
+          controlsEta.target.set(0, 0, 0);
+          controlsEta.update();
+
+          loaderEl.style.opacity = '0';
+          setTimeout(() => loaderEl.remove(), 350);
+        },
+        (xhr) => {
+          if (xhr.total > 0 && loaderTextEl) {
+            loaderTextEl.textContent = `Ladevorgang: ${Math.round((xhr.loaded / xhr.total) * 100)}%`;
+          }
+        },
+        (err) => {
+          console.error('Fehler beim Laden der ETA 6498-1 GLB-Datei:', err);
+          if (loaderTextEl) {
+            loaderTextEl.innerHTML =
+              'Fehler beim Laden der 3D-Datei.<br><small>Bitte prüfen Sie, ob "ETA6498-1_Web.glb" im übergeordneten Ordner liegt.</small>';
+          }
+        }
+      );
+
+      const etaRaycaster = new THREE.Raycaster();
+      const etaPointer = new THREE.Vector2();
+      let etaDownPos = { x: 0, y: 0 };
+
+      rendererEta.domElement.addEventListener('pointerdown', (ev) => {
+        if (ev.button !== 0) return;
+        etaDownPos = { x: ev.clientX, y: ev.clientY };
+      });
+
+      rendererEta.domElement.addEventListener('pointerup', (ev) => {
+        if (ev.button !== 0) return;
+        const dist = Math.hypot(ev.clientX - etaDownPos.x, ev.clientY - etaDownPos.y);
+        if (dist > 5 || etaPickableMeshes.length === 0) return;
+
+        const rect = rendererEta.domElement.getBoundingClientRect();
+        etaPointer.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+        etaPointer.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+
+        etaRaycaster.setFromCamera(etaPointer, cameraEta);
+        const hits = etaRaycaster.intersectObjects(etaPickableMeshes, false);
+        if (hits.length > 0) {
+          selectEtaMesh(hits[0].object);
+        }
+      });
+
+      const etaSlider = document.getElementById('eta-explode-slider');
+      const etaValText = document.getElementById('eta-explode-val');
+      const etaAxisSel = document.getElementById('eta-explode-axis');
+
+      function updateEtaExplode() {
+        const factor = parseFloat(etaSlider.value) / 100;
+        etaValText.textContent = `${Math.round(factor * 100)}%`;
+        const mode = etaAxisSel.value;
+
+        etaExplodeItems.forEach((item) => {
+          if (factor === 0) {
+            item.mesh.position.copy(item.origPos);
+            return;
+          }
+
+          const shift = new THREE.Vector3();
+          const spread = factor * 3.4;
+
+          if (mode === 'vertical-y') {
+            shift.set(
+              item.worldOffset.x * spread * 0.28,
+              item.worldOffset.y * spread * 2.5,
+              item.worldOffset.z * spread * 0.28
+            );
+          } else if (mode === 'vertical-z') {
+            shift.set(
+              item.worldOffset.x * spread * 0.28,
+              item.worldOffset.y * spread * 0.28,
+              item.worldOffset.z * spread * 2.5
+            );
+          } else {
+            shift.copy(item.worldOffset).multiplyScalar(spread * 1.85);
+          }
+
+          if (item.parent) {
+            const pScale = new THREE.Vector3();
+            item.parent.getWorldScale(pScale);
+            const localShift = shift.clone();
+            localShift.x /= pScale.x || 1;
+            localShift.y /= pScale.y || 1;
+            localShift.z /= pScale.z || 1;
+
+            const pQuat = new THREE.Quaternion();
+            item.parent.getWorldQuaternion(pQuat);
+            localShift.applyQuaternion(pQuat.invert());
+
+            item.mesh.position.copy(item.origPos).add(localShift);
+          }
+        });
+      }
+
+      etaSlider.addEventListener('input', updateEtaExplode);
+      etaAxisSel.addEventListener('change', updateEtaExplode);
+
+      document.getElementById('eta-reset-cam').addEventListener('click', () => {
+        cameraEta.position.copy(etaInitialCamPos);
+        controlsEta.target.set(0, 0, 0);
+        controlsEta.update();
+      });
+
+      window.addEventListener('resize', () => {
+        if (!etaContainer) return;
+        cameraEta.aspect = etaContainer.clientWidth / etaContainer.clientHeight;
+        cameraEta.updateProjectionMatrix();
+        rendererEta.setSize(etaContainer.clientWidth, etaContainer.clientHeight);
+      });
+
+      function animateEta() {
+        requestAnimationFrame(animateEta);
+        controlsEta.update();
+        rendererEta.render(sceneEta, cameraEta);
+      }
+      animateEta();
+
+      // =========================================================================
+      // 2. INTERAKTIVER 3D-VIEWER FEDERHAUS (GLEICHES THREE.JS r160)
+      // =========================================================================
+      const containerBarillet = document.getElementById('canvas-container-barillet');
+      if (containerBarillet) {
+        const sceneBarillet = new THREE.Scene();
+        sceneBarillet.background = new THREE.Color(0xffffff);
+        sceneBarillet.environment = sharedEnvMap;
+
+        const cameraBarillet = new THREE.PerspectiveCamera(
+          45,
+          containerBarillet.clientWidth / containerBarillet.clientHeight,
+          0.1,
+          1000
+        );
+        cameraBarillet.position.set(0, 25, 40);
+
+        const rendererBarillet = new THREE.WebGLRenderer({ antialias: true });
+        rendererBarillet.setSize(containerBarillet.clientWidth, containerBarillet.clientHeight);
+        rendererBarillet.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        rendererBarillet.toneMapping = THREE.ACESFilmicToneMapping;
+        rendererBarillet.toneMappingExposure = 1.15;
+        containerBarillet.appendChild(rendererBarillet.domElement);
+
+        const controlsBarillet = new OrbitControls(cameraBarillet, rendererBarillet.domElement);
+        controlsBarillet.enableDamping = true;
+        controlsBarillet.dampingFactor = 0.05;
+
+        const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.4);
+        dirLight1.position.set(20, 40, 20);
+        sceneBarillet.add(dirLight1);
+
+        const dirLight2 = new THREE.DirectionalLight(0x88bbff, 0.7);
+        dirLight2.position.set(-20, -20, -20);
+        sceneBarillet.add(dirLight2);
+
+        const partsBarillet = [];
+        const barilletLoader = new GLTFLoader();
+
+        barilletLoader.load(
+          '../barillet_fix.glb',
+          (gltf) => {
+            const model = gltf.scene;
+            sceneBarillet.add(model);
+
+            model.traverse((child) => {
+              if (child.isMesh) {
+                const initialPos = child.position.clone();
+                const name = child.name.toLowerCase();
+
+                let targetOffset = 0;
+                let labelType = 'tambour';
+
+                if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion') || name.includes('arbor')) {
+                  targetOffset = 0;
+                  labelType = 'arbre';
+                } else if (name.includes('coperchio') || name.includes('cover')) {
+                  targetOffset = 18;
+                  labelType = 'coperchio';
+                } else if (name.includes('molla') || name.includes('spring')) {
+                  targetOffset = 6;
+                  labelType = 'molla';
+                } else {
+                  targetOffset = -15;
+                  labelType = 'tambour';
+                }
+
+                partsBarillet.push({
+                  mesh: child,
+                  initialPos,
+                  targetOffset,
+                  labelId: 'label-' + labelType
+                });
+              }
+            });
+          },
+          undefined,
+          (error) => {
+            console.error('Error loading barrel GLB file:', error);
+          }
+        );
+
+        function updateBarilletLabelsPosition() {
+          partsBarillet.forEach((p) => {
+            const lbl = document.getElementById(p.labelId);
+            if (!lbl || lbl.style.display === 'none') return;
+
+            const tempV = p.mesh.position.clone();
+            tempV.project(cameraBarillet);
+
+            const x = (tempV.x * 0.5 + 0.5) * containerBarillet.clientWidth;
+            const y = (tempV.y * -0.5 + 0.5) * containerBarillet.clientHeight;
+
+            lbl.style.left = (x - 30) + 'px';
+            lbl.style.top = (y - 15) + 'px';
+          });
+        }
+
+        function updateBarilletExplosion(t) {
+          partsBarillet.forEach((p) => {
+            p.mesh.position.x = p.initialPos.x + (p.targetOffset * t);
+            p.mesh.position.y = p.initialPos.y;
+            p.mesh.position.z = p.initialPos.z;
+          });
+
+          const showLabels = t > 0.05;
+          ['label-arbre', 'label-tambour', 'label-molla', 'label-coperchio'].forEach((id) => {
+            const lbl = document.getElementById(id);
+            if (lbl) lbl.style.display = showLabels ? 'block' : 'none';
+          });
+
+          if (showLabels) {
+            updateBarilletLabelsPosition();
+          }
+        }
+
+        const sliderBarillet = document.getElementById('exploder-barillet');
+        const valScaleBarillet = document.getElementById('val-scale-barillet');
+        if (sliderBarillet) {
+          sliderBarillet.addEventListener('input', (event) => {
+            const t = Number(event.target.value) / 100;
+            updateBarilletExplosion(t);
+            if (valScaleBarillet) valScaleBarillet.innerText = event.target.value + '%';
+          });
+        }
+
+        window.addEventListener('resize', () => {
+          cameraBarillet.aspect = containerBarillet.clientWidth / containerBarillet.clientHeight;
+          cameraBarillet.updateProjectionMatrix();
+          rendererBarillet.setSize(containerBarillet.clientWidth, containerBarillet.clientHeight);
+        });
+
+        function animateBarillet() {
+          requestAnimationFrame(animateBarillet);
+          controlsBarillet.update();
+          rendererBarillet.render(sceneBarillet, cameraBarillet);
+
+          if (sliderBarillet && Number(sliderBarillet.value) > 5) {
+            updateBarilletLabelsPosition();
+          }
+        }
+        animateBarillet();
+      }
+    }
+  </script>
+  
   <script src="../_ricerca.js"></script>
   <script src="../script.js"></script>
 </body>
