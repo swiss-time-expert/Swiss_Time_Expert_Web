@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Time Expert - 1. Le Mouvement à Remontage Manuel</title>
+  
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="shortcut icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="stylesheet" href="../_stile.css">
+  
+  <style>
+    /* Allineamento forzato per sincronizzare Header e Notebook durante lo zoom */
+    .header-card, .notebook-container {
+      max-width: 1100px !important;
+      margin: 0 auto !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Stili per le Lingue */
+    .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
+    .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
+    .lang-btn:hover { background: rgba(255,255,255,0.3); }
+    .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
+
+    /* Menu a Tendina */
+    .dropdown { position: relative; display: inline-block; margin-right: 15px; }
+    .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
+    .dropbtn:hover { background: rgba(255,255,255,0.3); }
+    .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 320px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 10; border-radius: 6px; top: 100%; left: 0; margin-top: 5px; }
+    .dropdown-content a { color: #1a365d; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; font-family: sans-serif; font-weight: bold; }
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
+    .dropdown:hover .dropdown-content { display: block; }
+
+    /* Box di approfondimento con barra verde a sinistra (Prassi standard) */
+    .tech-doc-box { 
+      background: #f8f9fa; 
+      border-left: 5px solid #27ae60; 
+      padding: 20px 25px; 
+      margin: 25px 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      font-size: 1em; 
+      line-height: 1.6; 
+      color: #2c3e50; 
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .tech-doc-box h3 { color: #1a365d; margin-top: 20px; font-size: 1.15em; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+    .tech-doc-box h3:first-child { margin-top: 0; }
+    .tech-doc-box h4 { color: #2980b9; margin-top: 15px; font-size: 1.05em; }
+    .tech-doc-box p, .tech-doc-box li { font-size: 0.98em; }
+    .formula-math { font-family: monospace; background: #eef2f7; padding: 8px 12px; border-radius: 4px; display: inline-block; font-weight: bold; color: #1a365d; margin: 8px 0; }
+    .tech-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95em; }
+    .tech-table th, .tech-table td { border: 1px solid #dcdcdc; padding: 10px; text-align: center; }
+    .tech-table th { background-color: #1a365d; color: white; }
+
+    /* =========================================================================
+       VISUALIZZATORE 3D DARK STUDIO — CHAÎNE CINÉMATIQUE (TRENO DEL TEMPO)
+       ========================================================================= */
+    .train-studio-card {
+      background: #0d131f;
+      border: 1px solid #24324a;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 28px rgba(10, 18, 32, 0.22);
+      color: #f1f5f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .train-studio-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .train-studio-title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: 0.01em;
+    }
+    .train-studio-hint {
+      margin: 2px 0 0 0;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+    .train-btn {
+      background: rgba(30, 41, 59, 0.92);
+      color: #f8fafc;
+      border: 1px solid #3b4c66;
+      padding: 6px 11px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s, border-color 0.15s, transform 0.08s;
+    }
+    .train-btn:hover {
+      background: #2c3e55;
+      border-color: #d4af37;
+    }
+    .train-btn:active {
+      transform: scale(0.96);
+    }
+    .train-btn.active {
+      background: #b8860b;
+      border-color: #f3c64f;
+      color: #ffffff;
+    }
+
+    #canvas-container-train {
+      width: 100%;
+      height: 500px;
+      background: radial-gradient(circle at center, #1b263b 0%, #090d16 100%);
+      border-radius: 8px;
+      border: 1px solid #1e293b;
+      position: relative;
+      overflow: hidden;
+    }
+    #canvas-container-train.mode-pan {
+      cursor: grab;
+    }
+    #canvas-container-train.mode-pan:active {
+      cursor: grabbing;
+    }
+    #canvas-container-train:fullscreen,
+    #canvas-container-train:-webkit-full-screen {
+      width: 100vw !important;
+      height: 100vh !important;
+      border-radius: 0;
+      border: none;
+    }
+
+    /* Barra comandi HUD interna al canvas: sempre visibile anche in Plein Écran */
+    .train-hud-dock {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      background: rgba(13, 19, 31, 0.88);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      border-radius: 10px;
+      padding: 7px 10px;
+      z-index: 25;
+      max-width: calc(100% - 24px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+    }
+    .train-hud-sep {
+      width: 1px;
+      height: 20px;
+      background: rgba(148, 163, 184, 0.25);
+      margin: 0 2px;
+    }
+    #canvas-container-train:fullscreen .train-hud-dock,
+    #canvas-container-train:-webkit-full-screen .train-hud-dock {
+      bottom: 24px;
+      padding: 10px 14px;
+      gap: 8px;
+    }
+    #canvas-container-train:fullscreen .train-hud-dock .train-btn,
+    #canvas-container-train:-webkit-full-screen .train-hud-dock .train-btn {
+      padding: 9px 14px;
+      font-size: 0.92rem;
+    }
+
+    #train-loader {
+      position: absolute;
+      inset: 0;
+      background: rgba(9, 13, 22, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: opacity 0.35s ease;
+    }
+    .train-spinner {
+      width: 34px;
+      height: 34px;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-top-color: #d4af37;
+      border-radius: 50%;
+      animation: etaSpin 0.85s linear infinite;
+      margin-bottom: 10px;
+    }
+
+    /* Popup scheda tecnica componente al clic */
+    #train-spec-popup {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 340px;
+      max-width: calc(100% - 32px);
+      background: rgba(13, 19, 31, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid #d4af37;
+      border-left: 5px solid #d4af37;
+      border-radius: 10px;
+      padding: 15px 17px;
+      color: #f8fafc;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+      z-index: 26;
+      display: none;
+      animation: popupFadeIn 0.2s ease-out;
+    }
+    #train-spec-popup.visible {
+      display: block;
+    }
+
+    /* Scala maggiore in modalità Plein Écran */
+    #canvas-container-train:fullscreen #train-spec-popup,
+    #canvas-container-train:-webkit-full-screen #train-spec-popup {
+      top: 28px;
+      left: 28px;
+      width: 440px;
+      max-width: calc(100% - 56px);
+      padding: 22px 26px;
+      border-radius: 12px;
+      border-left-width: 6px;
+    }
+    #canvas-container-train:fullscreen .train-popup-badge,
+    #canvas-container-train:-webkit-full-screen .train-popup-badge {
+      font-size: 0.82rem;
+    }
+    #canvas-container-train:fullscreen .train-popup-title,
+    #canvas-container-train:-webkit-full-screen .train-popup-title {
+      font-size: 1.35rem;
+      margin-bottom: 14px;
+    }
+    #canvas-container-train:fullscreen .train-popup-row,
+    #canvas-container-train:-webkit-full-screen .train-popup-row {
+      font-size: 1.02rem;
+      padding: 8px 0;
+    }
+    #canvas-container-train:fullscreen .train-popup-close,
+    #canvas-container-train:-webkit-full-screen .train-popup-close {
+      font-size: 1.45rem;
+    }
+
+    @keyframes popupFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .train-popup-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .train-popup-badge {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #f3c64f;
+      font-weight: 700;
+    }
+    .train-popup-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.15rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 2px;
+    }
+    .train-popup-close:hover {
+      color: #ffffff;
+    }
+    .train-popup-title {
+      margin: 2px 0 10px 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .train-popup-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.84rem;
+      padding: 6px 0;
+      border-top: 1px solid rgba(148, 163, 184, 0.18);
+    }
+    .train-popup-key {
+      color: #94a3b8;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .train-popup-val {
+      color: #f8fafc;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    /* Visualizzatore 3D ETA 6498-1 (Tema chiaro) */
+    .eta-module-wrapper {
+      background: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-radius: 8px;
+      padding: 18px;
+      margin: 25px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .eta-top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .eta-heading {
+      margin: 0;
+      color: #1a365d;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .eta-subhint {
+      margin: 2px 0 0 0;
+      color: #5a6778;
+      font-size: 0.82rem;
+    }
+    .eta-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #1a365d;
+    }
+    .eta-toolbar select, .eta-toolbar button {
+      background: #f8f9fa;
+      color: #1a365d;
+      border: 1px solid #c5d0de;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .eta-toolbar select:hover, .eta-toolbar button:hover {
+      background: #e9eef5;
+    }
+    #canvas-container-eta {
+      width: 100%;
+      height: 480px;
+      background-color: #ffffff;
+      border: 1px solid #e4e8ee;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    #eta-loader {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.92);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 15;
+      color: #1a365d;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: opacity 0.35s ease;
+      text-align: center;
+      padding: 16px;
+    }
+    .eta-spinner {
+      width: 34px;
+      height: 34px;
+      border: 3px solid #d9e2ec;
+      border-top-color: #1a365d;
+      border-radius: 50%;
+      animation: etaSpin 0.85s linear infinite;
+      margin-bottom: 10px;
+    }
+    @keyframes etaSpin {
+      to { transform: rotate(360deg); }
+    }
+    #eta-selected-bar {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: #f4f7fb;
+      border-left: 4px solid #1a365d;
+      border-radius: 6px;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    #eta-selected-bar.visible {
+      display: flex;
+    }
+    #eta-selected-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #5a6778;
+      display: block;
+    }
+    #eta-selected-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1a365d;
+      word-break: break-word;
+    }
+    #eta-selected-raw {
+      font-size: 0.76rem;
+      color: #6c757d;
+      margin-left: 6px;
+      font-weight: 400;
+    }
+    #eta-clear-btn {
+      background: #ffffff;
+      color: #1a365d;
+      border: 1px solid #c5d0de;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    #eta-clear-btn:hover {
+      background: #e9eef5;
+    }
+    .eta-slider-box {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: #f8f9fa;
+      border: 1px solid #e4e8ee;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .eta-slider-box label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #1a365d;
+      white-space: nowrap;
+    }
+    .eta-slider-box input[type="range"] {
+      flex-grow: 1;
+      cursor: pointer;
+      accent-color: #1a365d;
+    }
+    .eta-slider-val {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #1a365d;
+      min-width: 44px;
+      text-align: right;
+    }
+    .eta-credits-box {
+      margin-top: 12px;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border: 1px solid #e2e6ec;
+      border-radius: 6px;
+      font-size: 0.83rem;
+      line-height: 1.55;
+      color: #3a4654;
+    }
+    .eta-credits-box a {
+      color: #1a365d;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+    .eta-credits-box a:hover {
+      color: #d9534f;
+    }
+  </style>
+
+  <!-- Import Map unico per Three.js r160 (condiviso tra Treno, ETA 6498-1 e Barillet senza duplicati) -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <div class="header-card">
+    
+    <!-- COLONNA SINISTRA: Testi e Navigazione -->
+    <div class="header-left-block">
+      <div class="badge">Haute Horlogerie — Brevet Fédéral</div>
+      <h1>1. Le Mouvement à Remontage Manuel : Comment Fonctionne une Montre Mécanique ?</h1>
+      <p class="subtitle">Cours d'expertise horlogère — Énergie, Barillet &amp; Train</p>
+      
+      <div class="header-controls">
+        <div class="dropdown">
+          <button class="dropbtn">☰ Menu Principal</button>
+          <div class="dropdown-content">
+            <a href="_001A-Mouvement_Manuel.html">1. Le Mouvement à Remontage Manuel</a>
+            <a href="_002-la-montre-automatique.html">2. La Montre Automatique</a>
+            <a href="_003-Horloge_Electronique.html">3. L'Horloge Électronique &amp; Quartz</a>
+            <a href="_004-Complications.html">4. Les Complications</a>
+            <a href="_005-Familles_Matieres.html">5. Les Familles de Matières</a>
+            <a href="_006-Fhasses_Fabrication.html">6. Phases et Technologies de Fabrication</a>
+            <a href="_007-Habillage.html">7. L'Habillage de la Montre</a>
+            <a href="_008-Histoire_Mesure_Temps.html">8. Histoire de la Mesure du Temps</a>
+          </div>
+        </div>
+
+        <div class="lang-switcher">
+          <a href="#" class="lang-btn active">FR</a>
+          <a href="../EN/_001A-Mouvement_Manuel.html" class="lang-btn">EN</a>
+          <a href="../DE/_001A-Mouvement_Manuel.html" class="lang-btn">DE</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- COLONNA DESTRA: Logo -->
+    <div class="header-right-block">
+      <img src="../Swiss_Time_Expert_Logo.png?v=3" alt="Swiss Time Expert Logo">
+    </div>
+
+  </div>
+
+  <div class="notebook-container" id="notebook-main">
+    
+    <div class="notebook-header">
+      <div class="notebook-title-cell">
+        <h2 class="handwritten-heading">Module 01 : Énergie, Barillet &amp; Chaîne Cinématique</h2>
+      </div>
+      <div class="tag-chic">✍️ Notes de Cours &amp; Schémas</div>
+    </div>
+
+    <div class="handwritten-body" id="course-content-area">
+
+      <h2 id="p1">1. Schéma Bloc du Mouvement Mécanique</h2>
+      <p>Le schéma bloc définit l'architecture fonctionnelle fondamentale de la montre mécanique à remontage manuel. L'énergie accumulée est transmise, distribuée et régulée de façon continue :</p>
+
+      <style>
+        .ste-container { max-width: 1000px; margin: 0 auto; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        .ste-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .ste-card { background-color: #f8f9fa; padding: 18px; border-radius: 6px; border-top: 4px solid #1a365d; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .ste-step { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6c757d; letter-spacing: 1px; margin-bottom: 6px; }
+        .ste-title { font-size: 1.05rem; font-weight: bold; color: #1a365d; margin: 0 0 10px 0; line-height: 1.25; }
+        .ste-text { font-size: 0.85rem; line-height: 1.55; color: #333; margin: 0; text-align: left; }
+        @media (max-width: 768px) { .ste-grid { grid-template-columns: 1fr; gap: 15px; } }
+      </style>
+
+      <!-- 1. MODELLO 3D INTERATTIVO DEL TRENO IN ALTO (DARK STUDIO + FULLSCREEN + POPUP + HUD) -->
+      <div class="ste-container">
+        <div class="train-studio-card">
+          <div class="train-studio-header">
+            <div>
+              <h3 class="train-studio-title">⚙️ Chaîne Cinématique Interactive 3D — Finition Haute Horlogerie</h3>
+              <p class="train-studio-hint" id="train-mode-hint">Clic sur une pièce : fiche technique • Glisser : pivoter • Boutons 🔍 + / − : zoom</p>
+            </div>
+          </div>
+
+          <div id="canvas-container-train">
+            <div id="train-loader">
+              <div class="train-spinner"></div>
+              <div id="train-loader-text">Chargement de la chaîne cinématique 3D...</div>
+            </div>
+
+            <!-- Popup scheda tecnica al clic -->
+            <div id="train-spec-popup" role="dialog" aria-live="polite">
+              <div class="train-popup-top">
+                <span class="train-popup-badge">Fiche Composant</span>
+                <button type="button" class="train-popup-close" id="train-popup-close" aria-label="Fermer">✕</button>
+              </div>
+              <div class="train-popup-title" id="train-popup-name">—</div>
+              <div class="train-popup-row">
+                <span class="train-popup-key">Nombre de dents (Z)</span>
+                <span class="train-popup-val" id="train-popup-teeth">—</span>
+              </div>
+              <div class="train-popup-row">
+                <span class="train-popup-key">Matériau &amp; Finition</span>
+                <span class="train-popup-val" id="train-popup-material">—</span>
+              </div>
+              <div class="train-popup-row">
+                <span class="train-popup-key">Fonction</span>
+                <span class="train-popup-val" id="train-popup-role">—</span>
+              </div>
+            </div>
+
+            <!-- Barra strumenti HUD interna: sempre visibile anche a schermo intero -->
+            <div class="train-hud-dock">
+              <button type="button" class="train-btn active" id="train-tool-orbit" title="Pivoter le modèle">⟳ Pivoter</button>
+              <button type="button" class="train-btn" id="train-tool-pan" title="Déplacer latéralement">✋ Déplacer</button>
+              <span class="train-hud-sep"></span>
+              <button type="button" class="train-btn" id="train-zoom-in" title="Zoom avant (maintenir appuyé)">🔍 +</button>
+              <button type="button" class="train-btn" id="train-zoom-out" title="Zoom arrière (maintenir appuyé)">🔍 −</button>
+              <span class="train-hud-sep"></span>
+              <button type="button" class="train-btn active" id="train-autorotate-btn" title="Rotation automatique">↻ Auto</button>
+              <button type="button" class="train-btn" id="train-reset-btn" title="Recentrer la vue">Centrer</button>
+              <button type="button" class="train-btn" id="train-fullscreen-btn" title="Plein écran">⛶ Plein Écran</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="ste-grid">
+          <div class="ste-card">
+            <div class="ste-step">Étape 1 : Énergie</div>
+            <h3 class="ste-title">Le Ressort &amp; Le Barillet</h3>
+            <p class="ste-text">Le moteur de la montre. Le ressort-moteur, logé à l'intérieur du tambour (1), emmagasine l'énergie mécanique lors de l'armage.</p>
+          </div>
+          <div class="ste-card">
+            <div class="ste-step">Étape 2 : Transmission</div>
+            <h3 class="ste-title">Le Rouage de Finissage</h3>
+            <p class="ste-text">La démultiplication de la force. Le train d'engrenages (2) achemine l'énergie.</p>
+          </div>
+          <div class="ste-card">
+            <div class="ste-step">Étape 3 : Distribution</div>
+            <h3 class="ste-title">L'Échappement</h3>
+            <p class="ste-text">Le convertisseur cinématique. La roue d'échappement (3) transforme le mouvement rotatif continu en impulsions.</p>
+          </div>
+          <div class="ste-card">
+            <div class="ste-step">Étape 4 : Régulation</div>
+            <h3 class="ste-title">L'Oscillateur</h3>
+            <p class="ste-text">Le cœur isochrone. L'ensemble balancier-spiral (4) dicte le rythme absolu.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1B. MODELLO 3D INTERATTIVO MOVIMENTO COMPLETO ETA 6498-1 SUBITO DOPO IL TRENO -->
+      <div class="eta-module-wrapper" id="eta-6498-section">
+        <div class="eta-top-bar">
+          <div>
+            <h3 class="eta-heading">🔧 Vue Éclatée Interactive 3D — Calibre ETA 6498-1</h3>
+            <p class="eta-subhint">Clic gauche : pivoter • Clic sur un composant : afficher son nom en français • Molette : zoom • Clic droit : déplacer</p>
+          </div>
+          <div class="eta-toolbar">
+            <label for="eta-explode-axis">Axe :</label>
+            <select id="eta-explode-axis">
+              <option value="vertical-y" selected>Vertical (Axe Y)</option>
+              <option value="vertical-z">Vertical (Axe Z)</option>
+              <option value="radial">Radial 3D</option>
+            </select>
+            <button type="button" id="eta-reset-cam">Centrer</button>
+          </div>
+        </div>
+
+        <div id="canvas-container-eta">
+          <div id="eta-loader">
+            <div class="eta-spinner"></div>
+            <div id="eta-loader-text">Chargement du calibre ETA 6498-1...</div>
+          </div>
+        </div>
+
+        <div id="eta-selected-bar" aria-live="polite">
+          <div>
+            <span id="eta-selected-label">Pièce sélectionnée</span>
+            <span id="eta-selected-name">—</span><span id="eta-selected-raw"></span>
+          </div>
+          <button type="button" id="eta-clear-btn">Désélectionner</button>
+        </div>
+
+        <div class="eta-slider-box">
+          <label for="eta-explode-slider">⚙️ Contrôle de l'Exploso :</label>
+          <input type="range" id="eta-explode-slider" min="0" max="100" value="0" step="0.5">
+          <span class="eta-slider-val" id="eta-explode-val">0%</span>
+        </div>
+
+        <div class="eta-credits-box">
+          <strong>Crédits, source &amp; licence :</strong> Modèle CAD de référence <em>ETA 6498-1 Complete Watch Movement</em> disponible sur
+          <a href="https://grabcad.com/library/eta-6498-1-complete-watch-movement-1" target="_blank" rel="noopener noreferrer">GrabCAD (bibliothèque communautaire)</a>.
+          Veuillez vérifier les conditions d'utilisation et la licence associées au fichier d'origine sur la fiche GrabCAD. Préparation, exportation glTF/GLB et intégration interactive 3D réalisées pour <strong>Swiss Time Expert</strong>.
+        </div>
+      </div>
+
+      <!-- 2. IMMAGINE STATICA CON PIN -->
+      <div class="img-always-visible" style="background: #fff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <div class="interactive-wrapper" style="position: relative; width: 100%;">
+          <img src="../chaine-cinematique-mecanique.png" alt="Chaîne cinématique complète" style="width: 100%; height: auto; display: block; border-radius: 4px;">
+          <div class="pin-marker" style="top: 14%; left: 49%; position: absolute; z-index: 5;">1</div>
+          <div class="pin-marker" style="top: 46%; left: 51%; position: absolute; z-index: 5;">2</div>
+          <div class="pin-marker" style="top: 41%; left: 33%; position: absolute; z-index: 5;">3</div>
+          <div class="pin-marker" style="top: 56%; left: 44%; position: absolute; z-index: 5;">4</div>
+          <div class="pin-marker" style="top: 72%; left: 32%; position: absolute; z-index: 5;">5</div>
+          <div class="pin-marker" style="top: 76%; left: 59%; position: absolute; z-index: 5;">8</div>
+          <div class="pin-marker" style="top: 64%; left: 60%; position: absolute; z-index: 5;">9</div>
+          <div class="pin-marker" style="top: 38%; left: 81%; background: #1b365d; position: absolute; z-index: 5;">⚙️</div>
+        </div>
+      </div>
+
+      <div class="legend-grid">
+        <div class="legend-item"><span class="badge-mini">1</span> Barillet</div>
+        <div class="legend-item"><span class="badge-mini">2</span> Roue de centre</div>
+        <div class="legend-item"><span class="badge-mini">3</span> Roue de troisième</div>
+        <div class="legend-item"><span class="badge-mini">4</span> Roue de seconde</div>
+        <div class="legend-item"><span class="badge-mini">5</span> Roue d'échappement</div>
+        <div class="legend-item"><span class="badge-mini">8</span> Balancier</div>
+        <div class="legend-item"><span class="badge-mini">9</span> Spiral</div>
+        <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">⚙️</span> Mécanisme de remontoir</div>
+      </div>
+
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-02) — Schéma Bloc &amp; Introduction</summary>
+        <div class="img-container"><img src="../01-02 Scema Bloc-Energie-Trasmission-Distribution-Regulation.jpg" alt="Fiche 01-02"></div>
+      </details>
+
+      <h2 id="barillet">2. Organe Moteur (Énergie) : Le Barillet &amp; Systèmes de Remontage</h2>
+      <p>Le barillet est le composant central du stockage d'énergie potentielle du mouvement mécanique. L'ensemble est constitué de quatre éléments fondamentaux :</p>
+      <ul>
+        <li><strong>Le Tambour :</strong> Boîte cylindrique abritant le ressort et portant la denture extérieure qui engrène avec le pignon de centre.</li>
+        <li><strong>Le Ressort-moteur :</strong> Lame élastique enroulée à l'intérieur, dont l'extrémité extérieure est fixée à la paroi du tambour.</li>
+        <li><strong>L'Arbre de barillet :</strong> Axe pivotant entre le pont et la platine, muni d'une bonde avec crochet pour l'attache intérieure du ressort.</li>
+        <li><strong>Le Couvercle :</strong> Élément de fermeture qui assure le guidage axial de l'arbre et protège le mécanisme des poussières.</li>
+      </ul>
+
+      <!-- 3. MODELLO 3D INTERATTIVO DEL BARILLET -->
+      <div class="img-always-visible">
+        <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
+          
+          <div id="canvas-container-barillet" style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px; position: relative; overflow: hidden;">
+            <div id="label-arbre" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Arbre &amp; Pignon</div>
+            <div id="label-tambour" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Tambour &amp; Roue</div>
+            <div id="label-molla" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Ressort-moteur</div>
+            <div id="label-coperchio" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Couvercle</div>
+          </div>
+
+          <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px; display: flex; align-items: center; gap: 15px;">
+            <label for="exploder-barillet" style="font-size: 14px; font-weight: bold; color: #1a365d; white-space: nowrap;">⚙️ Contrôle de l'Exploso :</label>
+            <input type="range" id="exploder-barillet" min="0" max="100" value="0" style="flex-grow: 1; cursor: pointer; accent-color: #1a365d;">
+            <span id="val-scale-barillet" style="font-size: 13px; font-weight: bold; color: #6c757d; min-width: 40px;">0%</span>
+          </div>
+
+          <div class="img-caption" style="margin-top: 10px;">📷 VUE TECHNIQUE 3D — Anatomie du barillet avec labels dynamiques.</div>
+        </div>
+      </div>
+
+      <!-- BLOCCO DI APPROFONDIMENTO TECNICO CON LA BARRA VERDE A SINISTRA -->
+      <div class="tech-doc-box">
+        <h3>4.1 Généralités et Rôle de l'Accumulateur d'Énergie</h3>
+        <p>Dans l'architecture d'un mouvement mécanique, l'énergie initiale est apportée par l'utilisateur lorsqu'il manipule la couronne de remontoir pour armer le ressort de barillet. Le système fonctionne ainsi comme un accumulateur d'énergie cinétique convertie en énergie potentielle élastique.</p>
+        <p>La chaîne fonctionnelle classique de l'horlogerie se décompose en cinq grands sous-ensembles :</p>
+        <ul>
+          <li><strong>Source d'énergie :</strong> Armage manuel ou automatique.</li>
+          <li><strong>Accumulateur :</strong> Barillet et son ressort.</li>
+          <li><strong>Comptage et Transmission :</strong> Rouage.</li>
+          <li><strong>Distribution :</strong> Échappement.</li>
+          <li><strong>Régulation &amp; Affichage :</strong> Organe réglant et affichage de l'heure.</li>
+        </ul>
+
+        <h3>4.2 Le Barillet et son Ressort</h3>
+        <h4>4.2.1 Descriptif technique de l'assemblage</h4>
+        <p>L'ensemble du barillet est généralement composé de quatre éléments fondamentaux :</p>
+        <ul>
+          <li><strong>Tambour de barillet :</strong> Boîte cylindrique abritant le ressort et servant de pivotement à l'arbre. Une encoche ou un dégagement sur le diamètre intérieur permet d'accrocher l'extrémité du ressort pour assurer l'entraînement du tambour.</li>
+          <li><strong>Ressort de barillet :</strong> Lame élastique enroulée à l'intérieur du tambour.</li>
+          <li><strong>Arbre de barillet :</strong> Axe pivotant entre le pont et la platine, comportant une bonde munie d'un crochet pour fixer l'attache intérieure du ressort.</li>
+          <li><strong>Couvercle de barillet :</strong> Élément de fermeture de la boîte qui participe également au guidage et au pivotement de l'arbre.</li>
+        </ul>
+
+        <h4>4.2.2 Principe physique et évolution géométrique</h4>
+        <p>Le ressort se présente sous la forme d'une lame à section rectangulaire. En cherchant à reprendre sa forme initiale après avoir été enroulé serré autour de la bonde de l'arbre, il produit le couple nécessaire au fonctionnement du mouvement.</p>
+        <p>Historiquement, la géométrie du ressort a évolué d'un enroulement spiralé classique vers la forme en S inversé (ou bride à retour), optimisée en fonction de la limite d'élasticité du matériau pour garantir une restitution d'énergie plus linéaire. La denture périphérique du tambour transmet directement ce couple au rouage de minuterie et de moyenne.</p>
+
+        <h3>4.3 Analyse Cinématique : Nombre de Tours et États du Ressort</h3>
+        <p>Pour modéliser le comportement du ressort, on distingue trois états fondamentaux de développement :</p>
+        <ul>
+          <li><strong>N'' :</strong> Nombre de tours du ressort entièrement armé (enroulé serré autour de la bonde).</li>
+          <li><strong>N' :</strong> Nombre de tours du ressort détendu à l'intérieur du tambour (en appui contre la paroi interne R).</li>
+          <li><strong>N₀ :</strong> Nombre de tours théorique du ressort à l'état libre (détendu hors du barillet).</li>
+        </ul>
+        <p>La différence entre l'espace de la bonde (r) et le rayon interne du tambour (R) est calculée pour réserver environ 50 % de surface occupée et 50 % de surface libre, maximisant ainsi la capacité d'accumulation d'énergie.</p>
+        <p><strong>Formules fondamentales de développement :</strong></p>
+        <ul>
+          <li>Nombre de tours de développement total (ΔN_t) : <div class="formula-math">ΔN_t = N'' - N₀</div></li>
+          <li>Nombre de tours utiles dans le barillet (ΔN_u) : <div class="formula-math">ΔN_u = N'' - N'</div></li>
+        </ul>
+
+        <h3>4.4 Paramètres de Conception et Formules d'Ingénierie</h3>
+        <h4>4.4.1 Longueur théorique du ressort</h4>
+        <p>La longueur active <em>L</em> du ressort dépend de la géométrie du tambour et de la bonde :</p>
+        <div class="formula-math">L ≈ (R² - r²) / (2 · e)</div>
+        <p><em>(Note empirique d'atelier : pour optimiser l'énergie réelle, cette longueur théorique est généralement majorée de 10 % à 33 % selon les dimensions du mouvement).</em></p>
+
+        <h4>4.4.2 Moment de force maximal (M_opmax)</h4>
+        <p>Lorsque le ressort est complètement armé autour de la bonde, le moment de force maximal se calcule via l'expression :</p>
+        <div class="formula-math">M_opmax = (E · h · e³) / (12 · L) · 2π · ΔN_t</div>
+        <p><strong>Où :</strong></p>
+        <ul>
+          <li><strong>E</strong> = Module d'élasticité du matériau (2,2 × 10⁵ à 2,3 × 10⁵ MPa ou N·mm⁻²).</li>
+          <li><strong>h</strong> = Hauteur (largeur) de la lame du ressort [mm].</li>
+          <li><strong>e</strong> = Épaisseur de la lame [mm].</li>
+          <li><strong>L</strong> = Longueur du ressort [mm].</li>
+          <li><strong>Δ N_t</strong> = Nombre de tours de développement total.</li>
+        </ul>
+
+        <h4>4.4.3 Propriétés de la Matière</h4>
+        <p>Les ressorts modernes de haute horlogerie utilisent des alliages à durcissement structural à base de cobalt, nickel et chrome (ex. Nivaflex). Ces matériaux amagnétiques offrent une ductilité élevée, une résistance à la corrosion et supportent de fortes contraintes élastiques sans déformation plastique permanente.</p>
+        <p><strong>Tension limite admissible (σ_max) :</strong> Comprise entre 2840 MPa et 3340 MPa selon les grades.</p>
+      </div>
+
+      <h2 id="croix-de-malte">3. Fixation du Ressort &amp; Régulation de Couple</h2>
+      <div class="img-always-visible">
+        <img src="../croix-de-malte.png" alt="Principe de fonctionnement de la Croix de Malte">
+        <div class="img-caption">📷 SCHÉMA TECHNIQUE — La Croix de Malte : blocage de la rotation pour l'exploitation de la plage de couple linéaire.</div>
+      </div>
+
+      <details class="image-popover">
+        <summary>📷 FEUILLET MANUSCRIT ORIGINAL (01-03) — Fixation du Ressort, Croix de Malte &amp; Fusée</summary>
+        <div class="img-container"><img src="../01-03 Energie - Le Ressort (F4.4P46).jpg" alt="Fiche 01-03"></div>
+      </details>
+
+      <!-- FUSÉE-CHAÎNE -->
+      <div style="display: flex; gap: 20px; align-items: center; background: #fff; padding: 20px; border: 1px solid #dcdcdc; border-radius: 8px; margin-top: 25px; margin-bottom: 25px;">
+        <div style="flex: 0 0 45%;">
+          <img src="../fusee-chaine.png" alt="Système Fusée-Chaîne" style="width: 100%; height: auto; border-radius: 4px;">
+        </div>
+        <div style="flex: 1;">
+          <h4 style="margin-top: 0; color: #2c4d75; font-size: 16px;">Force Constante : La Fusée-Chaîne</h4>
+          <p style="font-size: 14px; margin-bottom: 10px;">
+            Ce mécanisme historique agit comme une boîte de vitesses à variation continue pour compenser la perte de couple du ressort moteur au fur et à mesure de son désarmage.
+          </p>
+          <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
+            <li><strong>Armage maximal :</strong> Le ressort est fort, la chaîne tire sur le <em>petit diamètre</em> de la fusée (bras de levier court).</li>
+            <li><strong>Désarmage :</strong> Le ressort s'affaiblit, la chaîne tire sur le <em>grand diamètre</em> de la fusée (bras de levier long), égalisant ainsi parfaitement la force transmise à l'échappement.</li>
+          </ul>
+        </div>
+      </div>
+      
+    </div> 
+  </div> 
+
+  <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
+    <a href="_001B-Mouvement_Manuel.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Continuer la lecture ➔</a>
+  </div>
+  
+  <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
+
+  <!-- Script unico Three.js r160 per Treno del Tempo, ETA 6498-1 e Barillet -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+    // =========================================================================
+    // 0. VISUALIZZATORE 3D DARK STUDIO — CHAÎNE CINÉMATIQUE (TRENO DEL TEMPO)
+    // =========================================================================
+    const TRAIN_MODEL_URL = '../Train_fix.main_design.glb';
+    const trainContainer = document.getElementById('canvas-container-train');
+    let sharedEnvMap = null;
+
+    if (trainContainer) {
+      const sceneTrain = new THREE.Scene();
+
+      const cameraTrain = new THREE.PerspectiveCamera(
+        38,
+        trainContainer.clientWidth / trainContainer.clientHeight,
+        0.01,
+        1000
+      );
+      cameraTrain.position.set(0, 1.4, 4.2);
+
+      const rendererTrain = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      rendererTrain.setSize(trainContainer.clientWidth, trainContainer.clientHeight);
+      rendererTrain.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      rendererTrain.toneMapping = THREE.ACESFilmicToneMapping;
+      rendererTrain.toneMappingExposure = 1.25;
+      trainContainer.appendChild(rendererTrain.domElement);
+
+      const pmremTrain = new THREE.PMREMGenerator(rendererTrain);
+      sharedEnvMap = pmremTrain.fromScene(new RoomEnvironment(), 0.04).texture;
+      sceneTrain.environment = sharedEnvMap;
+
+      const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+      keyLight.position.set(5, 8, 6);
+      sceneTrain.add(keyLight);
+
+      const rimLight = new THREE.DirectionalLight(0x9ec5ff, 1.2);
+      rimLight.position.set(-6, 4, -5);
+      sceneTrain.add(rimLight);
+
+      const warmFill = new THREE.PointLight(0xffdf9e, 1.0, 20);
+      warmFill.position.set(0, -3, 4);
+      sceneTrain.add(warmFill);
+
+      const controlsTrain = new OrbitControls(cameraTrain, rendererTrain.domElement);
+      controlsTrain.enableDamping = true;
+      controlsTrain.dampingFactor = 0.06;
+      controlsTrain.autoRotate = true;
+      controlsTrain.autoRotateSpeed = 1.35;
+
+      // Strumenti interazione: 'orbit' | 'pan' + pulsanti lente 🔍 + e 🔍 − (anche a pressione continua)
+      const toolOrbitBtn = document.getElementById('train-tool-orbit');
+      const toolPanBtn = document.getElementById('train-tool-pan');
+      const zoomInBtn = document.getElementById('train-zoom-in');
+      const zoomOutBtn = document.getElementById('train-zoom-out');
+      const modeHintEl = document.getElementById('train-mode-hint');
+
+      function setBlenderTool(tool) {
+        toolOrbitBtn.classList.toggle('active', tool === 'orbit');
+        toolPanBtn.classList.toggle('active', tool === 'pan');
+        trainContainer.classList.toggle('mode-pan', tool === 'pan');
+
+        if (tool === 'orbit') {
+          controlsTrain.enableRotate = true;
+          controlsTrain.enablePan = true;
+          controlsTrain.mouseButtons = {
+            LEFT: THREE.MOUSE.ROTATE,
+            MIDDLE: THREE.MOUSE.DOLLY,
+            RIGHT: THREE.MOUSE.PAN
+          };
+          modeHintEl.textContent = 'Clic sur une pièce : fiche technique • Glisser : pivoter • Boutons 🔍 + / − : zoom';
+        } else {
+          controlsTrain.enableRotate = false;
+          controlsTrain.enablePan = true;
+          controlsTrain.mouseButtons = {
+            LEFT: THREE.MOUSE.PAN,
+            MIDDLE: THREE.MOUSE.DOLLY,
+            RIGHT: THREE.MOUSE.PAN
+          };
+          modeHintEl.textContent = 'Mode Déplacer actif : glisser pour déplacer la vue latéralement';
+        }
+      }
+
+      toolOrbitBtn.addEventListener('click', () => setBlenderTool('orbit'));
+      toolPanBtn.addEventListener('click', () => setBlenderTool('pan'));
+      setBlenderTool('orbit');
+
+      function applyCameraZoom(scaleFactor) {
+        const offset = cameraTrain.position.clone().sub(controlsTrain.target);
+        const newDist = THREE.MathUtils.clamp(offset.length() * scaleFactor, 0.7, 14.0);
+        offset.setLength(newDist);
+        cameraTrain.position.copy(controlsTrain.target).add(offset);
+        controlsTrain.update();
+      }
+
+      let zoomHoldInterval = null;
+      function bindZoomButton(btn, scaleFactor) {
+        const startZoom = (e) => {
+          e.preventDefault();
+          applyCameraZoom(scaleFactor);
+          clearInterval(zoomHoldInterval);
+          zoomHoldInterval = setInterval(() => applyCameraZoom(scaleFactor), 65);
+        };
+        const stopZoom = () => {
+          clearInterval(zoomHoldInterval);
+          zoomHoldInterval = null;
+        };
+        btn.addEventListener('pointerdown', startZoom);
+        btn.addEventListener('pointerup', stopZoom);
+        btn.addEventListener('pointerleave', stopZoom);
+        btn.addEventListener('pointercancel', stopZoom);
+      }
+
+      bindZoomButton(zoomInBtn, 0.88);
+      bindZoomButton(zoomOutBtn, 1.14);
+
+      const trainPickableMeshes = [];
+      const trainInitialCamPos = new THREE.Vector3(0, 1.4, 4.2);
+      let trainSelectedMesh = null;
+      let trainPrevEmissive = null;
+      let trainPrevEmissiveIntensity = 0;
+
+      const trainLoaderEl = document.getElementById('train-loader');
+      const trainLoaderText = document.getElementById('train-loader-text');
+      const popupEl = document.getElementById('train-spec-popup');
+      const popupNameEl = document.getElementById('train-popup-name');
+      const popupTeethEl = document.getElementById('train-popup-teeth');
+      const popupMatEl = document.getElementById('train-popup-material');
+      const popupRoleEl = document.getElementById('train-popup-role');
+      const popupCloseBtn = document.getElementById('train-popup-close');
+
+      const TRAIN_SPECS_FR = [
+        {
+          match: /tambour|barillet|barrel/i,
+          name: 'Tambour de Barillet',
+          teeth: '72 à 80 dents',
+          material: 'Laiton doré (CuZn37)',
+          role: 'Stockage et restitution du couple moteur'
+        },
+        {
+          match: /arbre|albero|shaft|asse/i,
+          name: 'Arbre de Barillet',
+          teeth: 'Carré de remontoir',
+          material: 'Acier trempé poli',
+          role: 'Pivotement et armage du ressort-moteur'
+        },
+        {
+          match: /centre|center|grande\s*moyenne/i,
+          name: 'Roue de Centre (Grande Moyenne)',
+          teeth: '64 à 80 dents (1 tour / heure)',
+          material: 'Laiton doré & pignon acier',
+          role: 'Transmission principale & entraînement minuterie'
+        },
+        {
+          match: /troisi[eè]me|third|petite\s*moyenne/i,
+          name: 'Roue de Troisième (Petite Moyenne)',
+          teeth: '60 à 75 dents',
+          material: 'Laiton doré & pignon acier trempé',
+          role: 'Démultiplication intermédiaire du rouage'
+        },
+        {
+          match: /seconde|fourth|second/i,
+          name: 'Roue de Seconde',
+          teeth: '60 à 70 dents (1 tour / minute)',
+          material: 'Laiton doré & pignon acier trempé',
+          role: 'Affichage des secondes & liaison échappement'
+        },
+        {
+          match: /[eé]chappement|escape/i,
+          name: "Roue d'Échappement",
+          teeth: '15 dents inclinées',
+          material: 'Acier trempé haute dureté',
+          role: 'Distribution des impulsions à l’ancre'
+        },
+        {
+          match: /ancre|pallet|palette|lev[eé]e/i,
+          name: 'Ancre Suisse & Levées',
+          teeth: '2 palettes (entrée / sortie)',
+          material: 'Acier poli & Rubis synthétique (Corindon)',
+          role: 'Verrouillage et entretien des oscillations'
+        },
+        {
+          match: /balancier|balance/i,
+          name: 'Balancier Annulaire',
+          teeth: 'Sans denture (organe oscillant)',
+          material: 'Glucydur / Laiton doré & axe acier',
+          role: 'Base de temps isochrone (2,5 – 4 Hz)'
+        },
+        {
+          match: /spiral|hairspring/i,
+          name: 'Spiral Régulateur',
+          teeth: '12 à 16 spires concentriques',
+          material: 'Alliage Nivarox / Acier bleui',
+          role: 'Couple de rappel élastique du balancier'
+        },
+        {
+          match: /aiguille|lancetta|hand|index/i,
+          name: 'Aiguille / Index Indicateur',
+          teeth: 'Canon ajusté sur axe',
+          material: 'Acier bleui à la flamme',
+          role: 'Lecture visuelle de la rotation'
+        },
+        {
+          match: /pignon|pinion/i,
+          name: 'Pignon de Finissage',
+          teeth: '8 à 12 ailes (profil épicycloïdal)',
+          material: 'Acier trempé poli-miroir',
+          role: 'Réception du couple entre mobiles'
+        },
+        {
+          match: /rubis|ruby|pierre|jewel/i,
+          name: 'Coussinet / Palette Rubis',
+          teeth: 'Sans denture',
+          material: 'Rubis synthétique (Al₂O₃)',
+          role: 'Réduction minimale des frottements'
+        }
+      ];
+
+      function formatFrenchComponentLabel(rawText) {
+        let s = (rawText || 'Mobile du train de rouage')
+          .replace(/\.(glb|gltf|blend|step|stp|sldprt|sldasm)$/i, '')
+          .replace(/\s*\.\d+$/, '')
+          .replace(/[_-]+/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        const replacements = [
+          [/\btamburo\b/gi, 'Tambour'],
+          [/\bcorona\b/gi, 'Couronne'],
+          [/\bdenti\b/gi, 'dents'],
+          [/\bdente\b/gi, 'dent'],
+          [/\bfermo\b/gi, 'arrêt'],
+          [/\bgola\b/gi, 'gorge'],
+          [/\bcoperchio\b/gi, 'couvercle'],
+          [/\bottone\d*\b/gi, 'laiton'],
+          [/\balbero\b/gi, 'Arbre'],
+          [/\basse\b/gi, 'Axe'],
+          [/\bmolla\b/gi, 'Ressort'],
+          [/\bruota\b/gi, 'Roue'],
+          [/\baiguille\b/gi, 'Aiguille'],
+          [/\blancetta\b/gi, 'Aiguille'],
+          [/\bbarrel\b/gi, 'Barillet'],
+          [/\bdrum\b/gi, 'Tambour'],
+          [/\bcover\b/gi, 'Couvercle'],
+          [/\bshaft\b/gi, 'Arbre'],
+          [/\bwheel\b/gi, 'Roue'],
+          [/\bpinion\b/gi, 'Pignon'],
+          [/\bspring\b/gi, 'Ressort'],
+          [/\bbrass\b/gi, 'Laiton'],
+          [/\bsteel\b/gi, 'Acier'],
+          [/\bruby\b/gi, 'Rubis'],
+          [/\bteeth\b/gi, 'dents'],
+          [/\btooth\b/gi, 'dent']
+        ];
+
+        for (const [re, frReplacement] of replacements) {
+          s = s.replace(re, frReplacement);
+        }
+
+        s = s.replace(/\s*—\s*laiton$/i, '').replace(/\s+/g, ' ').trim();
+        return s ? s.charAt(0).toUpperCase() + s.slice(1) : 'Mobile du train de rouage';
+      }
+
+      function detectMaterialLabel(mesh) {
+        const matName = (mesh.material?.name || '').toLowerCase();
+        if (matName.includes('ottone') || matName.includes('brass') || matName.includes('laiton') || matName.includes('gold')) {
+          return 'Laiton doré (CuZn)';
+        }
+        if (matName.includes('azzurr') || matName.includes('blue') || matName.includes('bleui')) {
+          return 'Acier bleui thermiquement';
+        }
+        if (matName.includes('rubin') || matName.includes('ruby') || matName.includes('rubis')) {
+          return 'Rubis synthétique (Corindon)';
+        }
+        if (matName.includes('acciaio') || matName.includes('steel') || matName.includes('acier') || matName.includes('rodiat')) {
+          return 'Acier trempé rhodié';
+        }
+        if (mesh.material?.color) {
+          const c = mesh.material.color;
+          if (c.r > 0.55 && c.g < 0.2 && c.b < 0.2) return 'Rubis synthétique (Corindon)';
+          if (c.b > 0.45 && c.r < 0.25) return 'Acier bleui thermiquement';
+          if (c.r > 0.65 && c.g > 0.45 && c.b < 0.35) return 'Laiton doré (CuZn)';
+        }
+        return 'Acier horloger trempé';
+      }
+
+      function resolveTrainComponentInfo(mesh) {
+        let fullHierarchyName = '';
+        let cur = mesh;
+        while (cur) {
+          if (cur.name) fullHierarchyName += ' ' + cur.name;
+          cur = cur.parent;
+        }
+
+        const explicitTeethMatch = fullHierarchyName.match(/(?:\bz\s*(\d{1,3})\b|\b(\d{1,3})\s*(?:dents|denti|teeth|d)\b)/i);
+        const explicitTeeth = explicitTeethMatch ? `${explicitTeethMatch[1] || explicitTeethMatch[2]} dents` : null;
+
+        for (const spec of TRAIN_SPECS_FR) {
+          if (spec.match.test(fullHierarchyName)) {
+            return {
+              name: spec.name,
+              teeth: explicitTeeth || spec.teeth,
+              material: spec.material,
+              role: spec.role
+            };
+          }
+        }
+
+        const frenchName = formatFrenchComponentLabel(mesh.name || mesh.parent?.name);
+        return {
+          name: frenchName,
+          teeth: explicitTeeth || 'Denture de précision',
+          material: detectMaterialLabel(mesh),
+          role: 'Transmission cinématique du mouvement'
+        };
+      }
+
+      function clearTrainSelection() {
+        if (trainSelectedMesh && trainSelectedMesh.material && 'emissive' in trainSelectedMesh.material) {
+          trainSelectedMesh.material.emissive.copy(trainPrevEmissive);
+          trainSelectedMesh.material.emissiveIntensity = trainPrevEmissiveIntensity;
+        }
+        trainSelectedMesh = null;
+        trainPrevEmissive = null;
+        popupEl.classList.remove('visible');
+      }
+
+      function selectTrainMesh(mesh) {
+        clearTrainSelection();
+        trainSelectedMesh = mesh;
+
+        const info = resolveTrainComponentInfo(mesh);
+        popupNameEl.textContent = info.name;
+        popupTeethEl.textContent = info.teeth;
+        popupMatEl.textContent = info.material;
+        popupRoleEl.textContent = info.role;
+        popupEl.classList.add('visible');
+
+        if (mesh.material && 'emissive' in mesh.material) {
+          mesh.material = mesh.material.clone();
+          trainPrevEmissive = mesh.material.emissive.clone();
+          trainPrevEmissiveIntensity = mesh.material.emissiveIntensity ?? 1;
+          mesh.material.emissive.setHex(0xd4af37);
+          mesh.material.emissiveIntensity = 0.55;
+        }
+      }
+
+      popupCloseBtn.addEventListener('click', clearTrainSelection);
+
+      const trainLoader = new GLTFLoader();
+      trainLoader.load(
+        TRAIN_MODEL_URL,
+        (gltf) => {
+          const trainRoot = gltf.scene;
+
+          const box = new THREE.Box3().setFromObject(trainRoot);
+          const center = box.getCenter(new THREE.Vector3());
+          const size = box.getSize(new THREE.Vector3());
+          const maxDim = Math.max(size.x, size.y, size.z) || 1;
+
+          trainRoot.scale.setScalar(3.3 / maxDim);
+          box.setFromObject(trainRoot);
+          box.getCenter(center);
+          trainRoot.position.sub(center);
+
+          sceneTrain.add(trainRoot);
+
+          trainRoot.traverse((child) => {
+            if (child.isMesh) {
+              if (child.material) {
+                child.material.needsUpdate = true;
+              }
+              trainPickableMeshes.push(child);
+            }
+          });
+
+          cameraTrain.position.copy(trainInitialCamPos);
+          controlsTrain.target.set(0, 0, 0);
+          controlsTrain.update();
+
+          trainLoaderEl.style.opacity = '0';
+          setTimeout(() => trainLoaderEl.remove(), 350);
+        },
+        (xhr) => {
+          if (xhr.total > 0 && trainLoaderText) {
+            trainLoaderText.textContent = `Chargement : ${Math.round((xhr.loaded / xhr.total) * 100)}%`;
+          }
+        },
+        (err) => {
+          console.error('Erreur chargement Train GLB:', err);
+          if (trainLoaderText) {
+            trainLoaderText.innerHTML = 'Erreur de chargement de "Train_fix.main_design.glb".';
+          }
+        }
+      );
+
+      const trainRaycaster = new THREE.Raycaster();
+      const trainPointer = new THREE.Vector2();
+      let trainDownPos = { x: 0, y: 0 };
+
+      rendererTrain.domElement.addEventListener('pointerdown', (ev) => {
+        if (ev.button !== 0) return;
+        trainDownPos = { x: ev.clientX, y: ev.clientY };
+      });
+
+      rendererTrain.domElement.addEventListener('pointerup', (ev) => {
+        if (ev.button !== 0) return;
+        const dist = Math.hypot(ev.clientX - trainDownPos.x, ev.clientY - trainDownPos.y);
+        if (dist > 5 || trainPickableMeshes.length === 0) return;
+
+        const rect = rendererTrain.domElement.getBoundingClientRect();
+        trainPointer.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+        trainPointer.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+
+        trainRaycaster.setFromCamera(trainPointer, cameraTrain);
+        const hits = trainRaycaster.intersectObjects(trainPickableMeshes, false);
+        if (hits.length > 0) {
+          selectTrainMesh(hits[0].object);
+        }
+      });
+
+      const autoRotateBtn = document.getElementById('train-autorotate-btn');
+      autoRotateBtn.addEventListener('click', () => {
+        controlsTrain.autoRotate = !controlsTrain.autoRotate;
+        autoRotateBtn.classList.toggle('active', controlsTrain.autoRotate);
+      });
+
+      document.getElementById('train-reset-btn').addEventListener('click', () => {
+        cameraTrain.position.copy(trainInitialCamPos);
+        controlsTrain.target.set(0, 0, 0);
+        setBlenderTool('orbit');
+        controlsTrain.update();
+      });
+
+      const fsBtn = document.getElementById('train-fullscreen-btn');
+
+      function toggleTrainFullscreen() {
+        if (!document.fullscreenElement) {
+          trainContainer.requestFullscreen?.().catch((e) => console.warn(e));
+        } else {
+          document.exitFullscreen?.();
+        }
+      }
+
+      fsBtn.addEventListener('click', toggleTrainFullscreen);
+
+      function resizeTrainViewer() {
+        if (!trainContainer) return;
+        const isFs = Boolean(document.fullscreenElement);
+        fsBtn.textContent = isFs ? '✕ Quitter' : '⛶ Plein Écran';
+        fsBtn.classList.toggle('active', isFs);
+
+        const w = trainContainer.clientWidth || window.innerWidth;
+        const h = trainContainer.clientHeight || window.innerHeight;
+        cameraTrain.aspect = w / h;
+        cameraTrain.updateProjectionMatrix();
+        rendererTrain.setSize(w, h);
+      }
+
+      document.addEventListener('fullscreenchange', resizeTrainViewer);
+      window.addEventListener('resize', resizeTrainViewer);
+
+      function animateTrain() {
+        requestAnimationFrame(animateTrain);
+        controlsTrain.update();
+        rendererTrain.render(sceneTrain, cameraTrain);
+      }
+      animateTrain();
+    }
+
+    // =========================================================================
+    // 1. VISUALIZZATORE 3D CALIBRE ETA 6498-1
+    // =========================================================================
+    const ETA_MODEL_URL = '../ETA6498-1_Web.glb';
+    const etaContainer = document.getElementById('canvas-container-eta');
+
+    if (etaContainer) {
+      const sceneEta = new THREE.Scene();
+      sceneEta.background = new THREE.Color(0xffffff);
+
+      const cameraEta = new THREE.PerspectiveCamera(
+        40,
+        etaContainer.clientWidth / etaContainer.clientHeight,
+        0.01,
+        1000
+      );
+      cameraEta.position.set(0, 3.2, 4.6);
+
+      const rendererEta = new THREE.WebGLRenderer({ antialias: true });
+      rendererEta.setSize(etaContainer.clientWidth, etaContainer.clientHeight);
+      rendererEta.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      rendererEta.toneMapping = THREE.ACESFilmicToneMapping;
+      rendererEta.toneMappingExposure = 1.15;
+      etaContainer.appendChild(rendererEta.domElement);
+
+      if (!sharedEnvMap) {
+        const pmremEta = new THREE.PMREMGenerator(rendererEta);
+        sharedEnvMap = pmremEta.fromScene(new RoomEnvironment(), 0.04).texture;
+      }
+      sceneEta.environment = sharedEnvMap;
+
+      const lightTop = new THREE.DirectionalLight(0xffffff, 1.8);
+      lightTop.position.set(5, 10, 7);
+      sceneEta.add(lightTop);
+
+      const lightFill = new THREE.DirectionalLight(0xdbe8ff, 0.9);
+      lightFill.position.set(-6, -4, -5);
+      sceneEta.add(lightFill);
+
+      const controlsEta = new OrbitControls(cameraEta, rendererEta.domElement);
+      controlsEta.enableDamping = true;
+      controlsEta.dampingFactor = 0.06;
+
+      let etaModelRoot = null;
+      const etaExplodeItems = [];
+      const etaPickableMeshes = [];
+      const etaInitialCamPos = new THREE.Vector3();
+
+      let etaSelectedMesh = null;
+      let etaPrevEmissive = null;
+      let etaPrevEmissiveIntensity = 0;
+
+      const selectedBar = document.getElementById('eta-selected-bar');
+      const selectedNameEl = document.getElementById('eta-selected-name');
+      const selectedRawEl = document.getElementById('eta-selected-raw');
+      const clearBtn = document.getElementById('eta-clear-btn');
+      const loaderEl = document.getElementById('eta-loader');
+      const loaderTextEl = document.getElementById('eta-loader-text');
+
+      const HOROLOGY_DICT_FR = [
+        [/ main\s*plate | base\s*plate | plate /i, 'Platine'],
+        [/ barrel\s*bridge /i, 'Pont de barillet'],
+        [/ train\s*(wheel\s*)?bridge | gear\s*train\s*bridge /i, 'Pont de rouage'],
+        [/ balance\s*(cock|bridge) /i, 'Coq de balancier'],
+        [/ pallet\s*(fork\s*)?(cock|bridge) | escapement\s*bridge /i, "Pont d'ancre"],
+        [/ bridge /i, 'Pont'],
+        [/ barrel\s*drum | drum /i, 'Tambour de barillet'],
+        [/ barrel\s*cover | cover /i, 'Couvercle de barillet'],
+        [/ barrel\s*arbor | arbor /i, 'Arbre de barillet'],
+        [/ mainspring | main\s*spring /i, 'Ressort-moteur'],
+        [/ barrel /i, 'Barillet'],
+        [/ ratchet\s*wheel | ratchet /i, 'Rochet'],
+        [/ crown\s*wheel /i, 'Roue de couronne'],
+        [/ winding\s*stem | stem /i, 'Tige de remontoir'],
+        [/ winding\s*pinion /i, 'Pignon de remontoir'],
+        [/ sliding\s*pinion | clutch\s*wheel /i, 'Pignon coulant'],
+        [/ setting\s*lever /i, 'Tirette'],
+        [/ yoke /i, 'Bascule'],
+        [/ click\s*spring /i, 'Ressort de cliquet'],
+        [/ click /i, 'Cliquet'],
+        [/ setting\s*wheel /i, 'Roue de mise à l’heure'],
+        [/ minute\s*wheel /i, 'Roue de minuterie'],
+        [/ hour\s*wheel /i, 'Roue des heures'],
+        [/ cannon\s*pinion /i, 'Chaussée'],
+        [/ center\s*wheel | centre\s*wheel /i, 'Roue de centre'],
+        [/ third\s*wheel /i, 'Roue de troisième'],
+        [/ fourth\s*wheel | second\s*wheel /i, 'Roue de seconde'],
+        [/ escape\s*wheel | escapement\s*wheel /i, "Roue d'échappement"],
+        [/ wheel /i, 'Roue'],
+        [/ pinion /i, 'Pignon'],
+        [/ pallet\s*fork | pallet | anchor /i, 'Ancre'],
+        [/ balance\s*wheel | balance /i, 'Balancier'],
+        [/ hairspring | balance\s*spring | spiral /i, 'Spiral'],
+        [/ regulator | index /i, 'Raquette'],
+        [/ stud /i, 'Piton'],
+        [/ incabloc | shock\s*absorber /i, 'Antichoc (Incabloc)'],
+        [/ jewel | ruby /i, 'Rubis / Pierre'],
+        [/ screw /i, 'Vis'],
+        [/ spring /i, 'Ressort'],
+        [/ washer /i, 'Rondelle'],
+        [/ pin /i, 'Goupille']
+      ];
+
+      function cleanEtaName(raw) {
+        if (!raw) return 'Composant sans nom';
+        return raw
+          .replace(/\.(sldprt|sldasm|igs|iges|step|stp|glb|gltf|blend)$/i, '')
+          .replace(/[_-]+/g, ' ')
+          .replace(/\s*\.\d+$/, '')
+          .replace(/\s+/g, ' ')
+          .trim() || 'Composant sans nom';
+      }
+
+      function translatePartToFrench(cleanName) {
+        for (const [pattern, frLabel] of HOROLOGY_DICT_FR) {
+          if (pattern.test(cleanName)) {
+            return frLabel;
+          }
+        }
+        return cleanName;
+      }
+
+      function resolveEtaPartName(mesh) {
+        let cur = mesh;
+        const genericRe = /^(mesh|object|node|part|solid|group|body|untitled)(_|\s|-|\d|\.)*$/i;
+        let rawFound = '';
+        while (cur && cur !== etaModelRoot) {
+          if (cur.name && !genericRe.test(cur.name.trim())) {
+            rawFound = cur.name;
+            break;
+          }
+          cur = cur.parent;
+        }
+        if (!rawFound) {
+          rawFound = mesh.name || mesh.parent?.name || '';
+        }
+        const cleaned = cleanEtaName(rawFound);
+        const translated = translatePartToFrench(cleaned);
+        return { translated, cleaned };
+      }
+
+      function clearEtaSelection() {
+        if (etaSelectedMesh && etaSelectedMesh.material && 'emissive' in etaSelectedMesh.material) {
+          etaSelectedMesh.material.emissive.copy(etaPrevEmissive);
+          etaSelectedMesh.material.emissiveIntensity = etaPrevEmissiveIntensity;
+        }
+        etaSelectedMesh = null;
+        etaPrevEmissive = null;
+        selectedNameEl.textContent = '—';
+        selectedRawEl.textContent = '';
+        selectedBar.classList.remove('visible');
+      }
+
+      function selectEtaMesh(mesh) {
+        if (etaSelectedMesh === mesh) return;
+        clearEtaSelection();
+
+        etaSelectedMesh = mesh;
+        const { translated, cleaned } = resolveEtaPartName(mesh);
+        selectedNameEl.textContent = translated;
+        selectedRawEl.textContent = translated.toLowerCase() !== cleaned.toLowerCase() ? `(${cleaned})` : '';
+        selectedBar.classList.add('visible');
+
+        if (mesh.material && 'emissive' in mesh.material) {
+          mesh.material = mesh.material.clone();
+          etaPrevEmissive = mesh.material.emissive.clone();
+          etaPrevEmissiveIntensity = mesh.material.emissiveIntensity ?? 1;
+          mesh.material.emissive.setHex(0x8c6928);
+          mesh.material.emissiveIntensity = 0.65;
+        }
+      }
+
+      clearBtn.addEventListener('click', clearEtaSelection);
+
+      const etaLoader = new GLTFLoader();
+      etaLoader.load(
+        ETA_MODEL_URL,
+        (gltf) => {
+          etaModelRoot = gltf.scene;
+
+          const box = new THREE.Box3().setFromObject(etaModelRoot);
+          const center = box.getCenter(new THREE.Vector3());
+          const size = box.getSize(new THREE.Vector3());
+          const maxDim = Math.max(size.x, size.y, size.z) || 1;
+
+          etaModelRoot.scale.setScalar(3.0 / maxDim);
+          box.setFromObject(etaModelRoot);
+          box.getCenter(center);
+          etaModelRoot.position.sub(center);
+
+          sceneEta.add(etaModelRoot);
+          etaModelRoot.updateMatrixWorld(true);
+
+          const origin = new THREE.Vector3(0, 0, 0);
+
+          etaModelRoot.traverse((child) => {
+            if (child.isMesh) {
+              if (child.material) {
+                child.material.needsUpdate = true;
+              }
+              etaPickableMeshes.push(child);
+
+              const mBox = new THREE.Box3().setFromObject(child);
+              const mCenter = mBox.getCenter(new THREE.Vector3());
+              etaExplodeItems.push({
+                mesh: child,
+                origPos: child.position.clone(),
+                worldOffset: mCenter.clone().sub(origin),
+                parent: child.parent
+              });
+            }
+          });
+
+          cameraEta.position.set(0, 3.1, 4.4);
+          etaInitialCamPos.copy(cameraEta.position);
+          controlsEta.target.set(0, 0, 0);
+          controlsEta.update();
+
+          loaderEl.style.opacity = '0';
+          setTimeout(() => loaderEl.remove(), 350);
+        },
+        (xhr) => {
+          if (xhr.total > 0 && loaderTextEl) {
+            loaderTextEl.textContent = `Chargement : ${Math.round((xhr.loaded / xhr.total) * 100)}%`;
+          }
+        },
+        (err) => {
+          console.error('Erreur chargement ETA 6498-1 GLB:', err);
+          if (loaderTextEl) {
+            loaderTextEl.innerHTML =
+              'Erreur de chargement du fichier 3D.<br><small>Vérifiez la présence de "ETA6498-1_Web.glb" dans le dossier parent.</small>';
+          }
+        }
+      );
+
+      const etaRaycaster = new THREE.Raycaster();
+      const etaPointer = new THREE.Vector2();
+      let etaDownPos = { x: 0, y: 0 };
+
+      rendererEta.domElement.addEventListener('pointerdown', (ev) => {
+        if (ev.button !== 0) return;
+        etaDownPos = { x: ev.clientX, y: ev.clientY };
+      });
+
+      rendererEta.domElement.addEventListener('pointerup', (ev) => {
+        if (ev.button !== 0) return;
+        const dist = Math.hypot(ev.clientX - etaDownPos.x, ev.clientY - etaDownPos.y);
+        if (dist > 5 || etaPickableMeshes.length === 0) return;
+
+        const rect = rendererEta.domElement.getBoundingClientRect();
+        etaPointer.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+        etaPointer.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+
+        etaRaycaster.setFromCamera(etaPointer, cameraEta);
+        const hits = etaRaycaster.intersectObjects(etaPickableMeshes, false);
+        if (hits.length > 0) {
+          selectEtaMesh(hits[0].object);
+        }
+      });
+
+      const etaSlider = document.getElementById('eta-explode-slider');
+      const etaValText = document.getElementById('eta-explode-val');
+      const etaAxisSel = document.getElementById('eta-explode-axis');
+
+      function updateEtaExplode() {
+        const factor = parseFloat(etaSlider.value) / 100;
+        etaValText.textContent = `${Math.round(factor * 100)}%`;
+        const mode = etaAxisSel.value;
+
+        etaExplodeItems.forEach((item) => {
+          if (factor === 0) {
+            item.mesh.position.copy(item.origPos);
+            return;
+          }
+
+          const shift = new THREE.Vector3();
+          const spread = factor * 3.4;
+
+          if (mode === 'vertical-y') {
+            shift.set(
+              item.worldOffset.x * spread * 0.28,
+              item.worldOffset.y * spread * 2.5,
+              item.worldOffset.z * spread * 0.28
+            );
+          } else if (mode === 'vertical-z') {
+            shift.set(
+              item.worldOffset.x * spread * 0.28,
+              item.worldOffset.y * spread * 0.28,
+              item.worldOffset.z * spread * 2.5
+            );
+          } else {
+            shift.copy(item.worldOffset).multiplyScalar(spread * 1.85);
+          }
+
+          if (item.parent) {
+            const pScale = new THREE.Vector3();
+            item.parent.getWorldScale(pScale);
+            const localShift = shift.clone();
+            localShift.x /= pScale.x || 1;
+            localShift.y /= pScale.y || 1;
+            localShift.z /= pScale.z || 1;
+
+            const pQuat = new THREE.Quaternion();
+            item.parent.getWorldQuaternion(pQuat);
+            localShift.applyQuaternion(pQuat.invert());
+
+            item.mesh.position.copy(item.origPos).add(localShift);
+          }
+        });
+      }
+
+      etaSlider.addEventListener('input', updateEtaExplode);
+      etaAxisSel.addEventListener('change', updateEtaExplode);
+
+      document.getElementById('eta-reset-cam').addEventListener('click', () => {
+        cameraEta.position.copy(etaInitialCamPos);
+        controlsEta.target.set(0, 0, 0);
+        controlsEta.update();
+      });
+
+      window.addEventListener('resize', () => {
+        if (!etaContainer) return;
+        cameraEta.aspect = etaContainer.clientWidth / etaContainer.clientHeight;
+        cameraEta.updateProjectionMatrix();
+        rendererEta.setSize(etaContainer.clientWidth, etaContainer.clientHeight);
+      });
+
+      function animateEta() {
+        requestAnimationFrame(animateEta);
+        controlsEta.update();
+        rendererEta.render(sceneEta, cameraEta);
+      }
+      animateEta();
+
+      // =========================================================================
+      // 2. VISUALIZZATORE 3D BARILLET (STESSO THREE.JS r160)
+      // =========================================================================
+      const containerBarillet = document.getElementById('canvas-container-barillet');
+      if (containerBarillet) {
+        const sceneBarillet = new THREE.Scene();
+        sceneBarillet.background = new THREE.Color(0xffffff);
+        sceneBarillet.environment = sharedEnvMap;
+
+        const cameraBarillet = new THREE.PerspectiveCamera(
+          45,
+          containerBarillet.clientWidth / containerBarillet.clientHeight,
+          0.1,
+          1000
+        );
+        cameraBarillet.position.set(0, 25, 40);
+
+        const rendererBarillet = new THREE.WebGLRenderer({ antialias: true });
+        rendererBarillet.setSize(containerBarillet.clientWidth, containerBarillet.clientHeight);
+        rendererBarillet.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        rendererBarillet.toneMapping = THREE.ACESFilmicToneMapping;
+        rendererBarillet.toneMappingExposure = 1.15;
+        containerBarillet.appendChild(rendererBarillet.domElement);
+
+        const controlsBarillet = new OrbitControls(cameraBarillet, rendererBarillet.domElement);
+        controlsBarillet.enableDamping = true;
+        controlsBarillet.dampingFactor = 0.05;
+
+        const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.4);
+        dirLight1.position.set(20, 40, 20);
+        sceneBarillet.add(dirLight1);
+
+        const dirLight2 = new THREE.DirectionalLight(0x88bbff, 0.7);
+        dirLight2.position.set(-20, -20, -20);
+        sceneBarillet.add(dirLight2);
+
+        const partsBarillet = [];
+        const barilletLoader = new GLTFLoader();
+
+        barilletLoader.load(
+          '../barillet_fix.glb',
+          (gltf) => {
+            const model = gltf.scene;
+            sceneBarillet.add(model);
+
+            model.traverse((child) => {
+              if (child.isMesh) {
+                const initialPos = child.position.clone();
+                const name = child.name.toLowerCase();
+
+                let targetOffset = 0;
+                let labelType = 'tambour';
+
+                if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion')) {
+                  targetOffset = 0;
+                  labelType = 'arbre';
+                } else if (name.includes('coperchio') || name.includes('cover')) {
+                  targetOffset = 18;
+                  labelType = 'coperchio';
+                } else if (name.includes('molla') || name.includes('spring')) {
+                  targetOffset = 6;
+                  labelType = 'molla';
+                } else {
+                  targetOffset = -15;
+                  labelType = 'tambour';
+                }
+
+                partsBarillet.push({
+                  mesh: child,
+                  initialPos,
+                  targetOffset,
+                  labelId: 'label-' + labelType
+                });
+              }
+            });
+          },
+          undefined,
+          (error) => {
+            console.error('Error loading barillet GLB file:', error);
+          }
+        );
+
+        function updateBarilletLabelsPosition() {
+          partsBarillet.forEach((p) => {
+            const lbl = document.getElementById(p.labelId);
+            if (!lbl || lbl.style.display === 'none') return;
+
+            const tempV = p.mesh.position.clone();
+            tempV.project(cameraBarillet);
+
+            const x = (tempV.x * 0.5 + 0.5) * containerBarillet.clientWidth;
+            const y = (tempV.y * -0.5 + 0.5) * containerBarillet.clientHeight;
+
+            lbl.style.left = (x - 30) + 'px';
+            lbl.style.top = (y - 15) + 'px';
+          });
+        }
+
+        function updateBarilletExplosion(t) {
+          partsBarillet.forEach((p) => {
+            p.mesh.position.x = p.initialPos.x + (p.targetOffset * t);
+            p.mesh.position.y = p.initialPos.y;
+            p.mesh.position.z = p.initialPos.z;
+          });
+
+          const showLabels = t > 0.05;
+          ['label-arbre', 'label-tambour', 'label-molla', 'label-coperchio'].forEach((id) => {
+            const lbl = document.getElementById(id);
+            if (lbl) lbl.style.display = showLabels ? 'block' : 'none';
+          });
+
+          if (showLabels) {
+            updateBarilletLabelsPosition();
+          }
+        }
+
+        const sliderBarillet = document.getElementById('exploder-barillet');
+        const valScaleBarillet = document.getElementById('val-scale-barillet');
+        if (sliderBarillet) {
+          sliderBarillet.addEventListener('input', (event) => {
+            const t = Number(event.target.value) / 100;
+            updateBarilletExplosion(t);
+            if (valScaleBarillet) valScaleBarillet.innerText = event.target.value + '%';
+          });
+        }
+
+        window.addEventListener('resize', () => {
+          cameraBarillet.aspect = containerBarillet.clientWidth / containerBarillet.clientHeight;
+          cameraBarillet.updateProjectionMatrix();
+          rendererBarillet.setSize(containerBarillet.clientWidth, containerBarillet.clientHeight);
+        });
+
+        function animateBarillet() {
+          requestAnimationFrame(animateBarillet);
+          controlsBarillet.update();
+          rendererBarillet.render(sceneBarillet, cameraBarillet);
+
+          if (sliderBarillet && Number(sliderBarillet.value) > 5) {
+            updateBarilletLabelsPosition();
+          }
+        }
+        animateBarillet();
+      }
+    }
+  </script>
+  
+  <script src="../_ricerca.js"></script>
+  <script src="../script.js"></script>
+</body>
+</html>

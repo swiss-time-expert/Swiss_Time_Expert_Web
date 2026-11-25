@@ -307,7 +307,7 @@
       text-align: right;
     }
 
-    /* Visualizzatore 3D ETA 6498-1 (Tema chiaro) */
+    /* Visualizzatore 3D ETA 6498-1 (Esploso a Panino + Scheda Tecnica) */
     .eta-module-wrapper {
       background: #ffffff;
       border: 1px solid #dcdcdc;
@@ -336,6 +336,21 @@
       color: #5a6778;
       font-size: 0.82rem;
     }
+    .eta-specs-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .eta-spec-pill {
+      background: #f4f7fb;
+      border: 1px solid #d5dfec;
+      color: #1a365d;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
     .eta-toolbar {
       display: flex;
       flex-wrap: wrap;
@@ -359,7 +374,7 @@
     }
     #canvas-container-eta {
       width: 100%;
-      height: 480px;
+      height: 500px;
       background-color: #ffffff;
       border: 1px solid #e4e8ee;
       border-radius: 8px;
@@ -396,17 +411,22 @@
     }
     #eta-selected-bar {
       margin-top: 12px;
-      padding: 10px 14px;
+      padding: 14px 16px;
       background: #f4f7fb;
-      border-left: 4px solid #1a365d;
+      border-left: 5px solid #1a365d;
       border-radius: 6px;
       display: none;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
+      flex-direction: column;
+      gap: 10px;
     }
     #eta-selected-bar.visible {
       display: flex;
+    }
+    .eta-selected-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
     }
     #eta-selected-label {
       font-size: 0.72rem;
@@ -414,18 +434,43 @@
       letter-spacing: 0.06em;
       color: #5a6778;
       display: block;
+      font-weight: 700;
     }
     #eta-selected-name {
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: #1a365d;
       word-break: break-word;
+    }
+    #eta-selected-multilang {
+      display: block;
+      font-size: 0.8rem;
+      color: #4a5568;
+      margin-top: 2px;
+      font-weight: 600;
     }
     #eta-selected-raw {
       font-size: 0.76rem;
       color: #6c757d;
       margin-left: 6px;
       font-weight: 400;
+    }
+    .eta-selected-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #d9e2ec;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+    .eta-detail-item strong {
+      display: block;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #5a6778;
+      margin-bottom: 2px;
     }
     #eta-clear-btn {
       background: #ffffff;
@@ -643,18 +688,27 @@
       <div class="eta-module-wrapper" id="eta-6498-section">
         <div class="eta-top-bar">
           <div>
-            <h3 class="eta-heading">🔧 Vue Éclatée Interactive 3D — Calibre ETA 6498-1</h3>
-            <p class="eta-subhint">Clic gauche : pivoter • Clic sur un composant : afficher son nom en français • Molette : zoom • Clic droit : déplacer</p>
+            <h3 class="eta-heading">🔧 Vue Éclatée Interactive 3D — Calibre ETA 6498-1 (Architecture Savonnette / Montre-Bracelet)</h3>
+            <p class="eta-subhint">Clic gauche : pivoter • Clic sur un composant : fiche technique &amp; lubrification • Molette : zoom • Clic droit : déplacer</p>
           </div>
           <div class="eta-toolbar">
-            <label for="eta-explode-axis">Axe :</label>
+            <label for="eta-explode-axis">Ouverture :</label>
             <select id="eta-explode-axis">
-              <option value="vertical-y" selected>Vertical (Axe Y)</option>
-              <option value="vertical-z">Vertical (Axe Z)</option>
-              <option value="radial">Radial 3D</option>
+              <option value="sandwich" selected>Empilement Axial (Panino)</option>
+              <option value="sandwich-inv">Empilement Axial Inversé</option>
+              <option value="radial">Éclaté Radial 3D</option>
             </select>
             <button type="button" id="eta-reset-cam">Centrer</button>
           </div>
+        </div>
+
+        <div class="eta-specs-strip">
+          <span class="eta-spec-pill">Ø 36,60 mm (16 ½''')</span>
+          <span class="eta-spec-pill">Hauteur : 4,50 mm</span>
+          <span class="eta-spec-pill">18'000 A/h (2,5 Hz)</span>
+          <span class="eta-spec-pill">Réserve : 46 h</span>
+          <span class="eta-spec-pill">17 Rubis</span>
+          <span class="eta-spec-pill">Levée : 44° • ETACHRON &amp; INCABLOC</span>
         </div>
 
         <div id="canvas-container-eta">
@@ -665,11 +719,24 @@
         </div>
 
         <div id="eta-selected-bar" aria-live="polite">
-          <div>
-            <span id="eta-selected-label">Pièce sélectionnée</span>
-            <span id="eta-selected-name">—</span><span id="eta-selected-raw"></span>
+          <div class="eta-selected-header">
+            <div>
+              <span id="eta-selected-label">Composant sélectionné — Fiche Atelier ETA 6497 / 6498-1</span>
+              <span id="eta-selected-name">—</span><span id="eta-selected-raw"></span>
+              <span id="eta-selected-multilang"></span>
+            </div>
+            <button type="button" id="eta-clear-btn">Désélectionner</button>
           </div>
-          <button type="button" id="eta-clear-btn">Désélectionner</button>
+          <div class="eta-selected-details">
+            <div class="eta-detail-item">
+              <strong>Rôle mécanique</strong>
+              <span id="eta-detail-role">—</span>
+            </div>
+            <div class="eta-detail-item">
+              <strong>Lubrification &amp; Procédure</strong>
+              <span id="eta-detail-lube">—</span>
+            </div>
+          </div>
         </div>
 
         <div class="eta-slider-box">
@@ -679,9 +746,9 @@
         </div>
 
         <div class="eta-credits-box">
-          <strong>Crédits, source &amp; licence :</strong> Modèle CAD de référence <em>ETA 6498-1 Complete Watch Movement</em> disponible sur
+          <strong>Note d'architecture &amp; Crédits :</strong> La famille <strong>ETA 6497-1</strong> (<em>Lépine</em>, tige et petite seconde à 180°) et <strong>ETA 6498-1</strong> (<em>Savonnette</em>, tige à 3 h et petite seconde à 6 h à 90°) partage les mêmes composants fonctionnels, cotes et règles de lubrification. Modèle CAD de référence <em>ETA 6498-1 Complete Watch Movement</em> disponible sur
           <a href="https://grabcad.com/library/eta-6498-1-complete-watch-movement-1" target="_blank" rel="noopener noreferrer">GrabCAD (bibliothèque communautaire)</a>.
-          Veuillez vérifier les conditions d'utilisation et la licence associées au fichier d'origine sur la fiche GrabCAD. Préparation, exportation glTF/GLB et intégration interactive 3D réalisées pour <strong>Swiss Time Expert</strong>.
+          Intégration interactive 3D et fiches pédagogiques réalisées pour <strong>Swiss Time Expert</strong>.
         </div>
       </div>
 
@@ -901,7 +968,6 @@
       controlsTrain.autoRotate = true;
       controlsTrain.autoRotateSpeed = 1.35;
 
-      // Strumenti interazione: 'orbit' | 'pan' + pulsanti lente 🔍 + e 🔍 − (anche a pressione continua)
       const toolOrbitBtn = document.getElementById('train-tool-orbit');
       const toolPanBtn = document.getElementById('train-tool-pan');
       const zoomInBtn = document.getElementById('train-zoom-in');
@@ -1322,14 +1388,14 @@
     }
 
     // =========================================================================
-    // 1. VISUALIZZATORE 3D CALIBRE ETA 6498-1
+    // 1. VISUALIZZATORE 3D CALIBRE ETA 6498-1 (ESPLOSO A PANINO + FICHE CT 6497-1)
     // =========================================================================
     const ETA_MODEL_URL = '../ETA6498-1_Web.glb';
     const etaContainer = document.getElementById('canvas-container-eta');
 
     if (etaContainer) {
       const sceneEta = new THREE.Scene();
-      sceneEta.background = new THREE.Color(0xffffff);
+      sceneEta.background = new THREE.Color(0xf8fafc);
 
       const cameraEta = new THREE.PerspectiveCamera(
         40,
@@ -1343,7 +1409,7 @@
       rendererEta.setSize(etaContainer.clientWidth, etaContainer.clientHeight);
       rendererEta.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       rendererEta.toneMapping = THREE.ACESFilmicToneMapping;
-      rendererEta.toneMappingExposure = 1.15;
+      rendererEta.toneMappingExposure = 1.45;
       etaContainer.appendChild(rendererEta.domElement);
 
       if (!sharedEnvMap) {
@@ -1352,12 +1418,19 @@
       }
       sceneEta.environment = sharedEnvMap;
 
-      const lightTop = new THREE.DirectionalLight(0xffffff, 1.8);
+      const ambientEta = new THREE.AmbientLight(0xffffff, 1.35);
+      sceneEta.add(ambientEta);
+
+      const lightTop = new THREE.DirectionalLight(0xffffff, 2.2);
       lightTop.position.set(5, 10, 7);
       sceneEta.add(lightTop);
 
-      const lightFill = new THREE.DirectionalLight(0xdbe8ff, 0.9);
-      lightFill.position.set(-6, -4, -5);
+      const lightFront = new THREE.DirectionalLight(0xfff4e0, 1.4);
+      lightFront.position.set(-4, 5, 8);
+      sceneEta.add(lightFront);
+
+      const lightFill = new THREE.DirectionalLight(0xdbe8ff, 1.2);
+      lightFill.position.set(-6, -6, -5);
       sceneEta.add(lightFill);
 
       const controlsEta = new OrbitControls(cameraEta, rendererEta.domElement);
@@ -1365,6 +1438,7 @@
       controlsEta.dampingFactor = 0.06;
 
       let etaModelRoot = null;
+      let etaNormalAxis = 'y'; // Rilevato automaticamente dallo spessore minimo del calibro
       const etaExplodeItems = [];
       const etaPickableMeshes = [];
       const etaInitialCamPos = new THREE.Vector3();
@@ -1375,91 +1449,373 @@
 
       const selectedBar = document.getElementById('eta-selected-bar');
       const selectedNameEl = document.getElementById('eta-selected-name');
+      const selectedMultilangEl = document.getElementById('eta-selected-multilang');
       const selectedRawEl = document.getElementById('eta-selected-raw');
+      const detailRoleEl = document.getElementById('eta-detail-role');
+      const detailLubeEl = document.getElementById('eta-detail-lube');
       const clearBtn = document.getElementById('eta-clear-btn');
       const loaderEl = document.getElementById('eta-loader');
       const loaderTextEl = document.getElementById('eta-loader-text');
 
-      const HOROLOGY_DICT_FR = [
-        [/ main\s*plate | base\s*plate | plate /i, 'Platine'],
-        [/ barrel\s*bridge /i, 'Pont de barillet'],
-        [/ train\s*(wheel\s*)?bridge | gear\s*train\s*bridge /i, 'Pont de rouage'],
-        [/ balance\s*(cock|bridge) /i, 'Coq de balancier'],
-        [/ pallet\s*(fork\s*)?(cock|bridge) | escapement\s*bridge /i, "Pont d'ancre"],
-        [/ bridge /i, 'Pont'],
-        [/ barrel\s*drum | drum /i, 'Tambour de barillet'],
-        [/ barrel\s*cover | cover /i, 'Couvercle de barillet'],
-        [/ barrel\s*arbor | arbor /i, 'Arbre de barillet'],
-        [/ mainspring | main\s*spring /i, 'Ressort-moteur'],
-        [/ barrel /i, 'Barillet'],
-        [/ ratchet\s*wheel | ratchet /i, 'Rochet'],
-        [/ crown\s*wheel /i, 'Roue de couronne'],
-        [/ winding\s*stem | stem /i, 'Tige de remontoir'],
-        [/ winding\s*pinion /i, 'Pignon de remontoir'],
-        [/ sliding\s*pinion | clutch\s*wheel /i, 'Pignon coulant'],
-        [/ setting\s*lever /i, 'Tirette'],
-        [/ yoke /i, 'Bascule'],
-        [/ click\s*spring /i, 'Ressort de cliquet'],
-        [/ click /i, 'Cliquet'],
-        [/ setting\s*wheel /i, 'Roue de mise à l’heure'],
-        [/ minute\s*wheel /i, 'Roue de minuterie'],
-        [/ hour\s*wheel /i, 'Roue des heures'],
-        [/ cannon\s*pinion /i, 'Chaussée'],
-        [/ center\s*wheel | centre\s*wheel /i, 'Roue de centre'],
-        [/ third\s*wheel /i, 'Roue de troisième'],
-        [/ fourth\s*wheel | second\s*wheel /i, 'Roue de seconde'],
-        [/ escape\s*wheel | escapement\s*wheel /i, "Roue d'échappement"],
-        [/ wheel /i, 'Roue'],
-        [/ pinion /i, 'Pignon'],
-        [/ pallet\s*fork | pallet | anchor /i, 'Ancre'],
-        [/ balance\s*wheel | balance /i, 'Balancier'],
-        [/ hairspring | balance\s*spring | spiral /i, 'Spiral'],
-        [/ regulator | index /i, 'Raquette'],
-        [/ stud /i, 'Piton'],
-        [/ incabloc | shock\s*absorber /i, 'Antichoc (Incabloc)'],
-        [/ jewel | ruby /i, 'Rubis / Pierre'],
-        [/ screw /i, 'Vis'],
-        [/ spring /i, 'Ressort'],
-        [/ washer /i, 'Rondelle'],
-        [/ pin /i, 'Goupille']
+      // Database didattico completo ricavato dalla Communication Technique ETA CT 6497-1
+      const ETA_COMPONENTS_DB = [
+        {
+          pattern: /main\s*plate|base\s*plate|platine|werkplatte|\bplate\b/i,
+          fr: 'Platine empierrée',
+          en: 'Main plate, jewelled',
+          de: 'Werkplatte mit Steinen',
+          role: 'Châssis principal du calibre (Ø 36,60 mm) recevant tous les mobiles, le mécanisme de mise à l’heure et le palier antichoc inférieur.',
+          lube: 'Huile fine (Moebius 9010) sur les rubis de rouage côté cadran.'
+        },
+        {
+          pattern: /barrel\s*bridge|pont.*barillet|federhausbr/i,
+          fr: 'Pont de barillet empierré',
+          en: 'Barrel bridge, jewelled',
+          de: 'Federhausbrücke mit Steinen',
+          role: 'Maintient le pivot supérieur de l’arbre de barillet et supporte le rochet, la roue de couronne et le cliquet (3 vis cylindriques).',
+          lube: 'Huile épaisse (Moebius HP-1300) au palier supérieur d’arbre de barillet.'
+        },
+        {
+          pattern: /train\s*(wheel\s*)?bridge|gear\s*train\s*bridge|pont.*rouage|r[aä]derwerkbr/i,
+          fr: 'Pont de rouage empierré',
+          en: 'Train wheel bridge, jewelled',
+          de: 'Räderwerkbrücke mit Steinen',
+          role: 'Assure le guidage axial des pivots de la roue de centre, de la roue moyenne et de la roue de seconde (2 vis cylindriques).',
+          lube: 'Huile épaisse (HP-1300) sur roue de centre ; huile fine (9010) sur moyenne et seconde.'
+        },
+        {
+          pattern: /balance\s*(cock|bridge)|pont.*balancier|coq|unruhbr/i,
+          fr: 'Pont de balancier complet (ETACHRON)',
+          en: 'Balance bridge assembled',
+          de: 'Unruhbrücke montiert',
+          role: 'Porte le porte-piton ETACHRON, les raquettes inférieure/supérieure et l’amortisseur antichoc supérieur INCABLOC (1 vis cylindrique).',
+          lube: 'Huile fine (Moebius 9010) sur la pierre contre-pivot du chaton INCABLOC.'
+        },
+        {
+          pattern: /pallet\s*(fork\s*)?(cock|bridge)|escapement\s*bridge|pont.*ancre|ankerbr/i,
+          fr: "Pont d'ancre empierré",
+          en: 'Pallet bridge, jewelled',
+          de: 'Ankerbrücke mit Steinen',
+          role: 'Maintient l’axe de l’ancre et sécurise la géométrie de l’échappement à ancre suisse (2 vis cylindriques).',
+          lube: 'À sec sur les pivots d’ancre (éviter toute migration d’huile vers les levées).'
+        },
+        {
+          pattern: /barrel\s*drum|tambour|federhausgeh/i,
+          fr: 'Tambour de barillet',
+          en: 'Barrel drum',
+          de: 'Federhaustrommel',
+          role: 'Boîte dentée abritant le ressort-moteur et entraînant directement le pignon de centre (réserve de marche : 46 heures).',
+          lube: 'Graisse/huile épaisse haute pression (Moebius HP-1300 / 9504) sur la paroi et le ressort.'
+        },
+        {
+          pattern: /barrel\s*cover|couvercle|deckel/i,
+          fr: 'Couvercle de barillet',
+          en: 'Barrel cover',
+          de: 'Federhausdeckel',
+          role: 'Ferme le tambour de barillet et assure le centrage axial de l’arbre.',
+          lube: 'Huile épaisse (Moebius HP-1300) à la portée de pivotement de l’arbre.'
+        },
+        {
+          pattern: /barrel\s*arbor|arbre.*barillet|federkern|\barbor\b/i,
+          fr: 'Arbre de barillet',
+          en: 'Barrel arbor',
+          de: 'Federhauswelle',
+          role: 'Axe central muni d’une bonde à crochet pour l’attache intérieure du ressort et d’un carré supérieur pour le rochet.',
+          lube: 'Huile épaisse (Moebius HP-1300) sur les deux portées de pivotement.'
+        },
+        {
+          pattern: /mainspring|main\s*spring|ressort.*moteur|zugfeder/i,
+          fr: 'Ressort-moteur',
+          en: 'Mainspring',
+          de: 'Zugfeder',
+          role: 'Lame élastique accumulant l’énergie mécanique lors de l’armage manuel pour assurer 46 h d’autonomie.',
+          lube: 'Lubrification d’origine (ne pas laver si livré prélubrifié ; sinon Moebius HP-1300 / graisse de barillet).'
+        },
+        {
+          pattern: /\bbarrel\b|barillet|federhaus/i,
+          fr: 'Barillet complet de mouvement',
+          en: 'Movement barrel complete',
+          de: 'Federhaus vollständig für Grundwerk',
+          role: 'Organe moteur complet accumulant l’énergie pour 46 heures de marche.',
+          lube: 'Huile épaisse (Moebius HP-1300) aux pivots d’arbre.'
+        },
+        {
+          pattern: /ratchet\s*wheel|\bratchet\b|rochet|sperrrad/i,
+          fr: 'Rochet',
+          en: 'Ratchet wheel',
+          de: 'Sperrrad',
+          role: 'Roue en acier montée sur le carré de l’arbre de barillet ; transmet le couple d’armage et coopère avec le cliquet.',
+          lube: 'Huile épaisse (Moebius HP-1300) sous la portée et la tête de vis.'
+        },
+        {
+          pattern: /crown\s*wheel\s*ring|bague.*couronne|kronradring/i,
+          fr: 'Bague de roue de couronne',
+          en: 'Crown wheel ring',
+          de: 'Kronradring',
+          role: 'Assure le centrage et la portée de glissement de la roue de couronne sur le pont de barillet.',
+          lube: 'Huile épaisse (Moebius HP-1300) sur la surface de friction.'
+        },
+        {
+          pattern: /crown\s*wheel|roue.*couronne|kronrad/i,
+          fr: 'Roue de couronne',
+          en: 'Crown wheel',
+          de: 'Kronrad',
+          role: 'Renvoie la rotation du pignon de remontoir vers le rochet. ATTENTION : vis à filetage à gauche (dévissage sens horaire).',
+          lube: 'Huile épaisse en grande quantité relative (Moebius HP-1300 SC) sur la portée.'
+        },
+        {
+          pattern: /click\s*spring|ressort.*cliquet|klinkenfeder/i,
+          fr: 'Ressort de cliquet',
+          en: 'Click spring',
+          de: 'Klinkenfeder',
+          role: 'Maintient le cliquet en appui élastique permanent contre la denture du rochet.',
+          lube: 'Légère touche de graisse (Moebius 9501 / 9504) au point de contact.'
+        },
+        {
+          pattern: /\bclick\b|cliquet|klinke/i,
+          fr: 'Cliquet',
+          en: 'Click',
+          de: 'Klinke',
+          role: 'Cliquet antiretour empêchant le désarmage brutal du ressort par le rochet.',
+          lube: 'Huile épaisse (Moebius HP-1300) sous la vis et l’épaulement.'
+        },
+        {
+          pattern: /winding\s*stem|\bstem\b|tige.*remontoir|aufzugwelle/i,
+          fr: 'Tige de remontoir',
+          en: 'Winding stem',
+          de: 'Aufzugwelle',
+          role: 'Commande l’armage (Pos. 1) et la mise à l’heure (Pos. 2). Atelier : tirer en Pos. 2 avant de desserrer la vis de tirette (max. 2 tours).',
+          lube: 'Graisse horlogère (Moebius 9504) sur le carré et les portées de guidage.'
+        },
+        {
+          pattern: /winding\s*pinion|pignon.*remontoir|aufzugtrieb/i,
+          fr: 'Pignon de remontoir',
+          en: 'Winding pinion',
+          de: 'Aufzugtrieb',
+          role: 'Engrène avec la roue de couronne en position d’armage grâce à sa denture Breguet unidirectionnelle.',
+          lube: 'Graisse (Moebius 9504) à l’intérieur et sur la denture.'
+        },
+        {
+          pattern: /sliding\s*pinion|clutch|pignon\s*coulant|kupplungstrieb/i,
+          fr: 'Pignon coulant',
+          en: 'Sliding pinion',
+          de: 'Kupplungstrieb',
+          role: 'Baladeur sur le carré de tige permettant de passer de l’armage du barillet au train de mise à l’heure.',
+          lube: 'Graisse (Moebius 9504) dans la gorge de bascule et sur le carré.'
+        },
+        {
+          pattern: /setting\s*lever\s*jumper|sautoir.*tirette|winkelhebelraste/i,
+          fr: 'Sautoir de tirette',
+          en: 'Setting lever jumper',
+          de: 'Winkelhebelraste',
+          role: 'Indexe et verrouille nettement les deux positions axiales de la tirette (remontage / mise à l’heure).',
+          lube: 'Graisse (Moebius 9504) sur le bec d’indexage.'
+        },
+        {
+          pattern: /setting\s*lever|tirette|winkelhebel/i,
+          fr: 'Tirette',
+          en: 'Setting lever',
+          de: 'Winkelhebel',
+          role: 'Relie la gorge de la tige de remontoir à la bascule pour commander le changement de fonction.',
+          lube: 'Graisse (Moebius 9504) sur le plot et le pivotement.'
+        },
+        {
+          pattern: /yoke\s*spring|ressort.*bascule|kupplungshebelfeder/i,
+          fr: 'Ressort de bascule',
+          en: 'Yoke spring',
+          de: 'Kupplungshebelfeder',
+          role: 'Rappelle la bascule et maintient le pignon coulant en prise.',
+          lube: 'Graisse (Moebius 9504) à l’extrémité d’appui.'
+        },
+        {
+          pattern: /\byoke\b|bascule|kupplungstriebhebel/i,
+          fr: 'Bascule de pignon coulant',
+          en: 'Yoke',
+          de: 'Kupplungstriebhebel',
+          role: 'Fourchette guidant le déplacement axial du pignon coulant sur la tige.',
+          lube: 'Graisse (Moebius 9504) sur le pivot et les becs.'
+        },
+        {
+          pattern: /intermediate.*setting|renvoi\s*interm|zwischen.*zeiger/i,
+          fr: 'Renvoi intermédiaire',
+          en: 'Intermediate setting wheel',
+          de: 'Zwischen-Zeigerstellrad',
+          role: 'Transmet le mouvement de mise à l’heure entre le pignon coulant et la roue de minuterie.',
+          lube: 'Huile épaisse (Moebius HP-1300) sur le tenon de pivotement.'
+        },
+        {
+          pattern: /setting\s*wheel|\brenvoi\b|zeigerstellrad/i,
+          fr: 'Renvoi de mise à l’heure',
+          en: 'Setting wheel',
+          de: 'Zeigerstellrad',
+          role: 'Engrène avec la roue de minuterie lors de la mise à l’heure en position 2.',
+          lube: 'Huile épaisse (Moebius HP-1300) sur le tenon.'
+        },
+        {
+          pattern: /minute\s*wheel|roue.*minuterie|wechselrad/i,
+          fr: 'Roue de minuterie',
+          en: 'Minute wheel',
+          de: 'Wechselrad',
+          role: 'Assure la démultiplication intermédiaire entre la chaussée et la roue des heures.',
+          lube: 'Huile épaisse (Moebius HP-1300) sur le tenon.'
+        },
+        {
+          pattern: /cannon\s*pinion|chauss[eé]e|minutenrohr/i,
+          fr: 'Chaussée entraîneuse',
+          en: 'Cannon pinion',
+          de: 'Mitnehmer-Minutenrohr',
+          role: 'Ajustée à friction sur l’axe de centre ; porte l’aiguille des minutes (1 tour/heure) et entraîne la minuterie.',
+          lube: 'Graisse/huile épaisse (Moebius HP-1300 / 9504) sur l’axe de centre.'
+        },
+        {
+          pattern: /hour\s*wheel|roue.*heures|stundenrad/i,
+          fr: 'Roue des heures',
+          en: 'Hour wheel',
+          de: 'Stundenrad',
+          role: 'Effectue 1 tour en 12 heures (réduction 12:1) et porte l’aiguille des heures.',
+          lube: 'Très faible quantité d’huile épaisse (Moebius HP-1300) sur le canon de chaussée.'
+        },
+        {
+          pattern: /center\s*wheel|centre\s*wheel|roue.*centre|minutenrad/i,
+          fr: 'Roue de centre',
+          en: 'Centre wheel',
+          de: 'Minutenrad',
+          role: 'Premier mobile du rouage entraîné par le barillet ; effectue 1 tour par heure.',
+          lube: 'Huile épaisse (Moebius HP-1300) aux deux pivots.'
+        },
+        {
+          pattern: /third\s*wheel|roue\s*moyenne|kleinbodenrad/i,
+          fr: 'Roue moyenne',
+          en: 'Third wheel',
+          de: 'Kleinbodenrad',
+          role: 'Mobile intermédiaire du train de finissage entre la roue de centre et la roue de seconde.',
+          lube: 'Huile fine (Moebius 9010) aux pivots.'
+        },
+        {
+          pattern: /fourth\s*wheel|second\s*wheel|roue.*seconde|sekundenrad/i,
+          fr: 'Roue de seconde',
+          en: 'Second wheel',
+          de: 'Sekundenrad',
+          role: 'Effectue 1 tour par minute (60 s) et porte l’aiguille de petite seconde (à 6 h sur ETA 6498-1, à 9 h sur 6497-1).',
+          lube: 'Huile fine (Moebius 9010) aux pivots.'
+        },
+        {
+          pattern: /escape\s*wheel|escapement\s*wheel|roue.*echappement|hemmungsrad/i,
+          fr: "Roue d'échappement",
+          en: 'Escape wheel',
+          de: 'Hemmungsrad',
+          role: 'Dernier mobile du rouage ; transmet les impulsions régulières aux levées de l’ancre.',
+          lube: 'Huile fine (Moebius 9010) aux pivots ; traitement épilame Fixodrop recommandé.'
+        },
+        {
+          pattern: /pallet\s*fork|\bpallet\b|\banchor\b|\bancre\b|\banker\b/i,
+          fr: 'Ancre suisse',
+          en: 'Pallet fork',
+          de: 'Anker',
+          role: 'Distributeur cinématique à levées en rubis verrouillant la roue d’échappement et entretenant le balancier (levée : 44°).',
+          lube: 'Huile spéciale pour levées (Moebius 9415) uniquement sur les plans d’impulsion des levées après épilamage.'
+        },
+        {
+          pattern: /hairspring|balance\s*spring|\bspiral\b/i,
+          fr: 'Spiral régulateur',
+          en: 'Hairspring',
+          de: 'Spiralfeder',
+          role: 'Ressort hélicoïdal plat assurant le couple de rappel isochrone du balancier à 18’000 A/h (2,5 Hz).',
+          lube: 'Strictement à sec (aucune trace d’huile).'
+        },
+        {
+          pattern: /balance\s*wheel|\bbalance\b|balancier|unruh/i,
+          fr: 'Balancier réglé',
+          en: 'Timed balance regulated',
+          de: 'Unruh reguliert',
+          role: 'Organe régulateur oscillant à 18’000 alternances/heure (2,5 Hz), angle de levée 44°.',
+          lube: 'Huile fine (Moebius 9010) dans les deux amortisseurs antichocs INCABLOC.'
+        },
+        {
+          pattern: /incabloc|shock\s*absorber|amortisseur|stosssicherung/i,
+          fr: 'Amortisseur antichoc INCABLOC',
+          en: 'INCABLOC shock absorber',
+          de: 'INCABLOC Stosssicherung',
+          role: 'Protège les pivots fins de l’axe de balancier contre les chocs axiaux et radiaux.',
+          lube: 'Huile fine (Moebius 9010) entre le rubis percé et la pierre contre-pivot.'
+        },
+        {
+          pattern: /etachron|stud|piton|regulator|index|raquette|r[uü]cker/i,
+          fr: 'Système de réglage ETACHRON (Raquette & Porte-piton)',
+          en: 'ETACHRON regulator & stud support',
+          de: 'ETACHRON Rücker & Spiralklötzchenträger',
+          role: 'Permet le réglage précis de la marche (raquette) et du repère (porte-piton mobile) sans déformer le spiral.',
+          lube: 'À sec.'
+        },
+        {
+          pattern: /jewel|ruby|rubis|stein/i,
+          fr: 'Coussinet rubis (17 rubis au total)',
+          en: 'Synthetic ruby jewel',
+          de: 'Lagerstein (Rubin)',
+          role: 'Palier en corindon synthétique minimisant le coefficient de frottement avec les pivots en acier trempé.',
+          lube: 'Huile fine (Moebius 9010) ou épaisse (HP-1300) selon le couple du mobile.'
+        },
+        {
+          pattern: /screw|\bvis\b|schraube/i,
+          fr: 'Vis de fixation horlogère',
+          en: 'Movement screw',
+          de: 'Werkbefestigungsschraube',
+          role: 'Fixation des ponts et organes (attention : vis de roue de couronne à filetage à gauche).',
+          lube: 'Légère trace d’huile épaisse sous la tête pour les mobiles tournants.'
+        }
       ];
 
       function cleanEtaName(raw) {
-        if (!raw) return 'Composant sans nom';
+        if (!raw) return 'Composant du mouvement';
         return raw
           .replace(/\.(sldprt|sldasm|igs|iges|step|stp|glb|gltf|blend)$/i, '')
           .replace(/[_-]+/g, ' ')
           .replace(/\s*\.\d+$/, '')
           .replace(/\s+/g, ' ')
-          .trim() || 'Composant sans nom';
+          .trim() || 'Composant du mouvement';
       }
 
-      function translatePartToFrench(cleanName) {
-        for (const [pattern, frLabel] of HOROLOGY_DICT_FR) {
-          if (pattern.test(cleanName)) {
-            return frLabel;
-          }
-        }
-        return cleanName;
-      }
-
-      function resolveEtaPartName(mesh) {
+      function resolveEtaPartInfo(mesh) {
         let cur = mesh;
         const genericRe = /^(mesh|object|node|part|solid|group|body|untitled)(_|\s|-|\d|\.)*$/i;
         let rawFound = '';
+        let fullHierarchy = '';
+
         while (cur && cur !== etaModelRoot) {
-          if (cur.name && !genericRe.test(cur.name.trim())) {
-            rawFound = cur.name;
-            break;
+          if (cur.name) {
+            fullHierarchy += ' ' + cur.name;
+            if (!rawFound && !genericRe.test(cur.name.trim())) {
+              rawFound = cur.name;
+            }
           }
           cur = cur.parent;
         }
         if (!rawFound) {
           rawFound = mesh.name || mesh.parent?.name || '';
         }
+
         const cleaned = cleanEtaName(rawFound);
-        const translated = translatePartToFrench(cleaned);
-        return { translated, cleaned };
+        const searchStr = (fullHierarchy + ' ' + cleaned).trim();
+
+        for (const item of ETA_COMPONENTS_DB) {
+          if (item.pattern.test(searchStr)) {
+            return {
+              fr: item.fr,
+              multilang: `EN : ${item.en}  •  DE : ${item.de}`,
+              raw: cleaned,
+              role: item.role,
+              lube: item.lube
+            };
+          }
+        }
+
+        return {
+          fr: cleaned,
+          multilang: 'Calibre ETA 6497-1 / 6498-1 (16 ½\'\'\' — 17 rubis)',
+          raw: cleaned,
+          role: 'Composant structurel ou cinématique du calibre à remontage manuel.',
+          lube: 'Se référer au plan de lubrification Moebius (9010 / HP-1300 / 9504).'
+        };
       }
 
       function clearEtaSelection() {
@@ -1470,7 +1826,10 @@
         etaSelectedMesh = null;
         etaPrevEmissive = null;
         selectedNameEl.textContent = '—';
+        selectedMultilangEl.textContent = '';
         selectedRawEl.textContent = '';
+        detailRoleEl.textContent = '—';
+        detailLubeEl.textContent = '—';
         selectedBar.classList.remove('visible');
       }
 
@@ -1479,17 +1838,20 @@
         clearEtaSelection();
 
         etaSelectedMesh = mesh;
-        const { translated, cleaned } = resolveEtaPartName(mesh);
-        selectedNameEl.textContent = translated;
-        selectedRawEl.textContent = translated.toLowerCase() !== cleaned.toLowerCase() ? `(${cleaned})` : '';
+        const info = resolveEtaPartInfo(mesh);
+        selectedNameEl.textContent = info.fr;
+        selectedMultilangEl.textContent = info.multilang;
+        selectedRawEl.textContent = info.fr.toLowerCase() !== info.raw.toLowerCase() ? `(${info.raw})` : '';
+        detailRoleEl.textContent = info.role;
+        detailLubeEl.textContent = info.lube;
         selectedBar.classList.add('visible');
 
         if (mesh.material && 'emissive' in mesh.material) {
           mesh.material = mesh.material.clone();
           etaPrevEmissive = mesh.material.emissive.clone();
           etaPrevEmissiveIntensity = mesh.material.emissiveIntensity ?? 1;
-          mesh.material.emissive.setHex(0x8c6928);
-          mesh.material.emissiveIntensity = 0.65;
+          mesh.material.emissive.setHex(0xb8860b);
+          mesh.material.emissiveIntensity = 0.7;
         }
       }
 
@@ -1510,6 +1872,16 @@
           box.setFromObject(etaModelRoot);
           box.getCenter(center);
           etaModelRoot.position.sub(center);
+
+          // Rileva automaticamente l'asse normale (quello con lo spessore minore = altezza 4,50 mm)
+          const normSize = box.getSize(new THREE.Vector3());
+          if (normSize.z <= normSize.x && normSize.z <= normSize.y) {
+            etaNormalAxis = 'z';
+          } else if (normSize.y <= normSize.x && normSize.y <= normSize.z) {
+            etaNormalAxis = 'y';
+          } else {
+            etaNormalAxis = 'x';
+          }
 
           sceneEta.add(etaModelRoot);
           etaModelRoot.updateMatrixWorld(true);
@@ -1534,7 +1906,14 @@
             }
           });
 
-          cameraEta.position.set(0, 3.1, 4.4);
+          // Posiziona la camera in modo ottimale per vedere l'impilamento "a panino"
+          if (etaNormalAxis === 'z') {
+            cameraEta.position.set(0, -3.4, 3.2);
+          } else if (etaNormalAxis === 'x') {
+            cameraEta.position.set(3.2, 2.8, 3.2);
+          } else {
+            cameraEta.position.set(0, 2.8, 4.4);
+          }
           etaInitialCamPos.copy(cameraEta.position);
           controlsEta.target.set(0, 0, 0);
           controlsEta.update();
@@ -1597,22 +1976,22 @@
           }
 
           const shift = new THREE.Vector3();
-          const spread = factor * 3.4;
 
-          if (mode === 'vertical-y') {
-            shift.set(
-              item.worldOffset.x * spread * 0.28,
-              item.worldOffset.y * spread * 2.5,
-              item.worldOffset.z * spread * 0.28
-            );
-          } else if (mode === 'vertical-z') {
-            shift.set(
-              item.worldOffset.x * spread * 0.28,
-              item.worldOffset.y * spread * 0.28,
-              item.worldOffset.z * spread * 2.5
-            );
+          if (mode === 'sandwich' || mode === 'sandwich-inv') {
+            // Separazione pura "a panino" sull'unico asse perpendicolare alla platina (nessuna deriva diagonale)
+            const sign = mode === 'sandwich-inv' ? -1 : 1;
+            const axialSpread = factor * 7.5 * sign;
+
+            if (etaNormalAxis === 'z') {
+              shift.set(0, 0, item.worldOffset.z * axialSpread);
+            } else if (etaNormalAxis === 'x') {
+              shift.set(item.worldOffset.x * axialSpread, 0, 0);
+            } else {
+              shift.set(0, item.worldOffset.y * axialSpread, 0);
+            }
           } else {
-            shift.copy(item.worldOffset).multiplyScalar(spread * 1.85);
+            // Esploso radiale 3D classico
+            shift.copy(item.worldOffset).multiplyScalar(factor * 4.5);
           }
 
           if (item.parent) {
