@@ -307,7 +307,7 @@
       text-align: right;
     }
 
-    /* Visualizzatore 3D ETA 6498-1 (Sfondo Bianco + Tasti Sopra + Volume Exploso Sotto) */
+    /* Visualizzatore 3D ETA 6498-1 (Posizione Verticale + Espansione Orizzontale + HUD) */
     .eta-module-wrapper {
       background: #ffffff;
       border: 1px solid #dcdcdc;
@@ -396,7 +396,7 @@
       background-color: #ffffff;
     }
 
-    /* Tasti in alto rispetto allo slider e volume Exploso in basso, ben separati senza sovrapposizioni */
+    /* Tasti in alto rispetto allo slider Exploso e volume Exploso in basso, ben separati */
     #canvas-container-eta .eta-hud-buttons {
       position: absolute;
       bottom: 66px;
@@ -1474,7 +1474,7 @@
     }
 
     // =========================================================================
-    // 1. VISUALIZZATORE 3D CALIBRE ETA 6498-1 (SFONDO BIANCO + HUD + FICHE CT 6497-1)
+    // 1. VISUALIZZATORE 3D CALIBRE ETA 6498-1 (ORIENTAMENTO VERTICALE + APERTURA SULLA LARGHEZZA)
     // =========================================================================
     const ETA_MODEL_URL = '../ETA6498-1_Web.glb';
     const etaContainer = document.getElementById('canvas-container-eta');
@@ -1484,12 +1484,12 @@
       sceneEta.background = new THREE.Color(0xffffff);
 
       const cameraEta = new THREE.PerspectiveCamera(
-        40,
+        38,
         etaContainer.clientWidth / etaContainer.clientHeight,
         0.01,
         1000
       );
-      cameraEta.position.set(0, 3.2, 4.6);
+      cameraEta.position.set(1.6, 0.35, 4.3);
 
       const rendererEta = new THREE.WebGLRenderer({ antialias: true });
       rendererEta.setSize(etaContainer.clientWidth, etaContainer.clientHeight);
@@ -1599,10 +1599,9 @@
       });
 
       let etaModelRoot = null;
-      let etaNormalAxis = 'y';
       const etaExplodeItems = [];
       const etaPickableMeshes = [];
-      const etaInitialCamPos = new THREE.Vector3();
+      const etaInitialCamPos = new THREE.Vector3(1.6, 0.35, 4.3);
 
       let etaSelectedMesh = null;
       let etaPrevEmissive = null;
@@ -2023,24 +2022,28 @@
         (gltf) => {
           etaModelRoot = gltf.scene;
 
-          const box = new THREE.Box3().setFromObject(etaModelRoot);
-          const center = box.getCenter(new THREE.Vector3());
-          const size = box.getSize(new THREE.Vector3());
-          const maxDim = Math.max(size.x, size.y, size.z) || 1;
+          // 1. Scala uniforme iniziale
+          const rawBox = new THREE.Box3().setFromObject(etaModelRoot);
+          const rawSize = rawBox.getSize(new THREE.Vector3());
+          const maxDim = Math.max(rawSize.x, rawSize.y, rawSize.z) || 1;
+          etaModelRoot.scale.setScalar(2.6 / maxDim);
 
-          etaModelRoot.scale.setScalar(3.0 / maxDim);
-          box.setFromObject(etaModelRoot);
-          box.getCenter(center);
-          etaModelRoot.position.sub(center);
-
-          const normSize = box.getSize(new THREE.Vector3());
-          if (normSize.z <= normSize.x && normSize.z <= normSize.y) {
-            etaNormalAxis = 'z';
-          } else if (normSize.y <= normSize.x && normSize.y <= normSize.z) {
-            etaNormalAxis = 'y';
-          } else {
-            etaNormalAxis = 'x';
+          // 2. Orienta il calibro in POSIZIONE VERTICALE (asse sottile allineato lungo X)
+          // così l'esploso a strati si sviluppa orizzontalmente lungo tutta la larghezza dello schermo
+          const scaledBox = new THREE.Box3().setFromObject(etaModelRoot);
+          const sSize = scaledBox.getSize(new THREE.Vector3());
+          if (sSize.y <= sSize.x && sSize.y <= sSize.z) {
+            // Il movimento era disteso orizzontale (asse sottile Y): ruotiamo di 90° su Z per metterlo verticale
+            etaModelRoot.rotation.z = Math.PI / 2;
+          } else if (sSize.z <= sSize.x && sSize.z <= sSize.y) {
+            // Il movimento era piatto sul piano XY (asse sottile Z): ruotiamo di 90° su Y per metterlo verticale di taglio
+            etaModelRoot.rotation.y = Math.PI / 2;
           }
+
+          // 3. Centra perfettamente nell'origine (0,0,0) dopo la rotazione verticale
+          const uprightBox = new THREE.Box3().setFromObject(etaModelRoot);
+          const uprightCenter = uprightBox.getCenter(new THREE.Vector3());
+          etaModelRoot.position.sub(uprightCenter);
 
           sceneEta.add(etaModelRoot);
           etaModelRoot.updateMatrixWorld(true);
@@ -2065,13 +2068,8 @@
             }
           });
 
-          if (etaNormalAxis === 'z') {
-            cameraEta.position.set(0, -3.4, 3.2);
-          } else if (etaNormalAxis === 'x') {
-            cameraEta.position.set(3.2, 2.8, 3.2);
-          } else {
-            cameraEta.position.set(0, 2.8, 4.4);
-          }
+          // Camera di partenza in leggero tre quarti frontale per apprezzare sia il calibro verticale sia l'apertura orizzontale
+          cameraEta.position.set(1.6, 0.35, 4.3);
           etaInitialCamPos.copy(cameraEta.position);
           controlsEta.target.set(0, 0, 0);
           controlsEta.update();
@@ -2136,17 +2134,12 @@
           const shift = new THREE.Vector3();
 
           if (mode === 'sandwich' || mode === 'sandwich-inv') {
+            // Espansione orizzontale lungo l'asse X (tutta la larghezza dello schermo)
             const sign = mode === 'sandwich-inv' ? -1 : 1;
-            const axialSpread = factor * 7.5 * sign;
-
-            if (etaNormalAxis === 'z') {
-              shift.set(0, 0, item.worldOffset.z * axialSpread);
-            } else if (etaNormalAxis === 'x') {
-              shift.set(item.worldOffset.x * axialSpread, 0, 0);
-            } else {
-              shift.set(0, item.worldOffset.y * axialSpread, 0);
-            }
+            const horizontalSpread = factor * 9.5 * sign;
+            shift.set(item.worldOffset.x * horizontalSpread, 0, 0);
           } else {
+            // Esploso radiale 3D classico
             shift.copy(item.worldOffset).multiplyScalar(factor * 4.5);
           }
 
