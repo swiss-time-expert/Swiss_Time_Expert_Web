@@ -84,7 +84,14 @@
       border-radius: 8px;
       padding: 10px 14px;
       margin-bottom: 12px;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .status-strip.error-strip {
+      background: #fef2f2;
+      border-color: #fecaca;
+      border-left-color: #dc2626;
+      color: #991b1b;
     }
     .step-badge {
       background: #1a365d;
@@ -126,32 +133,32 @@
       border: none;
     }
 
-    /* Banner dinamico in alto: mostra pezzo afferrato oppure ERRORE se si clicca il pezzo sbagliato */
+    /* Banner dinamico in alto: mostra pezzo afferrato oppure ERRORE rosso per max 3 secondi */
     #grab-tooltip {
       position: absolute;
       top: 14px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(13, 19, 31, 0.94);
+      background: rgba(13, 19, 31, 0.95);
       color: #ffd43b;
       border: 2px solid #d4af37;
-      padding: 9px 18px;
+      padding: 10px 20px;
       border-radius: 10px;
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       font-weight: 700;
       pointer-events: none;
       display: none;
       z-index: 28;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.38);
       max-width: calc(100% - 32px);
       text-align: center;
     }
     #grab-tooltip.visible { display: block; }
     #grab-tooltip.error {
-      background: #7f1d1d;
+      background: #991b1b;
       color: #ffffff;
-      border-color: #f87171;
-      animation: shakeBanner 0.32s ease;
+      border-color: #fca5a5;
+      animation: shakeBanner 0.34s ease;
     }
     #grab-tooltip.success {
       background: #14532d;
@@ -160,21 +167,21 @@
     }
     @keyframes shakeBanner {
       0%, 100% { transform: translateX(-50%); }
-      25% { transform: translateX(calc(-50% - 7px)); }
-      75% { transform: translateX(calc(-50% + 7px)); }
+      25% { transform: translateX(calc(-50% - 8px)); }
+      75% { transform: translateX(calc(-50% + 8px)); }
     }
 
     /* Etichetta al passaggio del mouse (hover) su un pezzo del vassoio */
     #hover-pill {
       position: absolute;
-      bottom: 62px;
+      bottom: 64px;
       left: 16px;
-      background: rgba(26, 54, 93, 0.92);
+      background: rgba(26, 54, 93, 0.94);
       color: #ffffff;
       border: 1px solid #93c5fd;
-      padding: 5px 12px;
+      padding: 6px 13px;
       border-radius: 6px;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 700;
       pointer-events: none;
       display: none;
@@ -300,7 +307,7 @@
       </div>
     </div>
 
-    <div class="status-strip">
+    <div class="status-strip" id="status-strip">
       <div>
         <span class="step-badge" id="step-badge">Étape 1</span>
         <span id="step-instruction">Chargement des composants de l'atelier...</span>
@@ -337,7 +344,7 @@
       </div>
       <div>
         <strong>Fonction mécanique</strong>
-        <div id="card-role">Saisissez une pièce sur le plateau quadrillé à gauche et approchez-la de la platine.</div>
+        <div id="card-role">Saisissez une pièce sur le plateau à gauche et approchez-la de la platine.</div>
       </div>
       <div>
         <strong>Lubrification &amp; Visserie aimantée</strong>
@@ -359,7 +366,7 @@
     scene.background = new THREE.Color(0xffffff);
 
     const camera = new THREE.PerspectiveCamera(36, stage.clientWidth / stage.clientHeight, 0.01, 1000);
-    const DEFAULT_CAM_POS = new THREE.Vector3(-0.35, 4.7, 3.1);
+    const DEFAULT_CAM_POS = new THREE.Vector3(-0.35, 4.8, 3.1);
     const DEFAULT_CAM_TARGET = new THREE.Vector3(-0.35, 0, 0);
     camera.position.copy(DEFAULT_CAM_POS);
 
@@ -381,14 +388,13 @@
     fillLight.position.set(-5, 6, -4);
     scene.add(fillLight);
 
-    // OrbitControls: in modalità Grab il tasto sinistro NON ruota la vista (ruota solo col tasto destro o in modalità Pivoter)
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.07;
     controls.target.copy(DEFAULT_CAM_TARGET);
     controls.update();
 
-    let interactionMode = 'grab'; // 'grab' | 'orbit'
+    let interactionMode = 'grab';
     const btnHudGrab = document.getElementById('hud-tool-grab');
     const btnHudOrbit = document.getElementById('hud-tool-orbit');
 
@@ -400,9 +406,9 @@
 
       if (mode === 'grab') {
         controls.mouseButtons = {
-          LEFT: null,               // Il clic sinistro / tocco serve SOLO a prendere i pezzi!
+          LEFT: null,
           MIDDLE: THREE.MOUSE.DOLLY,
-          RIGHT: THREE.MOUSE.ROTATE // Tasto destro ruota comunque la vista in qualsiasi momento
+          RIGHT: THREE.MOUSE.ROTATE
         };
       } else {
         controls.mouseButtons = {
@@ -416,11 +422,11 @@
     btnHudOrbit.addEventListener('click', () => setInteractionMode('orbit'));
     setInteractionMode('grab');
 
-    // Piano di lavoro (vassoio a sinistra) a quota y = -0.18, ben dimensionato per contenere tutti i pezzi
+    // Piano di lavoro (vassoio a sinistra)
     const TRAY_Y = -0.18;
     const trayGroup = new THREE.Group();
     const trayPlaneGeo = new THREE.PlaneGeometry(2.35, 3.6);
-    const trayPlaneMat = new THREE.MeshBasicMaterial({ color: 0xf1f5f9, side: THREE.DoubleSide });
+    const trayPlaneMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc, side: THREE.DoubleSide });
     const trayMesh = new THREE.Mesh(trayPlaneGeo, trayPlaneMat);
     trayMesh.rotation.x = -Math.PI / 2;
     trayMesh.position.set(-1.85, TRAY_Y, 0);
@@ -428,7 +434,7 @@
 
     const trayBorder = new THREE.LineSegments(
       new THREE.EdgesGeometry(trayPlaneGeo),
-      new THREE.LineBasicMaterial({ color: 0x94a3b8 })
+      new THREE.LineBasicMaterial({ color: 0x1a365d })
     );
     trayBorder.rotation.x = -Math.PI / 2;
     trayBorder.position.set(-1.85, TRAY_Y + 0.002, 0);
@@ -462,12 +468,12 @@
     targetMarker.visible = false;
     scene.add(targetMarker);
 
-    // Catalogo didattico completo (CT 6497-1 / 6498-1)
+    // Catalogo didattico completo (senza \b iniziale per intercettare anche prefissi tipo "180 Movement barrel")
     const CATALOG = [
       {
         order: 10,
-        pattern: /barrel\b|tambour|barillet|federhaus/i,
-        exclude: /bridge|pont|br[uü]cke/i,
+        pattern: /barrel|tambour|barillet|federhaus/i,
+        exclude: /bridge|pont|br[uü]cke|arbor|arbre/i,
         fr: 'Barillet complet (Tambour & Ressort)',
         en: 'Movement barrel complete',
         de: 'Federhaus vollständig',
@@ -577,11 +583,20 @@
         de: 'Unruh & Unruhbrücke montiert',
         role: 'Organe régulateur à 18’000 A/h (2,5 Hz) avec antichoc INCABLOC. Fixation automatique.',
         lube: 'Huile fine Moebius 9010 dans les contre-pivots INCABLOC ; spiral à sec.'
+      },
+      {
+        order: 130,
+        pattern: /winding.*stem|stem|tige|aufzugwelle/i,
+        fr: 'Tige de remontoir',
+        en: 'Winding stem',
+        de: 'Aufzugwelle',
+        role: 'Commande le remontage (Pos. 1) et la mise à l’heure (Pos. 2).',
+        lube: 'Graisse horlogère Moebius 9504 sur le carré et les portées.'
       }
     ];
 
     const SCREW_RE = /screw|\bvis\b|schraube|boulon|pin\b|goupille|stift|jewel|ruby|rubis/i;
-    const BASE_RE = /main\s*plate|base\s*plate|platine|werkplatte|\bplate\b/i;
+    const BASE_RE = /main\s*plate|base\s*plate|platine|werkplatte/i;
 
     let guidedMode = true;
     const mountableItems = [];
@@ -591,7 +606,9 @@
     let draggedItem = null;
     let hoveredItem = null;
     let bannerTimer = null;
+    let errorStripTimer = null;
 
+    const statusStripEl = document.getElementById('status-strip');
     const stepBadgeEl = document.getElementById('step-badge');
     const stepInstructionEl = document.getElementById('step-instruction');
     const progressPillEl = document.getElementById('progress-pill');
@@ -619,6 +636,21 @@
       grabTooltipEl.className = '';
     }
 
+    function showTemporaryWrongPieceError(wrongName, expectedName) {
+      clearTimeout(errorStripTimer);
+
+      const errMsg = `❌ Mauvaise pièce : « ${wrongName} ». Prenez d'abord : « ${expectedName} ».`;
+      statusStripEl.classList.add('error-strip');
+      stepInstructionEl.textContent = errMsg;
+      showBanner(errMsg, 'error', 3000);
+
+      // Au bout de 3 secondes maximum, rétablit automatiquement la consigne demandant la bonne pièce
+      errorStripTimer = setTimeout(() => {
+        statusStripEl.classList.remove('error-strip');
+        updateStatusUI();
+      }, 3000);
+    }
+
     function matchCatalog(rawName) {
       for (const entry of CATALOG) {
         if (entry.pattern.test(rawName) && !(entry.exclude && entry.exclude.test(rawName))) {
@@ -631,6 +663,7 @@
     function cleanFallbackName(raw) {
       return (raw || 'Composant horloger')
         .replace(/\.(sldprt|sldasm|igs|iges|step|stp|glb|gltf|blend)$/i, '')
+        .replace(/^\d+[\s_-]*/, '') // Rimuove eventuali prefissi numerici ETA es. "401 "
         .replace(/[_-]+/g, ' ')
         .replace(/\s*\.\d+$/, '')
         .replace(/\s+/g, ' ')
@@ -652,6 +685,9 @@
     }
 
     function updateStatusUI() {
+      clearTimeout(errorStripTimer);
+      statusStripEl.classList.remove('error-strip');
+
       const mountedCount = mountableItems.filter((it) => it.mounted).length;
       const total = mountableItems.length;
       progressPillEl.textContent = `${mountedCount} / ${total} montés`;
@@ -677,7 +713,6 @@
       });
     }
 
-    // Sposta una mesh in modo che il CENTRO REALE del suo Box3 raggiunga targetWorldCenter
     function moveMeshVisualCenterTo(mesh, targetWorldCenter) {
       mesh.updateMatrixWorld(true);
       const currentBox = new THREE.Box3().setFromObject(mesh);
@@ -750,7 +785,6 @@
       const cols = total > 8 ? 3 : 2;
       const rows = Math.ceil(total / cols);
 
-      // Adatta la dimensione del vassoio al numero effettivo di pezzi
       const spacingX = 0.78;
       const spacingZ = 0.68;
       const trayWidth = Math.max(1.8, cols * spacingX + 0.45);
@@ -772,10 +806,9 @@
         const col = idx % cols;
         const row = Math.floor(idx / cols);
 
-        // Calcola la quota Y in modo che il FONDO (min.y) del pezzo poggi sopra TRAY_Y + 0.015
         const targetCenter = new THREE.Vector3(
           startX + col * spacingX,
-          TRAY_Y + 0.015 + item.halfHeight,
+          TRAY_Y + 0.02 + item.halfHeight,
           startZ + row * spacingZ
         );
 
@@ -784,8 +817,7 @@
         item.trayWorldCenter = targetCenter.clone();
         item.mounted = false;
 
-        // Posiziona la hitbox invisibile sul vassoio sopra il pezzo per facilitare il clic/tocco
-        item.hitbox.position.set(targetCenter.x, TRAY_Y + 0.08, targetCenter.z);
+        item.hitbox.position.set(targetCenter.x, TRAY_Y + 0.10, targetCenter.z);
         item.hitbox.visible = true;
       });
 
@@ -809,7 +841,6 @@
         const maxDim = Math.max(size.x, size.y, size.z) || 1;
         root.scale.setScalar(2.5 / maxDim);
 
-        // Porta il calibro piatto sul piano XZ
         const sBox = new THREE.Box3().setFromObject(root);
         const sSize = sBox.getSize(new THREE.Vector3());
         if (sSize.z < sSize.y && sSize.z < sSize.x) {
@@ -819,7 +850,7 @@
         const cBox = new THREE.Box3().setFromObject(root);
         const center = cBox.getCenter(new THREE.Vector3());
         root.position.sub(center);
-        // Appoggia il movimento assemblato sul banco a destra (+0.78 su X, fondo allineato a TRAY_Y)
+
         const alignedBox = new THREE.Box3().setFromObject(root);
         root.position.x += 0.78;
         root.position.y += (TRAY_Y - alignedBox.min.y);
@@ -827,8 +858,7 @@
         scene.add(root);
         root.updateMatrixWorld(true);
 
-        // Crea geometria condivisa per hitbox di presa facile
-        const hitGeo = new THREE.CylinderGeometry(0.32, 0.32, 0.22, 16);
+        const hitGeo = new THREE.CylinderGeometry(0.36, 0.36, 0.28, 16);
         const hitMat = new THREE.MeshBasicMaterial({ visible: false });
 
         let fallbackIndex = 0;
@@ -854,8 +884,8 @@
             return;
           }
 
-          // 2. Viti, perni e rubini sciolti: viti magnetiche automatiche
-          if (SCREW_RE.test(fullName) || diag < 0.20) {
+          // 2. Viti, perni e micro-dettagli: gestiti come elementi magnetici automatici
+          if (SCREW_RE.test(fullName) || diag < 0.24) {
             magneticScrews.push({
               mesh: child,
               assembledLocalPos: child.position.clone(),
@@ -864,7 +894,7 @@
             return;
           }
 
-          // 3. Tutti gli altri organi (ponti, barillet, ruote, ancora, bilanciere, rochet...) vanno sul vassoio!
+          // 3. Organi principali da assemblare
           const catalogEntry = matchCatalog(fullName);
           const meta = catalogEntry || {
             order: 150 + fallbackIndex++,
@@ -894,10 +924,8 @@
           mountableItems.push(item);
         });
 
-        // Ordina i pezzi secondo la sequenza logica di montaggio
         mountableItems.sort((a, b) => a.meta.order - b.meta.order);
 
-        // Associa ogni vite magnetica al componente più vicino
         magneticScrews.forEach((sc) => {
           let bestItem = null;
           let bestDist = Infinity;
@@ -932,7 +960,6 @@
       }
     );
 
-    // Raycaster su hitbox + mesh reali (presa affidabile al 100% su mouse e touch)
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     const dragPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -(TRAY_Y + 0.28));
@@ -948,23 +975,35 @@
       updatePointerCoords(ev);
       raycaster.setFromCamera(pointer, camera);
 
-      // 1. Cerca prima sulle hitbox larghe del vassoio
       const activeHitboxes = hitboxes.filter((hb) => hb.visible);
       const hbHits = raycaster.intersectObjects(activeHitboxes, false);
       if (hbHits.length > 0 && hbHits[0].object.userData.item) {
         return hbHits[0].object.userData.item;
       }
 
-      // 2. Fallback diretto sulle mesh non ancora montate
       const pendingMeshes = mountableItems.filter((it) => !it.mounted).map((it) => it.mesh);
       const meshHits = raycaster.intersectObjects(pendingMeshes, false);
       if (meshHits.length > 0) {
         return mountableItems.find((it) => it.mesh === meshHits[0].object) || null;
       }
+
+      if (raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), -TRAY_Y), dragIntersect)) {
+        let nearest = null;
+        let minD = 0.42;
+        mountableItems.forEach((it) => {
+          if (it.mounted) return;
+          const d = Math.hypot(dragIntersect.x - it.trayWorldCenter.x, dragIntersect.z - it.trayWorldCenter.z);
+          if (d < minD) {
+            minD = d;
+            nearest = it;
+          }
+        });
+        if (nearest) return nearest;
+      }
+
       return null;
     }
 
-    // Hover feedback (mostra il nome del pezzo sotto il cursore prima ancora di cliccare)
     renderer.domElement.addEventListener('pointermove', (ev) => {
       if (draggedItem) {
         updatePointerCoords(ev);
@@ -1021,15 +1060,12 @@
 
       const nextExpected = getNextPendingItem();
       if (guidedMode && nextExpected && hitItem !== nextExpected) {
-        // Segnalazione chiara di ERRORE con il nome del componente sbagliato selezionato!
         setMeshHighlight(hitItem.mesh, 0xef4444, 0.85);
         setTimeout(() => {
           if (!hitItem.mounted) setMeshHighlight(hitItem.mesh, 0x000000, 0);
-        }, 700);
+        }, 800);
 
-        const errMsg = `❌ Composant incorrect : vous avez cliqué sur « ${hitItem.meta.fr} ». Prenez d'abord : « ${nextExpected.meta.fr} ».`;
-        stepInstructionEl.textContent = errMsg;
-        showBanner(errMsg, 'error', 3600);
+        showTemporaryWrongPieceError(hitItem.meta.fr, nextExpected.meta.fr);
         return;
       }
 
@@ -1075,7 +1111,6 @@
       }
     });
 
-    // Pulsanti UI superiori
     const btnGuided = document.getElementById('btn-mode-guided');
     const btnFree = document.getElementById('btn-mode-free');
 
@@ -1109,7 +1144,6 @@
       cardLubeEl.textContent = 'Les vis correspondantes s’aimanteront automatiquement.';
     });
 
-    // Controlli HUD camera & fullscreen
     function zoomCam(factor) {
       const offset = camera.position.clone().sub(controls.target);
       offset.setLength(THREE.MathUtils.clamp(offset.length() * factor, 1.2, 12.0));
