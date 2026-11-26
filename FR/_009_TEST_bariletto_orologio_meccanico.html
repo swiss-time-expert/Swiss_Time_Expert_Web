@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Swiss Time Expert — Test Assemblage Interactif 3D (ETA 6498-1)</title>
+  <title>Swiss Time Expert — Test Assemblage Interactif 3D par Cycles (ETA 6498-1)</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -93,6 +93,15 @@
       border-left-color: #dc2626;
       color: #991b1b;
     }
+    .cycle-badge {
+      background: #b8860b;
+      color: #ffffff;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.78rem;
+      margin-right: 6px;
+    }
     .step-badge {
       background: #1a365d;
       color: #ffd43b;
@@ -133,7 +142,6 @@
       border: none;
     }
 
-    /* Banner dinamico in alto: mostra pezzo afferrato oppure ERRORE rosso per max 3 secondi */
     #grab-tooltip {
       position: absolute;
       top: 14px;
@@ -171,7 +179,6 @@
       75% { transform: translateX(calc(-50% + 8px)); }
     }
 
-    /* Etichetta al passaggio del mouse (hover) posizionata in alto a sinistra fuori dai pezzi */
     #hover-pill {
       position: absolute;
       top: 14px;
@@ -189,7 +196,6 @@
     }
     #hover-pill.visible { display: block; }
 
-    /* Barra HUD spostata in basso a DESTRA (sotto la platina) per non coprire mai il vassoio a sinistra */
     .hud-dock {
       position: absolute;
       bottom: 14px;
@@ -295,8 +301,8 @@
   <div class="test-shell">
     <div class="test-header">
       <div>
-        <h1 class="test-title">🛠️ Atelier Virtuel 3D — Assemblage Interactif (Calibre ETA 6498-1)</h1>
-        <p class="test-sub">Clic gauche / doigt : saisir et déplacer une pièce • Clic droit (ou bouton ⟳ Pivoter) : tourner la vue • Vis aimantées automatiquement.</p>
+        <h1 class="test-title">🛠️ Atelier Virtuel 3D — Assemblage par Cycles (Calibre ETA 6498-1)</h1>
+        <p class="test-sub">Les composants arrivent sur l'établi par lots logiques (4 à 5 pièces par cycle) sans chevauchement • Vis aimantées automatiquement.</p>
       </div>
       <div class="test-controls">
         <button type="button" class="btn-ui active" id="btn-mode-guided">🧭 Mode Guidé</button>
@@ -308,6 +314,7 @@
 
     <div class="status-strip" id="status-strip">
       <div>
+        <span class="cycle-badge" id="cycle-badge">Cycle 1/3</span>
         <span class="step-badge" id="step-badge">Étape 1</span>
         <span id="step-instruction">Chargement des composants de l'atelier...</span>
       </div>
@@ -364,9 +371,8 @@
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
 
-    // Inquadratura dall'alto leggermente inclinata così l'intero vassoio e la platina entrano al 100% nello schermo
     const camera = new THREE.PerspectiveCamera(36, stage.clientWidth / stage.clientHeight, 0.01, 1000);
-    const DEFAULT_CAM_POS = new THREE.Vector3(-0.35, 5.4, 2.35);
+    const DEFAULT_CAM_POS = new THREE.Vector3(-0.35, 5.2, 2.45);
     const DEFAULT_CAM_TARGET = new THREE.Vector3(-0.35, -0.1, 0);
     camera.position.copy(DEFAULT_CAM_POS);
 
@@ -422,10 +428,10 @@
     btnHudOrbit.addEventListener('click', () => setInteractionMode('orbit'));
     setInteractionMode('grab');
 
-    // Piano di lavoro (vassoio a sinistra) dimensionato per stare comodo dentro lo schermo
+    // Piano di lavoro (vassoio a sinistra) dimensionato per 4-5 pezzi ben distanziati
     const TRAY_Y = -0.18;
     const trayGroup = new THREE.Group();
-    const trayPlaneGeo = new THREE.PlaneGeometry(2.3, 3.0);
+    const trayPlaneGeo = new THREE.PlaneGeometry(2.15, 2.75);
     const trayPlaneMat = new THREE.MeshBasicMaterial({ color: 0xf1f5f9, side: THREE.DoubleSide });
     const trayMesh = new THREE.Mesh(trayPlaneGeo, trayPlaneMat);
     trayMesh.rotation.x = -Math.PI / 2;
@@ -468,9 +474,17 @@
     targetMarker.visible = false;
     scene.add(targetMarker);
 
-    // Catalogo degli organi principali (raggruppati per unità funzionale)
+    const CYCLE_TITLES = {
+      1: 'Cycle 1/3 — Énergie & Rouage de finissage',
+      2: 'Cycle 2/3 — Ponts & Organes de remontage',
+      3: 'Cycle 3/3 — Échappement, Régulation & Commande'
+    };
+
+    // Catalogo organizzato in 3 CICLI logici da 4-5 pezzi ciascuno
     const CATALOG = [
+      // --- CICLO 1: Barillet + 4 ruote del treno ---
       {
+        cycle: 1,
         key: 'barrel',
         order: 10,
         pattern: /barrel|tambour|barillet|federhaus/i,
@@ -482,6 +496,7 @@
         lube: 'Huile épaisse Moebius HP-1300 aux pivots d’arbre ; graisse haute pression sur la paroi.'
       },
       {
+        cycle: 1,
         key: 'center',
         order: 20,
         pattern: /center|centre|minutenrad/i,
@@ -493,6 +508,7 @@
         lube: 'Huile épaisse Moebius HP-1300 aux deux pivots.'
       },
       {
+        cycle: 1,
         key: 'third',
         order: 30,
         pattern: /third|moyenne|kleinbodenrad/i,
@@ -504,6 +520,7 @@
         lube: 'Huile fine Moebius 9010 aux pivots.'
       },
       {
+        cycle: 1,
         key: 'fourth',
         order: 40,
         pattern: /fourth|second\s*wheel|seconde|sekundenrad/i,
@@ -515,6 +532,7 @@
         lube: 'Huile fine Moebius 9010 aux pivots.'
       },
       {
+        cycle: 1,
         key: 'escape',
         order: 50,
         pattern: /escape|echappement|hemmungsrad/i,
@@ -525,7 +543,10 @@
         role: 'Dernier mobile du train ; distribue les impulsions aux levées de l’ancre.',
         lube: 'Huile fine Moebius 9010 aux pivots ; épilame Fixodrop recommandé.'
       },
+
+      // --- CICLO 2: Ponti principali + Rochet + Ruota di corona ---
       {
+        cycle: 2,
         key: 'train_bridge',
         order: 60,
         pattern: /train.*bridge|gear.*bridge|pont.*rouage|r[aä]derwerkbr/i,
@@ -536,6 +557,7 @@
         lube: 'Huile épaisse HP-1300 sur centre ; huile fine 9010 sur moyenne et seconde.'
       },
       {
+        cycle: 2,
         key: 'barrel_bridge',
         order: 70,
         pattern: /barrel.*bridge|pont.*barillet|federhausbr/i,
@@ -546,6 +568,7 @@
         lube: 'Huile épaisse Moebius HP-1300 au palier supérieur d’arbre.'
       },
       {
+        cycle: 2,
         key: 'crown_wheel',
         order: 80,
         pattern: /crown|couronne|kronrad/i,
@@ -556,6 +579,7 @@
         lube: 'Huile épaisse Moebius HP-1300 SC sur la bague et la portée.'
       },
       {
+        cycle: 2,
         key: 'ratchet',
         order: 90,
         pattern: /ratchet|rochet|sperrrad/i,
@@ -565,7 +589,10 @@
         role: 'Solidaire du carré d’arbre de barillet pour l’armage du ressort.',
         lube: 'Huile épaisse Moebius HP-1300 sous la portée.'
       },
+
+      // --- CICLO 3: Ancora, Ponte d'ancora, Bilanciere & Tige ---
       {
+        cycle: 3,
         key: 'pallet',
         order: 100,
         pattern: /pallet|anchor|ancre|anker/i,
@@ -577,6 +604,7 @@
         lube: 'Huile spéciale Moebius 9415 sur les levées en rubis (pivots à sec).'
       },
       {
+        cycle: 3,
         key: 'pallet_bridge',
         order: 110,
         pattern: /pallet.*bridge|escapement.*bridge|pont.*ancre|ankerbr/i,
@@ -587,6 +615,7 @@
         lube: 'À sec sur les pivots d’ancre.'
       },
       {
+        cycle: 3,
         key: 'balance',
         order: 120,
         pattern: /balance|balancier|unruh|hairspring|spiral|incabloc|etachron|stud|regulator|raquette/i,
@@ -597,6 +626,7 @@
         lube: 'Huile fine Moebius 9010 dans les contre-pivots INCABLOC ; spiral à sec.'
       },
       {
+        cycle: 3,
         key: 'stem_system',
         order: 130,
         pattern: /winding|stem|tige|aufzug|setting|tirette|yoke|bascule|clutch|coulant|click|cliquet|minute\s*wheel|hour\s*wheel|cannon|chauss/i,
@@ -612,6 +642,8 @@
     const BASE_RE = /main\s*plate|base\s*plate|platine|werkplatte/i;
 
     let guidedMode = true;
+    let currentCycle = 1;
+    let maxCycle = 3;
     const mountableItems = [];
     const hitboxes = [];
     const magneticScrews = [];
@@ -622,6 +654,7 @@
     let errorStripTimer = null;
 
     const statusStripEl = document.getElementById('status-strip');
+    const cycleBadgeEl = document.getElementById('cycle-badge');
     const stepBadgeEl = document.getElementById('step-badge');
     const stepInstructionEl = document.getElementById('step-instruction');
     const progressPillEl = document.getElementById('progress-pill');
@@ -672,8 +705,21 @@
       return null;
     }
 
+    function getActiveCycleItems() {
+      return mountableItems.filter((it) => it.meta.cycle === currentCycle);
+    }
+
     function getNextPendingItem() {
-      return mountableItems.find((it) => !it.mounted) || null;
+      return getActiveCycleItems().find((it) => !it.mounted)
+        || mountableItems.find((it) => !it.mounted)
+        || null;
+    }
+
+    function setItemVisible(item, visible) {
+      item.meshes.forEach((m) => {
+        m.visible = visible;
+      });
+      item.hitbox.visible = visible && !item.mounted;
     }
 
     function setItemHighlight(item, hex, intensity) {
@@ -696,11 +742,13 @@
       const mountedCount = mountableItems.filter((it) => it.mounted).length;
       const total = mountableItems.length;
       progressPillEl.textContent = `${mountedCount} / ${total} montés`;
+      cycleBadgeEl.textContent = CYCLE_TITLES[currentCycle] || `Cycle ${currentCycle}/${maxCycle}`;
 
       const next = getNextPendingItem();
       if (!next) {
+        cycleBadgeEl.textContent = 'Assemblage complet';
         stepBadgeEl.textContent = 'Terminé';
-        stepInstructionEl.textContent = '🎉 Bravo ! Tous les organes principaux sont assemblés et toutes les vis sont aimantées.';
+        stepInstructionEl.textContent = '🎉 Bravo ! Les 3 cycles sont terminés et toutes les vis sont aimantées.';
         targetMarker.visible = false;
         return;
       }
@@ -709,9 +757,9 @@
       stepBadgeEl.textContent = `Étape ${stepNum}/${total}`;
       stepInstructionEl.textContent = guidedMode
         ? `Prenez sur le plateau : ${next.meta.fr}`
-        : `Mode libre : prenez n'importe quelle pièce sur le plateau (prochaine conseillée : ${next.meta.fr})`;
+        : `Mode libre (Lot ${currentCycle}) : prenez n'importe quelle pièce visible sur le plateau`;
 
-      mountableItems.forEach((it) => {
+      getActiveCycleItems().forEach((it) => {
         if (it.mounted || it === draggedItem || it === hoveredItem) return;
         const highlight = guidedMode && it === next;
         setItemHighlight(it, highlight ? 0xd4af37 : 0x000000, highlight ? 0.35 : 0);
@@ -771,6 +819,69 @@
       });
     }
 
+    // Dispone sul tavolo SOLO i 4-5 pezzi del ciclo attivo (nessuna sovrapposizione!)
+    function activateCycleTray(cycleNumber, announce = false) {
+      currentCycle = cycleNumber;
+      hoveredItem = null;
+      hoverPillEl.classList.remove('visible');
+
+      // Nasconde tutti i pezzi non ancora montati degli altri cicli
+      mountableItems.forEach((it) => {
+        if (!it.mounted) {
+          setItemVisible(it, it.meta.cycle === currentCycle);
+        }
+      });
+
+      const batch = getActiveCycleItems().filter((it) => !it.mounted);
+      if (batch.length === 0) {
+        updateStatusUI();
+        return;
+      }
+
+      // Griglia larga e ariosa: massimo 2 colonne × 3 righe con grande spaziatura tra i pezzi
+      const cols = 2;
+      const rows = Math.ceil(batch.length / cols);
+      const spacingX = 1.02;
+      const spacingZ = 0.96;
+      const trayWidth = cols * spacingX + 0.45;
+      const trayDepth = rows * spacingZ + 0.50;
+      const trayCenterX = -1.78;
+
+      trayMesh.geometry.dispose();
+      trayMesh.geometry = new THREE.PlaneGeometry(trayWidth, trayDepth);
+      trayMesh.position.set(trayCenterX, TRAY_Y, 0);
+
+      trayBorder.geometry.dispose();
+      trayBorder.geometry = new THREE.EdgesGeometry(trayMesh.geometry);
+      trayBorder.position.set(trayCenterX, TRAY_Y + 0.002, 0);
+
+      const startX = trayCenterX - ((cols - 1) * spacingX) / 2;
+      const startZ = -((rows - 1) * spacingZ) / 2;
+
+      batch.forEach((item, idx) => {
+        const col = idx % cols;
+        const row = Math.floor(idx / cols);
+
+        const targetCenter = new THREE.Vector3(
+          startX + col * spacingX,
+          TRAY_Y + 0.02 + item.halfHeight,
+          startZ + row * spacingZ
+        );
+
+        moveItemVisualCenterTo(item, targetCenter);
+        item.trayLocalPositions = item.meshes.map((m) => m.position.clone());
+        item.trayWorldCenter = targetCenter.clone();
+
+        item.hitbox.position.set(targetCenter.x, TRAY_Y + 0.10, targetCenter.z);
+        item.hitbox.visible = true;
+      });
+
+      if (announce) {
+        showBanner(`📦 ${CYCLE_TITLES[currentCycle]} prêt sur l'établi !`, 'success', 2600);
+      }
+      updateStatusUI();
+    }
+
     function completeItemAssembly(item) {
       if (item.mounted) return;
       item.mounted = true;
@@ -785,9 +896,17 @@
       animateItemToPositions(targets, 240, () => {
         setItemHighlight(item, 0x000000, 0);
         triggerMagneticScrews(item);
+
+        // Controlla se il ciclo corrente è stato completato per caricare il lotto successivo sul tavolo
+        const remainingInCycle = getActiveCycleItems().filter((it) => !it.mounted);
+        if (remainingInCycle.length === 0 && currentCycle < maxCycle) {
+          setTimeout(() => {
+            activateCycleTray(currentCycle + 1, true);
+          }, 550);
+        }
       });
 
-      showBanner(`✅ Bien joué : « ${item.meta.fr} » installé !`, 'success', 2400);
+      showBanner(`✅ Bien joué : « ${item.meta.fr} » installé !`, 'success', 2200);
 
       cardNameEl.textContent = item.meta.fr;
       cardMultilangEl.textContent = `EN : ${item.meta.en}  •  DE : ${item.meta.de}`;
@@ -797,53 +916,16 @@
       updateStatusUI();
     }
 
-    function layoutTrayItems() {
-      const total = mountableItems.length;
-      const cols = total > 6 ? 3 : 2;
-      const rows = Math.ceil(total / cols);
-
-      // Griglia compatta che rientra interamente nel campo visivo del vassoio a sinistra
-      const spacingX = 0.72;
-      const spacingZ = 0.68;
-      const trayWidth = cols * spacingX + 0.35;
-      const trayDepth = rows * spacingZ + 0.45;
-      const trayCenterX = -1.78;
-
-      trayMesh.geometry.dispose();
-      trayMesh.geometry = new THREE.PlaneGeometry(trayWidth, trayDepth);
-      trayMesh.position.set(trayCenterX, TRAY_Y, 0);
-
-      trayBorder.geometry.dispose();
-      trayBorder.geometry = new THREE.EdgesGeometry(trayMesh.geometry);
-      trayBorder.position.set(trayCenterX, TRAY_Y + 0.002, 0);
-
-      const startX = trayCenterX - ((cols - 1) * spacingX) / 2;
-      const startZ = -((rows - 1) * spacingZ) / 2;
-
-      mountableItems.forEach((item, idx) => {
-        const col = idx % cols;
-        const row = Math.floor(idx / cols);
-
-        const targetCenter = new THREE.Vector3(
-          startX + col * spacingX,
-          TRAY_Y + 0.02 + item.halfHeight,
-          startZ + row * spacingZ
-        );
-
-        moveItemVisualCenterTo(item, targetCenter);
-        item.trayLocalPositions = item.meshes.map((m) => m.position.clone());
-        item.trayWorldCenter = targetCenter.clone();
-        item.mounted = false;
-
-        item.hitbox.position.set(targetCenter.x, TRAY_Y + 0.10, targetCenter.z);
-        item.hitbox.visible = true;
+    function resetAllCycles() {
+      hideBanner();
+      mountableItems.forEach((it) => {
+        it.mounted = false;
+        setItemHighlight(it, 0x000000, 0);
       });
-
       magneticScrews.forEach((sc) => {
         sc.mesh.visible = false;
       });
-
-      updateStatusUI();
+      activateCycleTray(1, false);
     }
 
     const loaderEl = document.getElementById('loader-overlay');
@@ -870,7 +952,7 @@
         root.position.sub(center);
 
         const alignedBox = new THREE.Box3().setFromObject(root);
-        root.position.x += 0.85;
+        root.position.x += 0.88;
         root.position.y += (TRAY_Y - alignedBox.min.y);
 
         scene.add(root);
@@ -895,12 +977,12 @@
           const wSize = wBox.getSize(new THREE.Vector3());
           const diag = wSize.length();
 
-          // 1. Platina di base: resta fissa a destra come riferimento
+          // 1. Platina di base: resta fissa a destra
           if (BASE_RE.test(fullName) || diag > 1.85) {
             return;
           }
 
-          // 2. Viti, perni, rubini e micro-parti: gestiti come elementi magnetici automatici
+          // 2. Viti, perni, rubini e micro-parti: viti magnetiche automatiche
           if (SCREW_RE.test(fullName) || diag < 0.28) {
             magneticScrews.push({
               mesh: child,
@@ -910,7 +992,7 @@
             return;
           }
 
-          // 3. Raggruppa per chiave logica del CATALOGO (evita 41 frammenti separati sul tavolo)
+          // 3. Raggruppa per chiave logica del CATALOGO
           const catalogEntry = matchCatalog(fullName);
           if (catalogEntry) {
             if (!groupedByKey.has(catalogEntry.key)) {
@@ -921,11 +1003,10 @@
             }
             groupedByKey.get(catalogEntry.key).meshes.push(child);
           } else {
-            orphanMeshes.push({ mesh: child, wCenter, diag });
+            orphanMeshes.push({ mesh: child, wCenter });
           }
         });
 
-        // Eventuali mesh senza nome riconosciuto vengono aggregate al gruppo già esistente più vicino
         orphanMeshes.forEach((orp) => {
           let bestGroup = null;
           let bestDist = Infinity;
@@ -949,7 +1030,7 @@
           }
         });
 
-        const hitGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.28, 16);
+        const hitGeo = new THREE.CylinderGeometry(0.40, 0.40, 0.30, 16);
         const hitMat = new THREE.MeshBasicMaterial({ visible: false });
 
         groupedByKey.forEach((grp) => {
@@ -978,8 +1059,8 @@
         });
 
         mountableItems.sort((a, b) => a.meta.order - b.meta.order);
+        maxCycle = mountableItems.reduce((mx, it) => Math.max(mx, it.meta.cycle), 1);
 
-        // Associa ogni vite magnetica al gruppo più vicino
         magneticScrews.forEach((sc) => {
           let bestItem = null;
           let bestDist = Infinity;
@@ -998,7 +1079,7 @@
           }
         });
 
-        layoutTrayItems();
+        resetAllCycles();
 
         loaderEl.style.opacity = '0';
         setTimeout(() => loaderEl.remove(), 300);
@@ -1036,7 +1117,7 @@
       }
 
       const pendingMeshes = [];
-      mountableItems.forEach((it) => {
+      getActiveCycleItems().forEach((it) => {
         if (!it.mounted) pendingMeshes.push(...it.meshes);
       });
       const meshHits = raycaster.intersectObjects(pendingMeshes, false);
@@ -1046,8 +1127,8 @@
 
       if (raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), -TRAY_Y), dragIntersect)) {
         let nearest = null;
-        let minD = 0.40;
-        mountableItems.forEach((it) => {
+        let minD = 0.48;
+        getActiveCycleItems().forEach((it) => {
           if (it.mounted) return;
           const d = Math.hypot(dragIntersect.x - it.trayWorldCenter.x, dragIntersect.z - it.trayWorldCenter.z);
           if (d < minD) {
@@ -1198,11 +1279,10 @@
     });
 
     document.getElementById('btn-reset-all').addEventListener('click', () => {
-      hideBanner();
-      layoutTrayItems();
-      cardNameEl.textContent = 'Plateau réinitialisé';
+      resetAllCycles();
+      cardNameEl.textContent = 'Plateau réinitialisé (Cycle 1/3)';
       cardMultilangEl.textContent = '—';
-      cardRoleEl.textContent = 'Saisissez une pièce sur le plateau à gauche pour démarrer le montage.';
+      cardRoleEl.textContent = 'Saisissez une pièce du Cycle 1 sur le plateau à gauche pour démarrer le montage.';
       cardLubeEl.textContent = 'Les vis correspondantes s’aimanteront automatiquement.';
     });
 
