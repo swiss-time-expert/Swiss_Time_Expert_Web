@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swiss Time Expert - 6. Usinage Horloger Suisse, Finitions &amp; Décorations</title>
-  <meta name="description" content="Cours d'expertise horlogère sur l'usinage haute précision en Suisse, les finitions horlogères (anglage, flancs, poli noir, pivots, vis, roues) et les décorations (perlage, soleillage, Côtes de Genève, colimaçonnage, guillochage).">
+  <meta name="description" content="Cours d'expertise horlogère sur l'usinage haute précision en Suisse, les finitions horlogères et les décorations.">
 
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="shortcut icon" type="image/png" href="../favicon.png?v=2">
@@ -110,89 +110,38 @@
       background-color: #f8fafc;
     }
 
-    /* Finestre 3D grandi a tutta larghezza */
-    .finish-viewer-card {
+    /* Finestre 3D vuote pronte per i GLB prodotti uno a uno su Blender */
+    .blender-slot-card {
       width: 100%;
       background: #0d131f;
       border: 1px solid #24324a;
       border-left: 5px solid #d4af37;
       border-radius: 10px;
       padding: 16px 18px;
-      margin: 22px 0 32px 0;
+      margin: 20px 0 28px 0;
       color: #f8fafc;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      box-shadow: 0 10px 26px rgba(10, 18, 32, 0.18);
       box-sizing: border-box;
     }
-    .finish-viewer-top {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .finish-viewer-badge {
-      display: inline-block;
-      background: rgba(212, 175, 55, 0.18);
+    .blender-slot-title {
+      margin: 0 0 10px 0;
+      font-size: 1rem;
+      font-weight: 700;
       color: #ffd43b;
-      border: 1px solid rgba(212, 175, 55, 0.45);
-      padding: 3px 10px;
-      border-radius: 999px;
-      font-size: 0.74rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 4px;
     }
-    .finish-viewer-title {
-      margin: 0;
-      font-size: 1.04rem;
-      font-weight: 700;
-      color: #ffffff;
-    }
-    .finish-viewer-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    .finish-canvas-box {
+    .blender-slot-box {
       width: 100%;
-      height: 430px;
+      height: 360px;
       border-radius: 8px;
-      border: 1px solid #1e293b;
-      background: radial-gradient(circle at center, #25334a 0%, #0f172a 100%);
+      border: 1px dashed #3b4c66;
+      background: #111827;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      font-size: 0.88rem;
       position: relative;
       overflow: hidden;
-      cursor: grab;
-    }
-    .finish-canvas-box:active {
-      cursor: grabbing;
-    }
-    .finish-viewer-caption {
-      margin-top: 10px;
-      font-size: 0.85rem;
-      color: #cbd5e1;
-      line-height: 1.5;
-    }
-    .finish-ctrl-btn {
-      background: rgba(30, 41, 59, 0.92);
-      color: #f8fafc;
-      border: 1px solid #3b4c66;
-      padding: 6px 11px;
-      border-radius: 6px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .finish-ctrl-btn:hover {
-      border-color: #d4af37;
-      color: #ffd43b;
-    }
-    .finish-ctrl-btn.active {
-      background: #b8860b;
-      border-color: #f3c64f;
-      color: #ffffff;
     }
   </style>
 
@@ -253,902 +202,225 @@
     <div class="handwritten-body" id="course-content-area">
 
       <div class="toc-box">
-        <div class="toc-title">📑 Plan du Module — De l'Usinage Haute Précision à la Haute Horlogerie</div>
+        <div class="toc-title">📑 Plan du Module</div>
         <ul class="toc-grid">
           <li><a href="#sec1">1. Philosophie des Finitions Horlogères</a></li>
-          <li><a href="#sec2">2. Préparation &amp; Satinage des Flancs</a></li>
-          <li><a href="#sec3">3. L'Anglage (Coins Rentrants &amp; Sortants)</a></li>
+          <li><a href="#sec2">2. Préparation &amp; Finition des Flancs</a></li>
+          <li><a href="#sec3">3. L'Anglage</a></li>
           <li><a href="#sec4">4. Le Poli Noir (Polissage Miroir / Blocage)</a></li>
           <li><a href="#sec5">5. Finition des Perçages, Moulures &amp; Noyures</a></li>
           <li><a href="#sec6">6. Composants Mobiles : Roues, Vis, Goupilles &amp; Pivots</a></li>
-          <li><a href="#sec7">7. Les Décorations : Perlage, Soleillage &amp; Côtes de Genève</a></li>
+          <li><a href="#sec7">7. Les Décorations de Surface</a></li>
           <li><a href="#sec8">8. Lexique Technique d'Atelier</a></li>
           <li><a href="#f1">9. Les Trois Grandes Étapes du Cycle de Fabrication</a></li>
           <li><a href="#f2">10. Technologies Avancées &amp; Micro-Fabrication</a></li>
         </ul>
       </div>
 
-      <!-- 1. PHILOSOPHIE -->
       <h2 id="sec1">1. Philosophie &amp; Exigences des Finitions Horlogères</h2>
       <p>
-        Dans l'<strong>usinage horloger suisse</strong> de haute précision, la fabrication d'un calibre ne s'arrête jamais à la simple conformité dimensionnelle des <strong>composants horlogers</strong>. Une fois les opérations d'usinage fonctionnel achevées, chaque pont, platine, bascule ou mobile subit un ensemble d'opérations de terminaison qui distinguent la production industrielle courante de la Haute Horlogerie.
+        Dans l'<strong>usinage horloger suisse</strong> de haute précision, la fabrication d'un calibre ne s'arrête pas à la conformité dimensionnelle des <strong>composants horlogers</strong>. Chaque pont, platine, bascule ou mobile reçoit des finitions fonctionnelles et esthétiques adaptées à son rôle.
       </p>
-      <p>
-        L'<strong>expertise horlogère</strong> distingue rigoureusement deux familles complémentaires :
-      </p>
-      <ul>
-        <li><strong>Les finitions fonctionnelles et de préparation :</strong> elles améliorent l'état de surface, suppriment les bavures et micro-aspérités d'usinage, réduisent les coefficients de frottement, favorisent la rétention des lubrifiants et protègent les alliages contre l'oxydation (flancs, anglage, perçages, roulage des pivots, poli noir).</li>
-        <li><strong>Les décorations proprement dites :</strong> elles subliment l'architecture du mouvement en maîtrisant la réflexion et la diffusion de la lumière à travers des motifs géométriques réguliers (<strong>perlage</strong>, <strong>soleillage</strong>, <strong>Côtes de Genève</strong>, colimaçonnage, guillochage).</li>
-      </ul>
 
-      <!-- 2. LES FLANCS -->
       <h2 id="sec2">2. Préparation &amp; Finition des Flancs</h2>
       <p>
-        Les <strong>flancs</strong> constituent les parois latérales verticales des ponts, bascules et leviers. Leur qualité géométrique conditionne directement la régularité de l'anglage : un flanc ondulé ou marqué par l'outil engendrera inévitablement un chanfrein irrégulier.
+        Les <strong>flancs</strong> forment les parois latérales des ponts, bascules et leviers. Dressage à la lime (plate, feuille de sauge, queue de rat) et satinage régulier préparent la pièce avant l'anglage.
       </p>
-      <ul>
-        <li><strong>État brut selon l'usinage :</strong> les pièces obtenues par fraisage CNC ou électroérosion à fil présentent de fines stries verticales et des restes d'attaches qu'il faut éliminer. Les pièces étampées en série ont des flancs plus réguliers, mais sont systématiquement reprises manuellement en Haute Horlogerie.</li>
-        <li><strong>Dressage à la lime :</strong> l'artisan utilise des limes horlogères de précision adaptées au profil : <em>lime plate</em> pour les surfaces droites ou légèrement bombées, <em>lime feuille de sauge</em> pour les grands rayons creux et <em>lime ronde (queue de rat)</em> pour les petits dégagements.</li>
-        <li><strong>Satinage artisanal (étirage) :</strong> après dressage, la surface est unifiée à la main à l'aide de pierres synthétiques (type <em>Degussit</em>) et de cabrons revêtus de papiers abrasifs de granulométrie décroissante.</li>
-        <li><strong>Typologie des coins de flancs :</strong> on distingue le <em>coin rentrant</em> (intersection intérieure nécessitant une reprise manuelle à la lime affûtée), le <em>coin saillant</em> (angle vif extérieur) et le <em>coin arrondi</em>.</li>
-      </ul>
-
-      <div class="finish-viewer-card">
-        <div class="finish-viewer-top">
-          <div>
-            <span class="finish-viewer-badge">Aperçu 3D — Finition des Flancs</span>
-            <h4 class="finish-viewer-title">Satinage Rectiligne sur Pont de Rouage (ETA 6498-1)</h4>
-          </div>
-          <div class="finish-viewer-actions">
-            <button type="button" class="finish-ctrl-btn active" data-auto-viewer="viewer-flancs">↻ Auto</button>
-            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-flancs">↺ Recentrer</button>
-          </div>
-        </div>
-        <div class="finish-canvas-box" id="viewer-flancs"></div>
-        <div class="finish-viewer-caption">
-          Pont de rouage complet extrait du calibre ETA 6498-1 avec texture satinée brossée mettant en évidence les flancs latéraux et les arêtes vives.
-        </div>
+      <div class="blender-slot-card">
+        <div class="blender-slot-title">3D Blender — Flancs (en attente du modèle dédié)</div>
+        <div class="blender-slot-box" data-glb="">Slot 3D vide — à renseigner avec le .glb Blender</div>
       </div>
 
-      <!-- 3. L'ANGLAGE -->
-      <h2 id="sec3">3. L'Anglage (Chanfreinage de Haute Horlogerie)</h2>
+      <h2 id="sec3">3. L'Anglage</h2>
       <p>
-        L'<strong>anglage</strong> consiste à abattre l'arête vive formée entre la face supérieure d'un composant et son flanc vertical pour créer un chanfrein régulier (généralement incliné à 45°), poli jusqu'à obtenir un éclat lumineux continu soulignant les contours de la pièce.
+        L'<strong>anglage</strong> consiste à abattre l'arête entre la face supérieure et le flanc pour créer un chanfrein régulier (coins rentrants, coins sortants, adoucissage et avivage).
       </p>
-      <ul>
-        <li><strong>Signature de l'anglage main :</strong> l'authenticité d'un anglage exécuté à la main se reconnaît à la netteté absolue des <strong>coins rentrants</strong> (où deux chanfreins se rejoignent en un point précis vers l'intérieur) et des <strong>coins sortants</strong>, impossibles à reproduire avec la même finesse par usinage mécanique seul.</li>
-        <li><strong>Étapes d'exécution :</strong>
-          <ol>
-            <li><em>Ébauche du chanfrein :</em> à la lime fine ou à la fraise profilée pour établir une largeur constante sur tout le pourtour.</li>
-            <li><em>Adoucissage :</em> élimination des traits de lime à l'aide de pierres fines et de cabrons abrasifs de plus en plus doux.</li>
-            <li><em>Polissage final (avivage) :</em> lustrage sur tige de bois tendre (<em>bois de gentiane</em> ou buis) enduite de pâte diamantée ou d'alumine jusqu'à l'obtention d'un reflet miroir sans arrondir les arêtes.</li>
-          </ol>
-        </li>
-      </ul>
-
-      <div class="finish-viewer-card">
-        <div class="finish-viewer-top">
-          <div>
-            <span class="finish-viewer-badge">Aperçu 3D — Anglage</span>
-            <h4 class="finish-viewer-title">Pont de Barillet avec Chanfreins &amp; Contours Mis en Valeur (ETA 6498-1)</h4>
-          </div>
-          <div class="finish-viewer-actions">
-            <button type="button" class="finish-ctrl-btn active" data-auto-viewer="viewer-anglage">↻ Auto</button>
-            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-anglage">↺ Recentrer</button>
-          </div>
-        </div>
-        <div class="finish-canvas-box" id="viewer-anglage"></div>
-        <div class="finish-viewer-caption">
-          Pont de barillet complet extrait du calibre ETA 6498-1 : le filet lumineux souligne le pourtour chanfreiné, les logements de vis et les coins rentrants du pont.
-        </div>
+      <div class="blender-slot-card">
+        <div class="blender-slot-title">3D Blender — Anglage (en attente du modèle dédié)</div>
+        <div class="blender-slot-box" data-glb="">Slot 3D vide — à renseigner avec le .glb Blender</div>
       </div>
 
-      <!-- 4. LE POLI NOIR -->
       <h2 id="sec4">4. Le Poli Noir (Polissage Miroir ou Blocage)</h2>
       <p>
-        Considéré comme le sommet des <strong>finitions horlogères</strong> sur acier trempé, le <strong>poli noir</strong> (également appelé <em>blocage</em> ou <em>poli miroir</em>) est appliqué aux pièces nobles visibles : ponts de tourbillon, rochets, marteaux et timbres de répétition minutes, raquettes ou plaques de contre-pivot.
+        Le <strong>poli noir</strong> offre une réflexion spéculaire pure sur les surfaces planes préparées (rodage / plaque de zinc avec pâte diamantée), produisant un contraste optique entre noir profond et reflet miroir selon l'angle d'observation.
       </p>
-      <div class="tech-doc-box">
-        <h3>Principe optique du Poli Noir</h3>
-        <p>
-          La surface est rendue si parfaitement plane et exempte de toute micro-rayure qu'elle réfléchit la lumière incidente dans une seule direction (réflexion spéculaire pure). Lorsque la lumière frappe la pièce perpendiculairement et que l'œil observe sous un angle oblique, aucun rayon n'est diffusé vers l'observateur : la surface métallique apparaît d'un <strong>noir profond et intense</strong>, basculant instantanément vers un éclat argenté pur dès que l'angle d'observation change.
-        </p>
-      </div>
-      <ul>
-        <li><strong>Préparation mécanique (planéité) :</strong> la pièce collée sur un support est d'abord dressée sur papier abrasif à l'oxyde d'alumine ou par <em>rodage</em> sur plateau lapidaire à double rotation différentielle afin d'obtenir une planéité rigoureuse.</li>
-        <li><strong>Finition artisanale sur plaque de zinc :</strong> la pièce est frottée manuellement à plat sur une plaque en zinc rectifiée enduite de pâte diamantée très fine (pâte <em>Diamantine</em>). Nota technique : les alliages cuivreux tels que le maillechort ou l'Arcap ne sont pas compatibles avec la plaque de zinc et se polissent sur support à l'oxyde d'alumine.</li>
-      </ul>
-
-      <div class="finish-viewer-card">
-        <div class="finish-viewer-top">
-          <div>
-            <span class="finish-viewer-badge">Aperçu 3D — Poli Noir (Blocage)</span>
-            <h4 class="finish-viewer-title">Rochet en Acier Trempé Poli Noir (ETA 6498-1)</h4>
-          </div>
-          <div class="finish-viewer-actions">
-            <button type="button" class="finish-ctrl-btn active" data-auto-viewer="viewer-polinoir">↻ Auto</button>
-            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-polinoir">↺ Recentrer</button>
-          </div>
-        </div>
-        <div class="finish-canvas-box" id="viewer-polinoir"></div>
-        <div class="finish-viewer-caption">
-          Rochet extrait du calibre ETA 6498-1 en finition poli noir spéculaire : pivotez la pièce pour observer le contraste optique entre ombre noire profonde et éclat miroir.
-        </div>
+      <div class="blender-slot-card">
+        <div class="blender-slot-title">3D Blender — Poli Noir (en attente du modèle dédié)</div>
+        <div class="blender-slot-box" data-glb="">Slot 3D vide — à renseigner avec le .glb Blender</div>
       </div>
 
-      <!-- 5. PERÇAGES, MOULURES & NOYURES -->
       <h2 id="sec5">5. Finition des Perçages, Moulures &amp; Noyures</h2>
       <p>
-        Chaque trou de vis, logement de rubis ou évidement (<em>noyure</em>) usiné dans la platine ou les ponts reçoit un traitement spécifique alliant esthétique et fonctionnalité :
+        Moulures autour des rubis et logements de vis, ébavurage des perçages et finition des noyures.
       </p>
-      <ul>
-        <li><strong>Les moulures (creusures polies) :</strong> chanfreins circulaires larges et brillants usinés à la fraise diamant autour des pierres (rubis) et des logements de vis. Outre le contraste lumineux avec le décor environnant (Côtes de Genève ou perlage), la moulure forme un réservoir capillaire évitant l'étalement de l'huile.</li>
-        <li><strong>Ébavurage et polissage des perçages :</strong> suppression systématique des arêtes coupantes à l'entrée et à la sortie des trous de goupilles et de vis pour éviter toute génération de limailles lors de l'assemblage.</li>
-        <li><strong>Noyures :</strong> les fonds de noyures recevant les mobiles (barillet, rouage) sont fréquemment décorés par <em>perlage</em> ou <em>colimaçonnage</em> afin de piéger d'éventuelles micro-particules et d'offrir un fond esthétique visible même sous les ponts.</li>
-      </ul>
 
-      <!-- 6. COMPOSANTS MOBILES -->
       <h2 id="sec6">6. Usinage &amp; Terminaison des Composants Horlogers Mobiles</h2>
-      <p>
-        L'<strong>usinage haute précision horlogerie</strong> atteint son paroxysme sur les pièces de révolution et les organes de liaison qui assurent le rendement énergétique du mouvement :
-      </p>
-
       <table class="tech-table">
         <thead>
           <tr>
-            <th style="width: 24%;">Composant</th>
-            <th style="width: 38%;">Procédés d'Usinage</th>
-            <th style="width: 38%;">Finitions &amp; Critères Qualité</th>
+            <th>Composant</th>
+            <th>Usinage</th>
+            <th>Finitions</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>Roues &amp; Pignons</strong></td>
-            <td>Taillage par génération (fraise-mère) de dentures épicycloïdales ; découpe des bras (rayons) par fraisage ou étampage.</td>
-            <td>Polissage des ailes de pignon au bois/diamant pour réduire la friction ; anglage des bras de roue ; <strong>finition circulaire (cerclage)</strong> de la planche pour une lecture nette sous tous les angles.</td>
+            <td>Taillage, découpe des bras</td>
+            <td>Polissage des ailes, anglage des bras, finition circulaire</td>
           </tr>
           <tr>
             <td><strong>Vis Horlogères</strong></td>
-            <td>Décolletage de précision sur tours automatiques CNC ; fraisage de la fente et filetage roulé ou taillé.</td>
-            <td>Polissage bloqué (poli noir) de la tête ; anglage du logement sur le pont et de la fente pour éviter tout éclatement au vissage ; <strong>bleui thermique à la flamme (~290 °C)</strong> sur acier.</td>
+            <td>Décolletage, fente, filetage</td>
+            <td>Tête polie, logement/fente soignés, bleui thermique (~290 °C)</td>
           </tr>
           <tr>
             <td><strong>Goupilles</strong></td>
-            <td>Décolletage cylindrique ou conique (pente normalisée 1:50) en acier trempé ou laiton.</td>
-            <td>Tonnellation (polissage mécano-chimique au tonneau), arrondi et polissage des extrémités visibles pour faciliter l'introduction sans marquer les ponts.</td>
+            <td>Cylindriques ou coniques (1:50)</td>
+            <td>Tonnellation et extrémités polies</td>
           </tr>
           <tr>
             <td><strong>Pivots</strong></td>
-            <td>Tournage de précision ou décolletage CNC avec surépaisseur de quelques microns après trempe et revenu.</td>
-            <td><strong>Roulage</strong> à la meule en métal dur (écrouissage superficiel augmentant la dureté et l'état de surface) suivi d'un <em>poli flash</em>. Trois géométries : <em>cylindrique à portée</em> (rouage), <em>sans portée</em> (échappement) et <em>conique</em> (balancier sur contre-pivot).</td>
+            <td>Tournage / décolletage après trempe</td>
+            <td>Roulage et poli flash (cylindrique à portée, sans portée, conique)</td>
           </tr>
         </tbody>
       </table>
-
-      <div class="finish-viewer-card">
-        <div class="finish-viewer-top">
-          <div>
-            <span class="finish-viewer-badge">Aperçu 3D — Finition Circulaire sur Roue</span>
-            <h4 class="finish-viewer-title">Roue de Centre en Laiton Doré avec Satinage Circulaire (ETA 6498-1)</h4>
-          </div>
-          <div class="finish-viewer-actions">
-            <button type="button" class="finish-ctrl-btn active" data-auto-viewer="viewer-roues">↻ Auto</button>
-            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-roues">↺ Recentrer</button>
-          </div>
-        </div>
-        <div class="finish-canvas-box" id="viewer-roues"></div>
-        <div class="finish-viewer-caption">
-          Roue de centre extraite du calibre ETA 6498-1 : les anneaux concentriques de la finition satinée circulaire sont gravés sur la planche en laiton doré pour diffuser la lumière sans transparence.
-        </div>
+      <div class="blender-slot-card">
+        <div class="blender-slot-title">3D Blender — Roues &amp; Finition Circulaire (en attente du modèle dédié)</div>
+        <div class="blender-slot-box" data-glb="">Slot 3D vide — à renseigner avec le .glb Blender</div>
       </div>
 
-      <!-- 7. LES DÉCORATIONS -->
-      <h2 id="sec7">7. Les Décorations de Surface : Perlage, Soleillage &amp; Côtes de Genève</h2>
-      <p>
-        Les décorations horlogères habillent les surfaces planes des ponts, de la platine, des mobiles d'armage et des cadrans pour créer des jeux de lumière caractéristiques de la tradition suisse :
-      </p>
-
-      <!-- 7.1 PERLAGE -->
-      <h3>7.1 Le Perlage (Perlée)</h3>
-      <p>
-        Décoration composée de petits cercles juxtaposés et partiellement superposés (chevauchement régulier d'un tiers à la moitié du diamètre), exécutée à l'aide d'un tampon abrasif en caoutchouc chargé de grains fins monté sur broche verticale. Il habille principalement la <strong>platine</strong> et l'intérieur des noyures.
-      </p>
-      <div class="finish-viewer-card">
-        <div class="finish-viewer-top">
-          <div>
-            <span class="finish-viewer-badge">Décoration 3D — Perlage</span>
-            <h4 class="finish-viewer-title">Perlage à Cercles Chevauchants sur Platine (ETA 6498-1)</h4>
-          </div>
-          <div class="finish-viewer-actions">
-            <button type="button" class="finish-ctrl-btn active" data-auto-viewer="viewer-perlage">↻ Auto</button>
-            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-perlage">↺ Recentrer</button>
-          </div>
-        </div>
-        <div class="finish-canvas-box" id="viewer-perlage"></div>
-        <div class="finish-viewer-caption">
-          Platine principale extraite du calibre ETA 6498-1 revêtue du motif perlée à cercles concentriques superposés sur toute sa surface.
-        </div>
+      <h2 id="sec7">7. Les Décorations de Surface</h2>
+      <h3>7.1 Perlage</h3>
+      <p>Cercles juxtaposés et partiellement superposés sur platine ou noyures.</p>
+      <div class="blender-slot-card">
+        <div class="blender-slot-title">3D Blender — Perlage (en attente du modèle dédié)</div>
+        <div class="blender-slot-box" data-glb="">Slot 3D vide — à renseigner avec le .glb Blender</div>
       </div>
 
-      <!-- 7.2 SOLEILLAGE -->
-      <h3>7.2 Le Soleillage (Brossage Soleil)</h3>
-      <p>
-        Finition rayonnante constituée de micro-stries rectilignes partant du centre vers la périphérie de la pièce, produisant un reflet conique tournant sous la lumière. Typique des <strong>rochets</strong>, roues de couronne et masses oscillantes.
-      </p>
-      <div class="finish-viewer-card">
-        <div class="finish-viewer-top">
-          <div>
-            <span class="finish-viewer-badge">Décoration 3D — Soleillage</span>
-            <h4 class="finish-viewer-title">Brossage Soleil Radial sur Rochet (ETA 6498-1)</h4>
-          </div>
-          <div class="finish-viewer-actions">
-            <button type="button" class="finish-ctrl-btn active" data-auto-viewer="viewer-soleillage">↻ Auto</button>
-            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-soleillage">↺ Recentrer</button>
-          </div>
-        </div>
-        <div class="finish-canvas-box" id="viewer-soleillage"></div>
-        <div class="finish-viewer-caption">
-          Rochet extrait du calibre ETA 6498-1 avec micro-stries rayonnantes du centre vers la denture extérieure.
-        </div>
+      <h3>7.2 Soleillage</h3>
+      <p>Stries rectilignes rayonnantes du centre vers la périphérie.</p>
+      <div class="blender-slot-card">
+        <div class="blender-slot-title">3D Blender — Soleillage (en attente du modèle dédié)</div>
+        <div class="blender-slot-box" data-glb="">Slot 3D vide — à renseigner avec le .glb Blender</div>
       </div>
 
-      <!-- 7.3 CÔTES DE GENÈVE -->
-      <h3>7.3 Les Côtes de Genève</h3>
-      <p>
-        Bandes parallèles régulières présentant un fin striage ondulé ou rectiligne séparées par une arête nette, réalisées par déplacement linéaire d'une meule ou d'un outil rotatif incliné sur les <strong>ponts supérieurs</strong> (pont de barillet, pont de rouage).
-      </p>
-      <div class="finish-viewer-card">
-        <div class="finish-viewer-top">
-          <div>
-            <span class="finish-viewer-badge">Décoration 3D — Côtes de Genève</span>
-            <h4 class="finish-viewer-title">Côtes de Genève sur Pont de Barillet (ETA 6498-1)</h4>
-          </div>
-          <div class="finish-viewer-actions">
-            <button type="button" class="finish-ctrl-btn active" data-auto-viewer="viewer-cotes">↻ Auto</button>
-            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-cotes">↺ Recentrer</button>
-          </div>
-        </div>
-        <div class="finish-canvas-box" id="viewer-cotes"></div>
-        <div class="finish-viewer-caption">
-          Pont de barillet complet extrait du calibre ETA 6498-1 décoré de Côtes de Genève parallèles striées.
-        </div>
+      <h3>7.3 Côtes de Genève</h3>
+      <p>Bandes parallèles régulières sur les ponts.</p>
+      <div class="blender-slot-card">
+        <div class="blender-slot-title">3D Blender — Côtes de Genève (en attente du modèle dédié)</div>
+        <div class="blender-slot-box" data-glb="">Slot 3D vide — à renseigner avec le .glb Blender</div>
       </div>
 
-      <!-- 7.4 COLIMAÇONNAGE -->
-      <h3>7.4 Le Colimaçonnage</h3>
-      <p>
-        Fines stries en spirale continue exécutées à la meule abrasive sur une pièce en rotation. Le <strong>colimaçonnage</strong> est appliqué sur les <strong>tambours de barillet</strong>, les rochets ou le fond des noyures.
-      </p>
-      <div class="finish-viewer-card">
-        <div class="finish-viewer-top">
-          <div>
-            <span class="finish-viewer-badge">Décoration 3D — Colimaçonnage</span>
-            <h4 class="finish-viewer-title">Spire Continue de Colimaçonnage sur Tambour de Barillet (ETA 6498-1)</h4>
-          </div>
-          <div class="finish-viewer-actions">
-            <button type="button" class="finish-ctrl-btn active" data-auto-viewer="viewer-colimacon">↻ Auto</button>
-            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-colimacon">↺ Recentrer</button>
-          </div>
-        </div>
-        <div class="finish-canvas-box" id="viewer-colimacon"></div>
-        <div class="finish-viewer-caption">
-          Tambour de barillet extrait du calibre ETA 6498-1 orné d'une fine spirale concentrique continue (colimaçonnage).
-        </div>
+      <h3>7.4 Colimaçonnage</h3>
+      <p>Spirale concentrique continue sur tambours, rochets ou noyures.</p>
+      <div class="blender-slot-card">
+        <div class="blender-slot-title">3D Blender — Colimaçonnage (en attente du modèle dédié)</div>
+        <div class="blender-slot-box" data-glb="">Slot 3D vide — à renseigner avec le .glb Blender</div>
       </div>
 
-      <!-- 7.5 GUILLOCHAGE -->
-      <h3>7.5 Le Guillochage</h3>
-      <p>
-        Gravure géométrique répétitive réalisée au tour à guillocher (manuelle ou CNC). En horlogerie, le <strong>guillochage</strong> est la décoration emblématique des <strong>cadrans</strong> (motifs <em>Clous de Paris</em>, <em>grain d'orge</em>, <em>vagues</em>), mais peut également orner les masses oscillantes et certains ponts d'exception.
-      </p>
-      <div class="finish-viewer-card">
-        <div class="finish-viewer-top">
-          <div>
-            <span class="finish-viewer-badge">Décoration 3D — Guillochage</span>
-            <h4 class="finish-viewer-title">Cadran Guilloché « Clous de Paris » avec Compteur Petite Seconde</h4>
-          </div>
-          <div class="finish-viewer-actions">
-            <button type="button" class="finish-ctrl-btn active" data-auto-viewer="viewer-guilloche">↻ Auto</button>
-            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-guilloche">↺ Recentrer</button>
-          </div>
-        </div>
-        <div class="finish-canvas-box" id="viewer-guilloche"></div>
-        <div class="finish-viewer-caption">
-          Disque de cadran argenté avec rehaut poli et gravure géométrique guillochée en relief : pivotez pour observer le jeu d'ombre et de lumière dans les facettes.
-        </div>
+      <h3>7.5 Guillochage</h3>
+      <p>Gravure géométrique répétitive (notamment sur cadrans et masses oscillantes).</p>
+      <div class="blender-slot-card">
+        <div class="blender-slot-title">3D Blender — Guillochage (en attente du modèle dédié)</div>
+        <div class="blender-slot-box" data-glb="">Slot 3D vide — à renseigner avec le .glb Blender</div>
       </div>
 
-      <!-- 8. LEXIQUE TECHNIQUE -->
       <h2 id="sec8">8. Lexique Technique d'Atelier</h2>
       <div class="tech-doc-box">
-        <h3>Repères terminologiques essentiels</h3>
+        <h3>Termes clés</h3>
         <ul>
-          <li><strong>Adoucissage :</strong> opération intermédiaire consistant à éliminer les stries de lime ou d'usinage à l'aide d'abrasifs fins avant le polissage final.</li>
-          <li><strong>Avivage :</strong> polissage final de haute brillance exécuté au bois tendre et à la pâte diamantée.</li>
-          <li><strong>Cabron :</strong> bâtonnet de bois dur ou tendre (buis, gentiane, hêtre) recouvert de cuir ou de papier abrasif utilisé pour l'anglage et le satinage manuel.</li>
-          <li><strong>Épilamage :</strong> dépôt d'un film fluoré nanoscopique modifiant la tension superficielle des composants (échappement, rubis) pour empêcher l'étalement des huiles.</li>
-          <li><strong>Roulage (des pivots) :</strong> écrouissage mécanique d'un pivot en acier trempé entre une meule en carbure et une contre-broche afin d'abaisser la rugosité et d'accroître la résistance à l'usure.</li>
-          <li><strong>Tonnellation (tribofinition) :</strong> polissage en vrac dans un tonneau rotatif rempli de médias abrasifs ou de billes d'acier pour les petites pièces (goupilles, vis).</li>
+          <li><strong>Adoucissage :</strong> préparation de surface par abrasifs fins avant le polissage final.</li>
+          <li><strong>Avivage :</strong> lustrage final au bois et pâte abrasive.</li>
+          <li><strong>Cabron :</strong> bâtonnet de bois garni d'abrasif ou de cuir.</li>
+          <li><strong>Épilamage :</strong> traitement de surface limitant l'étalement des huiles.</li>
+          <li><strong>Roulage :</strong> écrouissage et polissage des pivots.</li>
+          <li><strong>Tonnellation :</strong> polissage en vrac au tonneau.</li>
         </ul>
       </div>
 
-      <!-- 9. EX CHAPITRE 1 DÉPLACÉ EN FIN DE MODULE -->
       <h2 id="f1">9. Les Trois Grandes Étapes du Cycle de Fabrication</h2>
-      <p>
-        Tout composant horloger suit chronologiquement une séquence de transformation rigoureuse, du métal brut à la terminaison haute horlogerie :
-      </p>
       <ul>
-        <li><strong>1° Ébauche (Mise en forme primaire) :</strong>
-          <ul>
-            <li><em>Laminage :</em> Réduction de l'épaisseur du métal en bandes calibrées.</li>
-            <li><em>Emboutissage :</em> Déformation plastique sous presse.</li>
-            <li><em>Poinçonnage / Découpage :</em> Détourage initial des formes brutes.</li>
-          </ul>
-        </li>
-        <li><strong>2° Finition Dimensionnelle (Usinage de précision) :</strong>
-          <ul>
-            <li><em>Tournage &amp; Fraise :</em> En méthode conventionnelle ou sur centres d'usinage CNC multi-axes.</li>
-            <li><em>Électroérosion :</em> Découpe par fil électrique pour les profils étroits et aciers trempés.</li>
-          </ul>
-        </li>
-        <li><strong>3° Finitions Esthétiques &amp; Traitements de Surface :</strong>
-          <ul>
-            <li><em>Décoration traditionnelle :</em> Côtes de Genève, perlage, soleillage, anglage main, polissage miroir (poli noir).</li>
-            <li><em>Traitements galvaniques :</em> Dorage, rhodiage, nickelage pour la protection et l'esthétique.</li>
-          </ul>
-        </li>
+        <li><strong>1° Ébauche :</strong> laminage, emboutissage, poinçonnage / découpage.</li>
+        <li><strong>2° Finition Dimensionnelle :</strong> tournage, fraisage, électroérosion.</li>
+        <li><strong>3° Finitions Esthétiques &amp; Traitements de Surface :</strong> décoration traditionnelle et traitements galvaniques.</li>
       </ul>
 
-      <!-- 10. EX CHAPITRE 2 DÉPLACÉ EN FIN DE MODULE -->
       <h2 id="f2">10. Technologies Avancées &amp; Micro-Fabrication</h2>
       <ul>
-        <li><strong>Technologie LIGA / UV-LIGA :</strong> Croissance galvanique à travers un moule photolithographique pour des pièces complexes et ajourées en nickel-phosphore.</li>
-        <li><strong>Composants en Silicium :</strong> Gravure par faisceau plasma (DRIE) pour des spiraux, ancres et roues d'échappement amagnétiques et sans lubrification.</li>
-        <li><strong>Rubis et Saphirs Synthétiques :</strong> Usinage par ultrasons et diamant pour les paliers de rouage et les glaces de protection.</li>
+        <li><strong>Technologie LIGA / UV-LIGA :</strong> croissance galvanique sur moule photolithographique.</li>
+        <li><strong>Composants en Silicium :</strong> gravure plasma (DRIE) amagnétique et sans lubrification.</li>
+        <li><strong>Rubis et Saphirs Synthétiques :</strong> usinage par ultrasons et diamant.</li>
       </ul>
 
     </div>
   </div>
 
-  <!-- ================= NAVIGAZIONE INFERIORE E CONTATTI ================= -->
-  <div style="margin-top: 40px; padding-top: 24px; border-top: 2px dashed #b0c4de; text-align: center;">
-    <p style="font-family: 'Kalam', cursive, sans-serif; font-size: 15pt; color: #900c3f; font-weight: 700; margin-bottom: 20px;">
-      🏁 Fin du Module 06 : L'usinage horloger suisse, les finitions et les décorations n'ont plus de secrets pour vous.
-    </p>
-
-    <div style="background-color: #f4f7fa; border: 1px solid #c8d7e6; border-radius: 8px; padding: 20px; max-width: 650px; margin: 0 auto 28px auto; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
-      <p style="font-family: 'Inter', sans-serif; font-size: 11pt; color: #1b365d; margin: 0 0 8px 0; font-weight: 700;">
-        L'univers horloger est infini... Poursuivons l'échange !
-      </p>
-      <p style="font-family: 'Inter', sans-serif; font-size: 9.5pt; color: #5a6b7c; margin: 0 0 16px 0; line-height: 1.5;">
-        Ce manuel rassemble les principes fondamentaux de l'usinage et des finitions horlogères, mais il serait impossible de résumer toute la richesse de cet art en un seul chapitre. Si vous avez des questions techniques, ma porte reste ouverte : écrivez-moi à <strong>swisstime.expert@gmail.com</strong>.
-      </p>
-      <a href="mailto:swisstime.expert@gmail.com" style="display: inline-block; background-color: #d9534f; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 9.5pt; font-weight: 600;">
-        ✉️ Contacter l'Expert
-      </a>
-    </div>
-
-    <div class="btn-nav-row" style="justify-content: center; gap: 20px;">
-      <a href="index.html" class="btn-nav" style="background-color: #5a6b7c; color: white; padding: 12px 24px; font-size: 11pt;">📋 Retour à l'Index</a>
-      <a href="_007-Habillage.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Passer au Module 07 : L'Habillage ➔</a>
-    </div>
+  <div class="btn-nav-row" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #b0c4de; justify-content: flex-end;">
+    <a href="_007-Habillage.html" class="btn-nav" style="background-color: #2c4d75; color: white; padding: 12px 24px; font-size: 11pt;">Passer au Module 07 : L'Habillage ➔</a>
   </div>
 
   <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
 
+  <!-- Carica un .glb solo quando l'attributo data-glb di uno slot viene valorizzato -->
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-    const ETA_MODEL_URL = '../ETA6498-1_Web.glb';
-
-    // Un solo WebGLRenderer offscreen condiviso: elimina il limite browser di 8 contesti WebGL simultanei
-    const sharedRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    sharedRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    sharedRenderer.toneMapping = THREE.ACESFilmicToneMapping;
-    sharedRenderer.toneMappingExposure = 1.32;
-
-    const pmrem = new THREE.PMREMGenerator(sharedRenderer);
-    const sharedEnvMap = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-
-    // Proietta coordinate UV sulla faccia piatta reale della geometria (usando la normale media dominante)
-    function applyFacePlanarUVs(geometry) {
-      const pos = geometry.attributes.position;
-      if (!pos) return;
-      geometry.computeVertexNormals();
-      const norm = geometry.attributes.normal;
-
-      let nx = 0, ny = 0, nz = 0;
-      for (let i = 0; i < norm.count; i++) {
-        nx += Math.abs(norm.getX(i));
-        ny += Math.abs(norm.getY(i));
-        nz += Math.abs(norm.getZ(i));
-      }
-
-      geometry.computeBoundingBox();
-      const bb = geometry.boundingBox;
-      const size = new THREE.Vector3();
-      bb.getSize(size);
-
-      // L'asse normale dominante è lo spessore; gli altri due assi formano il piano della superficie lavorata
-      let uAxis = 'x', vAxis = 'z';
-      if (nx >= ny && nx >= nz) {
-        uAxis = 'y';
-        vAxis = 'z';
-      } else if (nz >= nx && nz >= ny) {
-        uAxis = 'x';
-        vAxis = 'y';
-      } else {
-        uAxis = 'x';
-        vAxis = 'z';
-      }
-
-      const spanU = Math.max(size[uAxis], 0.0001);
-      const spanV = Math.max(size[vAxis], 0.0001);
-      const span = Math.max(spanU, spanV);
-
-      const uvs = new Float32Array(pos.count * 2);
-      for (let i = 0; i < pos.count; i++) {
-        const coord = { x: pos.getX(i), y: pos.getY(i), z: pos.getZ(i) };
-        // Centra l'UV intorno a (0.5, 0.5) così cerchi e raggi partono esattamente dal centro del pezzo
-        uvs[i * 2] = 0.5 + (coord[uAxis] - (bb.min[uAxis] + bb.max[uAxis]) * 0.5) / span;
-        uvs[i * 2 + 1] = 0.5 + (coord[vAxis] - (bb.min[vAxis] + bb.max[vAxis]) * 0.5) / span;
-      }
-      geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
-    }
-
-    // Genera texture ad alta risoluzione con alto contrasto per ogni lavorazione
-    function createDecorationTexture(patternType) {
-      const size = 1024;
-      const canvas = document.createElement('canvas');
-      canvas.width = size;
-      canvas.height = size;
-      const ctx = canvas.getContext('2d');
-
-      ctx.fillStyle = '#c8d1dc';
-      ctx.fillRect(0, 0, size, size);
-
-      if (patternType === 'flancs') {
-        for (let y = 0; y < size; y += 2) {
-          const v = 165 + Math.sin(y * 0.85) * 38 + ((y * 29) % 21) - 10;
-          ctx.fillStyle = `rgb(${v},${v + 4},${v + 10})`;
-          ctx.fillRect(0, y, size, 2);
-        }
-      } else if (patternType === 'perlage') {
-        ctx.fillStyle = '#b4becb';
-        ctx.fillRect(0, 0, size, size);
-        const stepX = 52;
-        const stepY = 44;
-        const r = 34;
-        for (let row = -1; row < size / stepY + 2; row++) {
-          const offsetX = (row % 2) * (stepX * 0.5);
-          for (let col = -1; col < size / stepX + 2; col++) {
-            const cx = col * stepX + offsetX;
-            const cy = row * stepY;
-            const grad = ctx.createRadialGradient(cx - r * 0.28, cy - r * 0.28, r * 0.06, cx, cy, r);
-            grad.addColorStop(0, '#ffffff');
-            grad.addColorStop(0.52, '#c0cad6');
-            grad.addColorStop(0.86, '#6f7c8c');
-            grad.addColorStop(1, '#333d4b');
-            ctx.beginPath();
-            ctx.arc(cx, cy, r, 0, Math.PI * 2);
-            ctx.fillStyle = grad;
-            ctx.fill();
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = 'rgba(15, 23, 42, 0.65)';
-            ctx.stroke();
-          }
-        }
-      } else if (patternType === 'soleillage') {
-        const cx = size / 2;
-        const cy = size / 2;
-        const rays = 240;
-        for (let i = 0; i < rays; i++) {
-          const angle = (i / rays) * Math.PI * 2;
-          const shade = Math.round(160 + Math.sin(angle * 4) * 52 + (i % 2 === 0 ? 26 : -26));
-          ctx.strokeStyle = `rgb(${shade},${shade + 5},${shade + 12})`;
-          ctx.lineWidth = 3.4;
-          ctx.beginPath();
-          ctx.moveTo(cx, cy);
-          ctx.lineTo(cx + Math.cos(angle) * (size * 0.8), cy + Math.sin(angle) * (size * 0.8));
-          ctx.stroke();
-        }
-      } else if (patternType === 'cotes') {
-        const stripeW = 86;
-        for (let x = 0; x < size; x += stripeW) {
-          const grad = ctx.createLinearGradient(x, 0, x + stripeW, 0);
-          grad.addColorStop(0, '#556273');
-          grad.addColorStop(0.22, '#f8fafc');
-          grad.addColorStop(0.76, '#adb7c4');
-          grad.addColorStop(1, '#434e5e');
-          ctx.fillStyle = grad;
-          ctx.fillRect(x, 0, stripeW, size);
-
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
-          ctx.lineWidth = 1.6;
-          for (let y = 0; y < size; y += 6) {
-            ctx.beginPath();
-            ctx.moveTo(x + 2, y);
-            ctx.bezierCurveTo(x + stripeW * 0.35, y - 5, x + stripeW * 0.65, y + 5, x + stripeW - 2, y);
-            ctx.stroke();
-          }
-        }
-      } else if (patternType === 'colimacon') {
-        const cx = size / 2;
-        const cy = size / 2;
-        ctx.fillStyle = '#aeb8c4';
-        ctx.fillRect(0, 0, size, size);
-        ctx.lineWidth = 3.6;
-        const maxR = size * 0.72;
-        const turns = 38;
-        ctx.beginPath();
-        for (let a = 0; a < turns * Math.PI * 2; a += 0.08) {
-          const r = 16 + (a / (turns * Math.PI * 2)) * maxR;
-          const x = cx + Math.cos(a) * r;
-          const y = cy + Math.sin(a) * r;
-          if (a === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = '#f8fafc';
-        ctx.stroke();
-
-        ctx.beginPath();
-        for (let a = 0; a < turns * Math.PI * 2; a += 0.08) {
-          const r = 20 + (a / (turns * Math.PI * 2)) * maxR;
-          const x = cx + Math.cos(a) * r;
-          const y = cy + Math.sin(a) * r;
-          if (a === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = '#475569';
-        ctx.stroke();
-      } else if (patternType === 'circulaire') {
-        const cx = size / 2;
-        const cy = size / 2;
-        ctx.fillStyle = '#e0ad48';
-        ctx.fillRect(0, 0, size, size);
-        for (let r = 8; r < size * 0.75; r += 5) {
-          ctx.lineWidth = 2.6;
-          ctx.strokeStyle = r % 10 === 0 ? '#fff0b3' : '#9c6b16';
-          ctx.beginPath();
-          ctx.arc(cx, cy, r, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-      } else if (patternType === 'guilloche') {
-        ctx.fillStyle = '#d4dce6';
-        ctx.fillRect(0, 0, size, size);
-        const cell = 36;
-        for (let y = 0; y <= size; y += cell) {
-          for (let x = 0; x <= size; x += cell) {
-            ctx.beginPath();
-            ctx.moveTo(x + cell / 2, y);
-            ctx.lineTo(x + cell, y + cell / 2);
-            ctx.lineTo(x + cell / 2, y + cell);
-            ctx.lineTo(x, y + cell / 2);
-            ctx.closePath();
-            ctx.fillStyle = ((x + y) / cell) % 2 === 0 ? '#f8fafc' : '#8d99a8';
-            ctx.fill();
-            ctx.strokeStyle = '#334155';
-            ctx.lineWidth = 1.8;
-            ctx.stroke();
-          }
-        }
-      }
-
-      const tex = new THREE.CanvasTexture(canvas);
-      tex.wrapS = THREE.RepeatWrapping;
-      tex.wrapT = THREE.RepeatWrapping;
-      tex.colorSpace = THREE.SRGBColorSpace;
-      tex.needsUpdate = true;
-      return tex;
-    }
-
-    function buildDialGuillocheGroup(finishMat) {
-      const group = new THREE.Group();
-
-      const dialGeo = new THREE.CylinderGeometry(1.15, 1.15, 0.05, 96);
-      applyFacePlanarUVs(dialGeo);
-      const dialMesh = new THREE.Mesh(dialGeo, finishMat);
-      group.add(dialMesh);
-
-      const bezelGeo = new THREE.TorusGeometry(1.15, 0.032, 16, 96);
-      bezelGeo.rotateX(Math.PI / 2);
-      const bezelMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.85, roughness: 0.18 });
-      group.add(new THREE.Mesh(bezelGeo, bezelMat));
-
-      const subRingGeo = new THREE.TorusGeometry(0.32, 0.015, 12, 64);
-      subRingGeo.rotateX(Math.PI / 2);
-      const subRing = new THREE.Mesh(subRingGeo, bezelMat);
-      subRing.position.set(0, 0.03, 0.54);
-      group.add(subRing);
-
-      return group;
-    }
-
-    const SCREW_EXCLUDE_RE = /screw|\bvis\b|schraube|boulon|pin\b|goupille|stift|jewel|ruby|rubis|washer|rondelle/i;
-
-    // Estrae il componente principale corrispondente; se il nome non combacia, usa la mesh più grande di fallback
-    function pickMainComponentMesh(rankedAllMeshes, includeRegex, fallbackRankIndex = 0) {
-      const filtered = rankedAllMeshes.filter((m) => includeRegex.test(m.fullName));
-      if (filtered.length > 0) {
-        return [filtered[0]];
-      }
-      if (rankedAllMeshes.length > 0) {
-        return [rankedAllMeshes[fallbackRankIndex % rankedAllMeshes.length]];
-      }
-      return [];
-    }
-
-    const VIEWER_CONFIGS = [
-      {
-        id: 'viewer-flancs',
-        match: /train.*bridge|gear.*bridge|pont.*rouage|r[aä]derwerkbr/i,
-        fallbackRank: 2,
-        pattern: 'flancs',
-        color: 0xd0d8e2,
-        metalness: 0.72,
-        roughness: 0.32,
-        edgeHighlight: false
-      },
-      {
-        id: 'viewer-anglage',
-        match: /barrel.*bridge|pont.*barillet|federhausbr/i,
-        fallbackRank: 1,
-        pattern: null,
-        color: 0xcbd5e1,
-        metalness: 0.78,
-        roughness: 0.22,
-        edgeHighlight: true
-      },
-      {
-        id: 'viewer-polinoir',
-        match: /ratchet|rochet|sperrrad/i,
-        fallbackRank: 3,
-        pattern: null,
-        color: 0x222832,
-        metalness: 0.92,
-        roughness: 0.06,
-        edgeHighlight: false
-      },
-      {
-        id: 'viewer-roues',
-        match: /center.*wheel|centre.*wheel|roue.*centre|minutenrad/i,
-        fallbackRank: 4,
-        pattern: 'circulaire',
-        color: 0xe6b450,
-        metalness: 0.62,
-        roughness: 0.32,
-        edgeHighlight: false
-      },
-      {
-        id: 'viewer-perlage',
-        match: /main\s*plate|base\s*plate|platine|werkplatte|\bplate\b/i,
-        fallbackRank: 0,
-        pattern: 'perlage',
-        color: 0xdbe3ec,
-        metalness: 0.62,
-        roughness: 0.34,
-        edgeHighlight: false
-      },
-      {
-        id: 'viewer-soleillage',
-        match: /ratchet|rochet|sperrrad/i,
-        fallbackRank: 3,
-        pattern: 'soleillage',
-        color: 0xdbe3ec,
-        metalness: 0.68,
-        roughness: 0.28,
-        edgeHighlight: false
-      },
-      {
-        id: 'viewer-cotes',
-        match: /barrel.*bridge|pont.*barillet|federhausbr/i,
-        fallbackRank: 1,
-        pattern: 'cotes',
-        color: 0xdbe3ec,
-        metalness: 0.66,
-        roughness: 0.30,
-        edgeHighlight: false
-      },
-      {
-        id: 'viewer-colimacon',
-        match: /barrel|tambour|barillet|federhaus/i,
-        fallbackRank: 2,
-        pattern: 'colimacon',
-        color: 0xd8e0ea,
-        metalness: 0.68,
-        roughness: 0.28,
-        edgeHighlight: false
-      },
-      {
-        id: 'viewer-guilloche',
-        customDial: true,
-        pattern: 'guilloche',
-        color: 0xe2e8f0,
-        metalness: 0.62,
-        roughness: 0.32,
-        edgeHighlight: false
-      }
-    ];
-
-    const activeScenes = [];
-
-    new GLTFLoader().load(
-      ETA_MODEL_URL,
-      (gltf) => {
-        const root = gltf.scene;
-        const rankedAllMeshes = [];
-
-        root.traverse((child) => {
-          if (!child.isMesh) return;
-          let fullName = '';
-          let cur = child;
-          while (cur) {
-            if (cur.name) fullName += ' ' + cur.name;
-            cur = cur.parent;
-          }
-          fullName = fullName.trim();
-          if (SCREW_EXCLUDE_RE.test(fullName)) return;
-
-          child.updateMatrixWorld(true);
-          const b = new THREE.Box3().setFromObject(child);
-          const diag = b.getSize(new THREE.Vector3()).length();
-          if (diag < 0.005) return;
-
-          rankedAllMeshes.push({ mesh: child, fullName, diag });
-        });
-
-        // Ordina dalla mesh più grande (platina, ponti, bariletto, ruote) alla più piccola
-        rankedAllMeshes.sort((a, b) => b.diag - a.diag);
-
-        VIEWER_CONFIGS.forEach((cfg) => {
-          const container = document.getElementById(cfg.id);
-          if (!container) return;
-
-          const displayCanvas = document.createElement('canvas');
-          displayCanvas.style.width = '100%';
-          displayCanvas.style.height = '100%';
-          displayCanvas.style.display = 'block';
-          container.appendChild(displayCanvas);
-          const displayCtx = displayCanvas.getContext('2d');
-
-          const scene = new THREE.Scene();
-          scene.environment = sharedEnvMap;
-
-          const camera = new THREE.PerspectiveCamera(
-            34,
-            (container.clientWidth || 800) / (container.clientHeight || 430),
-            0.01,
-            100
-          );
-          camera.position.set(0, 1.85, 2.55);
-
-          scene.add(new THREE.HemisphereLight(0xffffff, 0x64748b, 1.4));
-          const keyLight = new THREE.DirectionalLight(0xffffff, 2.0);
-          keyLight.position.set(4, 8, 5);
-          scene.add(keyLight);
-          const fillLight = new THREE.DirectionalLight(0xdbeafe, 1.2);
-          fillLight.position.set(-5, 4, -4);
-          scene.add(fillLight);
-
-          const mapTexture = cfg.pattern ? createDecorationTexture(cfg.pattern) : null;
-          const finishMat = new THREE.MeshStandardMaterial({
-            color: cfg.color,
-            map: mapTexture,
-            bumpMap: mapTexture,
-            bumpScale: mapTexture ? 0.025 : 0,
-            metalness: cfg.metalness,
-            roughness: cfg.roughness,
-            side: THREE.DoubleSide
-          });
-
-          const partGroup = new THREE.Group();
-
-          if (cfg.customDial) {
-            partGroup.add(buildDialGuillocheGroup(finishMat));
-          } else {
-            const matched = pickMainComponentMesh(rankedAllMeshes, cfg.match, cfg.fallbackRank);
-            matched.forEach(({ mesh }) => {
-              mesh.updateMatrixWorld(true);
-              const geomClone = mesh.geometry.clone();
-              applyFacePlanarUVs(geomClone);
-              const clone = new THREE.Mesh(geomClone, finishMat);
-              clone.applyMatrix4(mesh.matrixWorld);
-              partGroup.add(clone);
-
-              if (cfg.edgeHighlight) {
-                const edges = new THREE.EdgesGeometry(geomClone, 28);
-                const line = new THREE.LineSegments(
-                  edges,
-                  new THREE.LineBasicMaterial({ color: 0xffd43b })
-                );
-                line.applyMatrix4(mesh.matrixWorld);
-                partGroup.add(line);
-              }
-            });
-          }
-
-          const box = new THREE.Box3().setFromObject(partGroup);
-          const size = box.getSize(new THREE.Vector3());
-          const maxDim = Math.max(size.x, size.y, size.z) || 1;
-          partGroup.scale.setScalar(2.05 / maxDim);
-
-          const sBox = new THREE.Box3().setFromObject(partGroup);
-          const sSize = sBox.getSize(new THREE.Vector3());
-          if (!cfg.customDial && sSize.z < sSize.y && sSize.z < sSize.x) {
-            partGroup.rotation.x = -Math.PI / 2;
-          }
-
-          const cBox = new THREE.Box3().setFromObject(partGroup);
-          const center = cBox.getCenter(new THREE.Vector3());
-          partGroup.position.sub(center);
-
-          scene.add(partGroup);
-
-          const controls = new OrbitControls(camera, displayCanvas);
-          controls.enableDamping = true;
-          controls.dampingFactor = 0.06;
-          controls.autoRotate = true;
-          controls.autoRotateSpeed = 1.45;
-          controls.enablePan = false;
-
-          const autoBtn = document.querySelector(`[data-auto-viewer="${cfg.id}"]`);
-          if (autoBtn) {
-            autoBtn.addEventListener('click', () => {
-              controls.autoRotate = !controls.autoRotate;
-              autoBtn.classList.toggle('active', controls.autoRotate);
-            });
-          }
-
-          const resetBtn = document.querySelector(`[data-reset-viewer="${cfg.id}"]`);
-          if (resetBtn) {
-            resetBtn.addEventListener('click', () => {
-              camera.position.set(0, 1.85, 2.55);
-              controls.target.set(0, 0, 0);
-              controls.update();
-            });
-          }
-
-          activeScenes.push({ container, displayCanvas, displayCtx, scene, camera, controls });
-        });
-      },
-      undefined,
-      (err) => console.error('Erreur chargement GLB pour finitions:', err)
+    const slots = [...document.querySelectorAll('.blender-slot-box')].filter(
+      (el) => el.dataset.glb && el.dataset.glb.trim() !== ''
     );
 
-    function animateAll() {
-      requestAnimationFrame(animateAll);
-      const dpr = Math.min(window.devicePixelRatio, 2);
+    if (slots.length > 0) {
+      const loader = new GLTFLoader();
+      const entries = [];
 
-      activeScenes.forEach(({ container, displayCanvas, displayCtx, scene, camera, controls }) => {
-        const w = container.clientWidth;
-        const h = container.clientHeight;
-        if (!w || !h) return;
+      slots.forEach((container) => {
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(35, container.clientWidth / container.clientHeight, 0.01, 100);
+        camera.position.set(0, 1.5, 2.6);
 
-        // Renderizza solo le finestre visibili nello schermo (o vicine) per fluidità massima
-        const rect = container.getBoundingClientRect();
-        if (rect.bottom < -250 || rect.top > window.innerHeight + 250) return;
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.3;
+        container.innerHTML = '';
+        container.appendChild(renderer.domElement);
 
-        const targetW = Math.floor(w * dpr);
-        const targetH = Math.floor(h * dpr);
-        if (displayCanvas.width !== targetW || displayCanvas.height !== targetH) {
-          displayCanvas.width = targetW;
-          displayCanvas.height = targetH;
-          camera.aspect = w / h;
-          camera.updateProjectionMatrix();
-        }
+        const pmrem = new THREE.PMREMGenerator(renderer);
+        scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x64748b, 1.3));
 
-        controls.update();
-        sharedRenderer.setSize(w, h, false);
-        sharedRenderer.render(scene, camera);
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.autoRotate = true;
 
-        displayCtx.clearRect(0, 0, targetW, targetH);
-        displayCtx.drawImage(sharedRenderer.domElement, 0, 0, targetW, targetH);
+        loader.load(container.dataset.glb.trim(), (gltf) => {
+          const root = gltf.scene;
+          const box = new THREE.Box3().setFromObject(root);
+          const maxDim = Math.max(...box.getSize(new THREE.Vector3()).toArray()) || 1;
+          root.scale.setScalar(1.9 / maxDim);
+          const cBox = new THREE.Box3().setFromObject(root);
+          root.position.sub(cBox.getCenter(new THREE.Vector3()));
+          scene.add(root);
+        });
+
+        entries.push({ scene, camera, renderer, controls });
       });
+
+      function loop() {
+        requestAnimationFrame(loop);
+        entries.forEach(({ scene, camera, renderer, controls }) => {
+          controls.update();
+          renderer.render(scene, camera);
+        });
+      }
+      loop();
     }
-    animateAll();
   </script>
 
   <script src="../_ricerca.js"></script>
