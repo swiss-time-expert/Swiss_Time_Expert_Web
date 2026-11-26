@@ -137,7 +137,6 @@
       border: none;
     }
 
-    /* Barra comandi HUD interna al canvas: sempre visibile anche in Plein Écran */
     .train-hud-dock {
       position: absolute;
       bottom: 14px;
@@ -199,7 +198,6 @@
       margin-bottom: 10px;
     }
 
-    /* Popup scheda tecnica componente al clic */
     #train-spec-popup {
       position: absolute;
       top: 16px;
@@ -222,7 +220,6 @@
       display: block;
     }
 
-    /* Scala maggiore in modalità Plein Écran */
     #canvas-container-train:fullscreen #train-spec-popup,
     #canvas-container-train:-webkit-full-screen #train-spec-popup {
       top: 28px;
@@ -307,7 +304,7 @@
       text-align: right;
     }
 
-    /* Visualizzatore 3D ETA 6498-1 (Posizione Verticale + Espansione Orizzontale + HUD) */
+    /* Visualizzatore 3D ETA 6498-1 (Sollevato sopra i tasti + Apertura Orizzontale) */
     .eta-module-wrapper {
       background: #ffffff;
       border: 1px solid #dcdcdc;
@@ -374,7 +371,7 @@
     }
     #canvas-container-eta {
       width: 100%;
-      height: 560px;
+      height: 610px;
       background-color: #ffffff;
       border: 1px solid #e4e8ee;
       border-radius: 8px;
@@ -396,10 +393,9 @@
       background-color: #ffffff;
     }
 
-    /* Tasti in alto rispetto allo slider Exploso e volume Exploso in basso, ben separati */
     #canvas-container-eta .eta-hud-buttons {
       position: absolute;
-      bottom: 66px;
+      bottom: 62px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
@@ -411,7 +407,7 @@
       backdrop-filter: blur(8px);
       border: 1px solid rgba(212, 175, 55, 0.45);
       border-radius: 10px;
-      padding: 7px 10px;
+      padding: 6px 10px;
       z-index: 26;
       max-width: calc(100% - 24px);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
@@ -419,7 +415,7 @@
 
     #canvas-container-eta .eta-canvas-explode-dock {
       position: absolute;
-      bottom: 14px;
+      bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
@@ -430,7 +426,7 @@
       backdrop-filter: blur(8px);
       border: 1px solid rgba(212, 175, 55, 0.45);
       border-radius: 10px;
-      padding: 7px 14px;
+      padding: 6px 14px;
       z-index: 25;
       color: #f8fafc;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
@@ -605,6 +601,61 @@
     .eta-credits-box a:hover {
       color: #d9534f;
     }
+
+    /* Sezione Atelier Interactif d'Assemblage (sostituisce la vecchia immagine statica con i pin) */
+    .atelier-embed-card {
+      background: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-top: 4px solid #b8860b;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 25px 0;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .atelier-embed-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .atelier-embed-title {
+      margin: 0;
+      color: #1a365d;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .atelier-embed-sub {
+      margin: 2px 0 0 0;
+      color: #5a6778;
+      font-size: 0.82rem;
+    }
+    .atelier-open-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #1a365d;
+      color: #ffffff !important;
+      text-decoration: none;
+      padding: 7px 13px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      transition: background 0.15s;
+    }
+    .atelier-open-link:hover {
+      background: #b8860b;
+    }
+    .atelier-iframe {
+      width: 100%;
+      height: 830px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      display: block;
+      background: #0b1933;
+    }
   </style>
 
   <!-- Import Map unico per Three.js r160 (condiviso tra Treno, ETA 6498-1 e Barillet senza duplicati) -->
@@ -681,7 +732,7 @@
         @media (max-width: 768px) { .ste-grid { grid-template-columns: 1fr; gap: 15px; } }
       </style>
 
-      <!-- 1. MODELLO 3D INTERATTIVO DEL TRENO IN ALTO (DARK STUDIO + FULLSCREEN + POPUP + HUD) -->
+      <!-- 1. MODELLO 3D INTERATTIVO DEL TRENO IN ALTO -->
       <div class="ste-container">
         <div class="train-studio-card">
           <div class="train-studio-header">
@@ -697,7 +748,6 @@
               <div id="train-loader-text">Chargement de la chaîne cinématique 3D...</div>
             </div>
 
-            <!-- Popup scheda tecnica al clic -->
             <div id="train-spec-popup" role="dialog" aria-live="polite">
               <div class="train-popup-top">
                 <span class="train-popup-badge">Fiche Composant</span>
@@ -718,7 +768,6 @@
               </div>
             </div>
 
-            <!-- Barra strumenti HUD interna: sempre visibile anche a schermo intero -->
             <div class="train-hud-dock">
               <button type="button" class="train-btn active" id="train-tool-orbit" title="Pivoter le modèle">⟳ Pivoter</button>
               <button type="button" class="train-btn" id="train-tool-pan" title="Déplacer latéralement">✋ Déplacer</button>
@@ -757,7 +806,7 @@
         </div>
       </div>
 
-      <!-- 1B. MODELLO 3D INTERATTIVO MOVIMENTO COMPLETO ETA 6498-1 SUBITO DOPO IL TRENO -->
+      <!-- 1B. MODELLO 3D INTERATTIVO MOVIMENTO COMPLETO ETA 6498-1 (POSIZIONE ALZATA SOPRA I TASTI) -->
       <div class="eta-module-wrapper" id="eta-6498-section">
         <div class="eta-top-bar">
           <div>
@@ -789,7 +838,6 @@
             <div id="eta-loader-text">Chargement du calibre ETA 6498-1...</div>
           </div>
 
-          <!-- Tasti in alto rispetto allo slider Exploso -->
           <div class="eta-hud-buttons">
             <button type="button" class="train-btn active" id="eta-tool-orbit" title="Pivoter le modèle">⟳ Pivoter</button>
             <button type="button" class="train-btn" id="eta-tool-pan" title="Déplacer latéralement">✋ Déplacer</button>
@@ -802,7 +850,6 @@
             <button type="button" class="train-btn" id="eta-fullscreen-btn" title="Plein écran">⛶ Plein Écran</button>
           </div>
 
-          <!-- Volume dell'esploso posizionato sotto i tasti senza sovrapposizioni -->
           <div class="eta-canvas-explode-dock">
             <label for="eta-explode-slider">⚙️ Exploso :</label>
             <input type="range" id="eta-explode-slider" min="0" max="100" value="0" step="0.5">
@@ -838,30 +885,23 @@
         </div>
       </div>
 
-      <!-- 2. IMMAGINE STATICA CON PIN -->
-      <div class="img-always-visible" style="background: #fff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-        <div class="interactive-wrapper" style="position: relative; width: 100%;">
-          <img src="../chaine-cinematique-mecanique.png" alt="Chaîne cinématique complète" style="width: 100%; height: auto; display: block; border-radius: 4px;">
-          <div class="pin-marker" style="top: 14%; left: 49%; position: absolute; z-index: 5;">1</div>
-          <div class="pin-marker" style="top: 46%; left: 51%; position: absolute; z-index: 5;">2</div>
-          <div class="pin-marker" style="top: 41%; left: 33%; position: absolute; z-index: 5;">3</div>
-          <div class="pin-marker" style="top: 56%; left: 44%; position: absolute; z-index: 5;">4</div>
-          <div class="pin-marker" style="top: 72%; left: 32%; position: absolute; z-index: 5;">5</div>
-          <div class="pin-marker" style="top: 76%; left: 59%; position: absolute; z-index: 5;">8</div>
-          <div class="pin-marker" style="top: 64%; left: 60%; position: absolute; z-index: 5;">9</div>
-          <div class="pin-marker" style="top: 38%; left: 81%; background: #1b365d; position: absolute; z-index: 5;">⚙️</div>
+      <!-- 2. ATELIER INTERACTIF D'ASSEMBLAGE PAR CYCLES (remplace l'ancienne image statique) -->
+      <div class="atelier-embed-card" id="atelier-assemblage-section">
+        <div class="atelier-embed-top">
+          <div>
+            <h3 class="atelier-embed-title">🛠️ Exercice Pratique 3D — Assemblage du Mouvement par Cycles (ETA 6498-1)</h3>
+            <p class="atelier-embed-sub">Prenez chaque composant sur l'établi (doigt ou souris) et assemblez-le sur la platine : les vis s'aimantent automatiquement.</p>
+          </div>
+          <a href="assemblage-eta6498.html" target="_blank" rel="noopener noreferrer" class="atelier-open-link">↗ Ouvrir l'atelier en pleine page</a>
         </div>
-      </div>
 
-      <div class="legend-grid">
-        <div class="legend-item"><span class="badge-mini">1</span> Barillet</div>
-        <div class="legend-item"><span class="badge-mini">2</span> Roue de centre</div>
-        <div class="legend-item"><span class="badge-mini">3</span> Roue de troisième</div>
-        <div class="legend-item"><span class="badge-mini">4</span> Roue de seconde</div>
-        <div class="legend-item"><span class="badge-mini">5</span> Roue d'échappement</div>
-        <div class="legend-item"><span class="badge-mini">8</span> Balancier</div>
-        <div class="legend-item"><span class="badge-mini">9</span> Spiral</div>
-        <div class="legend-item"><span class="badge-mini" style="background:#1b365d;">⚙️</span> Mécanisme de remontoir</div>
+        <iframe
+          src="assemblage-eta6498.html"
+          class="atelier-iframe"
+          title="Atelier Virtuel 3D — Assemblage Interactif Calibre ETA 6498-1"
+          allow="fullscreen"
+          loading="lazy">
+        </iframe>
       </div>
 
       <details class="image-popover">
@@ -1474,7 +1514,7 @@
     }
 
     // =========================================================================
-    // 1. VISUALIZZATORE 3D CALIBRE ETA 6498-1 (ORIENTAMENTO VERTICALE + APERTURA SULLA LARGHEZZA)
+    // 1. VISUALIZZATORE 3D CALIBRE ETA 6498-1 (POSIZIONE ALZATA SOPRA I TASTI)
     // =========================================================================
     const ETA_MODEL_URL = '../ETA6498-1_Web.glb';
     const etaContainer = document.getElementById('canvas-container-eta');
@@ -1489,7 +1529,10 @@
         0.01,
         1000
       );
-      cameraEta.position.set(1.6, 0.35, 4.3);
+      // Target abbassato a y = -0.42 così il movimento sale nella zona alta del canvas e non tocca i bottoni
+      const ETA_INIT_CAM_POS = new THREE.Vector3(1.65, -0.05, 4.65);
+      const ETA_INIT_TARGET = new THREE.Vector3(0, -0.42, 0);
+      cameraEta.position.copy(ETA_INIT_CAM_POS);
 
       const rendererEta = new THREE.WebGLRenderer({ antialias: true });
       rendererEta.setSize(etaContainer.clientWidth, etaContainer.clientHeight);
@@ -1524,6 +1567,8 @@
       controlsEta.dampingFactor = 0.06;
       controlsEta.autoRotate = false;
       controlsEta.autoRotateSpeed = 1.35;
+      controlsEta.target.copy(ETA_INIT_TARGET);
+      controlsEta.update();
 
       const etaToolOrbitBtn = document.getElementById('eta-tool-orbit');
       const etaToolPanBtn = document.getElementById('eta-tool-pan');
@@ -1601,7 +1646,6 @@
       let etaModelRoot = null;
       const etaExplodeItems = [];
       const etaPickableMeshes = [];
-      const etaInitialCamPos = new THREE.Vector3(1.6, 0.35, 4.3);
 
       let etaSelectedMesh = null;
       let etaPrevEmissive = null;
@@ -1691,7 +1735,7 @@
           lube: 'Lubrification d’origine (ne pas laver si livré prélubrifié ; sinon Moebius HP-1300 / graisse de barillet).'
         },
         {
-          pattern: /\bbarrel\b|barillet|federhaus/i,
+          pattern: /barrel|barillet|federhaus/i,
           fr: 'Barillet complet de mouvement',
           en: 'Movement barrel complete',
           de: 'Federhaus vollständig für Grundwerk',
@@ -1699,7 +1743,7 @@
           lube: 'Huile épaisse (Moebius HP-1300) aux pivots d’arbre.'
         },
         {
-          pattern: /ratchet\s*wheel|\bratchet\b|rochet|sperrrad/i,
+          pattern: /ratchet|rochet|sperrrad/i,
           fr: 'Rochet',
           en: 'Ratchet wheel',
           de: 'Sperrrad',
@@ -1739,7 +1783,7 @@
           lube: 'Huile épaisse (Moebius HP-1300) sous la vis et l’épaulement.'
         },
         {
-          pattern: /winding\s*stem|\bstem\b|tige.*remontoir|aufzugwelle/i,
+          pattern: /winding\s*stem|stem|tige.*remontoir|aufzugwelle/i,
           fr: 'Tige de remontoir',
           en: 'Winding stem',
           de: 'Aufzugwelle',
@@ -1928,6 +1972,7 @@
         if (!raw) return 'Composant du mouvement';
         return raw
           .replace(/\.(sldprt|sldasm|igs|iges|step|stp|glb|gltf|blend)$/i, '')
+          .replace(/^\d+[\s_-]*/, '')
           .replace(/[_-]+/g, ' ')
           .replace(/\s*\.\d+$/, '')
           .replace(/\s+/g, ' ')
@@ -2022,25 +2067,19 @@
         (gltf) => {
           etaModelRoot = gltf.scene;
 
-          // 1. Scala uniforme iniziale
           const rawBox = new THREE.Box3().setFromObject(etaModelRoot);
           const rawSize = rawBox.getSize(new THREE.Vector3());
           const maxDim = Math.max(rawSize.x, rawSize.y, rawSize.z) || 1;
-          etaModelRoot.scale.setScalar(2.6 / maxDim);
+          etaModelRoot.scale.setScalar(2.45 / maxDim);
 
-          // 2. Orienta il calibro in POSIZIONE VERTICALE (asse sottile allineato lungo X)
-          // così l'esploso a strati si sviluppa orizzontalmente lungo tutta la larghezza dello schermo
           const scaledBox = new THREE.Box3().setFromObject(etaModelRoot);
           const sSize = scaledBox.getSize(new THREE.Vector3());
           if (sSize.y <= sSize.x && sSize.y <= sSize.z) {
-            // Il movimento era disteso orizzontale (asse sottile Y): ruotiamo di 90° su Z per metterlo verticale
             etaModelRoot.rotation.z = Math.PI / 2;
           } else if (sSize.z <= sSize.x && sSize.z <= sSize.y) {
-            // Il movimento era piatto sul piano XY (asse sottile Z): ruotiamo di 90° su Y per metterlo verticale di taglio
             etaModelRoot.rotation.y = Math.PI / 2;
           }
 
-          // 3. Centra perfettamente nell'origine (0,0,0) dopo la rotazione verticale
           const uprightBox = new THREE.Box3().setFromObject(etaModelRoot);
           const uprightCenter = uprightBox.getCenter(new THREE.Vector3());
           etaModelRoot.position.sub(uprightCenter);
@@ -2068,10 +2107,8 @@
             }
           });
 
-          // Camera di partenza in leggero tre quarti frontale per apprezzare sia il calibro verticale sia l'apertura orizzontale
-          cameraEta.position.set(1.6, 0.35, 4.3);
-          etaInitialCamPos.copy(cameraEta.position);
-          controlsEta.target.set(0, 0, 0);
+          cameraEta.position.copy(ETA_INIT_CAM_POS);
+          controlsEta.target.copy(ETA_INIT_TARGET);
           controlsEta.update();
 
           loaderEl.style.opacity = '0';
@@ -2134,12 +2171,10 @@
           const shift = new THREE.Vector3();
 
           if (mode === 'sandwich' || mode === 'sandwich-inv') {
-            // Espansione orizzontale lungo l'asse X (tutta la larghezza dello schermo)
             const sign = mode === 'sandwich-inv' ? -1 : 1;
             const horizontalSpread = factor * 9.5 * sign;
             shift.set(item.worldOffset.x * horizontalSpread, 0, 0);
           } else {
-            // Esploso radiale 3D classico
             shift.copy(item.worldOffset).multiplyScalar(factor * 4.5);
           }
 
@@ -2164,8 +2199,8 @@
       etaAxisSel.addEventListener('change', updateEtaExplode);
 
       etaResetCamBtn.addEventListener('click', () => {
-        cameraEta.position.copy(etaInitialCamPos);
-        controlsEta.target.set(0, 0, 0);
+        cameraEta.position.copy(ETA_INIT_CAM_POS);
+        controlsEta.target.copy(ETA_INIT_TARGET);
         setEtaTool('orbit');
         controlsEta.update();
       });
