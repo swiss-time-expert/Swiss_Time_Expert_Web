@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="../_stile.css">
 
   <style>
-    /* Allineamento forzato */
     .header-card, .notebook-container {
       max-width: 1100px !important;
       margin: 0 auto !important;
@@ -19,13 +18,11 @@
       box-sizing: border-box;
     }
 
-    /* Stili per le Lingue */
     .lang-switcher { display: flex; gap: 8px; margin-right: 15px; }
     .lang-btn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 9pt; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; }
     .lang-btn:hover { background: rgba(255,255,255,0.3); }
     .lang-btn.active { background: #d9534f; border-color: #d9534f; box-shadow: 0 0 10px rgba(217, 83, 79, 0.5); pointer-events: none; }
 
-    /* Menu a Tendina */
     .dropdown { position: relative; display: inline-block; margin-right: 15px; }
     .dropbtn { background: rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: 10pt; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s; }
     .dropbtn:hover { background: rgba(255,255,255,0.3); }
@@ -35,7 +32,6 @@
     .dropdown-content a:hover { background-color: #e2e6ea; border-radius: 6px; color: #d9534f; }
     .dropdown:hover .dropdown-content { display: block; }
 
-    /* Sommario rapido dei capitoli */
     .toc-box {
       background: #f4f7fb;
       border: 1px solid #d5dfec;
@@ -72,7 +68,6 @@
       text-decoration: underline;
     }
 
-    /* Box di approfondimento tecnico con barra verde */
     .tech-doc-box {
       background: #f8f9fa;
       border-left: 5px solid #27ae60;
@@ -115,17 +110,26 @@
       background-color: #f8fafc;
     }
 
-    /* Finestra 3D per ogni lavorazione (componente estratto da ETA 6498-1 con finitura metallica) */
+    .decor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 18px;
+      margin: 20px 0 28px 0;
+    }
+
     .finish-viewer-card {
       background: #0d131f;
       border: 1px solid #24324a;
       border-left: 5px solid #d4af37;
       border-radius: 10px;
       padding: 14px 16px;
-      margin: 20px 0 28px 0;
+      margin: 18px 0 24px 0;
       color: #f8fafc;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       box-shadow: 0 8px 22px rgba(10, 18, 32, 0.16);
+    }
+    .decor-grid .finish-viewer-card {
+      margin: 0;
     }
     .finish-viewer-top {
       display: flex;
@@ -142,7 +146,7 @@
       border: 1px solid rgba(212, 175, 55, 0.45);
       padding: 2px 9px;
       border-radius: 999px;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -150,17 +154,13 @@
     }
     .finish-viewer-title {
       margin: 0;
-      font-size: 0.98rem;
+      font-size: 0.96rem;
       font-weight: 700;
       color: #ffffff;
     }
-    .finish-viewer-hint {
-      font-size: 0.78rem;
-      color: #94a3b8;
-    }
     .finish-canvas-box {
       width: 100%;
-      height: 290px;
+      height: 270px;
       border-radius: 8px;
       border: 1px solid #1e293b;
       background: radial-gradient(circle at center, #1e293b 0%, #090d16 100%);
@@ -168,12 +168,15 @@
       overflow: hidden;
       cursor: grab;
     }
+    .decor-grid .finish-canvas-box {
+      height: 235px;
+    }
     .finish-canvas-box:active {
       cursor: grabbing;
     }
     .finish-viewer-caption {
       margin-top: 9px;
-      font-size: 0.82rem;
+      font-size: 0.81rem;
       color: #cbd5e1;
       line-height: 1.45;
     }
@@ -183,7 +186,7 @@
       border: 1px solid #3b4c66;
       padding: 5px 10px;
       border-radius: 6px;
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       font-weight: 600;
       cursor: pointer;
     }
@@ -204,7 +207,6 @@
 </head>
 <body>
 
-  <!-- ================= HEADER A DUE COLONNE ================= -->
   <div class="header-card">
     <div class="header-left-block">
       <div class="badge">Haute Horlogerie — Brevet Fédéral</div>
@@ -239,7 +241,6 @@
     </div>
   </div>
 
-  <!-- ================= NOTEBOOK ================= -->
   <div class="notebook-container" id="notebook-main">
 
     <div class="notebook-header">
@@ -288,21 +289,21 @@
       <ul>
         <li><strong>État brut selon l'usinage :</strong> les pièces obtenues par fraisage CNC ou électroérosion à fil présentent de fines stries verticales et des restes d'attaches qu'il faut éliminer. Les pièces étampées en série ont des flancs plus réguliers, mais sont systématiquement reprises manuellement en Haute Horlogerie.</li>
         <li><strong>Dressage à la lime :</strong> l'artisan utilise des limes horlogères de précision adaptées au profil : <em>lime plate</em> pour les surfaces droites ou légèrement bombées, <em>lime feuille de sauge</em> pour les grands rayons creux et <em>lime ronde (queue de rat)</em> pour les petits dégagements.</li>
-        <li><strong>Satinage artisanal (étirage) :</strong> après dressage, la surface est unifiée à la main à l'aide de pierres synthétiques (type <em>Degussit</em>) et de cabrons revêtus de papiers abrasifs de granulométrie décroissante. Le résultat doit offrir un grain satiné parfaitement rectiligne avec des arêtes vives nettes.</li>
+        <li><strong>Satinage artisanal (étirage) :</strong> après dressage, la surface est unifiée à la main à l'aide de pierres synthétiques (type <em>Degussit</em>) et de cabrons revêtus de papiers abrasifs de granulométrie décroissante.</li>
         <li><strong>Typologie des coins de flancs :</strong> on distingue le <em>coin rentrant</em> (intersection intérieure nécessitant une reprise manuelle à la lime affûtée), le <em>coin saillant</em> (angle vif extérieur) et le <em>coin arrondi</em>.</li>
       </ul>
 
       <div class="finish-viewer-card">
         <div class="finish-viewer-top">
           <div>
-            <span class="finish-viewer-badge">Aperçu Métallique 3D — Finition des Flancs</span>
-            <h4 class="finish-viewer-title">Satinage Rectiligne &amp; Arêtes Vives sur Pont de Rouage (ETA 6498-1)</h4>
+            <span class="finish-viewer-badge">Aperçu 3D — Finition des Flancs</span>
+            <h4 class="finish-viewer-title">Satinage Rectiligne sur Pont de Rouage (ETA 6498-1)</h4>
           </div>
           <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-flancs">↺ Recentrer</button>
         </div>
         <div class="finish-canvas-box" id="viewer-flancs"></div>
         <div class="finish-viewer-caption">
-          Composant extrait du calibre ETA 6498-1 : rendu métal satiné brossé mettant en évidence la planéité des parois latérales avant chanfreinage. Glissez pour pivoter.
+          Pont complet extrait du calibre ETA 6498-1 avec texture satinée brossée mettant en évidence les flancs et arêtes du pont.
         </div>
       </div>
 
@@ -325,14 +326,14 @@
       <div class="finish-viewer-card">
         <div class="finish-viewer-top">
           <div>
-            <span class="finish-viewer-badge">Aperçu Métallique 3D — Anglage</span>
-            <h4 class="finish-viewer-title">Chanfreins Polissage Miroir sur Pont de Barillet (ETA 6498-1)</h4>
+            <span class="finish-viewer-badge">Aperçu 3D — Anglage</span>
+            <h4 class="finish-viewer-title">Pont de Barillet Complet avec Chanfrein Mis en Valeur (ETA 6498-1)</h4>
           </div>
           <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-anglage">↺ Recentrer</button>
         </div>
         <div class="finish-canvas-box" id="viewer-anglage"></div>
         <div class="finish-viewer-caption">
-          Finition rhodiée à haute réflectivité spéculaire : la lumière accroche les arêtes chanfreinées du pont de barillet lors de la rotation.
+          Pont de barillet complet extrait du calibre ETA 6498-1 : la lumière souligne les contours et les angles du pont.
         </div>
       </div>
 
@@ -355,14 +356,14 @@
       <div class="finish-viewer-card">
         <div class="finish-viewer-top">
           <div>
-            <span class="finish-viewer-badge">Aperçu Métallique 3D — Poli Noir (Blocage)</span>
-            <h4 class="finish-viewer-title">Acier Trempé Poli Noir sur Pont de Balancier (ETA 6498-1)</h4>
+            <span class="finish-viewer-badge">Aperçu 3D — Poli Noir (Blocage)</span>
+            <h4 class="finish-viewer-title">Pont de Balancier Complet en Poli Noir (ETA 6498-1)</h4>
           </div>
           <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-polinoir">↺ Recentrer</button>
         </div>
         <div class="finish-canvas-box" id="viewer-polinoir"></div>
         <div class="finish-viewer-caption">
-          Finition acier poli noir (métallisation maximale, rugosité minimale) : faites pivoter la pièce pour observer le basculement optique entre ombre profonde et reflet miroir.
+          Pont de balancier complet extrait du calibre ETA 6498-1 avec rendu poli noir spéculaire : pivotez pour observer le basculement entre noir profond et reflet miroir.
         </div>
       </div>
 
@@ -418,14 +419,14 @@
       <div class="finish-viewer-card">
         <div class="finish-viewer-top">
           <div>
-            <span class="finish-viewer-badge">Aperçu Métallique 3D — Composants Mobiles</span>
-            <h4 class="finish-viewer-title">Laiton Doré Cerclé &amp; Pignon Acier Poli sur Roue de Centre (ETA 6498-1)</h4>
+            <span class="finish-viewer-badge">Aperçu 3D — Composants Mobiles</span>
+            <h4 class="finish-viewer-title">Roue de Centre en Laiton Doré &amp; Finition Circulaire (ETA 6498-1)</h4>
           </div>
           <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-roues">↺ Recentrer</button>
         </div>
         <div class="finish-canvas-box" id="viewer-roues"></div>
         <div class="finish-viewer-caption">
-          Roue de centre extraite du calibre ETA 6498-1 avec dorure galvanique chaude et finition satinée circulaire sur la planche.
+          Roue de centre extraite du calibre ETA 6498-1 avec dorure chaude et finition satinée circulaire sur la planche.
         </div>
       </div>
 
@@ -435,24 +436,82 @@
         Les décorations horlogères habillent les surfaces planes des ponts, de la platine et des roues d'armage pour créer des jeux de lumière caractéristiques de la tradition suisse :
       </p>
       <ul>
-        <li><strong>Le Perlage (Perlée) :</strong> décoration composée de petits cercles juxtaposés et partiellement superposés (chevauchement régulier d'un tiers à la moitié du diamètre), exécutée à l'aide d'un tampon abrasif en caoutchouc chargé de grains fins monté sur broche verticale. Utilisé principalement sur la platine et l'intérieur des noyures.</li>
-        <li><strong>Le Soleillage (Brossage Soleil) :</strong> finition rayonnante constituée de micro-stries rectilignes partant du centre vers la périphérie de la pièce, produisant un reflet conique tournant sous la lumière. Typique des rochets, roues de couronne et masses oscillantes.</li>
-        <li><strong>Les Côtes de Genève :</strong> bandes parallèles régulières présentant un fin striage ondulé ou rectiligne séparées par une arête nette, réalisées par déplacement linéaire d'une meule ou d'un outil rotatif incliné sur les ponts supérieurs.</li>
+        <li><strong>Le Perlage (Perlée) :</strong> décoration composée de petits cercles juxtaposés et partiellement superposés (chevauchement régulier d'un tiers à la moitié du diamètre), exécutée à l'aide d'un tampon abrasif en caoutchouc chargé de grains fins monté sur broche verticale.</li>
+        <li><strong>Le Soleillage (Brossage Soleil) :</strong> finition rayonnante constituée de micro-stries rectilignes partant du centre vers la périphérie de la pièce, produisant un reflet conique tournant sous la lumière.</li>
+        <li><strong>Les Côtes de Genève :</strong> bandes parallèles régulières présentant un fin striage ondulé ou rectiligne séparées par une arête nette, réalisées par déplacement linéaire d'une meule ou d'un outil rotatif incliné.</li>
         <li><strong>Le Colimaçonnage :</strong> fines stries en spirale continue appliquées sur les rochets, tambours de barillet ou fonds de noyures.</li>
         <li><strong>Le Guillochage :</strong> gravure géométrique répétitive réalisée au tour à guillocher (manuelle ou CNC) sur les cadrans, ponts ou masses oscillantes.</li>
       </ul>
 
-      <div class="finish-viewer-card">
-        <div class="finish-viewer-top">
-          <div>
-            <span class="finish-viewer-badge">Aperçu Métallique 3D — Soleillage &amp; Perlage</span>
-            <h4 class="finish-viewer-title">Finition Soleillée sur Rochet d'Armage (ETA 6498-1)</h4>
+      <div class="decor-grid">
+        <div class="finish-viewer-card">
+          <div class="finish-viewer-top">
+            <div>
+              <span class="finish-viewer-badge">Décoration — Perlage</span>
+              <h4 class="finish-viewer-title">Perlage (Cercles Chevauchants)</h4>
+            </div>
+            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-perlage">↺ Recentrer</button>
           </div>
-          <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-decor">↺ Recentrer</button>
+          <div class="finish-canvas-box" id="viewer-perlage"></div>
+          <div class="finish-viewer-caption">
+            Motif perlée à cercles juxtaposés et superposés sur composant extrait de l'ETA 6498-1.
+          </div>
         </div>
-        <div class="finish-canvas-box" id="viewer-decor"></div>
-        <div class="finish-viewer-caption">
-          Rochet extrait du calibre ETA 6498-1 en acier rhodié à reflets radiaux évoquant le soleillage horloger.
+
+        <div class="finish-viewer-card">
+          <div class="finish-viewer-top">
+            <div>
+              <span class="finish-viewer-badge">Décoration — Soleillage</span>
+              <h4 class="finish-viewer-title">Soleillage Radial sur Rochet</h4>
+            </div>
+            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-soleillage">↺ Recentrer</button>
+          </div>
+          <div class="finish-canvas-box" id="viewer-soleillage"></div>
+          <div class="finish-viewer-caption">
+            Finition soleillée à micro-stries rayonnantes depuis le centre sur le rochet extrait de l'ETA 6498-1.
+          </div>
+        </div>
+
+        <div class="finish-viewer-card">
+          <div class="finish-viewer-top">
+            <div>
+              <span class="finish-viewer-badge">Décoration — Côtes de Genève</span>
+              <h4 class="finish-viewer-title">Côtes de Genève (Bandes Parallèles)</h4>
+            </div>
+            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-cotes">↺ Recentrer</button>
+          </div>
+          <div class="finish-canvas-box" id="viewer-cotes"></div>
+          <div class="finish-viewer-caption">
+            Bandes parallèles striées à effet Côtes de Genève sur composant extrait de l'ETA 6498-1.
+          </div>
+        </div>
+
+        <div class="finish-viewer-card">
+          <div class="finish-viewer-top">
+            <div>
+              <span class="finish-viewer-badge">Décoration — Colimaçonnage</span>
+              <h4 class="finish-viewer-title">Colimaçonnage (Spirale Continue)</h4>
+            </div>
+            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-colimacon">↺ Recentrer</button>
+          </div>
+          <div class="finish-canvas-box" id="viewer-colimacon"></div>
+          <div class="finish-viewer-caption">
+            Stries concentriques en spirale (colimaçonnage) sur composant extrait de l'ETA 6498-1.
+          </div>
+        </div>
+
+        <div class="finish-viewer-card">
+          <div class="finish-viewer-top">
+            <div>
+              <span class="finish-viewer-badge">Décoration — Guillochage</span>
+              <h4 class="finish-viewer-title">Guillochage Géométrique</h4>
+            </div>
+            <button type="button" class="finish-ctrl-btn" data-reset-viewer="viewer-guilloche">↺ Recentrer</button>
+          </div>
+          <div class="finish-canvas-box" id="viewer-guilloche"></div>
+          <div class="finish-viewer-caption">
+            Trame géométrique entrecroisée inspirée du guillochage sur composant extrait de l'ETA 6498-1.
+          </div>
         </div>
       </div>
 
@@ -534,7 +593,7 @@
 
   <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
 
-  <!-- Script 3D per estrarre i componenti da ETA6498-1_Web.glb e applicare le finiture metalliche -->
+  <!-- Script 3D per estrarre i componenti completi da ETA6498-1_Web.glb e applicare texture/finiture reali -->
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -543,42 +602,227 @@
 
     const ETA_MODEL_URL = '../ETA6498-1_Web.glb';
 
-    // Configurazione delle 5 finestre 3D con componente estratto e finitura metallica dedicata
+    // Genera texture procedurali ad alta risoluzione per ciascuna finitura / decorazione
+    function createDecorationTexture(patternType) {
+      const size = 512;
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#b9c3ce';
+      ctx.fillRect(0, 0, size, size);
+
+      if (patternType === 'flancs') {
+        for (let y = 0; y < size; y += 2) {
+          const v = 165 + Math.sin(y * 1.4) * 22 + ((y * 37) % 19) - 9;
+          ctx.fillStyle = `rgb(${v},${v + 5},${v + 12})`;
+          ctx.fillRect(0, y, size, 2);
+        }
+      } else if (patternType === 'perlage') {
+        ctx.fillStyle = '#c4cdd7';
+        ctx.fillRect(0, 0, size, size);
+        const stepX = 34;
+        const stepY = 30;
+        const r = 21;
+        for (let row = -1; row < size / stepY + 2; row++) {
+          const offsetX = (row % 2) * (stepX * 0.5);
+          for (let col = -1; col < size / stepX + 2; col++) {
+            const cx = col * stepX + offsetX;
+            const cy = row * stepY;
+            const grad = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.3, r * 0.1, cx, cy, r);
+            grad.addColorStop(0, '#eef3f8');
+            grad.addColorStop(0.65, '#b2bcc8');
+            grad.addColorStop(0.92, '#7d8998');
+            grad.addColorStop(1, '#475261');
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.fillStyle = grad;
+            ctx.fill();
+            ctx.lineWidth = 1.2;
+            ctx.strokeStyle = 'rgba(30, 41, 59, 0.45)';
+            ctx.stroke();
+          }
+        }
+      } else if (patternType === 'soleillage') {
+        const cx = size / 2;
+        const cy = size / 2;
+        const rays = 144;
+        for (let i = 0; i < rays; i++) {
+          const angle = (i / rays) * Math.PI * 2;
+          const lum = i % 2 === 0 ? '#dce4ee' : '#8c97a6';
+          ctx.strokeStyle = lum;
+          ctx.lineWidth = 2.4;
+          ctx.beginPath();
+          ctx.moveTo(cx + Math.cos(angle) * 18, cy + Math.sin(angle) * 18);
+          ctx.lineTo(cx + Math.cos(angle) * (size * 0.75), cy + Math.sin(angle) * (size * 0.75));
+          ctx.stroke();
+        }
+      } else if (patternType === 'cotes') {
+        const stripeW = 42;
+        for (let x = 0; x < size; x += stripeW) {
+          const grad = ctx.createLinearGradient(x, 0, x + stripeW, 0);
+          grad.addColorStop(0, '#6e7a8a');
+          grad.addColorStop(0.25, '#dce4ee');
+          grad.addColorStop(0.75, '#aeb8c4');
+          grad.addColorStop(1, '#586473');
+          ctx.fillStyle = grad;
+          ctx.fillRect(x, 0, stripeW, size);
+
+          // Micro-strie parallele tipiche delle Côtes de Genève
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+          ctx.lineWidth = 1;
+          for (let y = 0; y < size; y += 4) {
+            ctx.beginPath();
+            ctx.moveTo(x + 2, y);
+            ctx.lineTo(x + stripeW - 2, y);
+            ctx.stroke();
+          }
+        }
+      } else if (patternType === 'colimacon') {
+        const cx = size / 2;
+        const cy = size / 2;
+        ctx.lineWidth = 2.2;
+        for (let r = 10; r < size * 0.72; r += 5.5) {
+          ctx.strokeStyle = r % 11 < 5.5 ? '#d8e0ea' : '#7b8694';
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      } else if (patternType === 'guilloche') {
+        const cell = 24;
+        ctx.strokeStyle = '#64748b';
+        ctx.lineWidth = 1.6;
+        for (let y = 0; y <= size; y += cell) {
+          for (let x = 0; x <= size; x += cell) {
+            ctx.beginPath();
+            ctx.moveTo(x, y + cell / 2);
+            ctx.lineTo(x + cell / 2, y);
+            ctx.lineTo(x + cell, y + cell / 2);
+            ctx.lineTo(x + cell / 2, y + cell);
+            ctx.closePath();
+            ctx.stroke();
+          }
+        }
+      }
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(2, 2);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    // Raccoglie tutte le mesh appartenenti a un sotto-assieme/ponte (escludendo micro-viti isolate)
+    function collectComponentMeshes(allMeshes, regex) {
+      const candidates = allMeshes.filter((m) => regex.test(m.fullName));
+      if (candidates.length === 0) return [];
+
+      // Calcola la diagonale del bounding box di ciascuna mesh candidata per escludere singole viti piccolissime
+      const sized = candidates.map((entry) => {
+        entry.mesh.updateMatrixWorld(true);
+        const b = new THREE.Box3().setFromObject(entry.mesh);
+        return { ...entry, diag: b.getSize(new THREE.Vector3()).length() };
+      });
+
+      const maxDiag = sized.reduce((acc, item) => Math.max(acc, item.diag), 0);
+      // Mantiene le mesh principali del ponte/organo (almeno il 25% della dimensione massima del gruppo)
+      const mainParts = sized.filter((item) => item.diag >= maxDiag * 0.25);
+      return mainParts.length > 0 ? mainParts : sized;
+    }
+
     const VIEWER_CONFIGS = [
       {
         id: 'viewer-flancs',
         match: /train.*bridge|gear.*bridge|pont.*rouage|r[aä]derwerkbr/i,
-        fallbackIndex: 1,
-        material: { color: 0xb8c2cc, metalness: 0.86, roughness: 0.34, clearcoat: 0.15 },
-        tilt: new THREE.Euler(0.65, 0.35, 0)
+        fallbackIndex: 0,
+        pattern: 'flancs',
+        color: 0xc5ced8,
+        metalness: 0.88,
+        roughness: 0.30,
+        clearcoat: 0.2
       },
       {
         id: 'viewer-anglage',
         match: /barrel.*bridge|pont.*barillet|federhausbr/i,
-        fallbackIndex: 2,
-        material: { color: 0xdce3ec, metalness: 0.94, roughness: 0.16, clearcoat: 0.45 },
-        tilt: new THREE.Euler(0.6, -0.4, 0)
+        fallbackIndex: 1,
+        pattern: null,
+        color: 0xe2e8f0,
+        metalness: 0.95,
+        roughness: 0.14,
+        clearcoat: 0.55
       },
       {
         id: 'viewer-polinoir',
         match: /balance.*bridge|balance.*cock|pont.*balancier|unruhbr/i,
-        fallbackIndex: 3,
-        material: { color: 0x262d36, metalness: 0.98, roughness: 0.05, clearcoat: 0.85 },
-        tilt: new THREE.Euler(0.75, 0.2, 0)
+        fallbackIndex: 2,
+        pattern: null,
+        color: 0x1b2028,
+        metalness: 0.99,
+        roughness: 0.04,
+        clearcoat: 0.95
       },
       {
         id: 'viewer-roues',
         match: /center.*wheel|centre.*wheel|roue.*centre|minutenrad/i,
-        fallbackIndex: 4,
-        material: { color: 0xd9a84e, metalness: 0.90, roughness: 0.24, clearcoat: 0.25 },
-        tilt: new THREE.Euler(0.7, 0.25, 0)
+        fallbackIndex: 3,
+        pattern: null,
+        color: 0xd9a84e,
+        metalness: 0.90,
+        roughness: 0.24,
+        clearcoat: 0.25
       },
       {
-        id: 'viewer-decor',
+        id: 'viewer-perlage',
+        match: /main\s*plate|base\s*plate|platine|werkplatte|\bplate\b/i,
+        fallbackIndex: 0,
+        pattern: 'perlage',
+        color: 0xd6dee8,
+        metalness: 0.85,
+        roughness: 0.28,
+        clearcoat: 0.2
+      },
+      {
+        id: 'viewer-soleillage',
         match: /ratchet|rochet|sperrrad/i,
-        fallbackIndex: 5,
-        material: { color: 0xcad3de, metalness: 0.93, roughness: 0.19, clearcoat: 0.35 },
-        tilt: new THREE.Euler(0.75, -0.25, 0)
+        fallbackIndex: 1,
+        pattern: 'soleillage',
+        color: 0xd8e0ea,
+        metalness: 0.90,
+        roughness: 0.22,
+        clearcoat: 0.3
+      },
+      {
+        id: 'viewer-cotes',
+        match: /barrel.*bridge|pont.*barillet|federhausbr/i,
+        fallbackIndex: 1,
+        pattern: 'cotes',
+        color: 0xd6dee8,
+        metalness: 0.88,
+        roughness: 0.25,
+        clearcoat: 0.25
+      },
+      {
+        id: 'viewer-colimacon',
+        match: /crown.*wheel|roue.*couronne|kronrad/i,
+        fallbackIndex: 2,
+        pattern: 'colimacon',
+        color: 0xd6dee8,
+        metalness: 0.88,
+        roughness: 0.25,
+        clearcoat: 0.25
+      },
+      {
+        id: 'viewer-guilloche',
+        match: /train.*bridge|gear.*bridge|pont.*rouage|r[aä]derwerkbr/i,
+        fallbackIndex: 0,
+        pattern: 'guilloche',
+        color: 0xd6dee8,
+        metalness: 0.88,
+        roughness: 0.25,
+        clearcoat: 0.25
       }
     ];
 
@@ -605,8 +849,7 @@
           const container = document.getElementById(cfg.id);
           if (!container) return;
 
-          // Trova tutte le mesh corrispondenti al componente (es. ponte + castone)
-          let matched = allMeshes.filter((m) => cfg.match.test(m.fullName));
+          let matched = collectComponentMeshes(allMeshes, cfg.match);
           if (matched.length === 0 && allMeshes.length > 0) {
             matched = [allMeshes[cfg.fallbackIndex % allMeshes.length]];
           }
@@ -618,7 +861,7 @@
             0.01,
             100
           );
-          camera.position.set(0, 1.5, 2.7);
+          camera.position.set(0, 1.55, 2.75);
 
           const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
           renderer.setSize(container.clientWidth, container.clientHeight);
@@ -642,15 +885,19 @@
           warmLight.position.set(0, -3, 3);
           scene.add(warmLight);
 
-          const partGroup = new THREE.Group();
+          const mapTexture = cfg.pattern ? createDecorationTexture(cfg.pattern) : null;
           const finishMat = new THREE.MeshPhysicalMaterial({
-            color: cfg.material.color,
-            metalness: cfg.material.metalness,
-            roughness: cfg.material.roughness,
-            clearcoat: cfg.material.clearcoat,
+            color: cfg.color,
+            map: mapTexture,
+            bumpMap: mapTexture,
+            bumpScale: mapTexture ? 0.018 : 0,
+            metalness: cfg.metalness,
+            roughness: cfg.roughness,
+            clearcoat: cfg.clearcoat,
             clearcoatRoughness: 0.12
           });
 
+          const partGroup = new THREE.Group();
           matched.forEach(({ mesh }) => {
             mesh.updateMatrixWorld(true);
             const clone = mesh.clone();
@@ -659,7 +906,6 @@
             partGroup.add(clone);
           });
 
-          // Normalizza scala, orienta e centra nell'origine
           const box = new THREE.Box3().setFromObject(partGroup);
           const size = box.getSize(new THREE.Vector3());
           const maxDim = Math.max(size.x, size.y, size.z) || 1;
@@ -671,7 +917,7 @@
 
           const pivotWrapper = new THREE.Group();
           pivotWrapper.add(partGroup);
-          pivotWrapper.rotation.copy(cfg.tilt);
+          pivotWrapper.rotation.set(0.68, 0.25, 0);
           scene.add(pivotWrapper);
 
           const controls = new OrbitControls(camera, renderer.domElement);
@@ -684,7 +930,7 @@
           const resetBtn = document.querySelector(`[data-reset-viewer="${cfg.id}"]`);
           if (resetBtn) {
             resetBtn.addEventListener('click', () => {
-              camera.position.set(0, 1.5, 2.7);
+              camera.position.set(0, 1.55, 2.75);
               controls.target.set(0, 0, 0);
               controls.update();
             });
