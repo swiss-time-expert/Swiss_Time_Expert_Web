@@ -339,7 +339,7 @@
         </div>
         <div class="finish-canvas-box" id="viewer-anglage"></div>
         <div class="finish-viewer-caption">
-          Pont de barillet complet extrait du calibre ETA 6498-1 (sans vis) : le filet lumineux souligne le pourtour chanfreiné, les logements de vis et les coins rentrants du pont.
+          Pont de barillet complet extrait du calibre ETA 6498-1 : le filet lumineux souligne le pourtour chanfreiné, les logements de vis et les coins rentrants du pont.
         </div>
       </div>
 
@@ -438,7 +438,7 @@
         </div>
         <div class="finish-canvas-box" id="viewer-roues"></div>
         <div class="finish-viewer-caption">
-          Roue de centre extraite du calibre ETA 6498-1 : la finition satinée circulaire concentrique sur la planche diffuse la lumière de façon homogène et évite tout effet de transparence lors de la rotation.
+          Roue de centre extraite du calibre ETA 6498-1 : les anneaux concentriques de la finition satinée circulaire sont gravés sur la planche en laiton doré pour diffuser la lumière sans transparence.
         </div>
       </div>
 
@@ -644,40 +644,62 @@
 
     const ETA_MODEL_URL = '../ETA6498-1_Web.glb';
 
-    // Proietta coordinate UV planari sui vertici della geometria CAD così la texture della finitura appare nitida
-    function applyPlanarUVs(geometry) {
+    // Un solo WebGLRenderer offscreen condiviso: elimina il limite browser di 8 contesti WebGL simultanei
+    const sharedRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    sharedRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    sharedRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+    sharedRenderer.toneMappingExposure = 1.32;
+
+    const pmrem = new THREE.PMREMGenerator(sharedRenderer);
+    const sharedEnvMap = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    // Proietta coordinate UV sulla faccia piatta reale della geometria (usando la normale media dominante)
+    function applyFacePlanarUVs(geometry) {
       const pos = geometry.attributes.position;
       if (!pos) return;
+      geometry.computeVertexNormals();
+      const norm = geometry.attributes.normal;
+
+      let nx = 0, ny = 0, nz = 0;
+      for (let i = 0; i < norm.count; i++) {
+        nx += Math.abs(norm.getX(i));
+        ny += Math.abs(norm.getY(i));
+        nz += Math.abs(norm.getZ(i));
+      }
+
       geometry.computeBoundingBox();
       const bb = geometry.boundingBox;
       const size = new THREE.Vector3();
       bb.getSize(size);
 
-      // Individua i due assi più estesi del pezzo (piano principale della superficie)
-      const axes = [
-        { axis: 'x', len: size.x, min: bb.min.x },
-        { axis: 'y', len: size.y, min: bb.min.y },
-        { axis: 'z', len: size.z, min: bb.min.z }
-      ].sort((a, b) => b.len - a.len);
+      // L'asse normale dominante è lo spessore; gli altri due assi formano il piano della superficie lavorata
+      let uAxis = 'x', vAxis = 'z';
+      if (nx >= ny && nx >= nz) {
+        uAxis = 'y';
+        vAxis = 'z';
+      } else if (nz >= nx && nz >= ny) {
+        uAxis = 'x';
+        vAxis = 'y';
+      } else {
+        uAxis = 'x';
+        vAxis = 'z';
+      }
 
-      const uAxis = axes[0];
-      const vAxis = axes[1];
-      const span = Math.max(uAxis.len, vAxis.len, 0.0001);
+      const spanU = Math.max(size[uAxis], 0.0001);
+      const spanV = Math.max(size[vAxis], 0.0001);
+      const span = Math.max(spanU, spanV);
 
       const uvs = new Float32Array(pos.count * 2);
       for (let i = 0; i < pos.count; i++) {
-        const vx = pos.getX(i);
-        const vy = pos.getY(i);
-        const vz = pos.getZ(i);
-        const coord = { x: vx, y: vy, z: vz };
-
-        uvs[i * 2] = (coord[uAxis.axis] - uAxis.min) / span;
-        uvs[i * 2 + 1] = (coord[vAxis.axis] - vAxis.min) / span;
+        const coord = { x: pos.getX(i), y: pos.getY(i), z: pos.getZ(i) };
+        // Centra l'UV intorno a (0.5, 0.5) così cerchi e raggi partono esattamente dal centro del pezzo
+        uvs[i * 2] = 0.5 + (coord[uAxis] - (bb.min[uAxis] + bb.max[uAxis]) * 0.5) / span;
+        uvs[i * 2 + 1] = 0.5 + (coord[vAxis] - (bb.min[vAxis] + bb.max[vAxis]) * 0.5) / span;
       }
       geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
     }
 
-    // Genera le texture procedurali realistiche per ciascuna lavorazione
+    // Genera texture ad alta risoluzione con alto contrasto per ogni lavorazione
     function createDecorationTexture(patternType) {
       const size = 1024;
       const canvas = document.createElement('canvas');
@@ -690,32 +712,32 @@
 
       if (patternType === 'flancs') {
         for (let y = 0; y < size; y += 2) {
-          const v = 175 + Math.sin(y * 0.9) * 28 + ((y * 29) % 17) - 8;
+          const v = 165 + Math.sin(y * 0.85) * 38 + ((y * 29) % 21) - 10;
           ctx.fillStyle = `rgb(${v},${v + 4},${v + 10})`;
           ctx.fillRect(0, y, size, 2);
         }
       } else if (patternType === 'perlage') {
-        ctx.fillStyle = '#bcc6d2';
+        ctx.fillStyle = '#b4becb';
         ctx.fillRect(0, 0, size, size);
-        const stepX = 56;
-        const stepY = 48;
-        const r = 36;
+        const stepX = 52;
+        const stepY = 44;
+        const r = 34;
         for (let row = -1; row < size / stepY + 2; row++) {
           const offsetX = (row % 2) * (stepX * 0.5);
           for (let col = -1; col < size / stepX + 2; col++) {
             const cx = col * stepX + offsetX;
             const cy = row * stepY;
-            const grad = ctx.createRadialGradient(cx - r * 0.28, cy - r * 0.28, r * 0.08, cx, cy, r);
-            grad.addColorStop(0, '#f8fafc');
-            grad.addColorStop(0.55, '#c2ccd8');
-            grad.addColorStop(0.88, '#7a8796');
-            grad.addColorStop(1, '#3e4856');
+            const grad = ctx.createRadialGradient(cx - r * 0.28, cy - r * 0.28, r * 0.06, cx, cy, r);
+            grad.addColorStop(0, '#ffffff');
+            grad.addColorStop(0.52, '#c0cad6');
+            grad.addColorStop(0.86, '#6f7c8c');
+            grad.addColorStop(1, '#333d4b');
             ctx.beginPath();
             ctx.arc(cx, cy, r, 0, Math.PI * 2);
             ctx.fillStyle = grad;
             ctx.fill();
-            ctx.lineWidth = 1.8;
-            ctx.strokeStyle = 'rgba(20, 30, 46, 0.55)';
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'rgba(15, 23, 42, 0.65)';
             ctx.stroke();
           }
         }
@@ -725,31 +747,31 @@
         const rays = 240;
         for (let i = 0; i < rays; i++) {
           const angle = (i / rays) * Math.PI * 2;
-          const shade = Math.round(165 + Math.sin(angle * 6) * 45 + (i % 2 === 0 ? 22 : -22));
+          const shade = Math.round(160 + Math.sin(angle * 4) * 52 + (i % 2 === 0 ? 26 : -26));
           ctx.strokeStyle = `rgb(${shade},${shade + 5},${shade + 12})`;
-          ctx.lineWidth = 3.2;
+          ctx.lineWidth = 3.4;
           ctx.beginPath();
-          ctx.moveTo(cx + Math.cos(angle) * 20, cy + Math.sin(angle) * 20);
+          ctx.moveTo(cx, cy);
           ctx.lineTo(cx + Math.cos(angle) * (size * 0.8), cy + Math.sin(angle) * (size * 0.8));
           ctx.stroke();
         }
       } else if (patternType === 'cotes') {
-        const stripeW = 84;
+        const stripeW = 86;
         for (let x = 0; x < size; x += stripeW) {
           const grad = ctx.createLinearGradient(x, 0, x + stripeW, 0);
-          grad.addColorStop(0, '#626f80');
-          grad.addColorStop(0.22, '#eef3f8');
-          grad.addColorStop(0.75, '#b2bcc8');
-          grad.addColorStop(1, '#4b5666');
+          grad.addColorStop(0, '#556273');
+          grad.addColorStop(0.22, '#f8fafc');
+          grad.addColorStop(0.76, '#adb7c4');
+          grad.addColorStop(1, '#434e5e');
           ctx.fillStyle = grad;
           ctx.fillRect(x, 0, stripeW, size);
 
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.28)';
-          ctx.lineWidth = 1.4;
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+          ctx.lineWidth = 1.6;
           for (let y = 0; y < size; y += 6) {
             ctx.beginPath();
             ctx.moveTo(x + 2, y);
-            ctx.bezierCurveTo(x + stripeW * 0.35, y - 4, x + stripeW * 0.65, y + 4, x + stripeW - 2, y);
+            ctx.bezierCurveTo(x + stripeW * 0.35, y - 5, x + stripeW * 0.65, y + 5, x + stripeW - 2, y);
             ctx.stroke();
           }
         }
@@ -758,38 +780,38 @@
         const cy = size / 2;
         ctx.fillStyle = '#aeb8c4';
         ctx.fillRect(0, 0, size, size);
-        ctx.lineWidth = 3.2;
-        const maxR = size * 0.75;
-        const turns = 42;
+        ctx.lineWidth = 3.6;
+        const maxR = size * 0.72;
+        const turns = 38;
         ctx.beginPath();
         for (let a = 0; a < turns * Math.PI * 2; a += 0.08) {
-          const r = 18 + (a / (turns * Math.PI * 2)) * maxR;
+          const r = 16 + (a / (turns * Math.PI * 2)) * maxR;
           const x = cx + Math.cos(a) * r;
           const y = cy + Math.sin(a) * r;
           if (a === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
-        ctx.strokeStyle = '#eef3f8';
+        ctx.strokeStyle = '#f8fafc';
         ctx.stroke();
 
         ctx.beginPath();
         for (let a = 0; a < turns * Math.PI * 2; a += 0.08) {
-          const r = 21.5 + (a / (turns * Math.PI * 2)) * maxR;
+          const r = 20 + (a / (turns * Math.PI * 2)) * maxR;
           const x = cx + Math.cos(a) * r;
           const y = cy + Math.sin(a) * r;
           if (a === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
-        ctx.strokeStyle = '#5a6676';
+        ctx.strokeStyle = '#475569';
         ctx.stroke();
       } else if (patternType === 'circulaire') {
         const cx = size / 2;
         const cy = size / 2;
-        ctx.fillStyle = '#dfae52';
+        ctx.fillStyle = '#e0ad48';
         ctx.fillRect(0, 0, size, size);
-        for (let r = 16; r < size * 0.75; r += 6) {
+        for (let r = 8; r < size * 0.75; r += 5) {
           ctx.lineWidth = 2.6;
-          ctx.strokeStyle = r % 12 === 0 ? '#f6d27a' : '#b88428';
+          ctx.strokeStyle = r % 10 === 0 ? '#fff0b3' : '#9c6b16';
           ctx.beginPath();
           ctx.arc(cx, cy, r, 0, Math.PI * 2);
           ctx.stroke();
@@ -806,10 +828,10 @@
             ctx.lineTo(x + cell / 2, y + cell);
             ctx.lineTo(x, y + cell / 2);
             ctx.closePath();
-            ctx.fillStyle = ((x + y) / cell) % 2 === 0 ? '#eef3f8' : '#9aa6b5';
+            ctx.fillStyle = ((x + y) / cell) % 2 === 0 ? '#f8fafc' : '#8d99a8';
             ctx.fill();
-            ctx.strokeStyle = '#475569';
-            ctx.lineWidth = 1.6;
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1.8;
             ctx.stroke();
           }
         }
@@ -823,12 +845,11 @@
       return tex;
     }
 
-    // Crea un disco quadrante dedicato per mostrare il Guillochage
     function buildDialGuillocheGroup(finishMat) {
       const group = new THREE.Group();
 
       const dialGeo = new THREE.CylinderGeometry(1.15, 1.15, 0.05, 96);
-      applyPlanarUVs(dialGeo);
+      applyFacePlanarUVs(dialGeo);
       const dialMesh = new THREE.Mesh(dialGeo, finishMat);
       group.add(dialMesh);
 
@@ -837,7 +858,6 @@
       const bezelMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.85, roughness: 0.18 });
       group.add(new THREE.Mesh(bezelGeo, bezelMat));
 
-      // Contatore dei piccoli secondi a ore 6
       const subRingGeo = new THREE.TorusGeometry(0.32, 0.015, 12, 64);
       subRingGeo.rotateX(Math.PI / 2);
       const subRing = new THREE.Mesh(subRingGeo, bezelMat);
@@ -849,29 +869,23 @@
 
     const SCREW_EXCLUDE_RE = /screw|\bvis\b|schraube|boulon|pin\b|goupille|stift|jewel|ruby|rubis|washer|rondelle/i;
 
-    // Estrae SOLO il corpo principale del componente (escludendo categoricamente qualsiasi vite)
-    function pickMainComponentMesh(allMeshes, includeRegex) {
-      const filtered = allMeshes.filter(
-        (m) => includeRegex.test(m.fullName) && !SCREW_EXCLUDE_RE.test(m.fullName)
-      );
-      if (filtered.length === 0) return [];
-
-      // Ordina per diagonale del bounding box decrescente e prende la mesh principale più grande (il ponte/platina/rochet vero)
-      const ranked = filtered
-        .map((entry) => {
-          entry.mesh.updateMatrixWorld(true);
-          const b = new THREE.Box3().setFromObject(entry.mesh);
-          return { ...entry, diag: b.getSize(new THREE.Vector3()).length() };
-        })
-        .sort((a, b) => b.diag - a.diag);
-
-      return [ranked[0]];
+    // Estrae il componente principale corrispondente; se il nome non combacia, usa la mesh più grande di fallback
+    function pickMainComponentMesh(rankedAllMeshes, includeRegex, fallbackRankIndex = 0) {
+      const filtered = rankedAllMeshes.filter((m) => includeRegex.test(m.fullName));
+      if (filtered.length > 0) {
+        return [filtered[0]];
+      }
+      if (rankedAllMeshes.length > 0) {
+        return [rankedAllMeshes[fallbackRankIndex % rankedAllMeshes.length]];
+      }
+      return [];
     }
 
     const VIEWER_CONFIGS = [
       {
         id: 'viewer-flancs',
         match: /train.*bridge|gear.*bridge|pont.*rouage|r[aä]derwerkbr/i,
+        fallbackRank: 2,
         pattern: 'flancs',
         color: 0xd0d8e2,
         metalness: 0.72,
@@ -881,6 +895,7 @@
       {
         id: 'viewer-anglage',
         match: /barrel.*bridge|pont.*barillet|federhausbr/i,
+        fallbackRank: 1,
         pattern: null,
         color: 0xcbd5e1,
         metalness: 0.78,
@@ -890,6 +905,7 @@
       {
         id: 'viewer-polinoir',
         match: /ratchet|rochet|sperrrad/i,
+        fallbackRank: 3,
         pattern: null,
         color: 0x222832,
         metalness: 0.92,
@@ -899,46 +915,51 @@
       {
         id: 'viewer-roues',
         match: /center.*wheel|centre.*wheel|roue.*centre|minutenrad/i,
+        fallbackRank: 4,
         pattern: 'circulaire',
         color: 0xe6b450,
-        metalness: 0.68,
-        roughness: 0.28,
+        metalness: 0.62,
+        roughness: 0.32,
         edgeHighlight: false
       },
       {
         id: 'viewer-perlage',
         match: /main\s*plate|base\s*plate|platine|werkplatte|\bplate\b/i,
+        fallbackRank: 0,
         pattern: 'perlage',
         color: 0xdbe3ec,
-        metalness: 0.65,
-        roughness: 0.32,
+        metalness: 0.62,
+        roughness: 0.34,
         edgeHighlight: false
       },
       {
         id: 'viewer-soleillage',
         match: /ratchet|rochet|sperrrad/i,
+        fallbackRank: 3,
         pattern: 'soleillage',
         color: 0xdbe3ec,
-        metalness: 0.72,
-        roughness: 0.26,
+        metalness: 0.68,
+        roughness: 0.28,
         edgeHighlight: false
       },
       {
         id: 'viewer-cotes',
         match: /barrel.*bridge|pont.*barillet|federhausbr/i,
+        fallbackRank: 1,
         pattern: 'cotes',
         color: 0xdbe3ec,
-        metalness: 0.70,
-        roughness: 0.28,
+        metalness: 0.66,
+        roughness: 0.30,
         edgeHighlight: false
       },
       {
         id: 'viewer-colimacon',
         match: /barrel|tambour|barillet|federhaus/i,
+        fallbackRank: 2,
         pattern: 'colimacon',
         color: 0xd8e0ea,
-        metalness: 0.72,
-        roughness: 0.26,
+        metalness: 0.68,
+        roughness: 0.28,
         edgeHighlight: false
       },
       {
@@ -946,8 +967,8 @@
         customDial: true,
         pattern: 'guilloche',
         color: 0xe2e8f0,
-        metalness: 0.65,
-        roughness: 0.30,
+        metalness: 0.62,
+        roughness: 0.32,
         edgeHighlight: false
       }
     ];
@@ -958,7 +979,7 @@
       ETA_MODEL_URL,
       (gltf) => {
         const root = gltf.scene;
-        const allMeshes = [];
+        const rankedAllMeshes = [];
 
         root.traverse((child) => {
           if (!child.isMesh) return;
@@ -968,39 +989,46 @@
             if (cur.name) fullName += ' ' + cur.name;
             cur = cur.parent;
           }
-          allMeshes.push({ mesh: child, fullName: fullName.trim() });
+          fullName = fullName.trim();
+          if (SCREW_EXCLUDE_RE.test(fullName)) return;
+
+          child.updateMatrixWorld(true);
+          const b = new THREE.Box3().setFromObject(child);
+          const diag = b.getSize(new THREE.Vector3()).length();
+          if (diag < 0.005) return;
+
+          rankedAllMeshes.push({ mesh: child, fullName, diag });
         });
+
+        // Ordina dalla mesh più grande (platina, ponti, bariletto, ruote) alla più piccola
+        rankedAllMeshes.sort((a, b) => b.diag - a.diag);
 
         VIEWER_CONFIGS.forEach((cfg) => {
           const container = document.getElementById(cfg.id);
           if (!container) return;
 
+          const displayCanvas = document.createElement('canvas');
+          displayCanvas.style.width = '100%';
+          displayCanvas.style.height = '100%';
+          displayCanvas.style.display = 'block';
+          container.appendChild(displayCanvas);
+          const displayCtx = displayCanvas.getContext('2d');
+
           const scene = new THREE.Scene();
+          scene.environment = sharedEnvMap;
+
           const camera = new THREE.PerspectiveCamera(
             34,
-            container.clientWidth / container.clientHeight,
+            (container.clientWidth || 800) / (container.clientHeight || 430),
             0.01,
             100
           );
           camera.position.set(0, 1.85, 2.55);
 
-          const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-          renderer.setSize(container.clientWidth, container.clientHeight);
-          renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-          renderer.toneMapping = THREE.ACESFilmicToneMapping;
-          renderer.toneMappingExposure = 1.3;
-          container.appendChild(renderer.domElement);
-
-          const pmrem = new THREE.PMREMGenerator(renderer);
-          scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-
-          // Illuminazione studio diffusa su tutti i lati (evita aree nere o semi-trasparenti)
-          scene.add(new THREE.HemisphereLight(0xffffff, 0x64748b, 1.35));
-
+          scene.add(new THREE.HemisphereLight(0xffffff, 0x64748b, 1.4));
           const keyLight = new THREE.DirectionalLight(0xffffff, 2.0);
           keyLight.position.set(4, 8, 5);
           scene.add(keyLight);
-
           const fillLight = new THREE.DirectionalLight(0xdbeafe, 1.2);
           fillLight.position.set(-5, 4, -4);
           scene.add(fillLight);
@@ -1010,7 +1038,7 @@
             color: cfg.color,
             map: mapTexture,
             bumpMap: mapTexture,
-            bumpScale: mapTexture ? 0.022 : 0,
+            bumpScale: mapTexture ? 0.025 : 0,
             metalness: cfg.metalness,
             roughness: cfg.roughness,
             side: THREE.DoubleSide
@@ -1021,11 +1049,11 @@
           if (cfg.customDial) {
             partGroup.add(buildDialGuillocheGroup(finishMat));
           } else {
-            const matched = pickMainComponentMesh(allMeshes, cfg.match);
+            const matched = pickMainComponentMesh(rankedAllMeshes, cfg.match, cfg.fallbackRank);
             matched.forEach(({ mesh }) => {
               mesh.updateMatrixWorld(true);
               const geomClone = mesh.geometry.clone();
-              applyPlanarUVs(geomClone);
+              applyFacePlanarUVs(geomClone);
               const clone = new THREE.Mesh(geomClone, finishMat);
               clone.applyMatrix4(mesh.matrixWorld);
               partGroup.add(clone);
@@ -1042,7 +1070,6 @@
             });
           }
 
-          // Orienta il componente in piano e lo centra
           const box = new THREE.Box3().setFromObject(partGroup);
           const size = box.getSize(new THREE.Vector3());
           const maxDim = Math.max(size.x, size.y, size.z) || 1;
@@ -1060,7 +1087,7 @@
 
           scene.add(partGroup);
 
-          const controls = new OrbitControls(camera, renderer.domElement);
+          const controls = new OrbitControls(camera, displayCanvas);
           controls.enableDamping = true;
           controls.dampingFactor = 0.06;
           controls.autoRotate = true;
@@ -1084,27 +1111,41 @@
             });
           }
 
-          activeScenes.push({ container, scene, camera, renderer, controls });
+          activeScenes.push({ container, displayCanvas, displayCtx, scene, camera, controls });
         });
       },
       undefined,
       (err) => console.error('Erreur chargement GLB pour finitions:', err)
     );
 
-    window.addEventListener('resize', () => {
-      activeScenes.forEach(({ container, camera, renderer }) => {
-        if (!container.clientWidth) return;
-        camera.aspect = container.clientWidth / container.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth, container.clientHeight);
-      });
-    });
-
     function animateAll() {
       requestAnimationFrame(animateAll);
-      activeScenes.forEach(({ scene, camera, renderer, controls }) => {
+      const dpr = Math.min(window.devicePixelRatio, 2);
+
+      activeScenes.forEach(({ container, displayCanvas, displayCtx, scene, camera, controls }) => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        if (!w || !h) return;
+
+        // Renderizza solo le finestre visibili nello schermo (o vicine) per fluidità massima
+        const rect = container.getBoundingClientRect();
+        if (rect.bottom < -250 || rect.top > window.innerHeight + 250) return;
+
+        const targetW = Math.floor(w * dpr);
+        const targetH = Math.floor(h * dpr);
+        if (displayCanvas.width !== targetW || displayCanvas.height !== targetH) {
+          displayCanvas.width = targetW;
+          displayCanvas.height = targetH;
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+        }
+
         controls.update();
-        renderer.render(scene, camera);
+        sharedRenderer.setSize(w, h, false);
+        sharedRenderer.render(scene, camera);
+
+        displayCtx.clearRect(0, 0, targetW, targetH);
+        displayCtx.drawImage(sharedRenderer.domElement, 0, 0, targetW, targetH);
       });
     }
     animateAll();
