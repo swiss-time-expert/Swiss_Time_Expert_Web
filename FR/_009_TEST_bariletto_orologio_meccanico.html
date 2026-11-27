@@ -98,8 +98,8 @@
       './ETA_6498-1_Movement_parts.glb'
     ];
 
-    // Escursione ampia per valorizzare la vista a schermo pieno
-    const BASE_EXPLODE_SPREAD = 16.5;
+    // Escursione ampia lungo l'asse del calibro
+    const BASE_EXPLODE_SPREAD = 14.0;
 
     const statusEl = document.getElementById('status');
     const container = document.getElementById('viewer');
@@ -108,31 +108,33 @@
     scene.background = new THREE.Color(0x181b20);
 
     const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.01, 100);
-    const DEFAULT_CAM_POS = new THREE.Vector3(2.5, 1.9, 2.7);
+    const DEFAULT_CAM_POS = new THREE.Vector3(2.2, 1.8, 2.5);
     camera.position.copy(DEFAULT_CAM_POS);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.8;
+    renderer.toneMappingExposure = 1.9;
     container.appendChild(renderer.domElement);
 
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
-    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.4);
-    dirLight1.position.set(4, 6, 5);
+    // Luci angolate per far brillare i rubini e i biselli dei ponti
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.6);
+    dirLight1.position.set(3, 6, 4);
     scene.add(dirLight1);
 
-    const dirLight2 = new THREE.DirectionalLight(0xdde6ff, 0.9);
-    dirLight2.position.set(-5, -3, -4);
+    const dirLight2 = new THREE.DirectionalLight(0xffe6d5, 1.0);
+    dirLight2.position.set(-4, 2, -5);
     scene.add(dirLight2);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.06;
 
+    let displayGroup = null;
     let modelRoot = null;
     const explodeItems = [];
     const loader = new GLTFLoader();
@@ -149,22 +151,19 @@
 
     function onModelLoaded(gltf) {
       modelRoot = gltf.scene;
-      scene.add(modelRoot);
 
-      // Ruota leggermente l'assieme così la lunga asta di carica resta verso il retro
-      modelRoot.rotation.set(0.15, 1.15, -0.1);
+      // 1. PRIMA calcoliamo tutto nello spazio locale non ruotato del GLB,
+      //    escludendo la tige (401 Winding stem) dalla centratura così il calibro è perfettamente centrato.
       modelRoot.updateMatrixWorld(true);
 
-      // Centra il modello sul corpo principale (escludendo la lunga tige di carica che sbilancia il box)
       const coreBox = new THREE.Box3();
       const fullBox = new THREE.Box3();
       modelRoot.traverse((child) => {
-        if (child.isMesh) {
-          fullBox.expandByObject(child);
-          const lbl = getHierarchyLabel(child);
-          if (!lbl.includes('401 winding stem')) {
-            coreBox.expandByObject(child);
-          }
+        if (!child.isMesh) return;
+        fullBox.expandByObject(child);
+        const lbl = getHierarchyLabel(child);
+        if (!lbl.includes('401 winding stem')) {
+          coreBox.expandByObject(child);
         }
       });
 
@@ -175,48 +174,17 @@
       refBox.getCenter(center);
 
       const maxDim = Math.max(size.x, size.y, size.z) || 1;
-      modelRoot.scale.setScalar(2.5 / maxDim);
-      modelRoot.updateMatrixWorld(true);
+      const normScale = 2.45 / maxDim;
 
-      // Riallinea il centro del corpo principale all'origine (0, 0, 0)
-      const scaledCoreBox = new THREE.Box3();
-      modelRoot.traverse((child) => {
-        if (child.isMesh) {
-          const lbl = getHierarchyLabel(child);
-          if (!lbl.includes('401 winding stem')) {
-            scaledCoreBox.expandByObject(child);
-          }
-        }
-      });
-      if (!scaledCoreBox.isEmpty()) {
-        scaledCoreBox.getCenter(center);
-        modelRoot.position.sub(center);
-        modelRoot.updateMatrixWorld(true);
-      }
+      // Asse reale di impilamento del calibro (quello più sottile del corpo senza tige)
+      const minAxis = (size.z <= size.x && size.z <= size.y) ? 'z'
+                    : (size.y <= size.x && size.y <= size.z) ? 'y' : 'x';
 
-      // Determina l'asse di profondità/spessore del movimento
-      const normBox = new THREE.Box3();
-      modelRoot.traverse((child) => {
-        if (child.isMesh) {
-          const lbl = getHierarchyLabel(child);
-          if (!lbl.includes('401 winding stem')) {
-            normBox.expandByObject(child);
-          }
-        }
-      });
-      const normSize = new THREE.Vector3();
-      const normCenter = new THREE.Vector3();
-      normBox.getSize(normSize);
-      normBox.getCenter(normCenter);
-
-      const minAxis = (normSize.z <= normSize.x && normSize.z <= normSize.y) ? 'z'
-                    : (normSize.y <= normSize.x && normSize.y <= normSize.z) ? 'y' : 'x';
-
-      // Raccoglie riferimenti per gruppi coerenti: bariletto chiuso e ruote di carica in acciaio allineate
+      // Raccoglie i box di riferimento per gruppi coerenti nello spazio locale
       const barrelBox = new THREE.Box3();
       const windingBox = new THREE.Box3();
-      const plateAndBridgeBox = new THREE.Box3();
-      const rubyMeshes = [];
+      const plateBox = new THREE.Box3();
+      const bridgesBox = new THREE.Box3();
 
       let meshCount = 0;
       modelRoot.traverse((child) => {
@@ -226,30 +194,13 @@
           child.material.side = THREE.DoubleSide;
           child.material.needsUpdate = true;
         }
-
         const lbl = getHierarchyLabel(child);
-        const matName = (child.material && child.material.name) ? child.material.name.toLowerCase() : '';
-
-        if (lbl.includes('180 movement barrel')) {
-          barrelBox.expandByObject(child);
-        }
-        if (
-          lbl.includes('415 ratchet wheel') ||
-          lbl.includes('420 crown wheel') ||
-          lbl.includes('422 crown wheel ring')
-        ) {
+        if (lbl.includes('180 movement barrel')) barrelBox.expandByObject(child);
+        if (lbl.includes('415 ratchet') || lbl.includes('420 crown') || lbl.includes('422 crown')) {
           windingBox.expandByObject(child);
         }
-        if (
-          lbl.includes('100 main plate') ||
-          lbl.includes('bridge') ||
-          lbl.includes('pont')
-        ) {
-          plateAndBridgeBox.expandByObject(child);
-        }
-        if (matName.includes('rubino') || lbl.includes('ruby')) {
-          rubyMeshes.push(child);
-        }
+        if (lbl.includes('100 main plate')) plateBox.expandByObject(child);
+        if (lbl.includes('bridge') || lbl.includes('pont')) bridgesBox.expandByObject(child);
       });
 
       const barrelCenter = new THREE.Vector3();
@@ -258,10 +209,17 @@
       const windingCenter = new THREE.Vector3();
       if (!windingBox.isEmpty()) windingBox.getCenter(windingCenter);
 
-      const extMinAxis = !plateAndBridgeBox.isEmpty() ? plateAndBridgeBox.min[minAxis] : normBox.min[minAxis];
-      const extMaxAxis = !plateAndBridgeBox.isEmpty() ? plateAndBridgeBox.max[minAxis] : normBox.max[minAxis];
-      const extMidAxis = (extMinAxis + extMaxAxis) * 0.5;
+      const plateCenter = new THREE.Vector3();
+      if (!plateBox.isEmpty()) plateBox.getCenter(plateCenter);
 
+      const bridgesCenter = new THREE.Vector3();
+      if (!bridgesBox.isEmpty()) bridgesBox.getCenter(bridgesCenter);
+
+      // Capisce da che lato del centro stanno i ponti rispetto alla platina (+1 o -1)
+      const bridgesSign = (bridgesCenter[minAxis] >= plateCenter[minAxis]) ? 1 : -1;
+      const plateSign = -bridgesSign;
+
+      // Imposta gli spostamenti puri lungo l'asse del calibro
       modelRoot.traverse((child) => {
         if (!child.isMesh) return;
         const lbl = getHierarchyLabel(child);
@@ -271,41 +229,40 @@
         const meshCenter = new THREE.Vector3();
         meshBox.getCenter(meshCenter);
 
+        let localOffset = meshCenter[minAxis] - center[minAxis];
         let mult = 0.45;
-        let refCoord = meshCenter[minAxis] - normCenter[minAxis];
 
-        // 1. Bariletto tenuto chiuso e compatto
+        // A. Bariletto tenuto chiuso e compatto
         if (lbl.includes('180 movement barrel')) {
-          mult = 0.14;
-          refCoord = barrelCenter[minAxis] - normCenter[minAxis];
+          localOffset = barrelCenter[minAxis] - center[minAxis];
+          mult = 0.25;
         }
-        // 2. Ruote di carica in acciaio allineate insieme
-        else if (
-          lbl.includes('415 ratchet wheel') ||
-          lbl.includes('420 crown wheel') ||
-          lbl.includes('422 crown wheel ring')
-        ) {
-          mult = 0.42;
-          refCoord = windingCenter[minAxis] - normCenter[minAxis];
+        // B. Ruote di carica in acciaio (415, 420, 422) allineate insieme sopra il ponte bariletto
+        else if (lbl.includes('415 ratchet') || lbl.includes('420 crown') || lbl.includes('422 crown')) {
+          localOffset = windingCenter[minAxis] - center[minAxis];
+          mult = 1.18;
         }
-        // 3. Antishock poco esploso per ora
+        // C. Antishock contenuto per ora
         else if (lbl.includes('incabloc')) {
-          mult = 0.22;
-        }
-        // 4. Rubini: quelli esterni restano verso l'esterno senza venire attraversati dalle platine
-        else if (matName.includes('rubino') || lbl.includes('ruby')) {
-          const isExternal = meshCenter[minAxis] >= extMidAxis;
-          mult = isExternal ? 0.82 : 0.28;
-          // Spinge leggermente verso l'esterno rispetto al bordo esterno per non essere mai superati da platina/ponti
-          if (isExternal) {
-            refCoord = Math.max(meshCenter[minAxis] - normCenter[minAxis], (extMaxAxis - normCenter[minAxis]) * 0.92);
-          }
-        }
-        // 5. Viti: piccoli distacchi coerenti
-        else if (lbl.includes('screw')) {
           mult = 0.35;
         }
-        // 6. Treno del tempo e ancora: tenuti più compatti e allineati
+        // D. Rubini: se stanno sul lato ponti restano FUORI dai ponti; se stanno sul lato platina restano FUORI dalla platina
+        else if (matName.includes('rubino') || lbl.includes('ruby')) {
+          const onBridgeSide = ((meshCenter[minAxis] - center[minAxis]) * bridgesSign) >= 0;
+          if (onBridgeSide) {
+            localOffset = bridgesSign * Math.abs(bridgesBox.max[minAxis] - bridgesBox.min[minAxis]) * 0.65;
+            mult = 1.25;
+          } else {
+            localOffset = plateSign * Math.abs(plateBox.max[minAxis] - plateBox.min[minAxis]) * 0.65;
+            mult = 1.25;
+          }
+        }
+        // E. Viti: accompagnano il rispettivo lato restando leggermente esterne
+        else if (lbl.includes('screw')) {
+          const onBridgeSide = ((meshCenter[minAxis] - center[minAxis]) * bridgesSign) >= 0;
+          mult = onBridgeSide ? 1.15 : 0.85;
+        }
+        // F. Treno del tempo e ancora: restano in asse e compatti al centro
         else if (
           lbl.includes('201 centre') ||
           lbl.includes('210 third') ||
@@ -313,42 +270,53 @@
           lbl.includes('705 escape') ||
           lbl.includes('710 pallet')
         ) {
-          mult = 0.28;
+          mult = 0.35;
         }
-        // 7. Platina e ponti: apertura principale
-        else if (
-          lbl.includes('100 main plate') ||
-          lbl.includes('bridge') ||
-          lbl.includes('pont')
-        ) {
-          mult = 0.95;
+        // G. Platina e ponti: si aprono bene per mostrare tutto l'interno
+        else if (lbl.includes('100 main plate') || lbl.includes('bridge') || lbl.includes('pont')) {
+          mult = 1.0;
         }
 
         explodeItems.push({
           obj: child,
           origPos: child.position.clone(),
           axis: minAxis,
-          factor: refCoord * BASE_EXPLODE_SPREAD * mult
+          delta: localOffset * BASE_EXPLODE_SPREAD * mult
         });
       });
 
-      statusEl.innerHTML = `<strong>Modello caricato</strong> (${meshCount} parti | Asse: ${minAxis.toUpperCase()})`;
+      // 2. ORA inseriamo modelRoot centrato dentro displayGroup e ruotiamo solo displayGroup!
+      //    Così gli assi locali dei singoli pezzi restano allineati al 100% con il calibro.
+      modelRoot.scale.setScalar(normScale);
+      modelRoot.position.copy(center).multiplyScalar(-normScale);
+
+      displayGroup = new THREE.Group();
+      displayGroup.add(modelRoot);
+
+      // Posa orologiera di 3/4:
+      // - Tige di carica (che nel GLB punta a +Y) ruotata verso dietro-destra (-Z / +X)
+      // - Faccia con i ponti e i rubini rivolta in avanti-alto verso la camera
+      displayGroup.rotation.order = 'YXZ';
+      displayGroup.rotation.y = -0.65;
+      displayGroup.rotation.x = -0.78;
+      displayGroup.rotation.z = 2.15;
+
+      scene.add(displayGroup);
+
+      statusEl.innerHTML = `<strong>Modello caricato</strong> (${meshCount} parti | Asse locale: ${minAxis.toUpperCase()})`;
     }
 
     function tryLoadFromIndex(index) {
       if (index >= CANDIDATE_PATHS.length) {
-        statusEl.innerHTML = `<span style="color:#ff6b6b;">File <code>ETA_6498-1_Movement_parts.glb</code> non trovato né fuori né dentro <code>/FR/</code>.</span>`;
+        statusEl.innerHTML = `<span style="color:#ff6b6b;">File <code>ETA_6498-1_Movement_parts.glb</code> non trovato.</span>`;
         return;
       }
-
-      const currentPath = CANDIDATE_PATHS[index];
       loader.load(
-        currentPath,
+        CANDIDATE_PATHS[index],
         (gltf) => onModelLoaded(gltf),
         (xhr) => {
           if (xhr.total) {
-            const pct = Math.round((xhr.loaded / xhr.total) * 100);
-            statusEl.innerHTML = `Caricamento: <strong>${pct}%</strong>`;
+            statusEl.innerHTML = `Caricamento: <strong>${Math.round((xhr.loaded / xhr.total) * 100)}%</strong>`;
           }
         },
         () => tryLoadFromIndex(index + 1)
@@ -362,10 +330,9 @@
     slider.addEventListener('input', () => {
       const t = parseFloat(slider.value);
       sliderVal.textContent = `${Math.round(t * 100)}%`;
-      const scaleX = modelRoot ? modelRoot.scale.x : 1;
       for (const item of explodeItems) {
         item.obj.position.copy(item.origPos);
-        item.obj.position[item.axis] += (item.factor * t) / scaleX;
+        item.obj.position[item.axis] += item.delta * t;
       }
     });
 
