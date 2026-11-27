@@ -304,7 +304,7 @@
       text-align: right;
     }
 
-    /* Visualizzatore 3D ETA 6498-1 (Sollevato sopra i tasti + Apertura Orizzontale) */
+    /* Visualizzatore 3D ETA 6498-1 (Sollevato sopra i tasti) */
     .eta-module-wrapper {
       background: #ffffff;
       border: 1px solid #dcdcdc;
@@ -602,7 +602,7 @@
       color: #d9534f;
     }
 
-    /* Sezione Atelier Interactif d'Assemblage (sostituisce la vecchia immagine statica con i pin) */
+    /* Sezione Atelier Interactif d'Assemblage */
     .atelier-embed-card {
       background: #ffffff;
       border: 1px solid #dcdcdc;
@@ -658,7 +658,7 @@
     }
   </style>
 
-  <!-- Import Map unico per Three.js r160 (condiviso tra Treno, ETA 6498-1 e Barillet senza duplicati) -->
+  <!-- Import Map unico per Three.js r160 -->
   <script type="importmap">
     {
       "imports": {
@@ -885,7 +885,7 @@
         </div>
       </div>
 
-      <!-- 2. ATELIER INTERACTIF D'ASSEMBLAGE PAR CYCLES (remplace l'ancienne image statique) -->
+      <!-- 2. ATELIER INTERACTIF D'ASSEMBLAGE PAR CYCLES -->
       <div class="atelier-embed-card" id="atelier-assemblage-section">
         <div class="atelier-embed-top">
           <div>
@@ -918,24 +918,24 @@
         <li><strong>Le Couvercle :</strong> Élément de fermeture qui assure le guidage axial de l'arbre et protège le mécanisme des poussières.</li>
       </ul>
 
-      <!-- 3. MODELLO 3D INTERATTIVO DEL BARILLET -->
+      <!-- 3. MODELLO 3D INTERATTIVO DEL BARILLET (OUVERTURE LATÉRALE EN COUCHE + RESSORT EN HAUT + PIVOT FIXE) -->
       <div class="img-always-visible">
         <div class="interactive-wrapper" style="position: relative; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 8px; padding: 15px;">
           
-          <div id="canvas-container-barillet" style="width: 100%; height: 450px; background-color: #ffffff; border-radius: 8px; position: relative; overflow: hidden;">
-            <div id="label-arbre" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Arbre &amp; Pignon</div>
-            <div id="label-tambour" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Tambour &amp; Roue</div>
-            <div id="label-molla" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Ressort-moteur</div>
-            <div id="label-coperchio" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">1. Couvercle</div>
+          <div id="canvas-container-barillet" style="width: 100%; height: 470px; background-color: #ffffff; border-radius: 8px; position: relative; overflow: hidden; border: 1px solid #e4e8ee;">
+            <div id="label-tambour" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 9px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.25); white-space: nowrap;">1. Tambour &amp; Roue</div>
+            <div id="label-molla" style="position: absolute; display: none; background: #b8860b; color: #fff; padding: 4px 9px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.25); white-space: nowrap;">2. Ressort-moteur</div>
+            <div id="label-arbre" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 9px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.25); white-space: nowrap;">3. Arbre de barillet</div>
+            <div id="label-coperchio" style="position: absolute; display: none; background: #1a365d; color: #fff; padding: 4px 9px; font-size: 11px; font-weight: bold; border-radius: 4px; pointer-events: none; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.25); white-space: nowrap;">4. Couvercle</div>
           </div>
 
-          <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px; display: flex; align-items: center; gap: 15px;">
+          <div style="margin-top: 15px; padding: 10px 14px; background: #f8f9fa; border-radius: 6px; display: flex; align-items: center; gap: 15px; border: 1px solid #e2e8f0;">
             <label for="exploder-barillet" style="font-size: 14px; font-weight: bold; color: #1a365d; white-space: nowrap;">⚙️ Contrôle de l'Exploso :</label>
-            <input type="range" id="exploder-barillet" min="0" max="100" value="0" style="flex-grow: 1; cursor: pointer; accent-color: #1a365d;">
-            <span id="val-scale-barillet" style="font-size: 13px; font-weight: bold; color: #6c757d; min-width: 40px;">0%</span>
+            <input type="range" id="exploder-barillet" min="0" max="100" value="0" style="flex-grow: 1; cursor: pointer; accent-color: #b8860b;">
+            <span id="val-scale-barillet" style="font-size: 13px; font-weight: bold; color: #1a365d; min-width: 42px; text-align: right;">0%</span>
           </div>
 
-          <div class="img-caption" style="margin-top: 10px;">📷 VUE TECHNIQUE 3D — Anatomie du barillet avec labels dynamiques.</div>
+          <div class="img-caption" style="margin-top: 10px;">📷 VUE TECHNIQUE 3D — Barillet ETA 6498-1 (Faites glisser pour pivoter librement ; ouvrez avec le curseur pour dégager le couvercle et le tambour latéralement avec le ressort en haut).</div>
         </div>
       </div>
 
@@ -1040,7 +1040,7 @@
   
   <footer>© 2026 Swiss Time Expert. Tous droits réservés.</footer>
 
-  <!-- Script unico Three.js r160 per Treno del Tempo, ETA 6498-1 e Barillet -->
+  <!-- Script unico Three.js r160 -->
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -1529,7 +1529,6 @@
         0.01,
         1000
       );
-      // Target abbassato a y = -0.42 così il movimento sale nella zona alta del canvas e non tocca i bottoni
       const ETA_INIT_CAM_POS = new THREE.Vector3(1.65, -0.05, 4.65);
       const ETA_INIT_TARGET = new THREE.Vector3(0, -0.42, 0);
       cameraEta.position.copy(ETA_INIT_CAM_POS);
@@ -2239,7 +2238,7 @@
       animateEta();
 
       // =========================================================================
-      // 2. VISUALIZZATORE 3D BARILLET (STESSO THREE.JS r160)
+      // 2. VISUALIZZATORE 3D BARILLET (OUVERTURE LATÉRALE + RESSORT EN HAUT + PIVOT FIXE)
       // =========================================================================
       const containerBarillet = document.getElementById('canvas-container-barillet');
       if (containerBarillet) {
@@ -2248,102 +2247,220 @@
         sceneBarillet.environment = sharedEnvMap;
 
         const cameraBarillet = new THREE.PerspectiveCamera(
-          45,
+          36,
           containerBarillet.clientWidth / containerBarillet.clientHeight,
-          0.1,
+          0.01,
           1000
         );
-        cameraBarillet.position.set(0, 25, 40);
+        cameraBarillet.position.set(0, 2.35, 3.15);
 
         const rendererBarillet = new THREE.WebGLRenderer({ antialias: true });
         rendererBarillet.setSize(containerBarillet.clientWidth, containerBarillet.clientHeight);
         rendererBarillet.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         rendererBarillet.toneMapping = THREE.ACESFilmicToneMapping;
-        rendererBarillet.toneMappingExposure = 1.15;
+        rendererBarillet.toneMappingExposure = 1.45;
         containerBarillet.appendChild(rendererBarillet.domElement);
 
         const controlsBarillet = new OrbitControls(cameraBarillet, rendererBarillet.domElement);
         controlsBarillet.enableDamping = true;
-        controlsBarillet.dampingFactor = 0.05;
+        controlsBarillet.dampingFactor = 0.06;
+        controlsBarillet.enableRotate = true;
+        controlsBarillet.enablePan = true;
+        controlsBarillet.enableZoom = true;
 
-        const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.4);
-        dirLight1.position.set(20, 40, 20);
-        sceneBarillet.add(dirLight1);
+        sceneBarillet.add(new THREE.AmbientLight(0xffffff, 1.45));
+        const bLight1 = new THREE.DirectionalLight(0xffffff, 2.2);
+        bLight1.position.set(5, 10, 7);
+        sceneBarillet.add(bLight1);
 
-        const dirLight2 = new THREE.DirectionalLight(0x88bbff, 0.7);
-        dirLight2.position.set(-20, -20, -20);
-        sceneBarillet.add(dirLight2);
+        const bLight2 = new THREE.DirectionalLight(0xdbe8ff, 1.2);
+        bLight2.position.set(-5, -4, -5);
+        sceneBarillet.add(bLight2);
 
         const partsBarillet = [];
-        const barilletLoader = new GLTFLoader();
+        const barilletGroup = new THREE.Group();
+        sceneBarillet.add(barilletGroup);
 
-        barilletLoader.load(
-          '../barillet_fix.glb',
+        function createMainspringMesh(radius, height) {
+          const turns = 7.5;
+          const points = [];
+          const steps = 260;
+          const rMin = radius * 0.24;
+          const rMax = radius * 0.84;
+          for (let i = 0; i <= steps; i++) {
+            const u = i / steps;
+            const angle = u * turns * Math.PI * 2;
+            const r = rMin + (rMax - rMin) * u;
+            points.push(new THREE.Vector3(Math.cos(angle) * r, 0, Math.sin(angle) * r));
+          }
+          const curve = new THREE.CatmullRomCurve3(points);
+          const springGeo = new THREE.TubeGeometry(curve, 260, Math.max(0.012, radius * 0.024), 8, false);
+          springGeo.scale(1, (height * 0.65) / Math.max(0.024, radius * 0.048), 1);
+          const springMat = new THREE.MeshStandardMaterial({
+            color: 0x3b4859,
+            metalness: 0.9,
+            roughness: 0.22
+          });
+          return new THREE.Mesh(springGeo, springMat);
+        }
+
+        const etaBarrelLoader = new GLTFLoader();
+        etaBarrelLoader.load(
+          ETA_MODEL_URL,
           (gltf) => {
-            const model = gltf.scene;
-            sceneBarillet.add(model);
+            const rawScene = gltf.scene;
+            const barrelMeshes = [];
 
-            model.traverse((child) => {
-              if (child.isMesh) {
-                const initialPos = child.position.clone();
-                const name = child.name.toLowerCase();
-
-                let targetOffset = 0;
-                let labelType = 'tambour';
-
-                if (name.includes('albero') || name.includes('shaft') || name.includes('asse') || name.includes('pinion')) {
-                  targetOffset = 0;
-                  labelType = 'arbre';
-                } else if (name.includes('coperchio') || name.includes('cover')) {
-                  targetOffset = 18;
-                  labelType = 'coperchio';
-                } else if (name.includes('molla') || name.includes('spring')) {
-                  targetOffset = 6;
-                  labelType = 'molla';
-                } else {
-                  targetOffset = -15;
-                  labelType = 'tambour';
-                }
-
-                partsBarillet.push({
-                  mesh: child,
-                  initialPos,
-                  targetOffset,
-                  labelId: 'label-' + labelType
-                });
+            rawScene.traverse((child) => {
+              if (!child.isMesh) return;
+              let fullName = '';
+              let cur = child;
+              while (cur) {
+                if (cur.name) fullName += ' ' + cur.name;
+                cur = cur.parent;
+              }
+              if (/barrel|tambour|barillet|federhaus|mainspring|spring/i.test(fullName) && !/bridge|pont|br[uü]cke/i.test(fullName)) {
+                barrelMeshes.push({ mesh: child, fullName });
               }
             });
+
+            if (barrelMeshes.length === 0) return;
+
+            const tempContainer = new THREE.Group();
+            barrelMeshes.forEach(({ mesh, fullName }) => {
+              mesh.updateMatrixWorld(true);
+              const cloned = mesh.clone();
+              cloned.applyMatrix4(mesh.matrixWorld);
+              cloned.userData.fullName = fullName;
+              tempContainer.add(cloned);
+            });
+
+            const box = new THREE.Box3().setFromObject(tempContainer);
+            const size = box.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z) || 1;
+            tempContainer.scale.setScalar(1.75 / maxDim);
+
+            const sBox = new THREE.Box3().setFromObject(tempContainer);
+            const sSize = sBox.getSize(new THREE.Vector3());
+            if (sSize.z < sSize.y && sSize.z < sSize.x) {
+              tempContainer.rotation.x = -Math.PI / 2;
+            }
+
+            const cBox = new THREE.Box3().setFromObject(tempContainer);
+            const center = cBox.getCenter(new THREE.Vector3());
+            tempContainer.position.sub(center);
+
+            barilletGroup.add(tempContainer);
+            barilletGroup.updateMatrixWorld(true);
+
+            const finalBox = new THREE.Box3().setFromObject(barilletGroup);
+            const finalSize = finalBox.getSize(new THREE.Vector3());
+            const barrelRadius = Math.max(finalSize.x, finalSize.z) * 0.5;
+            const barrelHeight = finalSize.y;
+
+            let hasDedicatedSpring = false;
+            const childrenList = [...tempContainer.children];
+
+            childrenList.forEach((child) => {
+              const name = (child.userData.fullName || '').toLowerCase();
+              const initialPos = child.position.clone();
+              let offset = new THREE.Vector3(-1.05, -0.06, 0);
+              let labelType = 'tambour';
+
+              if (/spring|molla|ressort|zugfeder/i.test(name)) {
+                offset = new THREE.Vector3(0, 0.42, 0);
+                labelType = 'molla';
+                hasDedicatedSpring = true;
+              } else if (/arbor|albero|arbre|federkern/i.test(name)) {
+                // Il perno resta fermo al suo posto senza spostamenti
+                offset = new THREE.Vector3(0, 0, 0);
+                labelType = 'arbre';
+              } else if (/cover|coperchio|couvercle|deckel/i.test(name)) {
+                // Il coperchio si apre lateralmente da un lato
+                offset = new THREE.Vector3(1.05, -0.06, 0);
+                labelType = 'coperchio';
+              } else {
+                // Il contenitore / tambour si apre lateralmente dal lato opposto
+                offset = new THREE.Vector3(-1.05, -0.06, 0);
+                labelType = 'tambour';
+              }
+
+              partsBarillet.push({
+                mesh: child,
+                initialPos,
+                targetOffset: offset,
+                labelId: 'label-' + labelType
+              });
+            });
+
+            if (!hasDedicatedSpring) {
+              // Ressort-moteur in alto al centro
+              const springMesh = createMainspringMesh(barrelRadius, barrelHeight);
+              springMesh.visible = false;
+              barilletGroup.add(springMesh);
+
+              partsBarillet.push({
+                mesh: springMesh,
+                initialPos: springMesh.position.clone(),
+                targetOffset: new THREE.Vector3(0, 0.42, 0),
+                labelId: 'label-molla',
+                revealOnExplode: true
+              });
+
+              // Perno centrale fisso (resta dov'è, con solo la targhetta del nome)
+              const arborGeo = new THREE.CylinderGeometry(barrelRadius * 0.14, barrelRadius * 0.14, barrelHeight * 1.25, 24);
+              const arborMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.9, roughness: 0.2 });
+              const arborMesh = new THREE.Mesh(arborGeo, arborMat);
+              barilletGroup.add(arborMesh);
+
+              partsBarillet.push({
+                mesh: arborMesh,
+                initialPos: arborMesh.position.clone(),
+                targetOffset: new THREE.Vector3(0, 0, 0),
+                labelId: 'label-arbre',
+                fixedPin: true
+              });
+            }
           },
           undefined,
           (error) => {
-            console.error('Error loading barillet GLB file:', error);
+            console.error('Erreur chargement barillet depuis ETA 6498-1:', error);
           }
         );
 
         function updateBarilletLabelsPosition() {
+          const tempV = new THREE.Vector3();
           partsBarillet.forEach((p) => {
             const lbl = document.getElementById(p.labelId);
             if (!lbl || lbl.style.display === 'none') return;
 
-            const tempV = p.mesh.position.clone();
+            const box = new THREE.Box3().setFromObject(p.mesh);
+            box.getCenter(tempV);
             tempV.project(cameraBarillet);
 
             const x = (tempV.x * 0.5 + 0.5) * containerBarillet.clientWidth;
             const y = (tempV.y * -0.5 + 0.5) * containerBarillet.clientHeight;
 
-            lbl.style.left = (x - 30) + 'px';
-            lbl.style.top = (y - 15) + 'px';
+            lbl.style.left = Math.min(containerBarillet.clientWidth - 135, Math.max(10, x - 35)) + 'px';
+            lbl.style.top = Math.min(containerBarillet.clientHeight - 32, Math.max(10, y - 16)) + 'px';
           });
         }
 
         function updateBarilletExplosion(t) {
           partsBarillet.forEach((p) => {
-            p.mesh.position.x = p.initialPos.x + (p.targetOffset * t);
-            p.mesh.position.y = p.initialPos.y;
-            p.mesh.position.z = p.initialPos.z;
+            if (p.revealOnExplode) {
+              p.mesh.visible = t > 0.04;
+            }
+            if (p.fixedPin) {
+              p.mesh.position.copy(p.initialPos);
+              return;
+            }
+            p.mesh.position.x = p.initialPos.x + (p.targetOffset.x * t);
+            p.mesh.position.y = p.initialPos.y + (p.targetOffset.y * t);
+            p.mesh.position.z = p.initialPos.z + (p.targetOffset.z * t);
           });
 
-          const showLabels = t > 0.05;
+          const showLabels = t > 0.06;
           ['label-arbre', 'label-tambour', 'label-molla', 'label-coperchio'].forEach((id) => {
             const lbl = document.getElementById(id);
             if (lbl) lbl.style.display = showLabels ? 'block' : 'none';
@@ -2375,7 +2492,7 @@
           controlsBarillet.update();
           rendererBarillet.render(sceneBarillet, cameraBarillet);
 
-          if (sliderBarillet && Number(sliderBarillet.value) > 5) {
+          if (sliderBarillet && Number(sliderBarillet.value) > 6) {
             updateBarilletLabelsPosition();
           }
         }
