@@ -98,8 +98,8 @@
       './ETA_6498-1_Movement_parts.glb'
     ];
 
-    // Escursione base ampia per valorizzare lo schermo pieno
-    const BASE_EXPLODE_SPREAD = 8.5;
+    // Escursione ampia per valorizzare la vista a schermo pieno
+    const BASE_EXPLODE_SPREAD = 16.5;
 
     const statusEl = document.getElementById('status');
     const container = document.getElementById('viewer');
@@ -108,7 +108,8 @@
     scene.background = new THREE.Color(0x181b20);
 
     const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.01, 100);
-    camera.position.set(2.8, 2.2, 3.2);
+    const DEFAULT_CAM_POS = new THREE.Vector3(2.5, 1.9, 2.7);
+    camera.position.copy(DEFAULT_CAM_POS);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -146,112 +147,189 @@
       return parts.join(' ').toLowerCase();
     }
 
-    function getCoherentMultiplier(label, matNameLower) {
-      // 1. Bariletto tenuto chiuso e solidale (spostamento minimo uniforme)
-      if (label.includes('180 movement barrel') || label.includes('barrel')) {
-        return 0.15;
-      }
-      // 2. Antishock poco esploso per ora
-      if (label.includes('incabloc')) {
-        return 0.25;
-      }
-      // 3. Rubini e viti: piccoli distacchi coerenti
-      if (matNameLower.includes('rubino') || label.includes('ruby') || label.includes('screw')) {
-        return 0.35;
-      }
-      // 4. Treno del tempo e ancora tenuti insieme/allineati
-      if (
-        label.includes('201 centre') ||
-        label.includes('210 third') ||
-        label.includes('220 second') ||
-        label.includes('705 escape') ||
-        label.includes('710 pallet')
-      ) {
-        return 0.32;
-      }
-      // 5. Platina e ponti: massima apertura strutturale
-      if (
-        label.includes('100 main plate') ||
-        label.includes('bridge') ||
-        label.includes('pont')
-      ) {
-        return 1.0;
-      }
-      // 6. Altri componenti interni / centrali: apertura moderata
-      return 0.45;
-    }
-
     function onModelLoaded(gltf) {
       modelRoot = gltf.scene;
       scene.add(modelRoot);
 
-      const box = new THREE.Box3().setFromObject(modelRoot);
-      const size = new THREE.Vector3();
-      const center = new THREE.Vector3();
-      box.getSize(size);
-      box.getCenter(center);
+      // Ruota leggermente l'assieme così la lunga asta di carica resta verso il retro
+      modelRoot.rotation.set(0.15, 1.15, -0.1);
+      modelRoot.updateMatrixWorld(true);
 
-      const maxDim = Math.max(size.x, size.y, size.z) || 1;
-      modelRoot.scale.setScalar(2.45 / maxDim);
-
-      box.setFromObject(modelRoot);
-      box.getCenter(center);
-      modelRoot.position.sub(center);
-
-      const normSize = new THREE.Vector3();
-      box.getSize(normSize);
-      const minAxis = (normSize.z <= normSize.x && normSize.z <= normSize.y) ? 'z'
-                    : (normSize.y <= normSize.x && normSize.y <= normSize.z) ? 'y' : 'x';
-
-      // Calcola un centro medio per il gruppo bariletto così resta chiuso e compatto
-      const barrelMeshes = [];
-      const barrelBox = new THREE.Box3();
-
-      let meshCount = 0;
+      // Centra il modello sul corpo principale (escludendo la lunga tige di carica che sbilancia il box)
+      const coreBox = new THREE.Box3();
+      const fullBox = new THREE.Box3();
       modelRoot.traverse((child) => {
         if (child.isMesh) {
-          meshCount++;
-          if (child.material) {
-            child.material.side = THREE.DoubleSide;
-            child.material.needsUpdate = true;
-          }
-          const label = getHierarchyLabel(child);
-          if (label.includes('180 movement barrel')) {
-            barrelMeshes.push(child);
-            barrelBox.expandByObject(child);
+          fullBox.expandByObject(child);
+          const lbl = getHierarchyLabel(child);
+          if (!lbl.includes('401 winding stem')) {
+            coreBox.expandByObject(child);
           }
         }
       });
 
-      const barrelCenter = new THREE.Vector3();
-      if (barrelMeshes.length > 0) {
-        barrelBox.getCenter(barrelCenter);
-      }
+      const refBox = coreBox.isEmpty() ? fullBox : coreBox;
+      const size = new THREE.Vector3();
+      const center = new THREE.Vector3();
+      refBox.getSize(size);
+      refBox.getCenter(center);
 
+      const maxDim = Math.max(size.x, size.y, size.z) || 1;
+      modelRoot.scale.setScalar(2.5 / maxDim);
+      modelRoot.updateMatrixWorld(true);
+
+      // Riallinea il centro del corpo principale all'origine (0, 0, 0)
+      const scaledCoreBox = new THREE.Box3();
       modelRoot.traverse((child) => {
         if (child.isMesh) {
-          const label = getHierarchyLabel(child);
-          const matNameLower = (child.material && child.material.name) ? child.material.name.toLowerCase() : '';
-          const mult = getCoherentMultiplier(label, matNameLower);
-
-          const isBarrel = label.includes('180 movement barrel');
-          let refCoord = 0;
-          if (isBarrel && barrelMeshes.length > 0) {
-            refCoord = barrelCenter[minAxis];
-          } else {
-            const meshBox = new THREE.Box3().setFromObject(child);
-            const meshCenter = new THREE.Vector3();
-            meshBox.getCenter(meshCenter);
-            refCoord = meshCenter[minAxis];
+          const lbl = getHierarchyLabel(child);
+          if (!lbl.includes('401 winding stem')) {
+            scaledCoreBox.expandByObject(child);
           }
-
-          explodeItems.push({
-            obj: child,
-            origPos: child.position.clone(),
-            axis: minAxis,
-            factor: refCoord * BASE_EXPLODE_SPREAD * mult
-          });
         }
+      });
+      if (!scaledCoreBox.isEmpty()) {
+        scaledCoreBox.getCenter(center);
+        modelRoot.position.sub(center);
+        modelRoot.updateMatrixWorld(true);
+      }
+
+      // Determina l'asse di profondità/spessore del movimento
+      const normBox = new THREE.Box3();
+      modelRoot.traverse((child) => {
+        if (child.isMesh) {
+          const lbl = getHierarchyLabel(child);
+          if (!lbl.includes('401 winding stem')) {
+            normBox.expandByObject(child);
+          }
+        }
+      });
+      const normSize = new THREE.Vector3();
+      const normCenter = new THREE.Vector3();
+      normBox.getSize(normSize);
+      normBox.getCenter(normCenter);
+
+      const minAxis = (normSize.z <= normSize.x && normSize.z <= normSize.y) ? 'z'
+                    : (normSize.y <= normSize.x && normSize.y <= normSize.z) ? 'y' : 'x';
+
+      // Raccoglie riferimenti per gruppi coerenti: bariletto chiuso e ruote di carica in acciaio allineate
+      const barrelBox = new THREE.Box3();
+      const windingBox = new THREE.Box3();
+      const plateAndBridgeBox = new THREE.Box3();
+      const rubyMeshes = [];
+
+      let meshCount = 0;
+      modelRoot.traverse((child) => {
+        if (!child.isMesh) return;
+        meshCount++;
+        if (child.material) {
+          child.material.side = THREE.DoubleSide;
+          child.material.needsUpdate = true;
+        }
+
+        const lbl = getHierarchyLabel(child);
+        const matName = (child.material && child.material.name) ? child.material.name.toLowerCase() : '';
+
+        if (lbl.includes('180 movement barrel')) {
+          barrelBox.expandByObject(child);
+        }
+        if (
+          lbl.includes('415 ratchet wheel') ||
+          lbl.includes('420 crown wheel') ||
+          lbl.includes('422 crown wheel ring')
+        ) {
+          windingBox.expandByObject(child);
+        }
+        if (
+          lbl.includes('100 main plate') ||
+          lbl.includes('bridge') ||
+          lbl.includes('pont')
+        ) {
+          plateAndBridgeBox.expandByObject(child);
+        }
+        if (matName.includes('rubino') || lbl.includes('ruby')) {
+          rubyMeshes.push(child);
+        }
+      });
+
+      const barrelCenter = new THREE.Vector3();
+      if (!barrelBox.isEmpty()) barrelBox.getCenter(barrelCenter);
+
+      const windingCenter = new THREE.Vector3();
+      if (!windingBox.isEmpty()) windingBox.getCenter(windingCenter);
+
+      const extMinAxis = !plateAndBridgeBox.isEmpty() ? plateAndBridgeBox.min[minAxis] : normBox.min[minAxis];
+      const extMaxAxis = !plateAndBridgeBox.isEmpty() ? plateAndBridgeBox.max[minAxis] : normBox.max[minAxis];
+      const extMidAxis = (extMinAxis + extMaxAxis) * 0.5;
+
+      modelRoot.traverse((child) => {
+        if (!child.isMesh) return;
+        const lbl = getHierarchyLabel(child);
+        const matName = (child.material && child.material.name) ? child.material.name.toLowerCase() : '';
+
+        const meshBox = new THREE.Box3().setFromObject(child);
+        const meshCenter = new THREE.Vector3();
+        meshBox.getCenter(meshCenter);
+
+        let mult = 0.45;
+        let refCoord = meshCenter[minAxis] - normCenter[minAxis];
+
+        // 1. Bariletto tenuto chiuso e compatto
+        if (lbl.includes('180 movement barrel')) {
+          mult = 0.14;
+          refCoord = barrelCenter[minAxis] - normCenter[minAxis];
+        }
+        // 2. Ruote di carica in acciaio allineate insieme
+        else if (
+          lbl.includes('415 ratchet wheel') ||
+          lbl.includes('420 crown wheel') ||
+          lbl.includes('422 crown wheel ring')
+        ) {
+          mult = 0.42;
+          refCoord = windingCenter[minAxis] - normCenter[minAxis];
+        }
+        // 3. Antishock poco esploso per ora
+        else if (lbl.includes('incabloc')) {
+          mult = 0.22;
+        }
+        // 4. Rubini: quelli esterni restano verso l'esterno senza venire attraversati dalle platine
+        else if (matName.includes('rubino') || lbl.includes('ruby')) {
+          const isExternal = meshCenter[minAxis] >= extMidAxis;
+          mult = isExternal ? 0.82 : 0.28;
+          // Spinge leggermente verso l'esterno rispetto al bordo esterno per non essere mai superati da platina/ponti
+          if (isExternal) {
+            refCoord = Math.max(meshCenter[minAxis] - normCenter[minAxis], (extMaxAxis - normCenter[minAxis]) * 0.92);
+          }
+        }
+        // 5. Viti: piccoli distacchi coerenti
+        else if (lbl.includes('screw')) {
+          mult = 0.35;
+        }
+        // 6. Treno del tempo e ancora: tenuti più compatti e allineati
+        else if (
+          lbl.includes('201 centre') ||
+          lbl.includes('210 third') ||
+          lbl.includes('220 second') ||
+          lbl.includes('705 escape') ||
+          lbl.includes('710 pallet')
+        ) {
+          mult = 0.28;
+        }
+        // 7. Platina e ponti: apertura principale
+        else if (
+          lbl.includes('100 main plate') ||
+          lbl.includes('bridge') ||
+          lbl.includes('pont')
+        ) {
+          mult = 0.95;
+        }
+
+        explodeItems.push({
+          obj: child,
+          origPos: child.position.clone(),
+          axis: minAxis,
+          factor: refCoord * BASE_EXPLODE_SPREAD * mult
+        });
       });
 
       statusEl.innerHTML = `<strong>Modello caricato</strong> (${meshCount} parti | Asse: ${minAxis.toUpperCase()})`;
@@ -312,7 +390,7 @@
       btnAuto.classList.toggle('active', controls.autoRotate);
     };
     document.getElementById('btnReset').onclick = () => {
-      camera.position.set(2.8, 2.2, 3.2);
+      camera.position.copy(DEFAULT_CAM_POS);
       controls.target.set(0, 0, 0);
       controls.update();
     };
