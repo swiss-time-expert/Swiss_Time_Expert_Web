@@ -39,6 +39,7 @@
       flex-direction: column;
       gap: 10px;
       align-items: center;
+      min-width: 340px;
       z-index: 10;
     }
     .slider-row { display: flex; align-items: center; gap: 12px; width: 100%; font-size: 13px; font-weight: 600; }
@@ -97,6 +98,9 @@
       './ETA_6498-1_Movement_parts.glb'
     ];
 
+    // Escursione base ampia per valorizzare lo schermo pieno
+    const BASE_EXPLODE_SPREAD = 8.5;
+
     const statusEl = document.getElementById('status');
     const container = document.getElementById('viewer');
 
@@ -104,7 +108,7 @@
     scene.background = new THREE.Color(0x181b20);
 
     const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.01, 100);
-    camera.position.set(2.4, 2.0, 2.8);
+    camera.position.set(2.8, 2.2, 3.2);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -132,7 +136,52 @@
     const explodeItems = [];
     const loader = new GLTFLoader();
 
-    function onModelLoaded(gltf, resolvedPath) {
+    function getHierarchyLabel(obj) {
+      const parts = [];
+      let cur = obj;
+      while (cur) {
+        if (cur.name) parts.push(cur.name);
+        cur = cur.parent;
+      }
+      return parts.join(' ').toLowerCase();
+    }
+
+    function getCoherentMultiplier(label, matNameLower) {
+      // 1. Bariletto tenuto chiuso e solidale (spostamento minimo uniforme)
+      if (label.includes('180 movement barrel') || label.includes('barrel')) {
+        return 0.15;
+      }
+      // 2. Antishock poco esploso per ora
+      if (label.includes('incabloc')) {
+        return 0.25;
+      }
+      // 3. Rubini e viti: piccoli distacchi coerenti
+      if (matNameLower.includes('rubino') || label.includes('ruby') || label.includes('screw')) {
+        return 0.35;
+      }
+      // 4. Treno del tempo e ancora tenuti insieme/allineati
+      if (
+        label.includes('201 centre') ||
+        label.includes('210 third') ||
+        label.includes('220 second') ||
+        label.includes('705 escape') ||
+        label.includes('710 pallet')
+      ) {
+        return 0.32;
+      }
+      // 5. Platina e ponti: massima apertura strutturale
+      if (
+        label.includes('100 main plate') ||
+        label.includes('bridge') ||
+        label.includes('pont')
+      ) {
+        return 1.0;
+      }
+      // 6. Altri componenti interni / centrali: apertura moderata
+      return 0.45;
+    }
+
+    function onModelLoaded(gltf) {
       modelRoot = gltf.scene;
       scene.add(modelRoot);
 
@@ -154,6 +203,10 @@
       const minAxis = (normSize.z <= normSize.x && normSize.z <= normSize.y) ? 'z'
                     : (normSize.y <= normSize.x && normSize.y <= normSize.z) ? 'y' : 'x';
 
+      // Calcola un centro medio per il gruppo bariletto così resta chiuso e compatto
+      const barrelMeshes = [];
+      const barrelBox = new THREE.Box3();
+
       let meshCount = 0;
       modelRoot.traverse((child) => {
         if (child.isMesh) {
@@ -162,15 +215,41 @@
             child.material.side = THREE.DoubleSide;
             child.material.needsUpdate = true;
           }
-          const meshBox = new THREE.Box3().setFromObject(child);
-          const meshCenter = new THREE.Vector3();
-          meshBox.getCenter(meshCenter);
+          const label = getHierarchyLabel(child);
+          if (label.includes('180 movement barrel')) {
+            barrelMeshes.push(child);
+            barrelBox.expandByObject(child);
+          }
+        }
+      });
+
+      const barrelCenter = new THREE.Vector3();
+      if (barrelMeshes.length > 0) {
+        barrelBox.getCenter(barrelCenter);
+      }
+
+      modelRoot.traverse((child) => {
+        if (child.isMesh) {
+          const label = getHierarchyLabel(child);
+          const matNameLower = (child.material && child.material.name) ? child.material.name.toLowerCase() : '';
+          const mult = getCoherentMultiplier(label, matNameLower);
+
+          const isBarrel = label.includes('180 movement barrel');
+          let refCoord = 0;
+          if (isBarrel && barrelMeshes.length > 0) {
+            refCoord = barrelCenter[minAxis];
+          } else {
+            const meshBox = new THREE.Box3().setFromObject(child);
+            const meshCenter = new THREE.Vector3();
+            meshBox.getCenter(meshCenter);
+            refCoord = meshCenter[minAxis];
+          }
 
           explodeItems.push({
             obj: child,
             origPos: child.position.clone(),
             axis: minAxis,
-            factor: meshCenter[minAxis] * 2.8
+            factor: refCoord * BASE_EXPLODE_SPREAD * mult
           });
         }
       });
@@ -187,7 +266,7 @@
       const currentPath = CANDIDATE_PATHS[index];
       loader.load(
         currentPath,
-        (gltf) => onModelLoaded(gltf, currentPath),
+        (gltf) => onModelLoaded(gltf),
         (xhr) => {
           if (xhr.total) {
             const pct = Math.round((xhr.loaded / xhr.total) * 100);
@@ -205,9 +284,10 @@
     slider.addEventListener('input', () => {
       const t = parseFloat(slider.value);
       sliderVal.textContent = `${Math.round(t * 100)}%`;
+      const scaleX = modelRoot ? modelRoot.scale.x : 1;
       for (const item of explodeItems) {
         item.obj.position.copy(item.origPos);
-        item.obj.position[item.axis] += (item.factor * t) / (modelRoot ? modelRoot.scale.x : 1);
+        item.obj.position[item.axis] += (item.factor * t) / scaleX;
       }
     });
 
@@ -232,7 +312,7 @@
       btnAuto.classList.toggle('active', controls.autoRotate);
     };
     document.getElementById('btnReset').onclick = () => {
-      camera.position.set(2.4, 2.0, 2.8);
+      camera.position.set(2.8, 2.2, 3.2);
       controls.target.set(0, 0, 0);
       controls.update();
     };
