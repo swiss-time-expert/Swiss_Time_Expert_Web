@@ -10,7 +10,7 @@
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      padding: 18px;
+      padding: 14px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #0b1933;
       color: #f8fafc;
@@ -21,7 +21,7 @@
       background: #ffffff;
       color: #1a365d;
       border-radius: 12px;
-      padding: 18px;
+      padding: 16px;
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
     }
     .test-header {
@@ -29,9 +29,9 @@
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 12px;
-      padding-bottom: 12px;
+      padding-bottom: 10px;
       border-bottom: 2px solid #e2e8f0;
     }
     .test-title {
@@ -45,86 +45,10 @@
       font-size: 0.84rem;
       color: #4a5568;
     }
-    .test-controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-    .btn-ui {
-      background: #f1f5f9;
-      color: #1a365d;
-      border: 1px solid #cbd5e1;
-      padding: 7px 12px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .btn-ui:hover { background: #e2e8f0; }
-    .btn-ui.active {
-      background: #1a365d;
-      color: #ffffff;
-      border-color: #1a365d;
-    }
-    .btn-ui.gold {
-      background: #b8860b;
-      color: #ffffff;
-      border-color: #9a6b00;
-    }
-
-    .status-strip {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      background: #f4f7fb;
-      border: 1px solid #d5dfec;
-      border-left: 5px solid #b8860b;
-      border-radius: 8px;
-      padding: 10px 14px;
-      margin-bottom: 12px;
-      font-size: 0.9rem;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .status-strip.error-strip {
-      background: #fef2f2;
-      border-color: #fecaca;
-      border-left-color: #dc2626;
-      color: #991b1b;
-    }
-    .cycle-badge {
-      background: #b8860b;
-      color: #ffffff;
-      padding: 3px 10px;
-      border-radius: 999px;
-      font-weight: 800;
-      font-size: 0.78rem;
-      margin-right: 6px;
-    }
-    .step-badge {
-      background: #1a365d;
-      color: #ffd43b;
-      padding: 3px 10px;
-      border-radius: 999px;
-      font-weight: 800;
-      font-size: 0.78rem;
-      margin-right: 8px;
-    }
-    .progress-pill {
-      font-weight: 800;
-      color: #1a365d;
-      background: #e2e8f0;
-      padding: 4px 12px;
-      border-radius: 999px;
-      font-size: 0.82rem;
-    }
 
     #canvas-stage {
       width: 100%;
-      height: 600px;
+      height: 640px;
       background: #ffffff;
       border: 1px solid #cbd5e1;
       border-radius: 10px;
@@ -144,9 +68,65 @@
       border: none;
     }
 
+    /* Barra di stato unificata in alto dentro il canvas (visibile anche a schermo pieno) */
+    .stage-top-bar {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      background: rgba(248, 250, 252, 0.96);
+      backdrop-filter: blur(8px);
+      border: 1px solid #cbd5e1;
+      border-left: 5px solid #b8860b;
+      border-radius: 10px;
+      padding: 8px 14px;
+      z-index: 26;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+      font-size: 0.9rem;
+      color: #1a365d;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .stage-top-bar.error-strip {
+      background: #fef2f2;
+      border-color: #fca5a5;
+      border-left-color: #dc2626;
+      color: #991b1b;
+    }
+    .cycle-badge {
+      background: #b8860b;
+      color: #ffffff;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      margin-right: 6px;
+    }
+    .step-badge {
+      background: #1a365d;
+      color: #ffd43b;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      margin-right: 8px;
+    }
+    .progress-pill {
+      font-weight: 800;
+      color: #1a365d;
+      background: #e2e8f0;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+    }
+
     #grab-tooltip {
       position: absolute;
-      top: 14px;
+      top: 66px;
       left: 50%;
       transform: translateX(-50%);
       background: rgba(13, 19, 31, 0.95);
@@ -183,14 +163,14 @@
 
     #hover-pill {
       position: absolute;
-      top: 14px;
+      top: 66px;
       left: 16px;
       background: rgba(26, 54, 93, 0.94);
       color: #ffffff;
       border: 1px solid #93c5fd;
-      padding: 6px 13px;
-      border-radius: 6px;
-      font-size: 0.82rem;
+      padding: 7px 14px;
+      border-radius: 7px;
+      font-size: 0.86rem;
       font-weight: 700;
       pointer-events: none;
       display: none;
@@ -198,44 +178,76 @@
     }
     #hover-pill.visible { display: block; }
 
+    /* Plancia comandi unificata e più grande in basso (sempre visibile anche in Plein Écran) */
     .hud-dock {
       position: absolute;
       bottom: 14px;
-      right: 16px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       flex-wrap: wrap;
-      justify-content: flex-end;
+      justify-content: center;
       align-items: center;
-      gap: 6px;
-      background: rgba(13, 19, 31, 0.92);
+      gap: 8px;
+      background: rgba(13, 19, 31, 0.94);
       backdrop-filter: blur(8px);
-      border: 1px solid rgba(212, 175, 55, 0.45);
-      border-radius: 10px;
-      padding: 7px 10px;
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      border-radius: 12px;
+      padding: 10px 14px;
       z-index: 25;
-      max-width: calc(100% - 32px);
+      width: max-content;
+      max-width: calc(100% - 24px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
     }
     .hud-btn {
-      background: rgba(30, 41, 59, 0.92);
+      background: rgba(30, 41, 59, 0.95);
       color: #f8fafc;
-      border: 1px solid #3b4c66;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: 0.79rem;
-      font-weight: 600;
+      border: 1px solid #475569;
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
       cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s, border-color 0.15s, transform 0.08s;
     }
-    .hud-btn:hover { border-color: #d4af37; }
+    .hud-btn:hover {
+      background: #2c3e55;
+      border-color: #d4af37;
+    }
+    .hud-btn:active {
+      transform: scale(0.97);
+    }
     .hud-btn.active {
       background: #b8860b;
       border-color: #f3c64f;
       color: #ffffff;
     }
+    .hud-btn.gold-action {
+      background: #9a6b00;
+      border-color: #f3c64f;
+      color: #ffffff;
+    }
+    .hud-btn.gold-action:hover {
+      background: #b8860b;
+    }
     .hud-sep {
       width: 1px;
-      height: 18px;
-      background: rgba(148, 163, 184, 0.25);
+      height: 24px;
+      background: rgba(148, 163, 184, 0.3);
       margin: 0 2px;
+    }
+
+    #canvas-stage:fullscreen .hud-dock,
+    #canvas-stage:-webkit-full-screen .hud-dock {
+      bottom: 20px;
+      padding: 12px 18px;
+      gap: 10px;
+    }
+    #canvas-stage:fullscreen .hud-btn,
+    #canvas-stage:-webkit-full-screen .hud-btn {
+      padding: 11px 16px;
+      font-size: 1rem;
     }
 
     #loader-overlay {
@@ -306,24 +318,18 @@
         <h1 class="test-title">🛠️ Atelier Virtuel 3D — Assemblage par Cycles (Calibre ETA 6498-1)</h1>
         <p class="test-sub">Les composants arrivent sur l'établi par lots logiques (4 à 5 pièces par cycle) sans chevauchement • Vis aimantées automatiquement.</p>
       </div>
-      <div class="test-controls">
-        <button type="button" class="btn-ui active" id="btn-mode-guided">🧭 Mode Guidé</button>
-        <button type="button" class="btn-ui" id="btn-mode-free">🔓 Mode Libre</button>
-        <button type="button" class="btn-ui" id="btn-auto-place">⚡ Poser l'étape</button>
-        <button type="button" class="btn-ui gold" id="btn-reset-all">↺ Recommencer</button>
-      </div>
-    </div>
-
-    <div class="status-strip" id="status-strip">
-      <div>
-        <span class="cycle-badge" id="cycle-badge">Cycle 1/3</span>
-        <span class="step-badge" id="step-badge">Étape 1</span>
-        <span id="step-instruction">Chargement des composants de l'atelier...</span>
-      </div>
-      <div class="progress-pill" id="progress-pill">0 / 0 montés</div>
     </div>
 
     <div id="canvas-stage">
+      <div class="stage-top-bar" id="status-strip">
+        <div>
+          <span class="cycle-badge" id="cycle-badge">Cycle 1/3</span>
+          <span class="step-badge" id="step-badge">Étape 1</span>
+          <span id="step-instruction">Chargement des composants de l'atelier...</span>
+        </div>
+        <div class="progress-pill" id="progress-pill">0 / 0 montés</div>
+      </div>
+
       <div id="loader-overlay">
         <div class="spinner"></div>
         <div id="loader-text">Préparation du plateau d'assemblage ETA 6498-1...</div>
@@ -333,14 +339,17 @@
       <div id="hover-pill">Composant</div>
 
       <div class="hud-dock">
+        <button type="button" class="hud-btn active" id="btn-mode-guided" title="Montage pas à pas dans l'ordre horloger">🧭 Mode Guidé</button>
+        <button type="button" class="hud-btn" id="btn-mode-free" title="Montage libre des pièces du lot">🔓 Mode Libre</button>
+        <button type="button" class="hud-btn" id="btn-auto-place" title="Poser automatiquement la pièce suivante">⚡ Poser l'étape</button>
+        <button type="button" class="hud-btn gold-action" id="btn-reset-all" title="Tout remettre sur l'établi">↺ Recommencer</button>
+        <span class="hud-sep"></span>
         <button type="button" class="hud-btn active" id="hud-tool-grab" title="Saisir et déplacer les pièces (clic gauche / doigt)">🤏 Saisir</button>
-        <button type="button" class="hud-btn" id="hud-tool-orbit" title="Pivoter librement la caméra avec le clic gauche">⟳ Pivoter</button>
-        <span class="hud-sep"></span>
-        <button type="button" class="hud-btn" id="hud-zoom-in">🔍 +</button>
-        <button type="button" class="hud-btn" id="hud-zoom-out">🔍 −</button>
-        <span class="hud-sep"></span>
-        <button type="button" class="hud-btn" id="hud-reset-cam">Centrer</button>
-        <button type="button" class="hud-btn" id="hud-fullscreen">⛶ Plein Écran</button>
+        <button type="button" class="hud-btn" id="hud-tool-orbit" title="Pivoter librement la caméra">⟳ Pivoter</button>
+        <button type="button" class="hud-btn" id="hud-zoom-in" title="Zoom avant">🔍 +</button>
+        <button type="button" class="hud-btn" id="hud-zoom-out" title="Zoom arrière">🔍 −</button>
+        <button type="button" class="hud-btn" id="hud-reset-cam" title="Recentrer la caméra">Centrer</button>
+        <button type="button" class="hud-btn" id="hud-fullscreen" title="Plein écran">⛶ Plein Écran</button>
       </div>
     </div>
 
