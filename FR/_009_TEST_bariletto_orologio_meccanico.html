@@ -132,7 +132,7 @@
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x181b20);
 
-    const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.01, 100);
+    const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.005, 100);
     const BASE_CAM_DIST = 4.6;
     const CAM_DIR = new THREE.Vector3(0.0, 0.25, 1.0).normalize();
     camera.position.copy(CAM_DIR).multiplyScalar(BASE_CAM_DIST);
@@ -159,8 +159,10 @@
     controls.enableDamping = true;
     controls.dampingFactor = 0.035;
     controls.rotateSpeed = 0.75;
-    controls.zoomSpeed = 0.9;
-    controls.panSpeed = 0.8;
+    controls.zoomSpeed = 1.15;
+    controls.panSpeed = 0.85;
+    controls.minDistance = 0.15;
+    controls.maxDistance = 25.0;
     controls.target.set(0, 0, 0);
 
     let displayGroup = null;
@@ -179,8 +181,6 @@
       return parts.join(' ').toLowerCase();
     }
 
-    // Risale dalla primitiva mesh al nodo oggetto Blender (es. "710_Pallet_fork-1__Imported1")
-    // così metallo e rubino dello stesso oggetto si muovono sempre insieme senza mai staccarsi
     function getBlenderObjectNode(mesh) {
       let cur = mesh;
       while (cur && cur.parent && cur.parent !== modelRoot) {
@@ -192,7 +192,19 @@
       return mesh;
     }
 
+    // Viti posizionate all'esterno del proprio ponte/gruppo lungo l'asse del panino
+    // per evitare qualsiasi attraversamento o rientro rispetto a platine e ponti
     function getHorizontalStep(lbl) {
+      // Viti del lato ponti (estraggono verso l'esterno oltre il rispettivo ponte)
+      if (lbl.includes('5125')) return 0.48; // oltre ponte ancora (0.34)
+      if (lbl.includes('5105')) return 0.58; // oltre ponte bariletto (0.42)
+      if (lbl.includes('5110')) return 0.62; // oltre ponte ruotismo (0.48)
+      if (lbl.includes('5121')) return 0.80; // oltre ponte bilanciere (0.64)
+      if (lbl.includes('5415') || lbl.includes('5420') || lbl.includes('5425')) return 0.72; // oltre ruote carica (0.56)
+
+      // Viti del lato tiretto/rimessa all'ora (estraggono verso l'esterno lato quadrante)
+      if (lbl.includes('5443') || lbl.includes('5445')) return -0.58;
+
       if (lbl.includes('100 main plate') || lbl.includes('100_main_plate')) {
         return -0.78;
       }
@@ -257,19 +269,8 @@
         return 0.56;
       }
 
-      if (
-        lbl.includes('5105') ||
-        lbl.includes('5110') ||
-        lbl.includes('5121') ||
-        lbl.includes('5125') ||
-        lbl.includes('5415') ||
-        lbl.includes('5420') ||
-        lbl.includes('5425') ||
-        lbl.includes('5443') ||
-        lbl.includes('5445') ||
-        lbl.includes('screw')
-      ) {
-        return 0.30;
+      if (lbl.includes('screw')) {
+        return 0.66;
       }
 
       return 0.08;
@@ -341,12 +342,10 @@
       modelRoot.traverse((child) => {
         if (!child.isMesh) return;
 
-        // Muove il nodo contenitore dell'oggetto Blender (così sotto-mesh di metallo e rubino restano fusi insieme)
         const targetNode = getBlenderObjectNode(child);
         if (registeredNodes.has(targetNode)) return;
         registeredNodes.add(targetNode);
 
-        // Normalizza underscore e spazi nei nomi esportati da Blender
         const lbl = getHierarchyLabel(targetNode).replace(/_/g, ' ');
         const step = getHorizontalStep(lbl);
         const sandwichShift = step * HORIZONTAL_SPREAD;
@@ -365,7 +364,7 @@
 
       statusEl.innerHTML =
         `<strong>Modello caricato</strong> (${registeredNodes.size} oggetti · ${meshCount} primitive)<br>` +
-        `Ancora &amp; rubini fusi sul nodo · Asse panino: ${stackAxis.toUpperCase()}`;
+        `Viti allineate all'esterno · Zoom ravvicinato attivo`;
     }
 
     function tryLoadFromIndex(index) {
@@ -402,7 +401,7 @@
         );
       }
 
-      const targetDist = BASE_CAM_DIST * (1 + 0.35 * easedT) * userZoomScale;
+      const targetDist = Math.max(0.15, BASE_CAM_DIST * (1 + 0.35 * easedT) * userZoomScale);
       const dir = camera.position.clone().sub(controls.target).normalize();
       if (dir.lengthSq() < 0.0001) dir.copy(CAM_DIR);
       camera.position.copy(controls.target).addScaledVector(dir, targetDist);
@@ -431,18 +430,18 @@
       btnRotate.classList.remove('active');
     };
     document.getElementById('btnZoomIn').onclick = () => {
-      userZoomScale = Math.max(0.45, userZoomScale * 0.85);
+      userZoomScale = Math.max(0.06, userZoomScale * 0.72);
       const rawT = parseFloat(slider.value);
       const easedT = rawT * rawT * (3 - 2 * rawT);
-      const targetDist = BASE_CAM_DIST * (1 + 0.35 * easedT) * userZoomScale;
+      const targetDist = Math.max(0.15, BASE_CAM_DIST * (1 + 0.35 * easedT) * userZoomScale);
       const dir = camera.position.clone().sub(controls.target).normalize();
       camera.position.copy(controls.target).addScaledVector(dir, targetDist);
     };
     document.getElementById('btnZoomOut').onclick = () => {
-      userZoomScale = Math.min(2.2, userZoomScale * 1.18);
+      userZoomScale = Math.min(3.5, userZoomScale * 1.25);
       const rawT = parseFloat(slider.value);
       const easedT = rawT * rawT * (3 - 2 * rawT);
-      const targetDist = BASE_CAM_DIST * (1 + 0.35 * easedT) * userZoomScale;
+      const targetDist = Math.max(0.15, BASE_CAM_DIST * (1 + 0.35 * easedT) * userZoomScale);
       const dir = camera.position.clone().sub(controls.target).normalize();
       camera.position.copy(controls.target).addScaledVector(dir, targetDist);
     };
