@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Swiss Time Expert — Vue Éclatée 3D "Panino" (ETA 6498-1)</title>
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="shortcut icon" type="image/png" href="../favicon.png?v=2">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -54,7 +56,7 @@
       flex-direction: column;
       gap: 8px;
       align-items: center;
-      width: min(460px, calc(100% - 24px));
+      width: min(540px, calc(100% - 24px));
       box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
       z-index: 10;
     }
@@ -132,6 +134,7 @@
       <button id="btnZoomOut">🔍 −</button>
       <button id="btnAuto">↻ Auto</button>
       <button id="btnReset">Centrer</button>
+      <button id="btnFullscreen" style="display:none;">⛶ Plein Écran</button>
     </div>
   </div>
 
@@ -486,6 +489,24 @@
       camera.position.copy(CAM_DIR).multiplyScalar(BASE_CAM_DIST * (1 + 0.35 * easedT));
       controls.update();
     };
+
+    // Pulsante Plein Écran / Quitter solo quando aperto come pagina autonoma (non in iframe)
+    const btnFullscreen = document.getElementById('btnFullscreen');
+    if (window.self === window.top) {
+      btnFullscreen.style.display = 'inline-block';
+      btnFullscreen.onclick = () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen?.().catch((e) => console.warn(e));
+        } else {
+          document.exitFullscreen?.();
+        }
+      };
+      document.addEventListener('fullscreenchange', () => {
+        const isFs = Boolean(document.fullscreenElement);
+        btnFullscreen.textContent = isFs ? '✕ Quitter' : '⛶ Plein Écran';
+        btnFullscreen.classList.toggle('active', isFs);
+      });
+    }
 
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;

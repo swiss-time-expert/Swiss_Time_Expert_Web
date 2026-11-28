@@ -382,6 +382,29 @@
       display: block;
       background: radial-gradient(circle at center, #1b263b 0%, #090d16 100%);
     }
+    .eta-embed-card:fullscreen,
+    .eta-embed-card:-webkit-full-screen {
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: none !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      border: none !important;
+      display: flex;
+      flex-direction: column;
+      padding: 14px 18px;
+      box-sizing: border-box;
+      background: #0d131f;
+    }
+    .eta-embed-card:fullscreen .eta-iframe,
+    .eta-embed-card:-webkit-full-screen .eta-iframe {
+      flex: 1 1 auto;
+      height: auto !important;
+    }
+    .eta-embed-card:fullscreen .eta-credits-box,
+    .eta-embed-card:-webkit-full-screen .eta-credits-box {
+      display: none;
+    }
     .eta-credits-box {
       margin-top: 12px;
       padding: 12px 16px;
@@ -612,7 +635,7 @@
             <h3 class="eta-embed-title">🔧 Vue Éclatée Interactive 3D — Calibre ETA 6498-1 (Architecture Savonnette / Montre-Bracelet)</h3>
             <p class="eta-embed-sub">Ouverture par strates ("panino") • Rubis d'ancre et d'impulsion solidaires • Vis extraites vers l'extérieur</p>
           </div>
-          <a href="explose-eta6498.html" target="_blank" rel="noopener noreferrer" class="eta-open-link">↗ Ouvrir en pleine page</a>
+          <button type="button" id="eta-fullscreen-btn" class="eta-open-link" style="cursor:pointer;">⛶ Plein Écran</button>
         </div>
 
         <div class="eta-specs-strip">
@@ -1462,6 +1485,26 @@
         }
       }
       animateBarillet();
+    }
+
+    // Fullscreen sulla stessa pagina per la finestra Vue Éclatée ETA 6498-1
+    const etaCard = document.getElementById('eta-6498-section');
+    const etaFsBtn = document.getElementById('eta-fullscreen-btn');
+    if (etaCard && etaFsBtn) {
+      etaFsBtn.addEventListener('click', () => {
+        if (document.fullscreenElement !== etaCard) {
+          etaCard.requestFullscreen?.().catch((e) => console.warn(e));
+        } else {
+          document.exitFullscreen?.();
+        }
+      });
+
+      document.addEventListener('fullscreenchange', () => {
+        const isFs = document.fullscreenElement === etaCard;
+        etaFsBtn.textContent = isFs ? '✕ Quitter' : '⛶ Plein Écran';
+        etaFsBtn.style.background = isFs ? '#b8860b' : '';
+        etaFsBtn.style.color = isFs ? '#ffffff' : '';
+      });
     }
   </script>
   
