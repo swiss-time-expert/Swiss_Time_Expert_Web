@@ -98,21 +98,8 @@
       './ETA_6498-1_Movement_parts.glb'
     ];
 
-    // Escursione orizzontale calibrata per restare sempre dentro lo schermo
-    const HORIZONTAL_SPREAD = 1.15;
-
-    // Offset orizzontali per gruppo (ordine di lettura e leggibilità del treno del tempo)
-    const GROUP_OFFSETS = {
-      rubini:    0.00,   // Fermi al loro posto per evitare effetti "proiettile"
-      bariletto: -0.18,  // Chiuso e compatto
-      antishock: 0.05,   // Contenuto in questa fase
-      treno:     0.22,   // Treno del tempo e scappamento ben leggibili all'interno
-      carica:    0.45,   // Ruote di carica / rimessa allineate
-      viti:      0.55,   // Viti con distacco leggero
-      platina:   -0.85,  // Platina "a fetta" tenuta vicina e ben leggibile
-      ponti:     0.95,   // Ponti "a fetta" aperti per liberare il treno del tempo
-      altro:     0.15
-    };
+    // Escursione a panino perpendicolare alla platina, calibrata per restare nello schermo al 100%
+    const SANDWICH_SPREAD = 0.85;
 
     const statusEl = document.getElementById('status');
     const container = document.getElementById('viewer');
@@ -121,7 +108,7 @@
     scene.background = new THREE.Color(0x181b20);
 
     const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.01, 100);
-    const DEFAULT_CAM_POS = new THREE.Vector3(0.0, 0.3, 4.4);
+    const DEFAULT_CAM_POS = new THREE.Vector3(2.4, 1.9, 2.7);
     camera.position.copy(DEFAULT_CAM_POS);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -134,18 +121,19 @@
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
-    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.5);
-    dirLight1.position.set(3, 5, 6);
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.6);
+    dirLight1.position.set(3, 6, 4);
     scene.add(dirLight1);
 
-    const dirLight2 = new THREE.DirectionalLight(0xdde6ff, 0.9);
-    dirLight2.position.set(-4, -2, 4);
+    const dirLight2 = new THREE.DirectionalLight(0xffe6d5, 1.0);
+    dirLight2.position.set(-4, 2, -5);
     scene.add(dirLight2);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.06;
 
+    let displayGroup = null;
     let modelRoot = null;
     const explodeItems = [];
     const loader = new GLTFLoader();
@@ -171,67 +159,20 @@
       return names.join(' ');
     }
 
-    function classifyGroup(lbl, matNames) {
-      if (matNames.includes('rubino') || lbl.includes('ruby')) return 'rubini';
-      if (lbl.includes('180 movement barrel')) return 'bariletto';
-      if (lbl.includes('incabloc')) return 'antishock';
-      if (lbl.includes('100 main plate')) return 'platina';
-      if (lbl.includes('bridge') || lbl.includes('pont')) return 'ponti';
-      if (lbl.includes('screw')) return 'viti';
-      if (
-        lbl.includes('201 centre') ||
-        lbl.includes('210 third') ||
-        lbl.includes('220 second') ||
-        lbl.includes('705 escape') ||
-        lbl.includes('710 pallet') ||
-        lbl.includes('721 balance')
-      ) return 'treno';
-      if (
-        lbl.includes('401 winding stem') ||
-        lbl.includes('407 winding') ||
-        lbl.includes('410 sliding') ||
-        lbl.includes('415 ratchet') ||
-        lbl.includes('420 crown') ||
-        lbl.includes('422 crown') ||
-        lbl.includes('425 click') ||
-        lbl.includes('435 yoke') ||
-        lbl.includes('440 yoke') ||
-        lbl.includes('443m setting') ||
-        lbl.includes('445m setting') ||
-        lbl.includes('450 setting') ||
-        lbl.includes('453 intermediate')
-      ) return 'carica';
-      return 'altro';
-    }
-
     function onModelLoaded(gltf) {
       modelRoot = gltf.scene;
-      scene.add(modelRoot);
-
-      // Mantiene l'orientamento naturale del modello senza ruotarlo
       modelRoot.updateMatrixWorld(true);
 
-      const box = new THREE.Box3().setFromObject(modelRoot);
-      const size = new THREE.Vector3();
-      const center = new THREE.Vector3();
-      box.getSize(size);
-      box.getCenter(center);
+      // Calcola il bounding box del corpo principale escludendo la lunga tige di carica
+      const coreBox = new THREE.Box3();
+      const fullBox = new THREE.Box3();
+      const plateBox = new THREE.Box3();
+      const bridgesBox = new THREE.Box3();
 
-      const maxDim = Math.max(size.x, size.y, size.z) || 1;
-      const scaleFactor = 2.4 / maxDim;
-      modelRoot.scale.setScalar(scaleFactor);
-      modelRoot.updateMatrixWorld(true);
-
-      box.setFromObject(modelRoot);
-      box.getCenter(center);
-      modelRoot.position.sub(center);
-      modelRoot.updateMatrixWorld(true);
-
-      // Direzione orizzontale pura sullo schermo (asse X mondiale)
-      const worldRight = new THREE.Vector3(1, 0, 0);
-
+      let meshCount = 0;
       modelRoot.traverse((child) => {
         if (!child.isMesh) return;
+        meshCount++;
         if (child.material) {
           const mats = Array.isArray(child.material) ? child.material : [child.material];
           for (const m of mats) {
@@ -241,46 +182,182 @@
             }
           }
         }
-
+        fullBox.expandByObject(child);
         const lbl = getHierarchyLabel(child);
-        const matNames = getMaterialNames(child);
-        const grp = classifyGroup(lbl, matNames);
-        const baseOffset = GROUP_OFFSETS[grp] ?? 0.0;
+        if (!lbl.includes('401 winding stem')) {
+          coreBox.expandByObject(child);
+        }
+        if (lbl.includes('100 main plate')) plateBox.expandByObject(child);
+        else if (lbl.includes('bridge') || lbl.includes('pont')) bridgesBox.expandByObject(child);
+      });
 
-        // Micro-scalatura interna solo per i ponti così restano ordinati a fette
-        let subStep = 0;
-        if (grp === 'ponti') {
-          if (lbl.includes('105m barrel')) subStep = -0.06;
-          else if (lbl.includes('110 train')) subStep = 0.04;
-          else if (lbl.includes('125 pallet')) subStep = 0.12;
-          else if (lbl.includes('121 balancing')) subStep = 0.20;
+      const refBox = coreBox.isEmpty() ? fullBox : coreBox;
+      const size = new THREE.Vector3();
+      const center = new THREE.Vector3();
+      refBox.getSize(size);
+      refBox.getCenter(center);
+
+      const maxDim = Math.max(size.x, size.y, size.z) || 1;
+      const normScale = 2.45 / maxDim;
+
+      // Asse reale di impilamento perpendicolare alla platina (dove lo spessore è minimo)
+      const stackAxis = (size.x <= size.y && size.x <= size.z) ? 'x'
+                      : (size.y <= size.x && size.y <= size.z) ? 'y' : 'z';
+
+      const plateCenter = new THREE.Vector3();
+      if (!plateBox.isEmpty()) plateBox.getCenter(plateCenter);
+
+      const bridgesCenter = new THREE.Vector3();
+      if (!bridgesBox.isEmpty()) bridgesBox.getCenter(bridgesCenter);
+
+      // Verso dei ponti (+1 o -1) rispetto alla platina lungo stackAxis
+      const bridgeDir = (bridgesCenter[stackAxis] >= plateCenter[stackAxis]) ? 1 : -1;
+      const plateDir = -bridgeDir;
+
+      // Vettore unitario perpendicolare alla platina nello spazio di modelRoot
+      const axisVecModel = new THREE.Vector3(
+        stackAxis === 'x' ? 1 : 0,
+        stackAxis === 'y' ? 1 : 0,
+        stackAxis === 'z' ? 1 : 0
+      );
+
+      // Tabella ordinata per gruppi lungo l'asse perpendicolare (ordine di montaggio)
+      function getGroupTier(lbl, matNames, meshCenter) {
+        const isRuby = matNames.includes('rubino') || lbl.includes('ruby');
+        const onBridgeSide = ((meshCenter[stackAxis] - center[stackAxis]) * bridgeDir) >= 0;
+
+        // 1. Rubini: restano solidali con la loro platina/ponte (nessun effetto proiettile)
+        if (isRuby) {
+          if (lbl.includes('incabloc')) return bridgeDir * 0.22;
+          return onBridgeSide ? (bridgeDir * 0.50) : (plateDir * 0.48);
         }
 
-        const totalWorldX = (baseOffset + subStep) * HORIZONTAL_SPREAD;
+        // 2. Platina principale (base del panino)
+        if (lbl.includes('100 main plate')) {
+          return plateDir * 0.48;
+        }
 
-        // Converte lo spostamento orizzontale (asse X mondo) nello spazio locale di child.parent
+        // 3. Bariletto: chiuso e compatto subito sopra la platina
+        if (lbl.includes('180 movement barrel')) {
+          return plateDir * 0.20;
+        }
+
+        // 4. Carica e rimessa lato platina (tiretto, bascula, rinvii, ruota ore/minuti/cambio)
+        if (
+          lbl.includes('240 driver') ||
+          lbl.includes('250 hour') ||
+          lbl.includes('260 minute') ||
+          lbl.includes('401 winding stem') ||
+          lbl.includes('407 winding') ||
+          lbl.includes('410 sliding') ||
+          lbl.includes('435 yoke') ||
+          lbl.includes('440 yoke') ||
+          lbl.includes('443m setting') ||
+          lbl.includes('445m setting') ||
+          lbl.includes('450 setting') ||
+          lbl.includes('453 intermediate')
+        ) {
+          return plateDir * 0.34;
+        }
+
+        // 5. Treno del tempo e scappamento: ben visibili nella fascia centrale aperta
+        if (
+          lbl.includes('201 centre') ||
+          lbl.includes('210 third') ||
+          lbl.includes('220 second')
+        ) {
+          return 0.0;
+        }
+        if (lbl.includes('705 escape')) {
+          return bridgeDir * 0.06;
+        }
+        if (lbl.includes('710 pallet')) {
+          return bridgeDir * 0.12;
+        }
+        if (lbl.includes('721 balance')) {
+          return bridgeDir * 0.18;
+        }
+
+        // 6. Antishock: contenuto subito sopra il bilanciere
+        if (lbl.includes('incabloc')) {
+          return bridgeDir * 0.22;
+        }
+
+        // 7. Ponti "a fette" ordinati per liberare la vista sul treno del tempo
+        if (lbl.includes('125 pallet bridge')) return bridgeDir * 0.36;
+        if (lbl.includes('105m barrel bridge')) return bridgeDir * 0.46;
+        if (lbl.includes('110 train wheel bridge')) return bridgeDir * 0.54;
+        if (lbl.includes('121 balancing bridge') || lbl.includes('303 two')) return bridgeDir * 0.64;
+        if (lbl.includes('bridge') || lbl.includes('pont')) return bridgeDir * 0.50;
+
+        // 8. Ruote di carica sopra il ponte bariletto (allineate insieme)
+        if (
+          lbl.includes('415 ratchet') ||
+          lbl.includes('420 crown') ||
+          lbl.includes('422 crown') ||
+          lbl.includes('425 click')
+        ) {
+          return bridgeDir * 0.58;
+        }
+
+        // 9. Viti: accompagnano il rispettivo lato restando leggermente esterne
+        if (lbl.includes('screw')) {
+          return onBridgeSide ? (bridgeDir * 0.68) : (plateDir * 0.56);
+        }
+
+        return 0.0;
+      }
+
+      modelRoot.traverse((child) => {
+        if (!child.isMesh) return;
+        const lbl = getHierarchyLabel(child);
+        const matNames = getMaterialNames(child);
+
+        const meshBox = new THREE.Box3().setFromObject(child);
+        const meshCenter = new THREE.Vector3();
+        meshBox.getCenter(meshCenter);
+
+        const tierVal = getGroupTier(lbl, matNames, meshCenter);
+        const totalWorldDelta = tierVal * SANDWICH_SPREAD;
+
+        // Converte lo spostamento perpendicolare alla platina nello spazio locale di child.parent
+        const worldDir = axisVecModel.clone().transformDirection(modelRoot.matrixWorld).normalize();
         const parentInvWorld = child.parent
           ? child.parent.matrixWorld.clone().invert()
           : new THREE.Matrix4().identity();
-        const localDir = worldRight.clone().transformDirection(parentInvWorld);
+        const localDir = worldDir.clone().transformDirection(parentInvWorld).normalize();
 
         const parentScale = new THREE.Vector3(1, 1, 1);
         if (child.parent) child.parent.getWorldScale(parentScale);
 
-        const localDelta = new THREE.Vector3(
-          localDir.x * totalWorldX / (parentScale.x || 1),
-          localDir.y * totalWorldX / (parentScale.y || 1),
-          localDir.z * totalWorldX / (parentScale.z || 1)
+        const deltaVec = new THREE.Vector3(
+          localDir.x * totalWorldDelta / (normScale * (parentScale.x || 1)),
+          localDir.y * totalWorldDelta / (normScale * (parentScale.y || 1)),
+          localDir.z * totalWorldDelta / (normScale * (parentScale.z || 1))
         );
 
         explodeItems.push({
           obj: child,
           origPos: child.position.clone(),
-          deltaVec: localDelta
+          deltaVec
         });
       });
 
-      statusEl.innerHTML = `<strong>Modello caricato</strong> (Esploso orizzontale a gruppi)`;
+      // Centra modelRoot e ripristina esattamente l'angolazione 3/4 che ti piaceva prima
+      modelRoot.scale.setScalar(normScale);
+      modelRoot.position.copy(center).multiplyScalar(-normScale);
+
+      displayGroup = new THREE.Group();
+      displayGroup.add(modelRoot);
+
+      displayGroup.rotation.order = 'YXZ';
+      displayGroup.rotation.y = -0.65;
+      displayGroup.rotation.x = -0.78;
+      displayGroup.rotation.z = 2.15;
+
+      scene.add(displayGroup);
+
+      statusEl.innerHTML = `<strong>Modello caricato</strong> (${meshCount} parti | Asse perni: ${stackAxis.toUpperCase()})`;
     }
 
     function tryLoadFromIndex(index) {
