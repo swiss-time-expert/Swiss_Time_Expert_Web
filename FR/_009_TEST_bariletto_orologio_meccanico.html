@@ -125,6 +125,11 @@
     // Mantiene esattamente la stessa ampiezza di esploso
     const HORIZONTAL_SPREAD = 1.65;
 
+    // Angolazione iniziale di riferimento
+    const BASE_ROT = { x: -0.35, y: -0.55, z: 1.55 };
+    // Leggera rotazione d'accompagnamento durante l'esploso per esporre meglio le fette
+    const EXPLODE_ROT_DELTA = { x: 0.08, y: 0.42, z: -0.12 };
+
     const statusEl = document.getElementById('status');
     const container = document.getElementById('viewer');
 
@@ -156,7 +161,11 @@
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.06;
+    controls.dampingFactor = 0.035;
+    controls.rotateSpeed = 0.75;
+    controls.zoomSpeed = 0.9;
+    controls.panSpeed = 0.8;
+    controls.target.set(0, 0, 0);
 
     let displayGroup = null;
     let modelRoot = null;
@@ -185,9 +194,25 @@
       return names.join(' ');
     }
 
-    // Mantiene esattamente gli stessi passi relativi tra i gruppi
+    // Mantiene esattamente gli stessi passi relativi tra i gruppi, tenendo fermi i rubini dell'ancora e del plateau
     function getHorizontalStep(lbl, matNames) {
       const isRuby = matNames.includes('rubino') || lbl.includes('ruby');
+
+      // Rubini dell'ancora (710 pallet) e del plateau/doppio disco / bilanciere (730 double roller / 721 balance)
+      // restano solidali esattamente al loro gruppo (0.18) senza staccarsi
+      if (
+        isRuby &&
+        (
+          lbl.includes('710 pallet') ||
+          lbl.includes('pallet') ||
+          lbl.includes('730 double') ||
+          lbl.includes('roller') ||
+          lbl.includes('plateau') ||
+          lbl.includes('721 balance')
+        )
+      ) {
+        return 0.18;
+      }
 
       if (lbl.includes('100 main plate') || lbl.includes('main_plate') || lbl.includes('platine')) {
         return -0.78;
@@ -229,6 +254,7 @@
         lbl.includes('705 escape') ||
         lbl.includes('710 pallet') ||
         lbl.includes('721 balance') ||
+        lbl.includes('730 double') ||
         lbl.includes('incabloc')
       ) {
         return 0.18;
@@ -291,7 +317,6 @@
       refBox.getSize(size);
       refBox.getCenter(center);
 
-      // Individua l'asse di spessore del movimento (asse del "panino", perpendicolare alla platina)
       const stackAxis = (size.x <= size.y && size.x <= size.z) ? 'x'
                       : (size.y <= size.x && size.y <= size.z) ? 'y' : 'z';
       const localStackVec = new THREE.Vector3(
@@ -309,14 +334,11 @@
       displayGroup = new THREE.Group();
       displayGroup.add(modelRoot);
       displayGroup.rotation.order = 'YXZ';
-      displayGroup.rotation.y = -0.55;
-      displayGroup.rotation.x = -0.35;
-      displayGroup.rotation.z = 1.55;
+      displayGroup.rotation.set(BASE_ROT.x, BASE_ROT.y, BASE_ROT.z);
 
       scene.add(displayGroup);
       scene.updateMatrixWorld(true);
 
-      // Direzione dell'asse "a panino" convertita nello spazio mondiale dopo la posa del modello
       const worldSandwichAxis = localStackVec
         .clone()
         .transformDirection(modelRoot.matrixWorld)
@@ -346,7 +368,7 @@
 
       statusEl.innerHTML =
         `<strong>Modello caricato</strong> (${meshCount} parti · Asse panino: ${stackAxis.toUpperCase()})<br>` +
-        `Distanze invariate · Apertura lungo l'asse del movimento`;
+        `Rubini ancora/plateau fissi · Rotazione &amp; zoom accompagnati`;
     }
 
     function tryLoadFromIndex(index) {
@@ -369,8 +391,21 @@
 
     tryLoadFromIndex(0);
 
-    function updateCameraDistance(t) {
-      const targetDist = BASE_CAM_DIST * (1 + 0.35 * t) * userZoomScale;
+    function applyExplodeState(rawT) {
+      const easedT = rawT * rawT * (3 - 2 * rawT);
+      for (const item of explodeItems) {
+        item.obj.position.copy(item.origPos).addScaledVector(item.deltaVec, easedT);
+      }
+
+      if (displayGroup) {
+        displayGroup.rotation.set(
+          BASE_ROT.x + EXPLODE_ROT_DELTA.x * easedT,
+          BASE_ROT.y + EXPLODE_ROT_DELTA.y * easedT,
+          BASE_ROT.z + EXPLODE_ROT_DELTA.z * easedT
+        );
+      }
+
+      const targetDist = BASE_CAM_DIST * (1 + 0.35 * easedT) * userZoomScale;
       const dir = camera.position.clone().sub(controls.target).normalize();
       if (dir.lengthSq() < 0.0001) dir.copy(CAM_DIR);
       camera.position.copy(controls.target).addScaledVector(dir, targetDist);
@@ -381,11 +416,7 @@
     slider.addEventListener('input', () => {
       const rawT = parseFloat(slider.value);
       sliderVal.textContent = `${Math.round(rawT * 100)}%`;
-      const easedT = rawT * rawT * (3 - 2 * rawT);
-      for (const item of explodeItems) {
-        item.obj.position.copy(item.origPos).addScaledVector(item.deltaVec, easedT);
-      }
-      updateCameraDistance(easedT);
+      applyExplodeState(rawT);
     });
 
     const btnRotate = document.getElementById('btnRotate');
@@ -405,12 +436,18 @@
     document.getElementById('btnZoomIn').onclick = () => {
       userZoomScale = Math.max(0.45, userZoomScale * 0.85);
       const rawT = parseFloat(slider.value);
-      updateCameraDistance(rawT * rawT * (3 - 2 * rawT));
+      const easedT = rawT * rawT * (3 - 2 * rawT);
+      const targetDist = BASE_CAM_DIST * (1 + 0.35 * easedT) * userZoomScale;
+      const dir = camera.position.clone().sub(controls.target).normalize();
+      camera.position.copy(controls.target).addScaledVector(dir, targetDist);
     };
     document.getElementById('btnZoomOut').onclick = () => {
       userZoomScale = Math.min(2.2, userZoomScale * 1.18);
       const rawT = parseFloat(slider.value);
-      updateCameraDistance(rawT * rawT * (3 - 2 * rawT));
+      const easedT = rawT * rawT * (3 - 2 * rawT);
+      const targetDist = BASE_CAM_DIST * (1 + 0.35 * easedT) * userZoomScale;
+      const dir = camera.position.clone().sub(controls.target).normalize();
+      camera.position.copy(controls.target).addScaledVector(dir, targetDist);
     };
     btnAuto.onclick = () => {
       controls.autoRotate = !controls.autoRotate;
@@ -421,6 +458,13 @@
       controls.target.set(0, 0, 0);
       const rawT = parseFloat(slider.value);
       const easedT = rawT * rawT * (3 - 2 * rawT);
+      if (displayGroup) {
+        displayGroup.rotation.set(
+          BASE_ROT.x + EXPLODE_ROT_DELTA.x * easedT,
+          BASE_ROT.y + EXPLODE_ROT_DELTA.y * easedT,
+          BASE_ROT.z + EXPLODE_ROT_DELTA.z * easedT
+        );
+      }
       camera.position.copy(CAM_DIR).multiplyScalar(BASE_CAM_DIST * (1 + 0.35 * easedT));
       controls.update();
     };
