@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Test 3D - ETA 6498-1</title>
+  <title>Test 3D - ETA 6498-1 (Vue Éclatée Méthode Ciechanowski)</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -24,6 +24,7 @@
       padding: 10px 14px;
       border-radius: 10px;
       font-size: 13px;
+      line-height: 1.4;
       z-index: 10;
     }
     #controls {
@@ -39,12 +40,29 @@
       flex-direction: column;
       gap: 10px;
       align-items: center;
-      min-width: 340px;
+      min-width: 360px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
       z-index: 10;
     }
-    .slider-row { display: flex; align-items: center; gap: 12px; width: 100%; font-size: 13px; font-weight: 600; }
-    input[type="range"] { flex: 1; accent-color: #d4af37; cursor: pointer; }
-    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    input[type="range"] {
+      flex: 1;
+      accent-color: #d4af37;
+      cursor: pointer;
+    }
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
     button {
       background: #262a30;
       color: #f0f2f5;
@@ -53,9 +71,15 @@
       border-radius: 8px;
       font-size: 13px;
       cursor: pointer;
+      transition: background 0.15s;
     }
     button:hover { background: #323840; }
-    button.active { background: #c99e28; color: #111; border-color: #e0b94b; font-weight: 600; }
+    button.active {
+      background: #c99e28;
+      color: #111;
+      border-color: #e0b94b;
+      font-weight: 600;
+    }
   </style>
   <script type="importmap">
     {
@@ -98,8 +122,8 @@
       './ETA_6498-1_Movement_parts.glb'
     ];
 
-    // Escursione a panino perpendicolare alla platina, calibrata per restare nello schermo al 100%
-    const SANDWICH_SPREAD = 0.85;
+    // Escursione a fette parallele lungo l'asse dei perni (in unità normalizzate)
+    const SLICE_AMPLITUDE = 1.35;
 
     const statusEl = document.getElementById('status');
     const container = document.getElementById('viewer');
@@ -107,9 +131,10 @@
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x181b20);
 
-    const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.01, 100);
-    const DEFAULT_CAM_POS = new THREE.Vector3(2.4, 1.9, 2.7);
-    camera.position.copy(DEFAULT_CAM_POS);
+    const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.01, 100);
+    const BASE_CAM_DIST = 3.9;
+    const CAM_DIR = new THREE.Vector3(2.4, 1.85, 2.65).normalize();
+    camera.position.copy(CAM_DIR).multiplyScalar(BASE_CAM_DIST);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -135,6 +160,7 @@
 
     let displayGroup = null;
     let modelRoot = null;
+    let userZoomScale = 1.0;
     const explodeItems = [];
     const loader = new GLTFLoader();
 
@@ -163,7 +189,6 @@
       modelRoot = gltf.scene;
       modelRoot.updateMatrixWorld(true);
 
-      // Calcola il bounding box del corpo principale escludendo la lunga tige di carica
       const coreBox = new THREE.Box3();
       const fullBox = new THREE.Box3();
       const plateBox = new THREE.Box3();
@@ -200,7 +225,7 @@
       const maxDim = Math.max(size.x, size.y, size.z) || 1;
       const normScale = 2.45 / maxDim;
 
-      // Asse reale di impilamento perpendicolare alla platina (dove lo spessore è minimo)
+      // Asse perpendicolare alla platina (dove lo spessore è minimo: asse dei perni)
       const stackAxis = (size.x <= size.y && size.x <= size.z) ? 'x'
                       : (size.y <= size.x && size.y <= size.z) ? 'y' : 'z';
 
@@ -210,57 +235,73 @@
       const bridgesCenter = new THREE.Vector3();
       if (!bridgesBox.isEmpty()) bridgesBox.getCenter(bridgesCenter);
 
-      // Verso dei ponti (+1 o -1) rispetto alla platina lungo stackAxis
+      // Verso dei ponti (+1 o -1) e verso della platina/quadrante (-1 o +1)
       const bridgeDir = (bridgesCenter[stackAxis] >= plateCenter[stackAxis]) ? 1 : -1;
-      const plateDir = -bridgeDir;
+      const dialDir = -bridgeDir;
 
-      // Vettore unitario perpendicolare alla platina nello spazio di modelRoot
       const axisVecModel = new THREE.Vector3(
         stackAxis === 'x' ? 1 : 0,
         stackAxis === 'y' ? 1 : 0,
         stackAxis === 'z' ? 1 : 0
       );
 
-      // Tabella ordinata per gruppi lungo l'asse perpendicolare (ordine di montaggio)
-      function getGroupTier(lbl, matNames, meshCenter) {
+      // Mappa rigorosa basata sulla sequenza di assemblaggio ETA 6498-1:
+      // Negativo = verso lato quadrante (dialDir) | Positivo = verso lato ponti (bridgeDir)
+      function getEtaSliceLevel(lbl, matNames, meshCenter) {
         const isRuby = matNames.includes('rubino') || lbl.includes('ruby');
         const onBridgeSide = ((meshCenter[stackAxis] - center[stackAxis]) * bridgeDir) >= 0;
 
-        // 1. Rubini: restano solidali con la loro platina/ponte (nessun effetto proiettile)
+        // 0. Rubini: restano ancorati/solidali al rispettivo supporto (nessun effetto proiettile)
         if (isRuby) {
           if (lbl.includes('incabloc')) return bridgeDir * 0.22;
-          return onBridgeSide ? (bridgeDir * 0.50) : (plateDir * 0.48);
+          if (lbl.includes('121 balancing') || lbl.includes('303')) return bridgeDir * 0.78;
+          if (lbl.includes('110 train')) return bridgeDir * 0.48;
+          if (lbl.includes('125 pallet')) return bridgeDir * 0.34;
+          return onBridgeSide ? (bridgeDir * 0.48) : (dialDir * 0.38);
         }
 
-        // 2. Platina principale (base del panino)
-        if (lbl.includes('100 main plate')) {
-          return plateDir * 0.48;
-        }
+        // --- LATO QUADRANTE (Montage du mécanisme de mise à l'heure) ---
+        // Fetta -5: Ruota ore (250) e Chaussée (240)
+        if (lbl.includes('250 hour')) return dialDir * 0.88;
+        if (lbl.includes('240 driver')) return dialDir * 0.80;
 
-        // 3. Bariletto: chiuso e compatto subito sopra la platina
-        if (lbl.includes('180 movement barrel')) {
-          return plateDir * 0.20;
-        }
-
-        // 4. Carica e rimessa lato platina (tiretto, bascula, rinvii, ruota ore/minuti/cambio)
+        // Fetta -4: Ruota minuteria (260), rinvii (450/453), tiretto e sautoir (443/445 + viti 5443/5445)
         if (
-          lbl.includes('240 driver') ||
-          lbl.includes('250 hour') ||
           lbl.includes('260 minute') ||
+          lbl.includes('450 setting') ||
+          lbl.includes('453 intermediate') ||
+          lbl.includes('443m setting') ||
+          lbl.includes('445m setting') ||
+          lbl.includes('5443') ||
+          lbl.includes('5445')
+        ) {
+          return dialDir * 0.68;
+        }
+
+        // Fetta -3: Tige (401), pignone scorrevole (407), pignone carica (410), bascula e molla (435/440)
+        if (
           lbl.includes('401 winding stem') ||
           lbl.includes('407 winding') ||
           lbl.includes('410 sliding') ||
           lbl.includes('435 yoke') ||
-          lbl.includes('440 yoke') ||
-          lbl.includes('443m setting') ||
-          lbl.includes('445m setting') ||
-          lbl.includes('450 setting') ||
-          lbl.includes('453 intermediate')
+          lbl.includes('440 yoke')
         ) {
-          return plateDir * 0.34;
+          return dialDir * 0.54;
         }
 
-        // 5. Treno del tempo e scappamento: ben visibili nella fascia centrale aperta
+        // --- BASE STRUTTURALE ---
+        // Fetta -2: Platina principale (100 Main Plate)
+        if (lbl.includes('100 main plate')) {
+          return dialDir * 0.38;
+        }
+
+        // --- LATO MOVIMENTO DI BASE (Montage du mouvement de base) ---
+        // Fetta -1: Bariletto completo (180) tenuto chiuso e compatto
+        if (lbl.includes('180 movement barrel')) {
+          return dialDir * 0.16;
+        }
+
+        // Fetta 0 (Centro): Treno del tempo (201 Centro, 210 Terza, 220/224 Secondi)
         if (
           lbl.includes('201 centre') ||
           lbl.includes('210 third') ||
@@ -268,43 +309,60 @@
         ) {
           return 0.0;
         }
-        if (lbl.includes('705 escape')) {
-          return bridgeDir * 0.06;
-        }
-        if (lbl.includes('710 pallet')) {
-          return bridgeDir * 0.12;
-        }
-        if (lbl.includes('721 balance')) {
-          return bridgeDir * 0.18;
-        }
 
-        // 6. Antishock: contenuto subito sopra il bilanciere
+        // Fetta +1: Scappamento e Bilanciere (705 Ruota scappamento, 710 Ancora, 721 Bilanciere)
+        if (lbl.includes('705 escape')) return bridgeDir * 0.10;
+        if (lbl.includes('710 pallet')) return bridgeDir * 0.14;
+        if (lbl.includes('721 balance')) return bridgeDir * 0.18;
+
+        // Antishock (Incabloc) contenuto vicino al bilanciere/platina
         if (lbl.includes('incabloc')) {
-          return bridgeDir * 0.22;
+          return onBridgeSide ? (bridgeDir * 0.22) : (dialDir * 0.42);
         }
 
-        // 7. Ponti "a fette" ordinati per liberare la vista sul treno del tempo
-        if (lbl.includes('125 pallet bridge')) return bridgeDir * 0.36;
-        if (lbl.includes('105m barrel bridge')) return bridgeDir * 0.46;
-        if (lbl.includes('110 train wheel bridge')) return bridgeDir * 0.54;
-        if (lbl.includes('121 balancing bridge') || lbl.includes('303 two')) return bridgeDir * 0.64;
-        if (lbl.includes('bridge') || lbl.includes('pont')) return bridgeDir * 0.50;
+        // Fetta +2: Ponte d'ancora (125) + viti 5125
+        if (lbl.includes('125 pallet bridge') || lbl.includes('5125')) {
+          return bridgeDir * 0.34;
+        }
 
-        // 8. Ruote di carica sopra il ponte bariletto (allineate insieme)
+        // Fetta +3: Ponte ruotismo (110 + viti 5110) e Ponte bariletto (105M + viti 5105) + cricco (425/430)
+        if (
+          lbl.includes('110 train wheel bridge') ||
+          lbl.includes('5110') ||
+          lbl.includes('105m barrel bridge') ||
+          lbl.includes('5105') ||
+          lbl.includes('425 click') ||
+          lbl.includes('430 click')
+        ) {
+          return bridgeDir * 0.48;
+        }
+
+        // Fetta +4: Ruote di carica sopra il ponte bariletto (415 Rocchetto, 420 Corona, 422 Anello)
         if (
           lbl.includes('415 ratchet') ||
           lbl.includes('420 crown') ||
-          lbl.includes('422 crown') ||
-          lbl.includes('425 click')
+          lbl.includes('422 crown')
         ) {
-          return bridgeDir * 0.58;
+          return bridgeDir * 0.64;
         }
 
-        // 9. Viti: accompagnano il rispettivo lato restando leggermente esterne
+        // Fetta +5: Ponte bilanciere (121 + racchetta 303 + porte-piton 375) e viti superiori
+        if (
+          lbl.includes('121 balancing bridge') ||
+          lbl.includes('303 two') ||
+          lbl.includes('375 stud') ||
+          lbl.includes('5121') ||
+          lbl.includes('5415') ||
+          lbl.includes('5420') ||
+          lbl.includes('5425')
+        ) {
+          return bridgeDir * 0.78;
+        }
+
+        // Fallback eventuale per viti o minuterie non esplicitate
         if (lbl.includes('screw')) {
-          return onBridgeSide ? (bridgeDir * 0.68) : (plateDir * 0.56);
+          return onBridgeSide ? (bridgeDir * 0.56) : (dialDir * 0.68);
         }
-
         return 0.0;
       }
 
@@ -317,8 +375,8 @@
         const meshCenter = new THREE.Vector3();
         meshBox.getCenter(meshCenter);
 
-        const tierVal = getGroupTier(lbl, matNames, meshCenter);
-        const totalWorldDelta = tierVal * SANDWICH_SPREAD;
+        const level = getEtaSliceLevel(lbl, matNames, meshCenter);
+        const totalWorldDelta = level * SLICE_AMPLITUDE;
 
         // Converte lo spostamento perpendicolare alla platina nello spazio locale di child.parent
         const worldDir = axisVecModel.clone().transformDirection(modelRoot.matrixWorld).normalize();
@@ -343,13 +401,13 @@
         });
       });
 
-      // Centra modelRoot e ripristina esattamente l'angolazione 3/4 che ti piaceva prima
       modelRoot.scale.setScalar(normScale);
       modelRoot.position.copy(center).multiplyScalar(-normScale);
 
       displayGroup = new THREE.Group();
       displayGroup.add(modelRoot);
 
+      // Posa 3/4 con tige verso il retro-sinistra e lato ponti/rubini in primo piano
       displayGroup.rotation.order = 'YXZ';
       displayGroup.rotation.y = -0.65;
       displayGroup.rotation.x = -0.78;
@@ -357,7 +415,9 @@
 
       scene.add(displayGroup);
 
-      statusEl.innerHTML = `<strong>Modello caricato</strong> (${meshCount} parti | Asse perni: ${stackAxis.toUpperCase()})`;
+      statusEl.innerHTML =
+        `<strong>Modello caricato</strong> (${meshCount} parti | Asse perni: ${stackAxis.toUpperCase()})<br>` +
+        `Sequenza ETA 6498-1 a fette parallele`;
     }
 
     function tryLoadFromIndex(index) {
@@ -380,14 +440,25 @@
 
     tryLoadFromIndex(0);
 
+    function updateCameraDistance(t) {
+      // Micro-zoom adattivo stile Ciechanowski: arretra dolcemente al crescere dell'esploso
+      const targetDist = BASE_CAM_DIST * (1 + 0.38 * t) * userZoomScale;
+      const dir = camera.position.clone().sub(controls.target).normalize();
+      if (dir.lengthSq() < 0.0001) dir.copy(CAM_DIR);
+      camera.position.copy(controls.target).addScaledVector(dir, targetDist);
+    }
+
     const slider = document.getElementById('explodeSlider');
     const sliderVal = document.getElementById('explodeValue');
     slider.addEventListener('input', () => {
-      const t = parseFloat(slider.value);
-      sliderVal.textContent = `${Math.round(t * 100)}%`;
+      const rawT = parseFloat(slider.value);
+      sliderVal.textContent = `${Math.round(rawT * 100)}%`;
+      // Curva fluida: partenza progressiva nei primi gradi, apertura completa al 100%
+      const easedT = rawT * rawT * (3 - 2 * rawT);
       for (const item of explodeItems) {
-        item.obj.position.copy(item.origPos).addScaledVector(item.deltaVec, t);
+        item.obj.position.copy(item.origPos).addScaledVector(item.deltaVec, easedT);
       }
+      updateCameraDistance(easedT);
     });
 
     const btnRotate = document.getElementById('btnRotate');
@@ -404,15 +475,26 @@
       btnPan.classList.add('active');
       btnRotate.classList.remove('active');
     };
-    document.getElementById('btnZoomIn').onclick = () => camera.position.multiplyScalar(0.85);
-    document.getElementById('btnZoomOut').onclick = () => camera.position.multiplyScalar(1.18);
+    document.getElementById('btnZoomIn').onclick = () => {
+      userZoomScale = Math.max(0.45, userZoomScale * 0.85);
+      const rawT = parseFloat(slider.value);
+      updateCameraDistance(rawT * rawT * (3 - 2 * rawT));
+    };
+    document.getElementById('btnZoomOut').onclick = () => {
+      userZoomScale = Math.min(2.2, userZoomScale * 1.18);
+      const rawT = parseFloat(slider.value);
+      updateCameraDistance(rawT * rawT * (3 - 2 * rawT));
+    };
     btnAuto.onclick = () => {
       controls.autoRotate = !controls.autoRotate;
       btnAuto.classList.toggle('active', controls.autoRotate);
     };
     document.getElementById('btnReset').onclick = () => {
-      camera.position.copy(DEFAULT_CAM_POS);
+      userZoomScale = 1.0;
       controls.target.set(0, 0, 0);
+      const rawT = parseFloat(slider.value);
+      const easedT = rawT * rawT * (3 - 2 * rawT);
+      camera.position.copy(CAM_DIR).multiplyScalar(BASE_CAM_DIST * (1 + 0.38 * easedT));
       controls.update();
     };
 
