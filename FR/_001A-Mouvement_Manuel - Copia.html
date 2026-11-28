@@ -1514,7 +1514,7 @@
     }
 
     // =========================================================================
-    // 1. VISUALIZZATORE 3D CALIBRE ETA 6498-1 (POSIZIONE ALZATA SOPRA I TASTI)
+    // 1. VISUALIZZATORE 3D CALIBRE ETA 6498-1 (ILLUMINAZIONE STUDIO POTENZIATA)
     // =========================================================================
     const ETA_MODEL_URL = '../ETA6498-1_Web.glb';
     const etaContainer = document.getElementById('canvas-container-eta');
@@ -1536,8 +1536,9 @@
       const rendererEta = new THREE.WebGLRenderer({ antialias: true });
       rendererEta.setSize(etaContainer.clientWidth, etaContainer.clientHeight);
       rendererEta.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      rendererEta.outputColorSpace = THREE.SRGBColorSpace;
       rendererEta.toneMapping = THREE.ACESFilmicToneMapping;
-      rendererEta.toneMappingExposure = 1.45;
+      rendererEta.toneMappingExposure = 1.9;
       etaContainer.appendChild(rendererEta.domElement);
 
       if (!sharedEnvMap) {
@@ -1545,20 +1546,21 @@
         sharedEnvMap = pmremEta.fromScene(new RoomEnvironment(), 0.04).texture;
       }
       sceneEta.environment = sharedEnvMap;
+      sceneEta.environmentIntensity = 1.4;
 
-      const ambientEta = new THREE.AmbientLight(0xffffff, 1.35);
+      const ambientEta = new THREE.AmbientLight(0xffffff, 1.85);
       sceneEta.add(ambientEta);
 
-      const lightTop = new THREE.DirectionalLight(0xffffff, 2.2);
+      const lightTop = new THREE.DirectionalLight(0xffffff, 2.7);
       lightTop.position.set(5, 10, 7);
       sceneEta.add(lightTop);
 
-      const lightFront = new THREE.DirectionalLight(0xfff4e0, 1.4);
+      const lightFront = new THREE.DirectionalLight(0xfff6e5, 2.0);
       lightFront.position.set(-4, 5, 8);
       sceneEta.add(lightFront);
 
-      const lightFill = new THREE.DirectionalLight(0xdbe8ff, 1.2);
-      lightFill.position.set(-6, -6, -5);
+      const lightFill = new THREE.DirectionalLight(0xe6f0ff, 1.7);
+      lightFill.position.set(-6, -6, 5);
       sceneEta.add(lightFill);
 
       const controlsEta = new OrbitControls(cameraEta, rendererEta.domElement);
@@ -2091,7 +2093,17 @@
           etaModelRoot.traverse((child) => {
             if (child.isMesh) {
               if (child.material) {
-                child.material.needsUpdate = true;
+                const mats = Array.isArray(child.material) ? child.material : [child.material];
+                mats.forEach((m) => {
+                  if (!m) return;
+                  if ('envMapIntensity' in m) {
+                    m.envMapIntensity = 1.85;
+                  }
+                  if (m.metalness > 0.7 && m.roughness < 0.14) {
+                    m.roughness = 0.16;
+                  }
+                  m.needsUpdate = true;
+                });
               }
               etaPickableMeshes.push(child);
 
@@ -2245,6 +2257,7 @@
         const sceneBarillet = new THREE.Scene();
         sceneBarillet.background = new THREE.Color(0xffffff);
         sceneBarillet.environment = sharedEnvMap;
+        sceneBarillet.environmentIntensity = 1.4;
 
         const cameraBarillet = new THREE.PerspectiveCamera(
           36,
@@ -2257,8 +2270,9 @@
         const rendererBarillet = new THREE.WebGLRenderer({ antialias: true });
         rendererBarillet.setSize(containerBarillet.clientWidth, containerBarillet.clientHeight);
         rendererBarillet.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        rendererBarillet.outputColorSpace = THREE.SRGBColorSpace;
         rendererBarillet.toneMapping = THREE.ACESFilmicToneMapping;
-        rendererBarillet.toneMappingExposure = 1.45;
+        rendererBarillet.toneMappingExposure = 1.85;
         containerBarillet.appendChild(rendererBarillet.domElement);
 
         const controlsBarillet = new OrbitControls(cameraBarillet, rendererBarillet.domElement);
@@ -2268,13 +2282,13 @@
         controlsBarillet.enablePan = true;
         controlsBarillet.enableZoom = true;
 
-        sceneBarillet.add(new THREE.AmbientLight(0xffffff, 1.45));
-        const bLight1 = new THREE.DirectionalLight(0xffffff, 2.2);
+        sceneBarillet.add(new THREE.AmbientLight(0xffffff, 1.8));
+        const bLight1 = new THREE.DirectionalLight(0xffffff, 2.6);
         bLight1.position.set(5, 10, 7);
         sceneBarillet.add(bLight1);
 
-        const bLight2 = new THREE.DirectionalLight(0xdbe8ff, 1.2);
-        bLight2.position.set(-5, -4, -5);
+        const bLight2 = new THREE.DirectionalLight(0xe6f0ff, 1.6);
+        bLight2.position.set(-5, -4, 5);
         sceneBarillet.add(bLight2);
 
         const partsBarillet = [];
@@ -2362,6 +2376,16 @@
             const childrenList = [...tempContainer.children];
 
             childrenList.forEach((child) => {
+              if (child.material) {
+                const mats = Array.isArray(child.material) ? child.material : [child.material];
+                mats.forEach((m) => {
+                  if (m && 'envMapIntensity' in m) {
+                    m.envMapIntensity = 1.85;
+                    m.needsUpdate = true;
+                  }
+                });
+              }
+
               const name = (child.userData.fullName || '').toLowerCase();
               const initialPos = child.position.clone();
               let offset = new THREE.Vector3(-1.05, -0.06, 0);
@@ -2372,15 +2396,12 @@
                 labelType = 'molla';
                 hasDedicatedSpring = true;
               } else if (/arbor|albero|arbre|federkern/i.test(name)) {
-                // Il perno resta fermo al suo posto senza spostamenti
                 offset = new THREE.Vector3(0, 0, 0);
                 labelType = 'arbre';
               } else if (/cover|coperchio|couvercle|deckel/i.test(name)) {
-                // Il coperchio si apre lateralmente da un lato
                 offset = new THREE.Vector3(1.05, -0.06, 0);
                 labelType = 'coperchio';
               } else {
-                // Il contenitore / tambour si apre lateralmente dal lato opposto
                 offset = new THREE.Vector3(-1.05, -0.06, 0);
                 labelType = 'tambour';
               }
@@ -2394,7 +2415,6 @@
             });
 
             if (!hasDedicatedSpring) {
-              // Ressort-moteur in alto al centro
               const springMesh = createMainspringMesh(barrelRadius, barrelHeight);
               springMesh.visible = false;
               barilletGroup.add(springMesh);
@@ -2407,7 +2427,6 @@
                 revealOnExplode: true
               });
 
-              // Perno centrale fisso (resta dov'è, con solo la targhetta del nome)
               const arborGeo = new THREE.CylinderGeometry(barrelRadius * 0.14, barrelRadius * 0.14, barrelHeight * 1.25, 24);
               const arborMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.9, roughness: 0.2 });
               const arborMesh = new THREE.Mesh(arborGeo, arborMat);
