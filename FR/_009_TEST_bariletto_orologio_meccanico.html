@@ -123,10 +123,7 @@
     ];
 
     const HORIZONTAL_SPREAD = 1.65;
-
-    // Angolazione iniziale di riferimento
     const BASE_ROT = { x: -0.35, y: -0.55, z: 1.55 };
-    // Rotazione d'accompagnamento verso il lato opposto durante l'esploso
     const EXPLODE_ROT_DELTA = { x: -0.08, y: -0.45, z: 0.14 };
 
     const statusEl = document.getElementById('status');
@@ -191,6 +188,15 @@
         names.push(child.material.name.toLowerCase());
       }
       return names.join(' ');
+    }
+
+    function computeLocalDeltaForChild(child, step, worldSandwichAxis, normScale) {
+      const worldOrigin = new THREE.Vector3(0, 0, 0);
+      const sandwichShift = step * HORIZONTAL_SPREAD;
+      const targetWorld = worldSandwichAxis.clone().multiplyScalar(sandwichShift);
+      const localOrigin = child.parent ? child.parent.worldToLocal(worldOrigin.clone()) : worldOrigin.clone();
+      const localTarget = child.parent ? child.parent.worldToLocal(targetWorld.clone()) : targetWorld.clone();
+      return localTarget.sub(localOrigin);
     }
 
     function getHorizontalStep(lbl, matNames) {
@@ -273,20 +279,26 @@
       const fullBox = new THREE.Box3();
       const palletBox = new THREE.Box3();
       const rollerBalanceBox = new THREE.Box3();
-      let meshCount = 0;
+      const allMeshes = [];
 
       modelRoot.traverse((child) => {
         if (!child.isMesh) return;
-        meshCount++;
+        allMeshes.push(child);
         fullBox.expandByObject(child);
         const lbl = getHierarchyLabel(child);
         if (!lbl.includes('401 winding stem')) {
           coreBox.expandByObject(child);
         }
-        if (lbl.includes('710 pallet') || lbl.includes('pallet')) {
+        if (lbl.includes('710 pallet') || lbl.includes('pallet') || lbl.includes('ancre')) {
           palletBox.expandByObject(child);
         }
-        if (lbl.includes('730 double') || lbl.includes('roller') || lbl.includes('721 balance')) {
+        if (
+          lbl.includes('730 double') ||
+          lbl.includes('roller') ||
+          lbl.includes('plateau') ||
+          lbl.includes('721 balance') ||
+          lbl.includes('balancier')
+        ) {
           rollerBalanceBox.expandByObject(child);
         }
         if (child.material) {
@@ -341,59 +353,84 @@
         .transformDirection(modelRoot.matrixWorld)
         .normalize();
 
-      const worldOrigin = new THREE.Vector3(0, 0, 0);
+      // Identifica i 3 rubini (2 dell'ancora + 1 dell'ellisse/plateau) per distanza/nome e li ancora al gruppo 0.18
+      const lockedToEscapement = new Set();
 
-      // Soglia di prossimità (in unità locali non scalate) per agganciare i piccoli rubini dell'ancora e del plateau
-      const proximityRadius = maxDim * 0.14;
-
-      modelRoot.traverse((child) => {
-        if (!child.isMesh) return;
+      const candidateJewels = [];
+      for (const child of allMeshes) {
         const lbl = getHierarchyLabel(child);
         const matNames = getMaterialNames(child);
-        const isRuby = matNames.includes('rubino') || lbl.includes('ruby');
+        const isRuby =
+          matNames.includes('rubino') ||
+          matNames.includes('ruby') ||
+          lbl.includes('rubino') ||
+          lbl.includes('ruby') ||
+          lbl.includes('jewel') ||
+          lbl.includes('pierre') ||
+          lbl.includes('ellipse') ||
+          lbl.includes('impulse');
 
-        const childBox = new THREE.Box3().setFromObject(child);
-        const childCenter = new THREE.Vector3();
-        childBox.getCenter(childCenter);
+        const box = new THREE.Box3().setFromObject(child);
+        const bSize = new THREE.Vector3();
+        const bCenter = new THREE.Vector3();
+        box.getSize(bSize);
+        box.getCenter(bCenter);
+        const bDiag = bSize.length();
+
+        const distPallet = hasPalletBox ? bCenter.distanceTo(palletCenter) : Infinity;
+        const distRoller = hasRollerBalanceBox ? bCenter.distanceTo(rollerBalanceCenter) : Infinity;
+        const minDist = Math.min(distPallet, distRoller);
+
+        if (isRuby || (bDiag < maxDim * 0.045 && minDist < maxDim * 0.14)) {
+          candidateJewels.push({ child, bCenter, minDist, isRuby });
+        }
+      }
+
+      // Ordina per vicinanza ad ancora/plateau e aggancia i più vicini (in particolare i 3 dell'ancora e impulso)
+      candidateJewels.sort((a, b) => a.minDist - b.minDist);
+      for (const entry of candidateJewels) {
+        if (entry.isRuby || entry.minDist < maxDim * 0.11) {
+          lockedToEscapement.add(entry.child);
+        }
+      }
+
+      // Mappa dei delta già assegnati per evitare che un figlio si sommi a un padre che già si muove
+      const assignedDeltas = new Map();
+
+      for (const child of allMeshes) {
+        const lbl = getHierarchyLabel(child);
+        const matNames = getMaterialNames(child);
 
         let step = getHorizontalStep(lbl, matNames);
-
-        // Se è un rubino (o un piccolo componente vicino all'ancora o al plateau/bilanciere),
-        // segue esattamente il gruppo 0.18 dell'ancora/plateau/bilanciere senza staccarsi
-        if (isRuby) {
-          const nearPallet = hasPalletBox && childCenter.distanceTo(palletCenter) <= proximityRadius;
-          const nearRollerBalance = hasRollerBalanceBox && childCenter.distanceTo(rollerBalanceCenter) <= proximityRadius;
-          if (
-            nearPallet ||
-            nearRollerBalance ||
-            lbl.includes('710') ||
-            lbl.includes('pallet') ||
-            lbl.includes('730') ||
-            lbl.includes('roller') ||
-            lbl.includes('721') ||
-            lbl.includes('balance')
-          ) {
-            step = 0.18;
-          }
+        if (lockedToEscapement.has(child)) {
+          step = 0.18;
         }
 
-        const sandwichShift = step * HORIZONTAL_SPREAD;
+        let deltaVec = computeLocalDeltaForChild(child, step, worldSandwichAxis, normScale);
 
-        const targetWorld = worldSandwichAxis.clone().multiplyScalar(sandwichShift);
-        const localOrigin = child.parent ? child.parent.worldToLocal(worldOrigin.clone()) : worldOrigin.clone();
-        const localTarget = child.parent ? child.parent.worldToLocal(targetWorld.clone()) : targetWorld.clone();
-        const localDelta = localTarget.sub(localOrigin);
+        // Se un antenato diretto è già in explodeItems con un delta diverso da zero,
+        // evita di applicare due volte lo stesso spostamento sullo stesso oggetto
+        let anc = child.parent;
+        while (anc) {
+          const ancDelta = assignedDeltas.get(anc);
+          if (ancDelta && ancDelta.lengthSq() > 1e-8) {
+            deltaVec = new THREE.Vector3(0, 0, 0);
+            break;
+          }
+          anc = anc.parent;
+        }
 
+        assignedDeltas.set(child, deltaVec);
         explodeItems.push({
           obj: child,
           origPos: child.position.clone(),
-          deltaVec: localDelta
+          deltaVec
         });
-      });
+      }
 
       statusEl.innerHTML =
-        `<strong>Modello caricato</strong> (${meshCount} parti · Asse panino: ${stackAxis.toUpperCase()})<br>` +
-        `Rubini ancora/plateau agganciati · Rotazione inversa &amp; zoom`;
+        `<strong>Modello caricato</strong> (${allMeshes.length} parti · Asse panino: ${stackAxis.toUpperCase()})<br>` +
+        `Rubini ancora &amp; impulso bloccati sul pezzo`;
     }
 
     function tryLoadFromIndex(index) {
