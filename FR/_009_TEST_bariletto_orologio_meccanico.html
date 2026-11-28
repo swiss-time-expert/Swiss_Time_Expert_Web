@@ -123,10 +123,7 @@
     ];
 
     const HORIZONTAL_SPREAD = 1.65;
-
-    // Angolazione iniziale di riferimento
     const BASE_ROT = { x: -0.35, y: -0.55, z: 1.55 };
-    // Rotazione d'accompagnamento verso il lato opposto durante l'esploso
     const EXPLODE_ROT_DELTA = { x: -0.08, y: -0.45, z: 0.14 };
 
     const statusEl = document.getElementById('status');
@@ -182,83 +179,96 @@
       return parts.join(' ').toLowerCase();
     }
 
-    function getMaterialNames(child) {
-      const names = [];
-      if (!child.material) return '';
-      if (Array.isArray(child.material)) {
-        for (const m of child.material) if (m && m.name) names.push(m.name.toLowerCase());
-      } else if (child.material.name) {
-        names.push(child.material.name.toLowerCase());
+    // Risale dalla primitiva mesh al nodo oggetto Blender (es. "710_Pallet_fork-1__Imported1")
+    // così metallo e rubino dello stesso oggetto si muovono sempre insieme senza mai staccarsi
+    function getBlenderObjectNode(mesh) {
+      let cur = mesh;
+      while (cur && cur.parent && cur.parent !== modelRoot) {
+        if (cur.name && cur.name.includes('Imported')) {
+          return cur;
+        }
+        cur = cur.parent;
       }
-      return names.join(' ');
+      return mesh;
     }
 
-    function getHorizontalStep(lbl, matNames) {
-      if (lbl.includes('100 main plate') || lbl.includes('main_plate') || lbl.includes('platine')) {
+    function getHorizontalStep(lbl) {
+      if (lbl.includes('100 main plate') || lbl.includes('100_main_plate')) {
         return -0.78;
       }
 
-      if (lbl.includes('180 movement barrel') || lbl.includes('barrel')) {
-        if (lbl.includes('105m barrel bridge') || lbl.includes('barrel bridge')) {
-          return 0.42;
-        }
+      if (lbl.includes('105m barrel bridge') || lbl.includes('105m_barrel_bridge')) {
+        return 0.42;
+      }
+
+      if (lbl.includes('180 movement barrel') || lbl.includes('180_movement_barrel')) {
         return -0.22;
       }
 
       if (
-        lbl.includes('250 hour') ||
-        lbl.includes('240 driver') ||
-        lbl.includes('260 minute') ||
-        lbl.includes('401 winding stem') ||
-        lbl.includes('407 winding') ||
-        lbl.includes('410 sliding') ||
-        lbl.includes('435 yoke') ||
-        lbl.includes('440 yoke') ||
-        lbl.includes('443m setting') ||
-        lbl.includes('445m setting') ||
-        lbl.includes('450 setting') ||
-        lbl.includes('453 intermediate')
+        lbl.includes('250 hour') || lbl.includes('250_hour') ||
+        lbl.includes('240 driver') || lbl.includes('240_driver') ||
+        lbl.includes('260 minute') || lbl.includes('260_minute') ||
+        lbl.includes('401 winding stem') || lbl.includes('401_winding_stem') ||
+        lbl.includes('407 winding') || lbl.includes('407_winding') ||
+        lbl.includes('410 sliding') || lbl.includes('410_sliding') ||
+        lbl.includes('435 yoke') || lbl.includes('435_yoke') ||
+        lbl.includes('440 yoke') || lbl.includes('440_yoke') ||
+        lbl.includes('443m setting') || lbl.includes('443m_setting') ||
+        lbl.includes('445m setting') || lbl.includes('445m_setting') ||
+        lbl.includes('450 setting') || lbl.includes('450_setting') ||
+        lbl.includes('453 intermediate') || lbl.includes('453_intermediate')
       ) {
         return -0.45;
       }
 
       if (
-        lbl.includes('201 centre') ||
-        lbl.includes('210 third') ||
-        lbl.includes('220 second')
+        lbl.includes('201 centre') || lbl.includes('201_centre') ||
+        lbl.includes('210 third') || lbl.includes('210_third') ||
+        lbl.includes('220 second') || lbl.includes('220_second')
       ) {
         return 0.02;
       }
 
       if (
-        lbl.includes('705 escape') ||
-        lbl.includes('710 pallet') ||
-        lbl.includes('721 balance') ||
-        lbl.includes('730 double') ||
+        lbl.includes('705 escape') || lbl.includes('705_escape') ||
+        lbl.includes('710 pallet') || lbl.includes('710_pallet') ||
+        lbl.includes('721 balance') || lbl.includes('721_balance') ||
         lbl.includes('incabloc')
       ) {
         return 0.18;
       }
 
-      if (lbl.includes('125 pallet bridge')) return 0.34;
-      if (lbl.includes('110 train wheel bridge')) return 0.48;
-      if (lbl.includes('121 balancing bridge') || lbl.includes('303 two') || lbl.includes('375 stud')) {
+      if (lbl.includes('125 pallet bridge') || lbl.includes('125_pallet_bridge')) return 0.34;
+      if (lbl.includes('110 train wheel bridge') || lbl.includes('110_train_wheel_bridge')) return 0.48;
+      if (
+        lbl.includes('121 balancing bridge') || lbl.includes('121_balancing_bridge') ||
+        lbl.includes('303 two') || lbl.includes('303_two')
+      ) {
         return 0.64;
       }
-      if (lbl.includes('bridge') || lbl.includes('pont')) return 0.46;
 
       if (
-        lbl.includes('415 ratchet') ||
-        lbl.includes('420 crown') ||
-        lbl.includes('422 crown') ||
-        lbl.includes('425 click') ||
-        lbl.includes('430 click')
+        lbl.includes('415 ratchet') || lbl.includes('415_ratchet') ||
+        lbl.includes('420 crown') || lbl.includes('420_crown') ||
+        lbl.includes('422 crown') || lbl.includes('422_crown') ||
+        lbl.includes('425 click') || lbl.includes('425_click')
       ) {
         return 0.56;
       }
 
-      const isRuby = matNames.includes('rubino') || lbl.includes('ruby');
-      if (isRuby || lbl.includes('screw')) {
+      if (
+        lbl.includes('5105') ||
+        lbl.includes('5110') ||
+        lbl.includes('5121') ||
+        lbl.includes('5125') ||
+        lbl.includes('5415') ||
+        lbl.includes('5420') ||
+        lbl.includes('5425') ||
+        lbl.includes('5443') ||
+        lbl.includes('5445') ||
+        lbl.includes('screw')
+      ) {
         return 0.30;
       }
 
@@ -271,7 +281,6 @@
 
       const coreBox = new THREE.Box3();
       const fullBox = new THREE.Box3();
-      const palletBox = new THREE.Box3();
       let meshCount = 0;
 
       modelRoot.traverse((child) => {
@@ -279,11 +288,8 @@
         meshCount++;
         fullBox.expandByObject(child);
         const lbl = getHierarchyLabel(child);
-        if (!lbl.includes('401 winding stem')) {
+        if (!lbl.includes('401 winding stem') && !lbl.includes('401_winding_stem')) {
           coreBox.expandByObject(child);
-        }
-        if (lbl.includes('710 pallet') || lbl.includes('pallet') || lbl.includes('ancre')) {
-          palletBox.expandByObject(child);
         }
         if (child.material) {
           const mats = Array.isArray(child.material) ? child.material : [child.material];
@@ -301,10 +307,6 @@
       const center = new THREE.Vector3();
       refBox.getSize(size);
       refBox.getCenter(center);
-
-      const palletCenter = new THREE.Vector3();
-      const hasPalletBox = !palletBox.isEmpty();
-      if (hasPalletBox) palletBox.getCenter(palletCenter);
 
       const stackAxis = (size.x <= size.y && size.x <= size.z) ? 'x'
                       : (size.y <= size.x && size.y <= size.z) ? 'y' : 'z';
@@ -334,51 +336,36 @@
         .normalize();
 
       const worldOrigin = new THREE.Vector3(0, 0, 0);
-
-      // Raggio ravvicinato attorno all'ancora (710) per intercettare i suoi rubini senza toccare gli altri
-      const palletProximityRadius = maxDim * 0.09;
+      const registeredNodes = new Set();
 
       modelRoot.traverse((child) => {
         if (!child.isMesh) return;
-        const lbl = getHierarchyLabel(child);
-        const matNames = getMaterialNames(child);
-        const isRuby =
-          matNames.includes('rubino') ||
-          matNames.includes('ruby') ||
-          lbl.includes('rubino') ||
-          lbl.includes('ruby');
 
-        const childBox = new THREE.Box3().setFromObject(child);
-        const childCenter = new THREE.Vector3();
-        childBox.getCenter(childCenter);
+        // Muove il nodo contenitore dell'oggetto Blender (così sotto-mesh di metallo e rubino restano fusi insieme)
+        const targetNode = getBlenderObjectNode(child);
+        if (registeredNodes.has(targetNode)) return;
+        registeredNodes.add(targetNode);
 
-        let step = getHorizontalStep(lbl, matNames);
-
-        // Mantiene i rubini dell'ancora (710) solidali con l'ancora (0.18)
-        if (isRuby) {
-          const nearPallet = hasPalletBox && childCenter.distanceTo(palletCenter) <= palletProximityRadius;
-          if (nearPallet || lbl.includes('710') || lbl.includes('pallet') || lbl.includes('ancre')) {
-            step = 0.18;
-          }
-        }
-
+        // Normalizza underscore e spazi nei nomi esportati da Blender
+        const lbl = getHierarchyLabel(targetNode).replace(/_/g, ' ');
+        const step = getHorizontalStep(lbl);
         const sandwichShift = step * HORIZONTAL_SPREAD;
 
         const targetWorld = worldSandwichAxis.clone().multiplyScalar(sandwichShift);
-        const localOrigin = child.parent ? child.parent.worldToLocal(worldOrigin.clone()) : worldOrigin.clone();
-        const localTarget = child.parent ? child.parent.worldToLocal(targetWorld.clone()) : targetWorld.clone();
+        const localOrigin = targetNode.parent ? targetNode.parent.worldToLocal(worldOrigin.clone()) : worldOrigin.clone();
+        const localTarget = targetNode.parent ? targetNode.parent.worldToLocal(targetWorld.clone()) : targetWorld.clone();
         const localDelta = localTarget.sub(localOrigin);
 
         explodeItems.push({
-          obj: child,
-          origPos: child.position.clone(),
+          obj: targetNode,
+          origPos: targetNode.position.clone(),
           deltaVec: localDelta
         });
       });
 
       statusEl.innerHTML =
-        `<strong>Modello caricato</strong> (${meshCount} parti · Asse panino: ${stackAxis.toUpperCase()})<br>` +
-        `Rubini ancora agganciati · Rotazione inversa &amp; zoom`;
+        `<strong>Modello caricato</strong> (${registeredNodes.size} oggetti · ${meshCount} primitive)<br>` +
+        `Ancora &amp; rubini fusi sul nodo · Asse panino: ${stackAxis.toUpperCase()}`;
     }
 
     function tryLoadFromIndex(index) {
