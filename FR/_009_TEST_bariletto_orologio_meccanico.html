@@ -98,8 +98,21 @@
       './ETA_6498-1_Movement_parts.glb'
     ];
 
-    // Escursione calibrata affinché a 100% resti tutto ben inquadrato a schermo pieno
-    const SANDWICH_SPREAD = 0.72;
+    // Escursione orizzontale calibrata per restare sempre dentro lo schermo
+    const HORIZONTAL_SPREAD = 1.15;
+
+    // Offset orizzontali per gruppo (ordine di lettura e leggibilità del treno del tempo)
+    const GROUP_OFFSETS = {
+      rubini:    0.00,   // Fermi al loro posto per evitare effetti "proiettile"
+      bariletto: -0.18,  // Chiuso e compatto
+      antishock: 0.05,   // Contenuto in questa fase
+      treno:     0.22,   // Treno del tempo e scappamento ben leggibili all'interno
+      carica:    0.45,   // Ruote di carica / rimessa allineate
+      viti:      0.55,   // Viti con distacco leggero
+      platina:   -0.85,  // Platina "a fetta" tenuta vicina e ben leggibile
+      ponti:     0.95,   // Ponti "a fetta" aperti per liberare il treno del tempo
+      altro:     0.15
+    };
 
     const statusEl = document.getElementById('status');
     const container = document.getElementById('viewer');
@@ -108,7 +121,7 @@
     scene.background = new THREE.Color(0x181b20);
 
     const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.01, 100);
-    const DEFAULT_CAM_POS = new THREE.Vector3(2.4, 1.9, 2.7);
+    const DEFAULT_CAM_POS = new THREE.Vector3(0.0, 0.3, 4.4);
     camera.position.copy(DEFAULT_CAM_POS);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -121,19 +134,18 @@
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
-    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.6);
-    dirLight1.position.set(3, 6, 4);
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.5);
+    dirLight1.position.set(3, 5, 6);
     scene.add(dirLight1);
 
-    const dirLight2 = new THREE.DirectionalLight(0xffe6d5, 1.0);
-    dirLight2.position.set(-4, 2, -5);
+    const dirLight2 = new THREE.DirectionalLight(0xdde6ff, 0.9);
+    dirLight2.position.set(-4, -2, 4);
     scene.add(dirLight2);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.06;
 
-    let displayGroup = null;
     let modelRoot = null;
     const explodeItems = [];
     const loader = new GLTFLoader();
@@ -159,41 +171,67 @@
       return names.join(' ');
     }
 
+    function classifyGroup(lbl, matNames) {
+      if (matNames.includes('rubino') || lbl.includes('ruby')) return 'rubini';
+      if (lbl.includes('180 movement barrel')) return 'bariletto';
+      if (lbl.includes('incabloc')) return 'antishock';
+      if (lbl.includes('100 main plate')) return 'platina';
+      if (lbl.includes('bridge') || lbl.includes('pont')) return 'ponti';
+      if (lbl.includes('screw')) return 'viti';
+      if (
+        lbl.includes('201 centre') ||
+        lbl.includes('210 third') ||
+        lbl.includes('220 second') ||
+        lbl.includes('705 escape') ||
+        lbl.includes('710 pallet') ||
+        lbl.includes('721 balance')
+      ) return 'treno';
+      if (
+        lbl.includes('401 winding stem') ||
+        lbl.includes('407 winding') ||
+        lbl.includes('410 sliding') ||
+        lbl.includes('415 ratchet') ||
+        lbl.includes('420 crown') ||
+        lbl.includes('422 crown') ||
+        lbl.includes('425 click') ||
+        lbl.includes('435 yoke') ||
+        lbl.includes('440 yoke') ||
+        lbl.includes('443m setting') ||
+        lbl.includes('445m setting') ||
+        lbl.includes('450 setting') ||
+        lbl.includes('453 intermediate')
+      ) return 'carica';
+      return 'altro';
+    }
+
     function onModelLoaded(gltf) {
       modelRoot = gltf.scene;
+      scene.add(modelRoot);
+
+      // Mantiene l'orientamento naturale del modello senza ruotarlo
       modelRoot.updateMatrixWorld(true);
 
-      // Box del corpo principale senza la lunga tige di carica (401 Winding stem)
-      const coreBox = new THREE.Box3();
-      const fullBox = new THREE.Box3();
-      modelRoot.traverse((child) => {
-        if (!child.isMesh) return;
-        fullBox.expandByObject(child);
-        const lbl = getHierarchyLabel(child);
-        if (!lbl.includes('401 winding stem')) {
-          coreBox.expandByObject(child);
-        }
-      });
-
-      const refBox = coreBox.isEmpty() ? fullBox : coreBox;
+      const box = new THREE.Box3().setFromObject(modelRoot);
       const size = new THREE.Vector3();
       const center = new THREE.Vector3();
-      refBox.getSize(size);
-      refBox.getCenter(center);
+      box.getSize(size);
+      box.getCenter(center);
 
       const maxDim = Math.max(size.x, size.y, size.z) || 1;
-      const normScale = 2.45 / maxDim;
+      const scaleFactor = 2.4 / maxDim;
+      modelRoot.scale.setScalar(scaleFactor);
+      modelRoot.updateMatrixWorld(true);
 
-      const stackAxis = (size.z <= size.x && size.z <= size.y) ? 'z'
-                      : (size.y <= size.x && size.y <= size.z) ? 'y' : 'x';
+      box.setFromObject(modelRoot);
+      box.getCenter(center);
+      modelRoot.position.sub(center);
+      modelRoot.updateMatrixWorld(true);
 
-      const plateBox = new THREE.Box3();
-      const bridgesBox = new THREE.Box3();
+      // Direzione orizzontale pura sullo schermo (asse X mondiale)
+      const worldRight = new THREE.Vector3(1, 0, 0);
 
-      let meshCount = 0;
       modelRoot.traverse((child) => {
         if (!child.isMesh) return;
-        meshCount++;
         if (child.material) {
           const mats = Array.isArray(child.material) ? child.material : [child.material];
           for (const m of mats) {
@@ -203,124 +241,46 @@
             }
           }
         }
-        const lbl = getHierarchyLabel(child);
-        if (lbl.includes('100 main plate')) plateBox.expandByObject(child);
-        else if (lbl.includes('bridge') || lbl.includes('pont')) bridgesBox.expandByObject(child);
-      });
 
-      const plateCenter = new THREE.Vector3();
-      if (!plateBox.isEmpty()) plateBox.getCenter(plateCenter);
-
-      const bridgesCenter = new THREE.Vector3();
-      if (!bridgesBox.isEmpty()) bridgesBox.getCenter(bridgesCenter);
-
-      const bridgeDir = (bridgesCenter[stackAxis] >= plateCenter[stackAxis]) ? 1 : -1;
-      const plateDir = -bridgeDir;
-
-      // Fasce a panino contenute per restare sempre dentro lo schermo anche al 100%
-      const layerTier = {
-        bridgeOuter: bridgeDir * 0.85,
-        winding:     bridgeDir * 0.52,
-        incabloc:    bridgeDir * 0.20,
-        trainCore:   0.0,
-        barrel:      plateDir * 0.14,
-        plateOuter:  plateDir * 0.85
-      };
-
-      const axisVecModel = new THREE.Vector3(
-        stackAxis === 'x' ? 1 : 0,
-        stackAxis === 'y' ? 1 : 0,
-        stackAxis === 'z' ? 1 : 0
-      );
-
-      modelRoot.traverse((child) => {
-        if (!child.isMesh) return;
         const lbl = getHierarchyLabel(child);
         const matNames = getMaterialNames(child);
-        const isRuby = matNames.includes('rubino') || lbl.includes('ruby');
+        const grp = classifyGroup(lbl, matNames);
+        const baseOffset = GROUP_OFFSETS[grp] ?? 0.0;
 
-        const meshBox = new THREE.Box3().setFromObject(child);
-        const meshCenter = new THREE.Vector3();
-        meshBox.getCenter(meshCenter);
-
-        let tierVal = 0.0;
-        let fineOffset = 0.0;
-
-        if (isRuby) {
-          // Segue la stessa fascia della struttura vicina senza staccarsi verso il bordo
-          const onBridgeSide = ((meshCenter[stackAxis] - center[stackAxis]) * bridgeDir) >= 0;
-          if (lbl.includes('incabloc')) {
-            tierVal = layerTier.incabloc;
-          } else if (onBridgeSide) {
-            tierVal = layerTier.bridgeOuter;
-          } else {
-            tierVal = layerTier.plateOuter;
-          }
-        } else if (lbl.includes('100 main plate')) {
-          tierVal = layerTier.plateOuter;
-        } else if (lbl.includes('bridge') || lbl.includes('pont')) {
-          tierVal = layerTier.bridgeOuter;
-          fineOffset = (meshCenter[stackAxis] - bridgesCenter[stackAxis]) * 0.15;
-        } else if (lbl.includes('415 ratchet') || lbl.includes('420 crown') || lbl.includes('422 crown')) {
-          tierVal = layerTier.winding;
-        } else if (lbl.includes('180 movement barrel')) {
-          tierVal = layerTier.barrel;
-        } else if (lbl.includes('incabloc')) {
-          tierVal = layerTier.incabloc;
-        } else if (lbl.includes('screw')) {
-          const onBridgeSide = ((meshCenter[stackAxis] - center[stackAxis]) * bridgeDir) >= 0;
-          tierVal = onBridgeSide ? layerTier.bridgeOuter : layerTier.plateOuter;
-        } else {
-          tierVal = layerTier.trainCore;
-          fineOffset = (meshCenter[stackAxis] - center[stackAxis]) * 0.1;
+        // Micro-scalatura interna solo per i ponti così restano ordinati a fette
+        let subStep = 0;
+        if (grp === 'ponti') {
+          if (lbl.includes('105m barrel')) subStep = -0.06;
+          else if (lbl.includes('110 train')) subStep = 0.04;
+          else if (lbl.includes('125 pallet')) subStep = 0.12;
+          else if (lbl.includes('121 balancing')) subStep = 0.20;
         }
 
-        const totalModelDelta = ((tierVal * SANDWICH_SPREAD) + fineOffset) / normScale;
+        const totalWorldX = (baseOffset + subStep) * HORIZONTAL_SPREAD;
 
-        const worldDir = axisVecModel.clone().transformDirection(modelRoot.matrixWorld).normalize();
+        // Converte lo spostamento orizzontale (asse X mondo) nello spazio locale di child.parent
         const parentInvWorld = child.parent
           ? child.parent.matrixWorld.clone().invert()
           : new THREE.Matrix4().identity();
-        const localDir = worldDir.clone().transformDirection(parentInvWorld).normalize();
+        const localDir = worldRight.clone().transformDirection(parentInvWorld);
 
-        const scaleFactor = new THREE.Vector3(1, 1, 1);
-        if (child.parent) {
-          const parentScale = new THREE.Vector3();
-          child.parent.getWorldScale(parentScale);
-          scaleFactor.set(
-            parentScale.x !== 0 ? 1 / parentScale.x : 1,
-            parentScale.y !== 0 ? 1 / parentScale.y : 1,
-            parentScale.z !== 0 ? 1 / parentScale.z : 1
-          );
-        }
+        const parentScale = new THREE.Vector3(1, 1, 1);
+        if (child.parent) child.parent.getWorldScale(parentScale);
 
-        const parentDeltaVec = new THREE.Vector3(
-          localDir.x * totalModelDelta * normScale * scaleFactor.x,
-          localDir.y * totalModelDelta * normScale * scaleFactor.y,
-          localDir.z * totalModelDelta * normScale * scaleFactor.z
+        const localDelta = new THREE.Vector3(
+          localDir.x * totalWorldX / (parentScale.x || 1),
+          localDir.y * totalWorldX / (parentScale.y || 1),
+          localDir.z * totalWorldX / (parentScale.z || 1)
         );
 
         explodeItems.push({
           obj: child,
           origPos: child.position.clone(),
-          deltaVec: parentDeltaVec
+          deltaVec: localDelta
         });
       });
 
-      modelRoot.scale.setScalar(normScale);
-      modelRoot.position.copy(center).multiplyScalar(-normScale);
-
-      displayGroup = new THREE.Group();
-      displayGroup.add(modelRoot);
-
-      displayGroup.rotation.order = 'YXZ';
-      displayGroup.rotation.y = -0.65;
-      displayGroup.rotation.x = -0.78;
-      displayGroup.rotation.z = 2.15;
-
-      scene.add(displayGroup);
-
-      statusEl.innerHTML = `<strong>Modello caricato</strong> (${meshCount} parti | Asse a panino: ${stackAxis.toUpperCase()})`;
+      statusEl.innerHTML = `<strong>Modello caricato</strong> (Esploso orizzontale a gruppi)`;
     }
 
     function tryLoadFromIndex(index) {
@@ -346,12 +306,10 @@
     const slider = document.getElementById('explodeSlider');
     const sliderVal = document.getElementById('explodeValue');
     slider.addEventListener('input', () => {
-      const rawT = parseFloat(slider.value);
-      sliderVal.textContent = `${Math.round(rawT * 100)}%`;
-      // Curva morbida per non far partire a razzo i pezzi al 3-4%
-      const easedT = Math.pow(rawT, 1.25);
+      const t = parseFloat(slider.value);
+      sliderVal.textContent = `${Math.round(t * 100)}%`;
       for (const item of explodeItems) {
-        item.obj.position.copy(item.origPos).addScaledVector(item.deltaVec, easedT);
+        item.obj.position.copy(item.origPos).addScaledVector(item.deltaVec, t);
       }
     });
 
