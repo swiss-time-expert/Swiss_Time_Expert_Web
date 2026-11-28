@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Swiss Time Expert — Test Assemblage Interactif 3D par Cycles (ETA 6498-1)</title>
+  <title>Swiss Time Expert — Atelier &amp; Vue Éclatée 3D (ETA 6498-1)</title>
   <link rel="icon" type="image/png" href="../favicon.png?v=2">
   <link rel="shortcut icon" type="image/png" href="../favicon.png?v=2">
   <style>
@@ -125,13 +125,16 @@
     #canvas-stage {
       width: 100%;
       height: 600px;
-      background: #ffffff;
+      background: #141619;
       border: 1px solid #cbd5e1;
       border-radius: 10px;
       position: relative;
       overflow: hidden;
       touch-action: none;
       cursor: default;
+    }
+    #canvas-stage.assembly-bg {
+      background: #ffffff;
     }
     #canvas-stage.hover-piece { cursor: grab; }
     #canvas-stage.grabbing { cursor: grabbing; }
@@ -198,13 +201,54 @@
     }
     #hover-pill.visible { display: block; }
 
+    .explode-dock {
+      position: absolute;
+      bottom: 64px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: min(460px, calc(100% - 32px));
+      background: rgba(20, 22, 25, 0.92);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      border-radius: 12px;
+      padding: 9px 16px;
+      z-index: 26;
+      color: #f8fafc;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+    .explode-dock.hidden { display: none; }
+    .explode-dock label {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #f3c64f;
+      white-space: nowrap;
+      margin: 0;
+    }
+    .explode-dock input[type="range"] {
+      flex-grow: 1;
+      cursor: pointer;
+      accent-color: #d4af37;
+      margin: 0;
+    }
+    .explode-val {
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: #ffffff;
+      min-width: 44px;
+      text-align: right;
+    }
+
     .hud-dock {
       position: absolute;
       bottom: 14px;
-      right: 16px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       flex-wrap: wrap;
-      justify-content: flex-end;
+      justify-content: center;
       align-items: center;
       gap: 6px;
       background: rgba(13, 19, 31, 0.92);
@@ -303,22 +347,23 @@
   <div class="test-shell">
     <div class="test-header">
       <div>
-        <h1 class="test-title">🛠️ Atelier Virtuel 3D — Assemblage par Cycles (Calibre ETA 6498-1)</h1>
-        <p class="test-sub">Les composants arrivent sur l'établi par lots logiques (4 à 5 pièces par cycle) sans chevauchement • Vis aimantées automatiquement.</p>
+        <h1 class="test-title">🛠️ Atelier Virtuel 3D — Vue Éclatée "Panino" &amp; Assemblage (ETA 6498-1)</h1>
+        <p class="test-sub">Vue éclatée axiale ("panino") avec rubis d'ancre/impulsion solidaires, vis extraites vers l'extérieur et atelier d'assemblage par cycles.</p>
       </div>
       <div class="test-controls">
-        <button type="button" class="btn-ui active" id="btn-mode-guided">🧭 Mode Guidé</button>
-        <button type="button" class="btn-ui" id="btn-mode-free">🔓 Mode Libre</button>
+        <button type="button" class="btn-ui active gold" id="btn-view-explode">💥 Vue Éclatée</button>
+        <button type="button" class="btn-ui" id="btn-mode-guided">🧭 Assemblage Guidé</button>
+        <button type="button" class="btn-ui" id="btn-mode-free">🔓 Assemblage Libre</button>
         <button type="button" class="btn-ui" id="btn-auto-place">⚡ Poser l'étape</button>
-        <button type="button" class="btn-ui gold" id="btn-reset-all">↺ Recommencer</button>
+        <button type="button" class="btn-ui" id="btn-reset-all">↺ Réinitialiser</button>
       </div>
     </div>
 
     <div class="status-strip" id="status-strip">
       <div>
-        <span class="cycle-badge" id="cycle-badge">Cycle 1/3</span>
-        <span class="step-badge" id="step-badge">Étape 1</span>
-        <span id="step-instruction">Chargement des composants de l'atelier...</span>
+        <span class="cycle-badge" id="cycle-badge">Vue Éclatée "Panino"</span>
+        <span class="step-badge" id="step-badge">ETA 6498-1</span>
+        <span id="step-instruction">Faites glisser le curseur « Vue Éclatée » ou passez en mode Assemblage Guidé / Libre.</span>
       </div>
       <div class="progress-pill" id="progress-pill">0 / 0 montés</div>
     </div>
@@ -326,37 +371,44 @@
     <div id="canvas-stage">
       <div id="loader-overlay">
         <div class="spinner"></div>
-        <div id="loader-text">Préparation du plateau d'assemblage ETA 6498-1...</div>
+        <div id="loader-text">Préparation du calibre ETA 6498-1...</div>
       </div>
 
       <div id="grab-tooltip">🤏 Pièce saisie : déposez-la sur la cible dorée</div>
       <div id="hover-pill">Composant</div>
 
+      <div class="explode-dock" id="explode-dock">
+        <label for="explode-slider">⚙️ Vue Éclatée :</label>
+        <input type="range" id="explode-slider" min="0" max="1" step="0.005" value="0">
+        <span class="explode-val" id="explode-val">0%</span>
+      </div>
+
       <div class="hud-dock">
-        <button type="button" class="hud-btn active" id="hud-tool-grab" title="Saisir et déplacer les pièces (clic gauche / doigt)">🤏 Saisir</button>
-        <button type="button" class="hud-btn" id="hud-tool-orbit" title="Pivoter librement la caméra avec le clic gauche">⟳ Pivoter</button>
+        <button type="button" class="hud-btn active" id="hud-tool-orbit" title="Pivoter la caméra">⟳ Pivoter</button>
+        <button type="button" class="hud-btn" id="hud-tool-pan" title="Déplacer la vue">✋ Déplacer</button>
+        <button type="button" class="hud-btn" id="hud-tool-grab" title="Saisir les pièces sur l'établi">🤏 Saisir</button>
         <span class="hud-sep"></span>
-        <button type="button" class="hud-btn" id="hud-zoom-in">🔍 +</button>
-        <button type="button" class="hud-btn" id="hud-zoom-out">🔍 −</button>
+        <button type="button" class="hud-btn" id="hud-zoom-in" title="Zoom avant rapproché">🔍 +</button>
+        <button type="button" class="hud-btn" id="hud-zoom-out" title="Zoom arrière">🔍 −</button>
         <span class="hud-sep"></span>
-        <button type="button" class="hud-btn" id="hud-reset-cam">Centrer</button>
-        <button type="button" class="hud-btn" id="hud-fullscreen">⛶ Plein Écran</button>
+        <button type="button" class="hud-btn" id="hud-reset-cam" title="Recentrer la vue">Centrer</button>
+        <button type="button" class="hud-btn" id="hud-fullscreen" title="Plein écran">⛶ Plein Écran</button>
       </div>
     </div>
 
     <div class="info-card">
       <div>
-        <strong>Dernier composant assemblé (FR / EN / DE)</strong>
-        <div class="info-main-name" id="card-name">En attente du premier montage...</div>
-        <div id="card-multilang" style="color:#475569; font-size:0.8rem; margin-top:2px;">—</div>
+        <strong>Architecture &amp; Composant (FR / EN / DE)</strong>
+        <div class="info-main-name" id="card-name">Calibre ETA 6498-1 — Vue Éclatée "Panino"</div>
+        <div id="card-multilang" style="color:#475569; font-size:0.8rem; margin-top:2px;">Ø 36,60 mm • 18'000 A/h (2,5 Hz) • 17 Rubis</div>
       </div>
       <div>
         <strong>Fonction mécanique</strong>
-        <div id="card-role">Saisissez une pièce sur le plateau à gauche et approchez-la de la platine.</div>
+        <div id="card-role">Ouverture par strates le long de l'axe d'empilement, avec rubis d'ancre/impulsion solidaires de leur composant.</div>
       </div>
       <div>
-        <strong>Lubrification &amp; Visserie aimantée</strong>
-        <div id="card-lube">Les vis de fixation correspondantes s'installent automatiquement dès que le mobile ou le pont est en place.</div>
+        <strong>Visserie &amp; Lubrification</strong>
+        <div id="card-lube">Vis extraites vers l'extérieur des ponts correspondants ; huile fine Moebius 9010, huile épaisse HP-1300 et graisse 9504.</div>
       </div>
     </div>
   </div>
@@ -367,50 +419,85 @@
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-    const MODEL_URL = '../ETA6498-1_Web.glb';
+    const CANDIDATE_MODEL_URLS = [
+      '../ETA_6498-1_Movement_parts.glb',
+      '../ETA6498-1_Web.glb'
+    ];
+
+    const HORIZONTAL_SPREAD = 1.65;
+    const BASE_ROT = { x: -0.35, y: -0.55, z: 1.55 };
+    const EXPLODE_ROT_DELTA = { x: -0.08, y: -0.45, z: 0.14 };
+
     const stage = document.getElementById('canvas-stage');
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xffffff);
+    scene.background = new THREE.Color(0x141619);
 
-    const camera = new THREE.PerspectiveCamera(36, stage.clientWidth / stage.clientHeight, 0.01, 1000);
-    const DEFAULT_CAM_POS = new THREE.Vector3(-0.35, 5.2, 2.45);
-    const DEFAULT_CAM_TARGET = new THREE.Vector3(-0.35, -0.1, 0);
-    camera.position.copy(DEFAULT_CAM_POS);
+    const camera = new THREE.PerspectiveCamera(38, stage.clientWidth / stage.clientHeight, 0.005, 100);
+    const EXPLODE_CAM_DIST = 4.6;
+    const EXPLODE_CAM_DIR = new THREE.Vector3(0.0, 0.25, 1.0).normalize();
+    const ASSEMBLY_CAM_POS = new THREE.Vector3(-0.35, 5.2, 2.45);
+    const ASSEMBLY_CAM_TARGET = new THREE.Vector3(-0.35, -0.1, 0);
+
+    camera.position.copy(EXPLODE_CAM_DIR).multiplyScalar(EXPLODE_CAM_DIST);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(stage.clientWidth, stage.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.45;
+    renderer.toneMappingExposure = 1.9;
     stage.appendChild(renderer.domElement);
 
     const pmrem = new THREE.PMREMGenerator(renderer);
     scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
-    scene.add(new THREE.AmbientLight(0xffffff, 1.45));
-    const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
-    keyLight.position.set(4, 10, 6);
-    scene.add(keyLight);
-    const fillLight = new THREE.DirectionalLight(0xdbe8ff, 1.2);
-    fillLight.position.set(-5, 6, -4);
-    scene.add(fillLight);
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.6);
+    dirLight1.position.set(3, 5, 6);
+    scene.add(dirLight1);
+
+    const dirLight2 = new THREE.DirectionalLight(0xffe6d5, 1.0);
+    dirLight2.position.set(-4, -2, 5);
+    scene.add(dirLight2);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.07;
-    controls.target.copy(DEFAULT_CAM_TARGET);
+    controls.dampingFactor = 0.035;
+    controls.rotateSpeed = 0.75;
+    controls.zoomSpeed = 1.15;
+    controls.panSpeed = 0.85;
+    controls.minDistance = 0.15;
+    controls.maxDistance = 25.0;
+    controls.target.set(0, 0, 0);
     controls.update();
 
-    let interactionMode = 'grab';
-    const btnHudGrab = document.getElementById('hud-tool-grab');
-    const btnHudOrbit = document.getElementById('hud-tool-orbit');
+    let displayGroup = null;
+    let modelRoot = null;
+    let userZoomScale = 1.0;
+    const explodeItems = [];
+
+    // 'explode' | 'guided' | 'free'
+    let workspaceMode = 'explode';
+    let interactionMode = 'orbit';
+
+    const btnViewExplode = document.getElementById('btn-view-explode');
+    const btnGuided = document.getElementById('btn-mode-guided');
+    const btnFree = document.getElementById('btn-mode-free');
+    const explodeDockEl = document.getElementById('explode-dock');
+    const explodeSlider = document.getElementById('explode-slider');
+    const explodeValEl = document.getElementById('explode-val');
+
+    const hudOrbitBtn = document.getElementById('hud-tool-orbit');
+    const hudPanBtn = document.getElementById('hud-tool-pan');
+    const hudGrabBtn = document.getElementById('hud-tool-grab');
 
     function setInteractionMode(mode) {
       interactionMode = mode;
-      btnHudGrab.classList.toggle('active', mode === 'grab');
-      btnHudOrbit.classList.toggle('active', mode === 'orbit');
+      hudOrbitBtn.classList.toggle('active', mode === 'orbit');
+      hudPanBtn.classList.toggle('active', mode === 'pan');
+      hudGrabBtn.classList.toggle('active', mode === 'grab');
+
       stage.classList.toggle('orbit-mode', mode === 'orbit');
+      stage.classList.toggle('mode-pan', mode === 'pan');
 
       if (mode === 'grab') {
         controls.mouseButtons = {
@@ -418,7 +505,17 @@
           MIDDLE: THREE.MOUSE.DOLLY,
           RIGHT: THREE.MOUSE.ROTATE
         };
+      } else if (mode === 'pan') {
+        controls.enableRotate = false;
+        controls.enablePan = true;
+        controls.mouseButtons = {
+          LEFT: THREE.MOUSE.PAN,
+          MIDDLE: THREE.MOUSE.DOLLY,
+          RIGHT: THREE.MOUSE.ROTATE
+        };
       } else {
+        controls.enableRotate = true;
+        controls.enablePan = true;
         controls.mouseButtons = {
           LEFT: THREE.MOUSE.ROTATE,
           MIDDLE: THREE.MOUSE.DOLLY,
@@ -426,9 +523,10 @@
         };
       }
     }
-    btnHudGrab.addEventListener('click', () => setInteractionMode('grab'));
-    btnHudOrbit.addEventListener('click', () => setInteractionMode('orbit'));
-    setInteractionMode('grab');
+
+    hudOrbitBtn.addEventListener('click', () => setInteractionMode('orbit'));
+    hudPanBtn.addEventListener('click', () => setInteractionMode('pan'));
+    hudGrabBtn.addEventListener('click', () => setInteractionMode('grab'));
 
     const TRAY_Y = -0.18;
     const trayGroup = new THREE.Group();
@@ -446,6 +544,7 @@
     trayBorder.rotation.x = -Math.PI / 2;
     trayBorder.position.set(-1.82, TRAY_Y + 0.002, 0);
     trayGroup.add(trayBorder);
+    trayGroup.visible = false;
     scene.add(trayGroup);
 
     const tweezersGroup = new THREE.Group();
@@ -479,7 +578,6 @@
       3: 'Cycle 3/3 — Échappement, Régulation & Commande'
     };
 
-    // Chiavi univoche per ogni singolo componente (nessuna sovrapposizione tra "third" e "fourth/second")
     const CATALOG = [
       {
         cycle: 1,
@@ -546,10 +644,10 @@
         key: 'train_bridge_unit',
         order: 60,
         pattern: /train.*bridge|gear.*bridge|pont.*rouage|r[aä]derwerkbr/i,
-        fr: 'Pont de rouage empierré (+ 2 vis aimantées)',
+        fr: 'Pont de rouage empierré (+ vis)',
         en: 'Train wheel bridge, jewelled',
         de: 'Räderwerkbrücke mit Steinen',
-        role: 'Maintient l’alignement axial du train de rouage. Ses 2 vis cylindriques s’aimantent automatiquement.',
+        role: 'Maintient l’alignement axial du train de rouage.',
         lube: 'Huile épaisse HP-1300 sur centre ; huile fine 9010 sur moyenne et seconde.'
       },
       {
@@ -557,10 +655,10 @@
         key: 'barrel_bridge_unit',
         order: 70,
         pattern: /barrel.*bridge|pont.*barillet|federhausbr/i,
-        fr: 'Pont de barillet empierré (+ 3 vis aimantées)',
+        fr: 'Pont de barillet empierré (+ vis)',
         en: 'Barrel bridge, jewelled',
         de: 'Federhausbrücke mit Steinen',
-        role: 'Ferme le barillet et supporte les organes d’armage. Ses 3 vis s’aimantent automatiquement.',
+        role: 'Ferme le barillet et supporte les organes d’armage.',
         lube: 'Huile épaisse Moebius HP-1300 au palier supérieur d’arbre.'
       },
       {
@@ -568,10 +666,10 @@
         key: 'crown_wheel_unit',
         order: 80,
         pattern: /crown|couronne|kronrad/i,
-        fr: 'Roue de couronne & Bague (+ vis gauche aimantée)',
+        fr: 'Roue de couronne & Bague (+ vis gauche)',
         en: 'Crown wheel & ring',
         de: 'Kronrad & Kronradring',
-        role: 'Transmet la rotation du pignon de remontoir au rochet. Vis à pas gauche installée automatiquement.',
+        role: 'Transmet la rotation du pignon de remontoir au rochet (vis à pas gauche).',
         lube: 'Huile épaisse Moebius HP-1300 SC sur la bague et la portée.'
       },
       {
@@ -579,7 +677,7 @@
         key: 'ratchet_wheel_unit',
         order: 90,
         pattern: /ratchet|rochet|sperrrad/i,
-        fr: 'Rochet (+ vis aimantée)',
+        fr: 'Rochet (+ vis)',
         en: 'Ratchet wheel',
         de: 'Sperrrad',
         role: 'Solidaire du carré d’arbre de barillet pour l’armage du ressort.',
@@ -591,7 +689,7 @@
         order: 100,
         pattern: /pallet|anchor|ancre|anker/i,
         exclude: /bridge|pont|br[uü]cke/i,
-        fr: 'Ancre suisse',
+        fr: 'Ancre suisse & Levées rubis',
         en: 'Pallet fork',
         de: 'Anker',
         role: 'Verrouille la roue d’échappement et entretient les oscillations du balancier (levée : 44°).',
@@ -602,10 +700,10 @@
         key: 'pallet_bridge_unit',
         order: 110,
         pattern: /pallet.*bridge|escapement.*bridge|pont.*ancre|ankerbr/i,
-        fr: "Pont d'ancre empierré (+ 2 vis aimantées)",
+        fr: "Pont d'ancre empierré (+ vis)",
         en: 'Pallet bridge, jewelled',
         de: 'Ankerbrücke mit Steinen',
-        role: 'Sécurise l’axe de l’ancre. Ses 2 vis cylindriques se fixent automatiquement.',
+        role: 'Sécurise l’axe de l’ancre.',
         lube: 'À sec sur les pivots d’ancre.'
       },
       {
@@ -613,10 +711,10 @@
         key: 'balance_unit',
         order: 120,
         pattern: /balance|balancier|unruh|hairspring|spiral|incabloc|etachron|stud|regulator|raquette/i,
-        fr: 'Ensemble Balancier-Spiral & Pont ETACHRON (+ vis aimantée)',
+        fr: 'Ensemble Balancier-Spiral & Pont ETACHRON (+ vis)',
         en: 'Timed balance & bridge assembled',
         de: 'Unruh & Unruhbrücke komplett',
-        role: 'Organe régulateur à 18’000 A/h (2,5 Hz) avec antichoc INCABLOC. Fixation automatique.',
+        role: 'Organe régulateur à 18’000 A/h (2,5 Hz) avec antichoc INCABLOC.',
         lube: 'Huile fine Moebius 9010 dans les contre-pivots INCABLOC ; spiral à sec.'
       },
       {
@@ -635,7 +733,6 @@
     const SCREW_RE = /screw|\bvis\b|schraube|boulon|pin\b|goupille|stift|jewel|ruby|rubis|washer|rondelle/i;
     const BASE_RE = /main\s*plate|base\s*plate|platine|werkplatte/i;
 
-    let guidedMode = true;
     let currentCycle = 1;
     let maxCycle = 3;
     const mountableItems = [];
@@ -660,6 +757,125 @@
     const cardRoleEl = document.getElementById('card-role');
     const cardLubeEl = document.getElementById('card-lube');
 
+    function getHierarchyLabel(obj) {
+      const parts = [];
+      let cur = obj;
+      while (cur) {
+        if (cur.name) parts.push(cur.name);
+        cur = cur.parent;
+      }
+      return parts.join(' ').toLowerCase();
+    }
+
+    function getBlenderObjectNode(mesh) {
+      let cur = mesh;
+      while (cur && cur.parent && cur.parent !== modelRoot) {
+        if (cur.name && cur.name.includes('Imported')) {
+          return cur;
+        }
+        cur = cur.parent;
+      }
+      return mesh;
+    }
+
+    // Viti posizionate all'esterno del proprio ponte/gruppo lungo l'asse del panino
+    function getHorizontalStep(lbl) {
+      if (lbl.includes('5125')) return 0.48;
+      if (lbl.includes('5105')) return 0.58;
+      if (lbl.includes('5110')) return 0.62;
+      if (lbl.includes('5121')) return 0.80;
+      if (lbl.includes('5415') || lbl.includes('5420') || lbl.includes('5425')) return 0.72;
+      if (lbl.includes('5443') || lbl.includes('5445')) return -0.58;
+
+      if (lbl.includes('100 main plate') || lbl.includes('100_main_plate')) return -0.78;
+      if (lbl.includes('105m barrel bridge') || lbl.includes('105m_barrel_bridge')) return 0.42;
+      if (lbl.includes('180 movement barrel') || lbl.includes('180_movement_barrel')) return -0.22;
+
+      if (
+        lbl.includes('250 hour') || lbl.includes('250_hour') ||
+        lbl.includes('240 driver') || lbl.includes('240_driver') ||
+        lbl.includes('260 minute') || lbl.includes('260_minute') ||
+        lbl.includes('401 winding stem') || lbl.includes('401_winding_stem') ||
+        lbl.includes('407 winding') || lbl.includes('407_winding') ||
+        lbl.includes('410 sliding') || lbl.includes('410_sliding') ||
+        lbl.includes('435 yoke') || lbl.includes('435_yoke') ||
+        lbl.includes('440 yoke') || lbl.includes('440_yoke') ||
+        lbl.includes('443m setting') || lbl.includes('443m_setting') ||
+        lbl.includes('445m setting') || lbl.includes('445m_setting') ||
+        lbl.includes('450 setting') || lbl.includes('450_setting') ||
+        lbl.includes('453 intermediate') || lbl.includes('453_intermediate')
+      ) {
+        return -0.45;
+      }
+
+      if (
+        lbl.includes('201 centre') || lbl.includes('201_centre') ||
+        lbl.includes('210 third') || lbl.includes('210_third') ||
+        lbl.includes('220 second') || lbl.includes('220_second')
+      ) {
+        return 0.02;
+      }
+
+      if (
+        lbl.includes('705 escape') || lbl.includes('705_escape') ||
+        lbl.includes('710 pallet') || lbl.includes('710_pallet') ||
+        lbl.includes('721 balance') || lbl.includes('721_balance') ||
+        lbl.includes('incabloc')
+      ) {
+        return 0.18;
+      }
+
+      if (lbl.includes('125 pallet bridge') || lbl.includes('125_pallet_bridge')) return 0.34;
+      if (lbl.includes('110 train wheel bridge') || lbl.includes('110_train_wheel_bridge')) return 0.48;
+      if (
+        lbl.includes('121 balancing bridge') || lbl.includes('121_balancing_bridge') ||
+        lbl.includes('303 two') || lbl.includes('303_two')
+      ) {
+        return 0.64;
+      }
+
+      if (
+        lbl.includes('415 ratchet') || lbl.includes('415_ratchet') ||
+        lbl.includes('420 crown') || lbl.includes('420_crown') ||
+        lbl.includes('422 crown') || lbl.includes('422_crown') ||
+        lbl.includes('425 click') || lbl.includes('425_click')
+      ) {
+        return 0.56;
+      }
+
+      if (lbl.includes('screw')) return 0.66;
+      return 0.08;
+    }
+
+    function applyExplodeState(rawT) {
+      const easedT = rawT * rawT * (3 - 2 * rawT);
+      explodeValEl.textContent = `${Math.round(rawT * 100)}%`;
+
+      for (const item of explodeItems) {
+        item.obj.position.copy(item.origPos).addScaledVector(item.deltaVec, easedT);
+      }
+
+      if (displayGroup) {
+        displayGroup.rotation.set(
+          BASE_ROT.x + EXPLODE_ROT_DELTA.x * easedT,
+          BASE_ROT.y + EXPLODE_ROT_DELTA.y * easedT,
+          BASE_ROT.z + EXPLODE_ROT_DELTA.z * easedT
+        );
+      }
+
+      const targetDist = Math.max(0.15, EXPLODE_CAM_DIST * (1 + 0.35 * easedT) * userZoomScale);
+      const dir = camera.position.clone().sub(controls.target).normalize();
+      if (dir.lengthSq() < 0.0001) dir.copy(EXPLODE_CAM_DIR);
+      camera.position.copy(controls.target).addScaledVector(dir, targetDist);
+    }
+
+    explodeSlider.addEventListener('input', () => {
+      if (workspaceMode !== 'explode') {
+        switchWorkspaceMode('explode');
+      }
+      applyExplodeState(parseFloat(explodeSlider.value));
+    });
+
     function showBanner(text, type = 'normal', autoHideMs = 0) {
       clearTimeout(bannerTimer);
       grabTooltipEl.textContent = text;
@@ -678,7 +894,6 @@
 
     function showTemporaryWrongPieceError(wrongName, expectedName) {
       clearTimeout(errorStripTimer);
-
       const errMsg = `❌ Mauvaise pièce : « ${wrongName} ». Prenez d'abord : « ${expectedName} ».`;
       statusStripEl.classList.add('error-strip');
       stepInstructionEl.textContent = errMsg;
@@ -710,10 +925,8 @@
     }
 
     function setItemVisible(item, visible) {
-      item.meshes.forEach((m) => {
-        m.visible = visible;
-      });
-      item.hitbox.visible = visible && !item.mounted;
+      item.meshes.forEach((m) => { m.visible = visible; });
+      item.hitbox.visible = visible && !item.mounted && workspaceMode !== 'explode';
     }
 
     function setItemHighlight(item, hex, intensity) {
@@ -736,8 +949,17 @@
       const mountedCount = mountableItems.filter((it) => it.mounted).length;
       const total = mountableItems.length;
       progressPillEl.textContent = `${mountedCount} / ${total} montés`;
-      cycleBadgeEl.textContent = CYCLE_TITLES[currentCycle] || `Cycle ${currentCycle}/${maxCycle}`;
 
+      if (workspaceMode === 'explode') {
+        cycleBadgeEl.textContent = 'Vue Éclatée "Panino"';
+        stepBadgeEl.textContent = 'ETA 6498-1';
+        stepInstructionEl.textContent = 'Glissez le curseur « Vue Éclatée » (0–100%) ; rubis d\'ancre/impulsion bloqués et vis extraites.';
+        targetMarker.visible = false;
+        return;
+      }
+
+      const guided = workspaceMode === 'guided';
+      cycleBadgeEl.textContent = CYCLE_TITLES[currentCycle] || `Cycle ${currentCycle}/${maxCycle}`;
       const next = getNextPendingItem();
       if (!next) {
         cycleBadgeEl.textContent = 'Assemblage complet';
@@ -749,13 +971,13 @@
 
       const stepNum = mountedCount + 1;
       stepBadgeEl.textContent = `Étape ${stepNum}/${total}`;
-      stepInstructionEl.textContent = guidedMode
+      stepInstructionEl.textContent = guided
         ? `Prenez sur le plateau : ${next.meta.fr}`
         : `Mode libre (Lot ${currentCycle}) : prenez n'importe quelle pièce visible sur le plateau`;
 
       getActiveCycleItems().forEach((it) => {
         if (it.mounted || it === draggedItem || it === hoveredItem) return;
-        const highlight = guidedMode && it === next;
+        const highlight = guided && it === next;
         setItemHighlight(it, highlight ? 0xd4af37 : 0x000000, highlight ? 0.35 : 0);
       });
     }
@@ -813,7 +1035,6 @@
       });
     }
 
-    // Posiziona ciascun componente del ciclo in una casella dedicata e non sovrapposta
     function activateCycleTray(cycleNumber, announce = false) {
       currentCycle = cycleNumber;
       hoveredItem = null;
@@ -853,22 +1074,16 @@
       batch.forEach((item, idx) => {
         const col = idx % cols;
         const row = Math.floor(idx / cols);
-
-        // Casella univoca calcolata dal proprio indice idx
         const slotX = startX + col * spacingX;
         const slotZ = startZ + row * spacingZ;
-        const targetCenter = new THREE.Vector3(
-          slotX,
-          TRAY_Y + 0.02 + item.halfHeight,
-          slotZ
-        );
+        const targetCenter = new THREE.Vector3(slotX, TRAY_Y + 0.02 + item.halfHeight, slotZ);
 
         moveItemVisualCenterTo(item, targetCenter);
         item.trayLocalPositions = item.meshes.map((m) => m.position.clone());
         item.trayWorldCenter = targetCenter.clone();
 
         item.hitbox.position.set(slotX, TRAY_Y + 0.10, slotZ);
-        item.hitbox.visible = true;
+        item.hitbox.visible = workspaceMode !== 'explode';
       });
 
       if (announce) {
@@ -910,8 +1125,72 @@
       updateStatusUI();
     }
 
+    function switchWorkspaceMode(nextMode) {
+      workspaceMode = nextMode;
+      hideBanner();
+      hoveredItem = null;
+      hoverPillEl.classList.remove('visible');
+
+      btnViewExplode.classList.toggle('active', workspaceMode === 'explode');
+      btnGuided.classList.toggle('active', workspaceMode === 'guided');
+      btnFree.classList.toggle('active', workspaceMode === 'free');
+
+      explodeDockEl.classList.toggle('hidden', workspaceMode !== 'explode');
+      trayGroup.visible = workspaceMode !== 'explode';
+      stage.classList.toggle('assembly-bg', workspaceMode !== 'explode');
+
+      if (!modelRoot || !displayGroup) return;
+
+      if (workspaceMode === 'explode') {
+        scene.background = new THREE.Color(0x141619);
+        displayGroup.visible = true;
+        modelRoot.traverse((c) => { if (c.isMesh) c.visible = true; });
+        hitboxes.forEach((hb) => { hb.visible = false; });
+
+        userZoomScale = 1.0;
+        controls.target.set(0, 0, 0);
+        applyExplodeState(parseFloat(explodeSlider.value) || 0);
+        setInteractionMode('orbit');
+      } else {
+        scene.background = new THREE.Color(0xffffff);
+        displayGroup.rotation.set(0, 0, 0);
+        displayGroup.visible = true;
+        modelRoot.traverse((c) => { if (c.isMesh) c.visible = true; });
+
+        // Ripristina le posizionamento d'assemblage per il plateau
+        explodeItems.forEach((it) => it.obj.position.copy(it.origPos));
+        mountableItems.forEach((it) => {
+          if (it.mounted) {
+            it.meshes.forEach((m, idx) => m.position.copy(it.assembledLocalPositions[idx]));
+            it.meshes.forEach((m) => { m.visible = true; });
+            it.hitbox.visible = false;
+          } else {
+            const inCycle = it.meta.cycle === currentCycle;
+            it.meshes.forEach((m) => { m.visible = inCycle; });
+            it.hitbox.visible = inCycle;
+          }
+        });
+        magneticScrews.forEach((sc) => {
+          const parentItem = mountableItems.find((it) => it.screws.includes(sc));
+          sc.mesh.visible = parentItem ? parentItem.mounted : true;
+        });
+
+        camera.position.copy(ASSEMBLY_CAM_POS);
+        controls.target.copy(ASSEMBLY_CAM_TARGET);
+        setInteractionMode('grab');
+      }
+
+      controls.update();
+      updateStatusUI();
+    }
+
     function resetAllCycles() {
       hideBanner();
+      explodeSlider.value = '0';
+      explodeValEl.textContent = '0%';
+      userZoomScale = 1.0;
+
+      explodeItems.forEach((it) => it.obj.position.copy(it.origPos));
       mountableItems.forEach((it) => {
         it.mounted = false;
         setItemHighlight(it, 0x000000, 0);
@@ -919,172 +1198,235 @@
       magneticScrews.forEach((sc) => {
         sc.mesh.visible = false;
       });
+      currentCycle = 1;
       activateCycleTray(1, false);
+      switchWorkspaceMode('explode');
     }
+
+    btnViewExplode.addEventListener('click', () => switchWorkspaceMode('explode'));
+    btnGuided.addEventListener('click', () => switchWorkspaceMode('guided'));
+    btnFree.addEventListener('click', () => switchWorkspaceMode('free'));
 
     const loaderEl = document.getElementById('loader-overlay');
     const loaderTextEl = document.getElementById('loader-text');
+    const gltfLoader = new GLTFLoader();
 
-    new GLTFLoader().load(
-      MODEL_URL,
-      (gltf) => {
-        const root = gltf.scene;
+    function loadModelWithFallback(urls, idx = 0) {
+      if (idx >= urls.length) {
+        loaderTextEl.textContent = 'Erreur de chargement du modèle 3D ETA 6498-1.';
+        return;
+      }
 
-        const box = new THREE.Box3().setFromObject(root);
-        const size = box.getSize(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z) || 1;
-        root.scale.setScalar(2.35 / maxDim);
+      gltfLoader.load(
+        urls[idx],
+        (gltf) => {
+          modelRoot = gltf.scene;
+          modelRoot.updateMatrixWorld(true);
 
-        const sBox = new THREE.Box3().setFromObject(root);
-        const sSize = sBox.getSize(new THREE.Vector3());
-        if (sSize.z < sSize.y && sSize.z < sSize.x) {
-          root.rotation.x = -Math.PI / 2;
-        }
+          const coreBox = new THREE.Box3();
+          const fullBox = new THREE.Box3();
+          const groupedByKey = new Map();
+          const orphanMeshes = [];
+          let meshCount = 0;
 
-        const cBox = new THREE.Box3().setFromObject(root);
-        const center = cBox.getCenter(new THREE.Vector3());
-        root.position.sub(center);
+          modelRoot.traverse((child) => {
+            if (!child.isMesh) return;
+            meshCount++;
+            fullBox.expandByObject(child);
 
-        const alignedBox = new THREE.Box3().setFromObject(root);
-        root.position.x += 0.92;
-        root.position.y += (TRAY_Y - alignedBox.min.y);
+            const lbl = getHierarchyLabel(child);
+            if (!lbl.includes('401 winding stem') && !lbl.includes('401_winding_stem')) {
+              coreBox.expandByObject(child);
+            }
 
-        scene.add(root);
-        root.updateMatrixWorld(true);
-
-        const groupedByKey = new Map();
-        const orphanMeshes = [];
-
-        root.traverse((child) => {
-          if (!child.isMesh) return;
-
-          let fullName = '';
-          let cur = child;
-          while (cur && cur !== root) {
-            if (cur.name) fullName += ' ' + cur.name;
-            cur = cur.parent;
-          }
-          fullName = fullName.trim();
-
-          const wBox = new THREE.Box3().setFromObject(child);
-          const wCenter = wBox.getCenter(new THREE.Vector3());
-          const wSize = wBox.getSize(new THREE.Vector3());
-          const diag = wSize.length();
-
-          if (BASE_RE.test(fullName) || diag > 1.85) {
-            return;
-          }
-
-          if (SCREW_RE.test(fullName) || diag < 0.28) {
-            magneticScrews.push({
-              mesh: child,
-              assembledLocalPos: child.position.clone(),
-              worldCenter: wCenter.clone()
-            });
-            return;
-          }
-
-          const catalogEntry = matchCatalog(fullName);
-          if (catalogEntry) {
-            if (!groupedByKey.has(catalogEntry.key)) {
-              groupedByKey.set(catalogEntry.key, {
-                meta: catalogEntry,
-                meshes: []
+            if (child.material) {
+              const mats = Array.isArray(child.material) ? child.material : [child.material];
+              mats.forEach((m) => {
+                if (!m) return;
+                m.side = THREE.DoubleSide;
+                if ('envMapIntensity' in m) m.envMapIntensity = 1.6;
+                m.needsUpdate = true;
               });
             }
-            groupedByKey.get(catalogEntry.key).meshes.push(child);
-          } else {
-            orphanMeshes.push({ mesh: child, wCenter });
-          }
-        });
 
-        orphanMeshes.forEach((orp) => {
-          let bestGroup = null;
-          let bestDist = Infinity;
-          groupedByKey.forEach((grp) => {
-            const gBox = new THREE.Box3();
-            grp.meshes.forEach((m) => gBox.expandByObject(m));
-            const d = orp.wCenter.distanceTo(gBox.getCenter(new THREE.Vector3()));
-            if (d < bestDist) {
-              bestDist = d;
-              bestGroup = grp;
+            let fullName = '';
+            let cur = child;
+            while (cur && cur !== modelRoot) {
+              if (cur.name) fullName += ' ' + cur.name;
+              cur = cur.parent;
+            }
+            fullName = fullName.trim();
+
+            const wBox = new THREE.Box3().setFromObject(child);
+            const wCenter = wBox.getCenter(new THREE.Vector3());
+            const wSize = wBox.getSize(new THREE.Vector3());
+            const diag = wSize.length();
+
+            if (BASE_RE.test(fullName) || diag > 1.85) return;
+
+            if (SCREW_RE.test(fullName) || diag < 0.28) {
+              magneticScrews.push({
+                mesh: child,
+                assembledLocalPos: child.position.clone(),
+                worldCenter: wCenter.clone()
+              });
+              return;
+            }
+
+            const entry = matchCatalog(fullName);
+            if (entry) {
+              if (!groupedByKey.has(entry.key)) {
+                groupedByKey.set(entry.key, { meta: entry, meshes: [] });
+              }
+              groupedByKey.get(entry.key).meshes.push(child);
+            } else {
+              orphanMeshes.push({ mesh: child, wCenter });
             }
           });
-          if (bestGroup) {
-            bestGroup.meshes.push(orp.mesh);
-          } else {
-            magneticScrews.push({
-              mesh: orp.mesh,
-              assembledLocalPos: orp.mesh.position.clone(),
-              worldCenter: orp.wCenter.clone()
+
+          orphanMeshes.forEach((orp) => {
+            let bestGroup = null;
+            let bestDist = Infinity;
+            groupedByKey.forEach((grp) => {
+              const gBox = new THREE.Box3();
+              grp.meshes.forEach((m) => gBox.expandByObject(m));
+              const d = orp.wCenter.distanceTo(gBox.getCenter(new THREE.Vector3()));
+              if (d < bestDist) {
+                bestDist = d;
+                bestGroup = grp;
+              }
             });
-          }
-        });
-
-        const hitGeo = new THREE.CylinderGeometry(0.36, 0.36, 0.30, 16);
-        const hitMat = new THREE.MeshBasicMaterial({ visible: false });
-
-        groupedByKey.forEach((grp) => {
-          const groupBox = new THREE.Box3();
-          grp.meshes.forEach((m) => groupBox.expandByObject(m));
-          const groupCenter = groupBox.getCenter(new THREE.Vector3());
-          const groupSize = groupBox.getSize(new THREE.Vector3());
-
-          const hitbox = new THREE.Mesh(hitGeo, hitMat);
-          scene.add(hitbox);
-
-          const item = {
-            meshes: grp.meshes,
-            hitbox,
-            assembledLocalPositions: grp.meshes.map((m) => m.position.clone()),
-            assembledWorldCenter: groupCenter.clone(),
-            halfHeight: Math.max(0.02, groupSize.y * 0.5),
-            meta: grp.meta,
-            screws: [],
-            mounted: false
-          };
-
-          hitbox.userData.item = item;
-          hitboxes.push(hitbox);
-          mountableItems.push(item);
-        });
-
-        mountableItems.sort((a, b) => a.meta.order - b.meta.order);
-        maxCycle = mountableItems.reduce((mx, it) => Math.max(mx, it.meta.cycle), 1);
-
-        magneticScrews.forEach((sc) => {
-          let bestItem = null;
-          let bestDist = Infinity;
-          mountableItems.forEach((it) => {
-            const d = sc.worldCenter.distanceTo(it.assembledWorldCenter);
-            const weight = /bridge|pont|crown|couronne|ratchet|rochet/i.test(it.meta.en) ? 0.55 : 1.0;
-            if (d * weight < bestDist) {
-              bestDist = d * weight;
-              bestItem = it;
+            if (bestGroup) {
+              bestGroup.meshes.push(orp.mesh);
+            } else {
+              magneticScrews.push({
+                mesh: orp.mesh,
+                assembledLocalPos: orp.mesh.position.clone(),
+                worldCenter: orp.wCenter.clone()
+              });
             }
           });
-          if (bestItem) {
-            bestItem.screws.push(sc);
-          } else {
-            sc.mesh.visible = true;
+
+          const refBox = coreBox.isEmpty() ? fullBox : coreBox;
+          const size = new THREE.Vector3();
+          const center = new THREE.Vector3();
+          refBox.getSize(size);
+          refBox.getCenter(center);
+
+          const stackAxis = (size.x <= size.y && size.x <= size.z) ? 'x'
+                          : (size.y <= size.x && size.y <= size.z) ? 'y' : 'z';
+          const localStackVec = new THREE.Vector3(
+            stackAxis === 'x' ? 1 : 0,
+            stackAxis === 'y' ? 1 : 0,
+            stackAxis === 'z' ? 1 : 0
+          );
+
+          const maxDim = Math.max(size.x, size.y, size.z) || 1;
+          const normScale = 2.35 / maxDim;
+
+          modelRoot.scale.setScalar(normScale);
+          modelRoot.position.copy(center).multiplyScalar(-normScale);
+
+          displayGroup = new THREE.Group();
+          displayGroup.add(modelRoot);
+          displayGroup.rotation.order = 'YXZ';
+          displayGroup.rotation.set(BASE_ROT.x, BASE_ROT.y, BASE_ROT.z);
+
+          scene.add(displayGroup);
+          scene.updateMatrixWorld(true);
+
+          const worldSandwichAxis = localStackVec
+            .clone()
+            .transformDirection(modelRoot.matrixWorld)
+            .normalize();
+          const worldOrigin = new THREE.Vector3(0, 0, 0);
+          const registeredNodes = new Set();
+
+          modelRoot.traverse((child) => {
+            if (!child.isMesh) return;
+            const targetNode = getBlenderObjectNode(child);
+            if (registeredNodes.has(targetNode)) return;
+            registeredNodes.add(targetNode);
+
+            const lbl = getHierarchyLabel(targetNode).replace(/_/g, ' ');
+            const step = getHorizontalStep(lbl);
+            const sandwichShift = step * HORIZONTAL_SPREAD;
+
+            const targetWorld = worldSandwichAxis.clone().multiplyScalar(sandwichShift);
+            const localOrigin = targetNode.parent ? targetNode.parent.worldToLocal(worldOrigin.clone()) : worldOrigin.clone();
+            const localTarget = targetNode.parent ? targetNode.parent.worldToLocal(targetWorld.clone()) : targetWorld.clone();
+            const localDelta = localTarget.sub(localOrigin);
+
+            explodeItems.push({
+              obj: targetNode,
+              origPos: targetNode.position.clone(),
+              deltaVec: localDelta
+            });
+          });
+
+          // Prepara gli elementi per la modalità Assemblage
+          const hitGeo = new THREE.CylinderGeometry(0.36, 0.36, 0.30, 16);
+          const hitMat = new THREE.MeshBasicMaterial({ visible: false });
+
+          groupedByKey.forEach((grp) => {
+            const groupBox = new THREE.Box3();
+            grp.meshes.forEach((m) => groupBox.expandByObject(m));
+            const groupCenter = groupBox.getCenter(new THREE.Vector3());
+            const groupSize = groupBox.getSize(new THREE.Vector3());
+
+            const hitbox = new THREE.Mesh(hitGeo, hitMat);
+            hitbox.visible = false;
+            scene.add(hitbox);
+
+            const item = {
+              meshes: grp.meshes,
+              hitbox,
+              assembledLocalPositions: grp.meshes.map((m) => m.position.clone()),
+              assembledWorldCenter: groupCenter.clone(),
+              halfHeight: Math.max(0.02, groupSize.y * 0.5),
+              meta: grp.meta,
+              screws: [],
+              mounted: false
+            };
+
+            hitbox.userData.item = item;
+            hitboxes.push(hitbox);
+            mountableItems.push(item);
+          });
+
+          mountableItems.sort((a, b) => a.meta.order - b.meta.order);
+          maxCycle = mountableItems.reduce((mx, it) => Math.max(mx, it.meta.cycle), 1);
+
+          magneticScrews.forEach((sc) => {
+            let bestItem = null;
+            let bestDist = Infinity;
+            mountableItems.forEach((it) => {
+              const d = sc.worldCenter.distanceTo(it.assembledWorldCenter);
+              const weight = /bridge|pont|crown|couronne|ratchet|rochet/i.test(it.meta.en) ? 0.55 : 1.0;
+              if (d * weight < bestDist) {
+                bestDist = d * weight;
+                bestItem = it;
+              }
+            });
+            if (bestItem) {
+              bestItem.screws.push(sc);
+            }
+          });
+
+          progressPillEl.textContent = `0 / ${mountableItems.length} montés`;
+          loaderEl.style.opacity = '0';
+          setTimeout(() => loaderEl.remove(), 300);
+        },
+        (xhr) => {
+          if (xhr.total > 0) {
+            loaderTextEl.textContent = `Chargement : ${Math.round((xhr.loaded / xhr.total) * 100)}%`;
           }
-        });
+        },
+        () => loadModelWithFallback(urls, idx + 1)
+      );
+    }
 
-        resetAllCycles();
-
-        loaderEl.style.opacity = '0';
-        setTimeout(() => loaderEl.remove(), 300);
-      },
-      (xhr) => {
-        if (xhr.total > 0) {
-          loaderTextEl.textContent = `Chargement : ${Math.round((xhr.loaded / xhr.total) * 100)}%`;
-        }
-      },
-      (err) => {
-        console.error(err);
-        loaderTextEl.textContent = 'Erreur de chargement de ETA6498-1_Web.glb';
-      }
-    );
+    loadModelWithFallback(CANDIDATE_MODEL_URLS, 0);
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
@@ -1134,6 +1476,8 @@
     }
 
     renderer.domElement.addEventListener('pointermove', (ev) => {
+      if (workspaceMode === 'explode') return;
+
       if (draggedItem) {
         updatePointerCoords(ev);
         raycaster.setFromCamera(pointer, camera);
@@ -1165,7 +1509,7 @@
       const over = pickTrayItem(ev);
       if (over !== hoveredItem) {
         if (hoveredItem && !hoveredItem.mounted) {
-          const isNext = guidedMode && hoveredItem === getNextPendingItem();
+          const isNext = workspaceMode === 'guided' && hoveredItem === getNextPendingItem();
           setItemHighlight(hoveredItem, isNext ? 0xd4af37 : 0x000000, isNext ? 0.35 : 0);
         }
         hoveredItem = over;
@@ -1182,13 +1526,13 @@
     });
 
     renderer.domElement.addEventListener('pointerdown', (ev) => {
-      if (ev.button !== 0 || interactionMode !== 'grab' || mountableItems.length === 0) return;
+      if (workspaceMode === 'explode' || ev.button !== 0 || interactionMode !== 'grab' || mountableItems.length === 0) return;
 
       const hitItem = pickTrayItem(ev);
       if (!hitItem) return;
 
       const nextExpected = getNextPendingItem();
-      if (guidedMode && nextExpected && hitItem !== nextExpected) {
+      if (workspaceMode === 'guided' && nextExpected && hitItem !== nextExpected) {
         setItemHighlight(hitItem, 0xef4444, 0.85);
         setTimeout(() => {
           if (!hitItem.mounted) setItemHighlight(hitItem, 0x000000, 0);
@@ -1245,51 +1589,50 @@
       }
     });
 
-    const btnGuided = document.getElementById('btn-mode-guided');
-    const btnFree = document.getElementById('btn-mode-free');
-
-    btnGuided.addEventListener('click', () => {
-      guidedMode = true;
-      btnGuided.classList.add('active');
-      btnFree.classList.remove('active');
-      hideBanner();
-      updateStatusUI();
-    });
-
-    btnFree.addEventListener('click', () => {
-      guidedMode = false;
-      btnFree.classList.add('active');
-      btnGuided.classList.remove('active');
-      hideBanner();
-      updateStatusUI();
-    });
-
     document.getElementById('btn-auto-place').addEventListener('click', () => {
+      if (workspaceMode === 'explode') switchWorkspaceMode('guided');
       const next = getNextPendingItem();
       if (next) completeItemAssembly(next);
     });
 
     document.getElementById('btn-reset-all').addEventListener('click', () => {
       resetAllCycles();
-      cardNameEl.textContent = 'Plateau réinitialisé (Cycle 1/3)';
-      cardMultilangEl.textContent = '—';
-      cardRoleEl.textContent = 'Saisissez une pièce du Cycle 1 sur le plateau à gauche pour démarrer le montage.';
-      cardLubeEl.textContent = 'Les vis correspondantes s’aimanteront automatiquement.';
+      cardNameEl.textContent = 'Calibre ETA 6498-1 — Vue Éclatée "Panino"';
+      cardMultilangEl.textContent = 'Ø 36,60 mm • 18\'000 A/h (2,5 Hz) • 17 Rubis';
+      cardRoleEl.textContent = 'Ouverture par strates le long de l\'axe d\'empilement, avec rubis d\'ancre/impulsion solidaires de leur composant.';
+      cardLubeEl.textContent = 'Vis extraites vers l\'extérieur des ponts correspondants ; huile fine Moebius 9010, huile épaisse HP-1300 et graisse 9504.';
     });
 
     function zoomCam(factor) {
-      const offset = camera.position.clone().sub(controls.target);
-      offset.setLength(THREE.MathUtils.clamp(offset.length() * factor, 1.2, 12.0));
-      camera.position.copy(controls.target).add(offset);
-      controls.update();
+      if (workspaceMode === 'explode') {
+        userZoomScale = THREE.MathUtils.clamp(userZoomScale * factor, 0.06, 3.5);
+        const rawT = parseFloat(explodeSlider.value) || 0;
+        const easedT = rawT * rawT * (3 - 2 * rawT);
+        const targetDist = Math.max(0.15, EXPLODE_CAM_DIST * (1 + 0.35 * easedT) * userZoomScale);
+        const dir = camera.position.clone().sub(controls.target).normalize();
+        camera.position.copy(controls.target).addScaledVector(dir, targetDist);
+        controls.update();
+      } else {
+        const offset = camera.position.clone().sub(controls.target);
+        offset.setLength(THREE.MathUtils.clamp(offset.length() * factor, 0.3, 14.0));
+        camera.position.copy(controls.target).add(offset);
+        controls.update();
+      }
     }
 
-    document.getElementById('hud-zoom-in').addEventListener('click', () => zoomCam(0.85));
-    document.getElementById('hud-zoom-out').addEventListener('click', () => zoomCam(1.18));
+    document.getElementById('hud-zoom-in').addEventListener('click', () => zoomCam(0.75));
+    document.getElementById('hud-zoom-out').addEventListener('click', () => zoomCam(1.22));
     document.getElementById('hud-reset-cam').addEventListener('click', () => {
-      camera.position.copy(DEFAULT_CAM_POS);
-      controls.target.copy(DEFAULT_CAM_TARGET);
-      setInteractionMode('grab');
+      if (workspaceMode === 'explode') {
+        userZoomScale = 1.0;
+        controls.target.set(0, 0, 0);
+        applyExplodeState(parseFloat(explodeSlider.value) || 0);
+        setInteractionMode('orbit');
+      } else {
+        camera.position.copy(ASSEMBLY_CAM_POS);
+        controls.target.copy(ASSEMBLY_CAM_TARGET);
+        setInteractionMode('grab');
+      }
       controls.update();
     });
 

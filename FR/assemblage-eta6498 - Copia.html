@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Swiss Time Expert — Test Assemblage Interactif 3D par Cycles (ETA 6498-1)</title>
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
+  <link rel="shortcut icon" type="image/png" href="../favicon.png?v=2">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 18px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0b1933;
+      color: #f8fafc;
+    }
+    .test-shell {
+      max-width: 1240px;
+      margin: 0 auto;
+      background: #ffffff;
+      color: #1a365d;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    }
+    .test-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .test-title {
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #1a365d;
+    }
+    .test-sub {
+      margin: 3px 0 0 0;
+      font-size: 0.84rem;
+      color: #4a5568;
+    }
+    .test-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .btn-ui {
+      background: #f1f5f9;
+      color: #1a365d;
+      border: 1px solid #cbd5e1;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-ui:hover { background: #e2e8f0; }
+    .btn-ui.active {
+      background: #1a365d;
+      color: #ffffff;
+      border-color: #1a365d;
+    }
+    .btn-ui.gold {
+      background: #b8860b;
+      color: #ffffff;
+      border-color: #9a6b00;
+    }
+
+    .status-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #f4f7fb;
+      border: 1px solid #d5dfec;
+      border-left: 5px solid #b8860b;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .status-strip.error-strip {
+      background: #fef2f2;
+      border-color: #fecaca;
+      border-left-color: #dc2626;
+      color: #991b1b;
+    }
+    .cycle-badge {
+      background: #b8860b;
+      color: #ffffff;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.78rem;
+      margin-right: 6px;
+    }
+    .step-badge {
+      background: #1a365d;
+      color: #ffd43b;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.78rem;
+      margin-right: 8px;
+    }
+    .progress-pill {
+      font-weight: 800;
+      color: #1a365d;
+      background: #e2e8f0;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+    }
+
+    #canvas-stage {
+      width: 100%;
+      height: 600px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      touch-action: none;
+      cursor: default;
+    }
+    #canvas-stage.hover-piece { cursor: grab; }
+    #canvas-stage.grabbing { cursor: grabbing; }
+    #canvas-stage.orbit-mode { cursor: move; }
+    #canvas-stage:fullscreen,
+    #canvas-stage:-webkit-full-screen {
+      width: 100vw !important;
+      height: 100vh !important;
+      border-radius: 0;
+      border: none;
+    }
+
+    #grab-tooltip {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(13, 19, 31, 0.95);
+      color: #ffd43b;
+      border: 2px solid #d4af37;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      pointer-events: none;
+      display: none;
+      z-index: 28;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.38);
+      max-width: calc(100% - 32px);
+      text-align: center;
+    }
+    #grab-tooltip.visible { display: block; }
+    #grab-tooltip.error {
+      background: #991b1b;
+      color: #ffffff;
+      border-color: #fca5a5;
+      animation: shakeBanner 0.34s ease;
+    }
+    #grab-tooltip.success {
+      background: #14532d;
+      color: #f0fdf4;
+      border-color: #4ade80;
+    }
+    @keyframes shakeBanner {
+      0%, 100% { transform: translateX(-50%); }
+      25% { transform: translateX(calc(-50% - 8px)); }
+      75% { transform: translateX(calc(-50% + 8px)); }
+    }
+
+    #hover-pill {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      background: rgba(26, 54, 93, 0.94);
+      color: #ffffff;
+      border: 1px solid #93c5fd;
+      padding: 6px 13px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      pointer-events: none;
+      display: none;
+      z-index: 24;
+    }
+    #hover-pill.visible { display: block; }
+
+    .hud-dock {
+      position: absolute;
+      bottom: 14px;
+      right: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 6px;
+      background: rgba(13, 19, 31, 0.92);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      border-radius: 10px;
+      padding: 7px 10px;
+      z-index: 25;
+      max-width: calc(100% - 32px);
+    }
+    .hud-btn {
+      background: rgba(30, 41, 59, 0.92);
+      color: #f8fafc;
+      border: 1px solid #3b4c66;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.79rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .hud-btn:hover { border-color: #d4af37; }
+    .hud-btn.active {
+      background: #b8860b;
+      border-color: #f3c64f;
+      color: #ffffff;
+    }
+    .hud-sep {
+      width: 1px;
+      height: 18px;
+      background: rgba(148, 163, 184, 0.25);
+      margin: 0 2px;
+    }
+
+    #loader-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.94);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+      color: #1a365d;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #d9e2ec;
+      border-top-color: #1a365d;
+      border-radius: 50%;
+      animation: spin 0.85s linear infinite;
+      margin-bottom: 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .info-card {
+      margin-top: 14px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 5px solid #27ae60;
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      font-size: 0.86rem;
+    }
+    .info-card strong {
+      display: block;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      margin-bottom: 3px;
+    }
+    .info-main-name {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #1a365d;
+    }
+  </style>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <div class="test-shell">
+    <div class="test-header">
+      <div>
+        <h1 class="test-title">🛠️ Atelier Virtuel 3D — Assemblage par Cycles (Calibre ETA 6498-1)</h1>
+        <p class="test-sub">Les composants arrivent sur l'établi par lots logiques (4 à 5 pièces par cycle) sans chevauchement • Vis aimantées automatiquement.</p>
+      </div>
+      <div class="test-controls">
+        <button type="button" class="btn-ui active" id="btn-mode-guided">🧭 Mode Guidé</button>
+        <button type="button" class="btn-ui" id="btn-mode-free">🔓 Mode Libre</button>
+        <button type="button" class="btn-ui" id="btn-auto-place">⚡ Poser l'étape</button>
+        <button type="button" class="btn-ui gold" id="btn-reset-all">↺ Recommencer</button>
+      </div>
+    </div>
+
+    <div class="status-strip" id="status-strip">
+      <div>
+        <span class="cycle-badge" id="cycle-badge">Cycle 1/3</span>
+        <span class="step-badge" id="step-badge">Étape 1</span>
+        <span id="step-instruction">Chargement des composants de l'atelier...</span>
+      </div>
+      <div class="progress-pill" id="progress-pill">0 / 0 montés</div>
+    </div>
+
+    <div id="canvas-stage">
+      <div id="loader-overlay">
+        <div class="spinner"></div>
+        <div id="loader-text">Préparation du plateau d'assemblage ETA 6498-1...</div>
+      </div>
+
+      <div id="grab-tooltip">🤏 Pièce saisie : déposez-la sur la cible dorée</div>
+      <div id="hover-pill">Composant</div>
+
+      <div class="hud-dock">
+        <button type="button" class="hud-btn active" id="hud-tool-grab" title="Saisir et déplacer les pièces (clic gauche / doigt)">🤏 Saisir</button>
+        <button type="button" class="hud-btn" id="hud-tool-orbit" title="Pivoter librement la caméra avec le clic gauche">⟳ Pivoter</button>
+        <span class="hud-sep"></span>
+        <button type="button" class="hud-btn" id="hud-zoom-in">🔍 +</button>
+        <button type="button" class="hud-btn" id="hud-zoom-out">🔍 −</button>
+        <span class="hud-sep"></span>
+        <button type="button" class="hud-btn" id="hud-reset-cam">Centrer</button>
+        <button type="button" class="hud-btn" id="hud-fullscreen">⛶ Plein Écran</button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div>
+        <strong>Dernier composant assemblé (FR / EN / DE)</strong>
+        <div class="info-main-name" id="card-name">En attente du premier montage...</div>
+        <div id="card-multilang" style="color:#475569; font-size:0.8rem; margin-top:2px;">—</div>
+      </div>
+      <div>
+        <strong>Fonction mécanique</strong>
+        <div id="card-role">Saisissez une pièce sur le plateau à gauche et approchez-la de la platine.</div>
+      </div>
+      <div>
+        <strong>Lubrification &amp; Visserie aimantée</strong>
+        <div id="card-lube">Les vis de fixation correspondantes s'installent automatiquement dès que le mobile ou le pont est en place.</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+    const MODEL_URL = '../ETA6498-1_Web.glb';
+    const stage = document.getElementById('canvas-stage');
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xffffff);
+
+    const camera = new THREE.PerspectiveCamera(36, stage.clientWidth / stage.clientHeight, 0.01, 1000);
+    const DEFAULT_CAM_POS = new THREE.Vector3(-0.35, 5.2, 2.45);
+    const DEFAULT_CAM_TARGET = new THREE.Vector3(-0.35, -0.1, 0);
+    camera.position.copy(DEFAULT_CAM_POS);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(stage.clientWidth, stage.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.45;
+    stage.appendChild(renderer.domElement);
+
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    scene.add(new THREE.AmbientLight(0xffffff, 1.45));
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+    keyLight.position.set(4, 10, 6);
+    scene.add(keyLight);
+    const fillLight = new THREE.DirectionalLight(0xdbe8ff, 1.2);
+    fillLight.position.set(-5, 6, -4);
+    scene.add(fillLight);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.07;
+    controls.target.copy(DEFAULT_CAM_TARGET);
+    controls.update();
+
+    let interactionMode = 'grab';
+    const btnHudGrab = document.getElementById('hud-tool-grab');
+    const btnHudOrbit = document.getElementById('hud-tool-orbit');
+
+    function setInteractionMode(mode) {
+      interactionMode = mode;
+      btnHudGrab.classList.toggle('active', mode === 'grab');
+      btnHudOrbit.classList.toggle('active', mode === 'orbit');
+      stage.classList.toggle('orbit-mode', mode === 'orbit');
+
+      if (mode === 'grab') {
+        controls.mouseButtons = {
+          LEFT: null,
+          MIDDLE: THREE.MOUSE.DOLLY,
+          RIGHT: THREE.MOUSE.ROTATE
+        };
+      } else {
+        controls.mouseButtons = {
+          LEFT: THREE.MOUSE.ROTATE,
+          MIDDLE: THREE.MOUSE.DOLLY,
+          RIGHT: THREE.MOUSE.PAN
+        };
+      }
+    }
+    btnHudGrab.addEventListener('click', () => setInteractionMode('grab'));
+    btnHudOrbit.addEventListener('click', () => setInteractionMode('orbit'));
+    setInteractionMode('grab');
+
+    const TRAY_Y = -0.18;
+    const trayGroup = new THREE.Group();
+    const trayPlaneGeo = new THREE.PlaneGeometry(2.3, 2.95);
+    const trayPlaneMat = new THREE.MeshBasicMaterial({ color: 0xf1f5f9, side: THREE.DoubleSide });
+    const trayMesh = new THREE.Mesh(trayPlaneGeo, trayPlaneMat);
+    trayMesh.rotation.x = -Math.PI / 2;
+    trayMesh.position.set(-1.82, TRAY_Y, 0);
+    trayGroup.add(trayMesh);
+
+    const trayBorder = new THREE.LineSegments(
+      new THREE.EdgesGeometry(trayPlaneGeo),
+      new THREE.LineBasicMaterial({ color: 0x1a365d })
+    );
+    trayBorder.rotation.x = -Math.PI / 2;
+    trayBorder.position.set(-1.82, TRAY_Y + 0.002, 0);
+    trayGroup.add(trayBorder);
+    scene.add(trayGroup);
+
+    const tweezersGroup = new THREE.Group();
+    const legGeo = new THREE.BoxGeometry(0.025, 0.75, 0.05);
+    const legMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.85, roughness: 0.25 });
+    const leg1 = new THREE.Mesh(legGeo, legMat);
+    leg1.position.set(-0.04, 0.36, 0);
+    leg1.rotation.z = -0.09;
+    const leg2 = new THREE.Mesh(legGeo, legMat);
+    leg2.position.set(0.04, 0.36, 0);
+    leg2.rotation.z = 0.09;
+    tweezersGroup.add(leg1, leg2);
+    tweezersGroup.visible = false;
+    scene.add(tweezersGroup);
+
+    const targetRingGeo = new THREE.RingGeometry(0.16, 0.24, 32);
+    const targetRingMat = new THREE.MeshBasicMaterial({
+      color: 0xd4af37,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.9
+    });
+    const targetMarker = new THREE.Mesh(targetRingGeo, targetRingMat);
+    targetMarker.rotation.x = -Math.PI / 2;
+    targetMarker.visible = false;
+    scene.add(targetMarker);
+
+    const CYCLE_TITLES = {
+      1: 'Cycle 1/3 — Énergie & Rouage de finissage',
+      2: 'Cycle 2/3 — Ponts & Organes de remontage',
+      3: 'Cycle 3/3 — Échappement, Régulation & Commande'
+    };
+
+    // Chiavi univoche per ogni singolo componente (nessuna sovrapposizione tra "third" e "fourth/second")
+    const CATALOG = [
+      {
+        cycle: 1,
+        key: 'barrel_unit',
+        order: 10,
+        pattern: /barrel|tambour|barillet|federhaus/i,
+        exclude: /bridge|pont|br[uü]cke/i,
+        fr: 'Barillet complet (Tambour, Arbre & Ressort)',
+        en: 'Movement barrel complete',
+        de: 'Federhaus vollständig',
+        role: 'Accumulateur d’énergie mécanique (autonomie théorique : 46 heures).',
+        lube: 'Huile épaisse Moebius HP-1300 aux pivots d’arbre ; graisse haute pression sur la paroi.'
+      },
+      {
+        cycle: 1,
+        key: 'center_wheel_unit',
+        order: 20,
+        pattern: /center|centre|minutenrad/i,
+        exclude: /bridge|pont|cannon|chauss/i,
+        fr: 'Roue de centre',
+        en: 'Centre wheel',
+        de: 'Minutenrad',
+        role: 'Premier mobile du rouage entraîné par le barillet (1 tour / heure).',
+        lube: 'Huile épaisse Moebius HP-1300 aux deux pivots.'
+      },
+      {
+        cycle: 1,
+        key: 'third_wheel_unit',
+        order: 30,
+        pattern: /third|moyenne|kleinbodenrad/i,
+        exclude: /bridge|pont|fourth|second/i,
+        fr: 'Roue moyenne',
+        en: 'Third wheel',
+        de: 'Kleinbodenrad',
+        role: 'Mobile intermédiaire transmettant le couple vers la roue de seconde.',
+        lube: 'Huile fine Moebius 9010 aux pivots.'
+      },
+      {
+        cycle: 1,
+        key: 'fourth_wheel_unit',
+        order: 40,
+        pattern: /fourth|second\s*wheel|seconde|sekundenrad/i,
+        exclude: /bridge|pont|third|moyenne/i,
+        fr: 'Roue de seconde',
+        en: 'Second wheel',
+        de: 'Sekundenrad',
+        role: 'Effectue 1 tour par minute (60 s) et porte la petite seconde à 6 h.',
+        lube: 'Huile fine Moebius 9010 aux pivots.'
+      },
+      {
+        cycle: 1,
+        key: 'escape_wheel_unit',
+        order: 50,
+        pattern: /escape|echappement|hemmungsrad/i,
+        exclude: /bridge|pont|fork|ancre/i,
+        fr: "Roue d'échappement",
+        en: 'Escape wheel',
+        de: 'Hemmungsrad',
+        role: 'Dernier mobile du train ; distribue les impulsions aux levées de l’ancre.',
+        lube: 'Huile fine Moebius 9010 aux pivots ; épilame Fixodrop recommandé.'
+      },
+      {
+        cycle: 2,
+        key: 'train_bridge_unit',
+        order: 60,
+        pattern: /train.*bridge|gear.*bridge|pont.*rouage|r[aä]derwerkbr/i,
+        fr: 'Pont de rouage empierré (+ 2 vis aimantées)',
+        en: 'Train wheel bridge, jewelled',
+        de: 'Räderwerkbrücke mit Steinen',
+        role: 'Maintient l’alignement axial du train de rouage. Ses 2 vis cylindriques s’aimantent automatiquement.',
+        lube: 'Huile épaisse HP-1300 sur centre ; huile fine 9010 sur moyenne et seconde.'
+      },
+      {
+        cycle: 2,
+        key: 'barrel_bridge_unit',
+        order: 70,
+        pattern: /barrel.*bridge|pont.*barillet|federhausbr/i,
+        fr: 'Pont de barillet empierré (+ 3 vis aimantées)',
+        en: 'Barrel bridge, jewelled',
+        de: 'Federhausbrücke mit Steinen',
+        role: 'Ferme le barillet et supporte les organes d’armage. Ses 3 vis s’aimantent automatiquement.',
+        lube: 'Huile épaisse Moebius HP-1300 au palier supérieur d’arbre.'
+      },
+      {
+        cycle: 2,
+        key: 'crown_wheel_unit',
+        order: 80,
+        pattern: /crown|couronne|kronrad/i,
+        fr: 'Roue de couronne & Bague (+ vis gauche aimantée)',
+        en: 'Crown wheel & ring',
+        de: 'Kronrad & Kronradring',
+        role: 'Transmet la rotation du pignon de remontoir au rochet. Vis à pas gauche installée automatiquement.',
+        lube: 'Huile épaisse Moebius HP-1300 SC sur la bague et la portée.'
+      },
+      {
+        cycle: 2,
+        key: 'ratchet_wheel_unit',
+        order: 90,
+        pattern: /ratchet|rochet|sperrrad/i,
+        fr: 'Rochet (+ vis aimantée)',
+        en: 'Ratchet wheel',
+        de: 'Sperrrad',
+        role: 'Solidaire du carré d’arbre de barillet pour l’armage du ressort.',
+        lube: 'Huile épaisse Moebius HP-1300 sous la portée.'
+      },
+      {
+        cycle: 3,
+        key: 'pallet_fork_unit',
+        order: 100,
+        pattern: /pallet|anchor|ancre|anker/i,
+        exclude: /bridge|pont|br[uü]cke/i,
+        fr: 'Ancre suisse',
+        en: 'Pallet fork',
+        de: 'Anker',
+        role: 'Verrouille la roue d’échappement et entretient les oscillations du balancier (levée : 44°).',
+        lube: 'Huile spéciale Moebius 9415 sur les levées en rubis (pivots à sec).'
+      },
+      {
+        cycle: 3,
+        key: 'pallet_bridge_unit',
+        order: 110,
+        pattern: /pallet.*bridge|escapement.*bridge|pont.*ancre|ankerbr/i,
+        fr: "Pont d'ancre empierré (+ 2 vis aimantées)",
+        en: 'Pallet bridge, jewelled',
+        de: 'Ankerbrücke mit Steinen',
+        role: 'Sécurise l’axe de l’ancre. Ses 2 vis cylindriques se fixent automatiquement.',
+        lube: 'À sec sur les pivots d’ancre.'
+      },
+      {
+        cycle: 3,
+        key: 'balance_unit',
+        order: 120,
+        pattern: /balance|balancier|unruh|hairspring|spiral|incabloc|etachron|stud|regulator|raquette/i,
+        fr: 'Ensemble Balancier-Spiral & Pont ETACHRON (+ vis aimantée)',
+        en: 'Timed balance & bridge assembled',
+        de: 'Unruh & Unruhbrücke komplett',
+        role: 'Organe régulateur à 18’000 A/h (2,5 Hz) avec antichoc INCABLOC. Fixation automatique.',
+        lube: 'Huile fine Moebius 9010 dans les contre-pivots INCABLOC ; spiral à sec.'
+      },
+      {
+        cycle: 3,
+        key: 'stem_system_unit',
+        order: 130,
+        pattern: /winding|stem|tige|aufzug|setting|tirette|yoke|bascule|clutch|coulant|click|cliquet|minute\s*wheel|hour\s*wheel|cannon|chauss/i,
+        fr: 'Tige de remontoir & Organes de commande',
+        en: 'Winding stem & setting mechanism',
+        de: 'Aufzugwelle & Zeigerstellmechanismus',
+        role: 'Assure le remontage (Pos. 1) et la mise à l’heure (Pos. 2).',
+        lube: 'Graisse horlogère Moebius 9504 et huile épaisse HP-1300.'
+      }
+    ];
+
+    const SCREW_RE = /screw|\bvis\b|schraube|boulon|pin\b|goupille|stift|jewel|ruby|rubis|washer|rondelle/i;
+    const BASE_RE = /main\s*plate|base\s*plate|platine|werkplatte/i;
+
+    let guidedMode = true;
+    let currentCycle = 1;
+    let maxCycle = 3;
+    const mountableItems = [];
+    const hitboxes = [];
+    const magneticScrews = [];
+    const animations = [];
+    let draggedItem = null;
+    let hoveredItem = null;
+    let bannerTimer = null;
+    let errorStripTimer = null;
+
+    const statusStripEl = document.getElementById('status-strip');
+    const cycleBadgeEl = document.getElementById('cycle-badge');
+    const stepBadgeEl = document.getElementById('step-badge');
+    const stepInstructionEl = document.getElementById('step-instruction');
+    const progressPillEl = document.getElementById('progress-pill');
+    const grabTooltipEl = document.getElementById('grab-tooltip');
+    const hoverPillEl = document.getElementById('hover-pill');
+
+    const cardNameEl = document.getElementById('card-name');
+    const cardMultilangEl = document.getElementById('card-multilang');
+    const cardRoleEl = document.getElementById('card-role');
+    const cardLubeEl = document.getElementById('card-lube');
+
+    function showBanner(text, type = 'normal', autoHideMs = 0) {
+      clearTimeout(bannerTimer);
+      grabTooltipEl.textContent = text;
+      grabTooltipEl.className = 'visible' + (type === 'error' ? ' error' : type === 'success' ? ' success' : '');
+      if (autoHideMs > 0) {
+        bannerTimer = setTimeout(() => {
+          grabTooltipEl.className = '';
+        }, autoHideMs);
+      }
+    }
+
+    function hideBanner() {
+      clearTimeout(bannerTimer);
+      grabTooltipEl.className = '';
+    }
+
+    function showTemporaryWrongPieceError(wrongName, expectedName) {
+      clearTimeout(errorStripTimer);
+
+      const errMsg = `❌ Mauvaise pièce : « ${wrongName} ». Prenez d'abord : « ${expectedName} ».`;
+      statusStripEl.classList.add('error-strip');
+      stepInstructionEl.textContent = errMsg;
+      showBanner(errMsg, 'error', 3000);
+
+      errorStripTimer = setTimeout(() => {
+        statusStripEl.classList.remove('error-strip');
+        updateStatusUI();
+      }, 3000);
+    }
+
+    function matchCatalog(rawName) {
+      for (const entry of CATALOG) {
+        if (entry.pattern.test(rawName) && !(entry.exclude && entry.exclude.test(rawName))) {
+          return entry;
+        }
+      }
+      return null;
+    }
+
+    function getActiveCycleItems() {
+      return mountableItems.filter((it) => it.meta.cycle === currentCycle);
+    }
+
+    function getNextPendingItem() {
+      return getActiveCycleItems().find((it) => !it.mounted)
+        || mountableItems.find((it) => !it.mounted)
+        || null;
+    }
+
+    function setItemVisible(item, visible) {
+      item.meshes.forEach((m) => {
+        m.visible = visible;
+      });
+      item.hitbox.visible = visible && !item.mounted;
+    }
+
+    function setItemHighlight(item, hex, intensity) {
+      if (!item) return;
+      item.meshes.forEach((mesh) => {
+        if (!mesh.material || !('emissive' in mesh.material)) return;
+        if (!mesh.userData.clonedMat) {
+          mesh.material = mesh.material.clone();
+          mesh.userData.clonedMat = true;
+        }
+        mesh.material.emissive.setHex(hex);
+        mesh.material.emissiveIntensity = intensity;
+      });
+    }
+
+    function updateStatusUI() {
+      clearTimeout(errorStripTimer);
+      statusStripEl.classList.remove('error-strip');
+
+      const mountedCount = mountableItems.filter((it) => it.mounted).length;
+      const total = mountableItems.length;
+      progressPillEl.textContent = `${mountedCount} / ${total} montés`;
+      cycleBadgeEl.textContent = CYCLE_TITLES[currentCycle] || `Cycle ${currentCycle}/${maxCycle}`;
+
+      const next = getNextPendingItem();
+      if (!next) {
+        cycleBadgeEl.textContent = 'Assemblage complet';
+        stepBadgeEl.textContent = 'Terminé';
+        stepInstructionEl.textContent = '🎉 Bravo ! Les 3 cycles sont terminés et toutes les vis sont aimantées.';
+        targetMarker.visible = false;
+        return;
+      }
+
+      const stepNum = mountedCount + 1;
+      stepBadgeEl.textContent = `Étape ${stepNum}/${total}`;
+      stepInstructionEl.textContent = guidedMode
+        ? `Prenez sur le plateau : ${next.meta.fr}`
+        : `Mode libre (Lot ${currentCycle}) : prenez n'importe quelle pièce visible sur le plateau`;
+
+      getActiveCycleItems().forEach((it) => {
+        if (it.mounted || it === draggedItem || it === hoveredItem) return;
+        const highlight = guidedMode && it === next;
+        setItemHighlight(it, highlight ? 0xd4af37 : 0x000000, highlight ? 0.35 : 0);
+      });
+    }
+
+    function moveItemVisualCenterTo(item, targetWorldCenter) {
+      const box = new THREE.Box3();
+      item.meshes.forEach((m) => {
+        m.updateMatrixWorld(true);
+        box.expandByObject(m);
+      });
+      const currentWorldCenter = box.getCenter(new THREE.Vector3());
+      const worldDelta = targetWorldCenter.clone().sub(currentWorldCenter);
+
+      item.meshes.forEach((mesh) => {
+        if (mesh.parent) {
+          const pQuat = new THREE.Quaternion();
+          mesh.parent.getWorldQuaternion(pQuat);
+          const pScale = new THREE.Vector3();
+          mesh.parent.getWorldScale(pScale);
+
+          const localDelta = worldDelta.clone().applyQuaternion(pQuat.invert());
+          localDelta.x /= pScale.x || 1;
+          localDelta.y /= pScale.y || 1;
+          localDelta.z /= pScale.z || 1;
+          mesh.position.add(localDelta);
+        } else {
+          mesh.position.add(worldDelta);
+        }
+        mesh.updateMatrixWorld(true);
+      });
+    }
+
+    function animateItemToPositions(entries, durationMs = 280, onDone = null) {
+      animations.push({
+        entries: entries.map((e) => ({
+          mesh: e.mesh,
+          start: e.mesh.position.clone(),
+          end: e.targetLocalPos.clone()
+        })),
+        startTime: performance.now(),
+        duration: durationMs,
+        onDone
+      });
+    }
+
+    function triggerMagneticScrews(item) {
+      if (!item.screws || item.screws.length === 0) return;
+      item.screws.forEach((sc, idx) => {
+        sc.mesh.visible = true;
+        const dropStart = sc.assembledLocalPos.clone().add(new THREE.Vector3(0, 0.45 + idx * 0.08, 0));
+        sc.mesh.position.copy(dropStart);
+        setTimeout(() => {
+          animateItemToPositions([{ mesh: sc.mesh, targetLocalPos: sc.assembledLocalPos }], 280);
+        }, idx * 65);
+      });
+    }
+
+    // Posiziona ciascun componente del ciclo in una casella dedicata e non sovrapposta
+    function activateCycleTray(cycleNumber, announce = false) {
+      currentCycle = cycleNumber;
+      hoveredItem = null;
+      hoverPillEl.classList.remove('visible');
+
+      mountableItems.forEach((it) => {
+        if (!it.mounted) {
+          setItemVisible(it, it.meta.cycle === currentCycle);
+        }
+      });
+
+      const batch = getActiveCycleItems().filter((it) => !it.mounted);
+      if (batch.length === 0) {
+        updateStatusUI();
+        return;
+      }
+
+      const cols = 2;
+      const rows = Math.ceil(batch.length / cols);
+      const spacingX = 1.12;
+      const spacingZ = 1.02;
+      const trayWidth = cols * spacingX + 0.55;
+      const trayDepth = rows * spacingZ + 0.55;
+      const trayCenterX = -1.82;
+
+      trayMesh.geometry.dispose();
+      trayMesh.geometry = new THREE.PlaneGeometry(trayWidth, trayDepth);
+      trayMesh.position.set(trayCenterX, TRAY_Y, 0);
+
+      trayBorder.geometry.dispose();
+      trayBorder.geometry = new THREE.EdgesGeometry(trayMesh.geometry);
+      trayBorder.position.set(trayCenterX, TRAY_Y + 0.002, 0);
+
+      const startX = trayCenterX - ((cols - 1) * spacingX) / 2;
+      const startZ = -((rows - 1) * spacingZ) / 2;
+
+      batch.forEach((item, idx) => {
+        const col = idx % cols;
+        const row = Math.floor(idx / cols);
+
+        // Casella univoca calcolata dal proprio indice idx
+        const slotX = startX + col * spacingX;
+        const slotZ = startZ + row * spacingZ;
+        const targetCenter = new THREE.Vector3(
+          slotX,
+          TRAY_Y + 0.02 + item.halfHeight,
+          slotZ
+        );
+
+        moveItemVisualCenterTo(item, targetCenter);
+        item.trayLocalPositions = item.meshes.map((m) => m.position.clone());
+        item.trayWorldCenter = targetCenter.clone();
+
+        item.hitbox.position.set(slotX, TRAY_Y + 0.10, slotZ);
+        item.hitbox.visible = true;
+      });
+
+      if (announce) {
+        showBanner(`📦 ${CYCLE_TITLES[currentCycle]} prêt sur l'établi !`, 'success', 2600);
+      }
+      updateStatusUI();
+    }
+
+    function completeItemAssembly(item) {
+      if (item.mounted) return;
+      item.mounted = true;
+      item.hitbox.visible = false;
+      setItemHighlight(item, 0x27ae60, 0.45);
+
+      const targets = item.meshes.map((m, idx) => ({
+        mesh: m,
+        targetLocalPos: item.assembledLocalPositions[idx]
+      }));
+
+      animateItemToPositions(targets, 240, () => {
+        setItemHighlight(item, 0x000000, 0);
+        triggerMagneticScrews(item);
+
+        const remainingInCycle = getActiveCycleItems().filter((it) => !it.mounted);
+        if (remainingInCycle.length === 0 && currentCycle < maxCycle) {
+          setTimeout(() => {
+            activateCycleTray(currentCycle + 1, true);
+          }, 550);
+        }
+      });
+
+      showBanner(`✅ Bien joué : « ${item.meta.fr} » installé !`, 'success', 2200);
+
+      cardNameEl.textContent = item.meta.fr;
+      cardMultilangEl.textContent = `EN : ${item.meta.en}  •  DE : ${item.meta.de}`;
+      cardRoleEl.textContent = item.meta.role;
+      cardLubeEl.textContent = item.meta.lube;
+
+      updateStatusUI();
+    }
+
+    function resetAllCycles() {
+      hideBanner();
+      mountableItems.forEach((it) => {
+        it.mounted = false;
+        setItemHighlight(it, 0x000000, 0);
+      });
+      magneticScrews.forEach((sc) => {
+        sc.mesh.visible = false;
+      });
+      activateCycleTray(1, false);
+    }
+
+    const loaderEl = document.getElementById('loader-overlay');
+    const loaderTextEl = document.getElementById('loader-text');
+
+    new GLTFLoader().load(
+      MODEL_URL,
+      (gltf) => {
+        const root = gltf.scene;
+
+        const box = new THREE.Box3().setFromObject(root);
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z) || 1;
+        root.scale.setScalar(2.35 / maxDim);
+
+        const sBox = new THREE.Box3().setFromObject(root);
+        const sSize = sBox.getSize(new THREE.Vector3());
+        if (sSize.z < sSize.y && sSize.z < sSize.x) {
+          root.rotation.x = -Math.PI / 2;
+        }
+
+        const cBox = new THREE.Box3().setFromObject(root);
+        const center = cBox.getCenter(new THREE.Vector3());
+        root.position.sub(center);
+
+        const alignedBox = new THREE.Box3().setFromObject(root);
+        root.position.x += 0.92;
+        root.position.y += (TRAY_Y - alignedBox.min.y);
+
+        scene.add(root);
+        root.updateMatrixWorld(true);
+
+        const groupedByKey = new Map();
+        const orphanMeshes = [];
+
+        root.traverse((child) => {
+          if (!child.isMesh) return;
+
+          let fullName = '';
+          let cur = child;
+          while (cur && cur !== root) {
+            if (cur.name) fullName += ' ' + cur.name;
+            cur = cur.parent;
+          }
+          fullName = fullName.trim();
+
+          const wBox = new THREE.Box3().setFromObject(child);
+          const wCenter = wBox.getCenter(new THREE.Vector3());
+          const wSize = wBox.getSize(new THREE.Vector3());
+          const diag = wSize.length();
+
+          if (BASE_RE.test(fullName) || diag > 1.85) {
+            return;
+          }
+
+          if (SCREW_RE.test(fullName) || diag < 0.28) {
+            magneticScrews.push({
+              mesh: child,
+              assembledLocalPos: child.position.clone(),
+              worldCenter: wCenter.clone()
+            });
+            return;
+          }
+
+          const catalogEntry = matchCatalog(fullName);
+          if (catalogEntry) {
+            if (!groupedByKey.has(catalogEntry.key)) {
+              groupedByKey.set(catalogEntry.key, {
+                meta: catalogEntry,
+                meshes: []
+              });
+            }
+            groupedByKey.get(catalogEntry.key).meshes.push(child);
+          } else {
+            orphanMeshes.push({ mesh: child, wCenter });
+          }
+        });
+
+        orphanMeshes.forEach((orp) => {
+          let bestGroup = null;
+          let bestDist = Infinity;
+          groupedByKey.forEach((grp) => {
+            const gBox = new THREE.Box3();
+            grp.meshes.forEach((m) => gBox.expandByObject(m));
+            const d = orp.wCenter.distanceTo(gBox.getCenter(new THREE.Vector3()));
+            if (d < bestDist) {
+              bestDist = d;
+              bestGroup = grp;
+            }
+          });
+          if (bestGroup) {
+            bestGroup.meshes.push(orp.mesh);
+          } else {
+            magneticScrews.push({
+              mesh: orp.mesh,
+              assembledLocalPos: orp.mesh.position.clone(),
+              worldCenter: orp.wCenter.clone()
+            });
+          }
+        });
+
+        const hitGeo = new THREE.CylinderGeometry(0.36, 0.36, 0.30, 16);
+        const hitMat = new THREE.MeshBasicMaterial({ visible: false });
+
+        groupedByKey.forEach((grp) => {
+          const groupBox = new THREE.Box3();
+          grp.meshes.forEach((m) => groupBox.expandByObject(m));
+          const groupCenter = groupBox.getCenter(new THREE.Vector3());
+          const groupSize = groupBox.getSize(new THREE.Vector3());
+
+          const hitbox = new THREE.Mesh(hitGeo, hitMat);
+          scene.add(hitbox);
+
+          const item = {
+            meshes: grp.meshes,
+            hitbox,
+            assembledLocalPositions: grp.meshes.map((m) => m.position.clone()),
+            assembledWorldCenter: groupCenter.clone(),
+            halfHeight: Math.max(0.02, groupSize.y * 0.5),
+            meta: grp.meta,
+            screws: [],
+            mounted: false
+          };
+
+          hitbox.userData.item = item;
+          hitboxes.push(hitbox);
+          mountableItems.push(item);
+        });
+
+        mountableItems.sort((a, b) => a.meta.order - b.meta.order);
+        maxCycle = mountableItems.reduce((mx, it) => Math.max(mx, it.meta.cycle), 1);
+
+        magneticScrews.forEach((sc) => {
+          let bestItem = null;
+          let bestDist = Infinity;
+          mountableItems.forEach((it) => {
+            const d = sc.worldCenter.distanceTo(it.assembledWorldCenter);
+            const weight = /bridge|pont|crown|couronne|ratchet|rochet/i.test(it.meta.en) ? 0.55 : 1.0;
+            if (d * weight < bestDist) {
+              bestDist = d * weight;
+              bestItem = it;
+            }
+          });
+          if (bestItem) {
+            bestItem.screws.push(sc);
+          } else {
+            sc.mesh.visible = true;
+          }
+        });
+
+        resetAllCycles();
+
+        loaderEl.style.opacity = '0';
+        setTimeout(() => loaderEl.remove(), 300);
+      },
+      (xhr) => {
+        if (xhr.total > 0) {
+          loaderTextEl.textContent = `Chargement : ${Math.round((xhr.loaded / xhr.total) * 100)}%`;
+        }
+      },
+      (err) => {
+        console.error(err);
+        loaderTextEl.textContent = 'Erreur de chargement de ETA6498-1_Web.glb';
+      }
+    );
+
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    const dragPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -(TRAY_Y + 0.28));
+    const dragIntersect = new THREE.Vector3();
+
+    function updatePointerCoords(ev) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      pointer.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+    }
+
+    function pickTrayItem(ev) {
+      updatePointerCoords(ev);
+      raycaster.setFromCamera(pointer, camera);
+
+      const activeHitboxes = hitboxes.filter((hb) => hb.visible && hb.userData.item && !hb.userData.item.mounted);
+      const hbHits = raycaster.intersectObjects(activeHitboxes, false);
+      if (hbHits.length > 0 && hbHits[0].object.userData.item) {
+        return hbHits[0].object.userData.item;
+      }
+
+      const pendingMeshes = [];
+      getActiveCycleItems().forEach((it) => {
+        if (!it.mounted) pendingMeshes.push(...it.meshes);
+      });
+      const meshHits = raycaster.intersectObjects(pendingMeshes, false);
+      if (meshHits.length > 0) {
+        return mountableItems.find((it) => !it.mounted && it.meshes.includes(meshHits[0].object)) || null;
+      }
+
+      if (raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), -TRAY_Y), dragIntersect)) {
+        let nearest = null;
+        let minD = 0.42;
+        getActiveCycleItems().forEach((it) => {
+          if (it.mounted) return;
+          const d = Math.hypot(dragIntersect.x - it.trayWorldCenter.x, dragIntersect.z - it.trayWorldCenter.z);
+          if (d < minD) {
+            minD = d;
+            nearest = it;
+          }
+        });
+        if (nearest) return nearest;
+      }
+
+      return null;
+    }
+
+    renderer.domElement.addEventListener('pointermove', (ev) => {
+      if (draggedItem) {
+        updatePointerCoords(ev);
+        raycaster.setFromCamera(pointer, camera);
+
+        if (raycaster.ray.intersectPlane(dragPlane, dragIntersect)) {
+          moveItemVisualCenterTo(draggedItem, dragIntersect);
+          tweezersGroup.position.set(dragIntersect.x + 0.06, dragIntersect.y + 0.03, dragIntersect.z);
+
+          const distToSlot = Math.hypot(
+            dragIntersect.x - draggedItem.assembledWorldCenter.x,
+            dragIntersect.z - draggedItem.assembledWorldCenter.z
+          );
+          if (distToSlot < 0.65) {
+            targetRingMat.color.setHex(0x27ae60);
+            targetMarker.scale.setScalar(1.22);
+          } else {
+            targetRingMat.color.setHex(0xd4af37);
+            targetMarker.scale.setScalar(1.0);
+          }
+        }
+        return;
+      }
+
+      if (interactionMode !== 'grab') {
+        hoverPillEl.classList.remove('visible');
+        return;
+      }
+
+      const over = pickTrayItem(ev);
+      if (over !== hoveredItem) {
+        if (hoveredItem && !hoveredItem.mounted) {
+          const isNext = guidedMode && hoveredItem === getNextPendingItem();
+          setItemHighlight(hoveredItem, isNext ? 0xd4af37 : 0x000000, isNext ? 0.35 : 0);
+        }
+        hoveredItem = over;
+        if (hoveredItem) {
+          setItemHighlight(hoveredItem, 0x38bdf8, 0.55);
+          stage.classList.add('hover-piece');
+          hoverPillEl.textContent = `🔍 ${hoveredItem.meta.fr}`;
+          hoverPillEl.classList.add('visible');
+        } else {
+          stage.classList.remove('hover-piece');
+          hoverPillEl.classList.remove('visible');
+        }
+      }
+    });
+
+    renderer.domElement.addEventListener('pointerdown', (ev) => {
+      if (ev.button !== 0 || interactionMode !== 'grab' || mountableItems.length === 0) return;
+
+      const hitItem = pickTrayItem(ev);
+      if (!hitItem) return;
+
+      const nextExpected = getNextPendingItem();
+      if (guidedMode && nextExpected && hitItem !== nextExpected) {
+        setItemHighlight(hitItem, 0xef4444, 0.85);
+        setTimeout(() => {
+          if (!hitItem.mounted) setItemHighlight(hitItem, 0x000000, 0);
+        }, 800);
+
+        showTemporaryWrongPieceError(hitItem.meta.fr, nextExpected.meta.fr);
+        return;
+      }
+
+      draggedItem = hitItem;
+      hoverPillEl.classList.remove('visible');
+      stage.classList.add('grabbing');
+      setItemHighlight(draggedItem, 0xd4af37, 0.7);
+
+      targetMarker.position.set(
+        draggedItem.assembledWorldCenter.x,
+        draggedItem.assembledWorldCenter.y + 0.04,
+        draggedItem.assembledWorldCenter.z
+      );
+      targetMarker.visible = true;
+
+      tweezersGroup.visible = true;
+      showBanner(`🤏 ${draggedItem.meta.fr} — Déposez sur la cible dorée`, 'normal');
+    });
+
+    window.addEventListener('pointerup', () => {
+      if (!draggedItem) return;
+
+      const boxNow = new THREE.Box3();
+      draggedItem.meshes.forEach((m) => boxNow.expandByObject(m));
+      const centerNow = boxNow.getCenter(new THREE.Vector3());
+      const dist = Math.hypot(
+        centerNow.x - draggedItem.assembledWorldCenter.x,
+        centerNow.z - draggedItem.assembledWorldCenter.z
+      );
+
+      tweezersGroup.visible = false;
+      targetMarker.visible = false;
+      stage.classList.remove('grabbing');
+
+      const itemToCheck = draggedItem;
+      draggedItem = null;
+
+      if (dist < 0.75) {
+        completeItemAssembly(itemToCheck);
+      } else {
+        hideBanner();
+        setItemHighlight(itemToCheck, 0x000000, 0);
+        const backTargets = itemToCheck.meshes.map((m, idx) => ({
+          mesh: m,
+          targetLocalPos: itemToCheck.trayLocalPositions[idx]
+        }));
+        animateItemToPositions(backTargets, 240, updateStatusUI);
+      }
+    });
+
+    const btnGuided = document.getElementById('btn-mode-guided');
+    const btnFree = document.getElementById('btn-mode-free');
+
+    btnGuided.addEventListener('click', () => {
+      guidedMode = true;
+      btnGuided.classList.add('active');
+      btnFree.classList.remove('active');
+      hideBanner();
+      updateStatusUI();
+    });
+
+    btnFree.addEventListener('click', () => {
+      guidedMode = false;
+      btnFree.classList.add('active');
+      btnGuided.classList.remove('active');
+      hideBanner();
+      updateStatusUI();
+    });
+
+    document.getElementById('btn-auto-place').addEventListener('click', () => {
+      const next = getNextPendingItem();
+      if (next) completeItemAssembly(next);
+    });
+
+    document.getElementById('btn-reset-all').addEventListener('click', () => {
+      resetAllCycles();
+      cardNameEl.textContent = 'Plateau réinitialisé (Cycle 1/3)';
+      cardMultilangEl.textContent = '—';
+      cardRoleEl.textContent = 'Saisissez une pièce du Cycle 1 sur le plateau à gauche pour démarrer le montage.';
+      cardLubeEl.textContent = 'Les vis correspondantes s’aimanteront automatiquement.';
+    });
+
+    function zoomCam(factor) {
+      const offset = camera.position.clone().sub(controls.target);
+      offset.setLength(THREE.MathUtils.clamp(offset.length() * factor, 1.2, 12.0));
+      camera.position.copy(controls.target).add(offset);
+      controls.update();
+    }
+
+    document.getElementById('hud-zoom-in').addEventListener('click', () => zoomCam(0.85));
+    document.getElementById('hud-zoom-out').addEventListener('click', () => zoomCam(1.18));
+    document.getElementById('hud-reset-cam').addEventListener('click', () => {
+      camera.position.copy(DEFAULT_CAM_POS);
+      controls.target.copy(DEFAULT_CAM_TARGET);
+      setInteractionMode('grab');
+      controls.update();
+    });
+
+    const fsBtn = document.getElementById('hud-fullscreen');
+    fsBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        stage.requestFullscreen?.();
+      } else {
+        document.exitFullscreen?.();
+      }
+    });
+
+    function onResize() {
+      const w = stage.clientWidth || window.innerWidth;
+      const h = stage.clientHeight || window.innerHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+      fsBtn.textContent = document.fullscreenElement === stage ? '✕ Quitter' : '⛶ Plein Écran';
+    }
+
+    document.addEventListener('fullscreenchange', onResize);
+    window.addEventListener('resize', onResize);
+
+    function animate(now) {
+      requestAnimationFrame(animate);
+
+      for (let i = animations.length - 1; i >= 0; i--) {
+        const a = animations[i];
+        const t = Math.min(1, (now - a.startTime) / a.duration);
+        const ease = 1 - Math.pow(1 - t, 3);
+        a.entries.forEach((ent) => {
+          ent.mesh.position.lerpVectors(ent.start, ent.end, ease);
+        });
+        if (t >= 1) {
+          animations.splice(i, 1);
+          if (a.onDone) a.onDone();
+        }
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
