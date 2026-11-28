@@ -122,13 +122,12 @@
       './ETA_6498-1_Movement_parts.glb'
     ];
 
-    // Mantiene esattamente la stessa ampiezza di esploso
     const HORIZONTAL_SPREAD = 1.65;
 
     // Angolazione iniziale di riferimento
     const BASE_ROT = { x: -0.35, y: -0.55, z: 1.55 };
-    // Leggera rotazione d'accompagnamento durante l'esploso per esporre meglio le fette
-    const EXPLODE_ROT_DELTA = { x: 0.08, y: 0.42, z: -0.12 };
+    // Rotazione d'accompagnamento verso il lato opposto durante l'esploso
+    const EXPLODE_ROT_DELTA = { x: -0.08, y: -0.45, z: 0.14 };
 
     const statusEl = document.getElementById('status');
     const container = document.getElementById('viewer');
@@ -194,26 +193,7 @@
       return names.join(' ');
     }
 
-    // Mantiene esattamente gli stessi passi relativi tra i gruppi, tenendo fermi i rubini dell'ancora e del plateau
     function getHorizontalStep(lbl, matNames) {
-      const isRuby = matNames.includes('rubino') || lbl.includes('ruby');
-
-      // Rubini dell'ancora (710 pallet) e del plateau/doppio disco / bilanciere (730 double roller / 721 balance)
-      // restano solidali esattamente al loro gruppo (0.18) senza staccarsi
-      if (
-        isRuby &&
-        (
-          lbl.includes('710 pallet') ||
-          lbl.includes('pallet') ||
-          lbl.includes('730 double') ||
-          lbl.includes('roller') ||
-          lbl.includes('plateau') ||
-          lbl.includes('721 balance')
-        )
-      ) {
-        return 0.18;
-      }
-
       if (lbl.includes('100 main plate') || lbl.includes('main_plate') || lbl.includes('platine')) {
         return -0.78;
       }
@@ -277,6 +257,7 @@
         return 0.56;
       }
 
+      const isRuby = matNames.includes('rubino') || lbl.includes('ruby');
       if (isRuby || lbl.includes('screw')) {
         return 0.30;
       }
@@ -290,6 +271,8 @@
 
       const coreBox = new THREE.Box3();
       const fullBox = new THREE.Box3();
+      const palletBox = new THREE.Box3();
+      const rollerBalanceBox = new THREE.Box3();
       let meshCount = 0;
 
       modelRoot.traverse((child) => {
@@ -299,6 +282,12 @@
         const lbl = getHierarchyLabel(child);
         if (!lbl.includes('401 winding stem')) {
           coreBox.expandByObject(child);
+        }
+        if (lbl.includes('710 pallet') || lbl.includes('pallet')) {
+          palletBox.expandByObject(child);
+        }
+        if (lbl.includes('730 double') || lbl.includes('roller') || lbl.includes('721 balance')) {
+          rollerBalanceBox.expandByObject(child);
         }
         if (child.material) {
           const mats = Array.isArray(child.material) ? child.material : [child.material];
@@ -316,6 +305,14 @@
       const center = new THREE.Vector3();
       refBox.getSize(size);
       refBox.getCenter(center);
+
+      const palletCenter = new THREE.Vector3();
+      const hasPalletBox = !palletBox.isEmpty();
+      if (hasPalletBox) palletBox.getCenter(palletCenter);
+
+      const rollerBalanceCenter = new THREE.Vector3();
+      const hasRollerBalanceBox = !rollerBalanceBox.isEmpty();
+      if (hasRollerBalanceBox) rollerBalanceBox.getCenter(rollerBalanceCenter);
 
       const stackAxis = (size.x <= size.y && size.x <= size.z) ? 'x'
                       : (size.y <= size.x && size.y <= size.z) ? 'y' : 'z';
@@ -346,12 +343,40 @@
 
       const worldOrigin = new THREE.Vector3(0, 0, 0);
 
+      // Soglia di prossimità (in unità locali non scalate) per agganciare i piccoli rubini dell'ancora e del plateau
+      const proximityRadius = maxDim * 0.14;
+
       modelRoot.traverse((child) => {
         if (!child.isMesh) return;
         const lbl = getHierarchyLabel(child);
         const matNames = getMaterialNames(child);
+        const isRuby = matNames.includes('rubino') || lbl.includes('ruby');
 
-        const step = getHorizontalStep(lbl, matNames);
+        const childBox = new THREE.Box3().setFromObject(child);
+        const childCenter = new THREE.Vector3();
+        childBox.getCenter(childCenter);
+
+        let step = getHorizontalStep(lbl, matNames);
+
+        // Se è un rubino (o un piccolo componente vicino all'ancora o al plateau/bilanciere),
+        // segue esattamente il gruppo 0.18 dell'ancora/plateau/bilanciere senza staccarsi
+        if (isRuby) {
+          const nearPallet = hasPalletBox && childCenter.distanceTo(palletCenter) <= proximityRadius;
+          const nearRollerBalance = hasRollerBalanceBox && childCenter.distanceTo(rollerBalanceCenter) <= proximityRadius;
+          if (
+            nearPallet ||
+            nearRollerBalance ||
+            lbl.includes('710') ||
+            lbl.includes('pallet') ||
+            lbl.includes('730') ||
+            lbl.includes('roller') ||
+            lbl.includes('721') ||
+            lbl.includes('balance')
+          ) {
+            step = 0.18;
+          }
+        }
+
         const sandwichShift = step * HORIZONTAL_SPREAD;
 
         const targetWorld = worldSandwichAxis.clone().multiplyScalar(sandwichShift);
@@ -368,7 +393,7 @@
 
       statusEl.innerHTML =
         `<strong>Modello caricato</strong> (${meshCount} parti · Asse panino: ${stackAxis.toUpperCase()})<br>` +
-        `Rubini ancora/plateau fissi · Rotazione &amp; zoom accompagnati`;
+        `Rubini ancora/plateau agganciati · Rotazione inversa &amp; zoom`;
     }
 
     function tryLoadFromIndex(index) {
