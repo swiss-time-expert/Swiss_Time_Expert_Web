@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Test 3D - ETA 6498-1 (Vue Éclatée Horizontale)</title>
+  <title>Test 3D - ETA 6498-1 (Vue Éclatée "Panino")</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -122,7 +122,7 @@
       './ETA_6498-1_Movement_parts.glb'
     ];
 
-    // Ampiezza orizzontale a fette sullo schermo (in unità di scena)
+    // Mantiene esattamente la stessa ampiezza di esploso
     const HORIZONTAL_SPREAD = 1.65;
 
     const statusEl = document.getElementById('status');
@@ -185,16 +185,14 @@
       return names.join(' ');
     }
 
-    // Restituisce il passo orizzontale (-1..+1) in base alla gerarchia ETA 6498-1
+    // Mantiene esattamente gli stessi passi relativi tra i gruppi
     function getHorizontalStep(lbl, matNames) {
       const isRuby = matNames.includes('rubino') || lbl.includes('ruby');
 
-      // 1. Platina principale (e rubini solidali con la platina) -> apre a sinistra
       if (lbl.includes('100 main plate') || lbl.includes('main_plate') || lbl.includes('platine')) {
         return -0.78;
       }
 
-      // 2. Bariletto completo -> compatto e chiuso, poco spostato verso sinistra
       if (lbl.includes('180 movement barrel') || lbl.includes('barrel')) {
         if (lbl.includes('105m barrel bridge') || lbl.includes('barrel bridge')) {
           return 0.42;
@@ -202,7 +200,6 @@
         return -0.22;
       }
 
-      // 3. Rimessa all'ora e carica lato quadrante -> fascia sinistra-centro
       if (
         lbl.includes('250 hour') ||
         lbl.includes('240 driver') ||
@@ -220,7 +217,6 @@
         return -0.45;
       }
 
-      // 4. Treno del tempo -> centro ben leggibile
       if (
         lbl.includes('201 centre') ||
         lbl.includes('210 third') ||
@@ -229,7 +225,6 @@
         return 0.02;
       }
 
-      // 5. Scappamento, bilanciere e antishock -> fascia centro-destra contenuta
       if (
         lbl.includes('705 escape') ||
         lbl.includes('710 pallet') ||
@@ -239,7 +234,6 @@
         return 0.18;
       }
 
-      // 6. Ponti (e rubini solidali con i ponti) -> a fette ordinate verso destra
       if (lbl.includes('125 pallet bridge')) return 0.34;
       if (lbl.includes('110 train wheel bridge')) return 0.48;
       if (lbl.includes('121 balancing bridge') || lbl.includes('303 two') || lbl.includes('375 stud')) {
@@ -247,7 +241,6 @@
       }
       if (lbl.includes('bridge') || lbl.includes('pont')) return 0.46;
 
-      // 7. Ruote di carica (rocchetto, corona, anello, cricco) -> allineate verso destra
       if (
         lbl.includes('415 ratchet') ||
         lbl.includes('420 crown') ||
@@ -258,7 +251,6 @@
         return 0.56;
       }
 
-      // 8. Viti e rubini non classificati sopra: seguono il lato di appartenenza senza vagare
       if (isRuby || lbl.includes('screw')) {
         return 0.30;
       }
@@ -270,7 +262,6 @@
       modelRoot = gltf.scene;
       modelRoot.updateMatrixWorld(true);
 
-      // Calcola box del corpo principale senza la lunga tige di carica (401 Winding stem)
       const coreBox = new THREE.Box3();
       const fullBox = new THREE.Box3();
       let meshCount = 0;
@@ -300,13 +291,21 @@
       refBox.getSize(size);
       refBox.getCenter(center);
 
+      // Individua l'asse di spessore del movimento (asse del "panino", perpendicolare alla platina)
+      const stackAxis = (size.x <= size.y && size.x <= size.z) ? 'x'
+                      : (size.y <= size.x && size.y <= size.z) ? 'y' : 'z';
+      const localStackVec = new THREE.Vector3(
+        stackAxis === 'x' ? 1 : 0,
+        stackAxis === 'y' ? 1 : 0,
+        stackAxis === 'z' ? 1 : 0
+      );
+
       const maxDim = Math.max(size.x, size.y, size.z) || 1;
       const normScale = 2.35 / maxDim;
 
       modelRoot.scale.setScalar(normScale);
       modelRoot.position.copy(center).multiplyScalar(-normScale);
 
-      // Posizione più orizzontale per leggere l'esploso da sinistra a destra
       displayGroup = new THREE.Group();
       displayGroup.add(modelRoot);
       displayGroup.rotation.order = 'YXZ';
@@ -317,7 +316,12 @@
       scene.add(displayGroup);
       scene.updateMatrixWorld(true);
 
-      // Calcola i vettori locali esatti DOPO aver aggiornato tutte le matrici nella scena
+      // Direzione dell'asse "a panino" convertita nello spazio mondiale dopo la posa del modello
+      const worldSandwichAxis = localStackVec
+        .clone()
+        .transformDirection(modelRoot.matrixWorld)
+        .normalize();
+
       const worldOrigin = new THREE.Vector3(0, 0, 0);
 
       modelRoot.traverse((child) => {
@@ -326,9 +330,9 @@
         const matNames = getMaterialNames(child);
 
         const step = getHorizontalStep(lbl, matNames);
-        const worldShiftX = step * HORIZONTAL_SPREAD;
+        const sandwichShift = step * HORIZONTAL_SPREAD;
 
-        const targetWorld = new THREE.Vector3(worldShiftX, 0, 0);
+        const targetWorld = worldSandwichAxis.clone().multiplyScalar(sandwichShift);
         const localOrigin = child.parent ? child.parent.worldToLocal(worldOrigin.clone()) : worldOrigin.clone();
         const localTarget = child.parent ? child.parent.worldToLocal(targetWorld.clone()) : targetWorld.clone();
         const localDelta = localTarget.sub(localOrigin);
@@ -341,8 +345,8 @@
       });
 
       statusEl.innerHTML =
-        `<strong>Modello caricato</strong> (${meshCount} parti)<br>` +
-        `Esploso orizzontale · Platina a sinistra · Ponti a destra`;
+        `<strong>Modello caricato</strong> (${meshCount} parti · Asse panino: ${stackAxis.toUpperCase()})<br>` +
+        `Distanze invariate · Apertura lungo l'asse del movimento`;
     }
 
     function tryLoadFromIndex(index) {
