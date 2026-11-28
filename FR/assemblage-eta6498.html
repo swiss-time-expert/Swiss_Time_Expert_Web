@@ -203,25 +203,25 @@
 
     .explode-dock {
       position: absolute;
-      bottom: 64px;
+      bottom: 58px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       align-items: center;
-      gap: 12px;
-      width: min(460px, calc(100% - 32px));
+      gap: 10px;
+      width: min(440px, calc(100% - 24px));
       background: rgba(20, 22, 25, 0.92);
       backdrop-filter: blur(8px);
       border: 1px solid rgba(212, 175, 55, 0.5);
       border-radius: 12px;
-      padding: 9px 16px;
+      padding: 8px 14px;
       z-index: 26;
       color: #f8fafc;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
     }
     .explode-dock.hidden { display: none; }
     .explode-dock label {
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 700;
       color: #f3c64f;
       white-space: nowrap;
@@ -234,40 +234,42 @@
       margin: 0;
     }
     .explode-val {
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 800;
       color: #ffffff;
-      min-width: 44px;
+      min-width: 42px;
       text-align: right;
     }
 
     .hud-dock {
       position: absolute;
-      bottom: 14px;
+      bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       justify-content: center;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       background: rgba(13, 19, 31, 0.92);
       backdrop-filter: blur(8px);
       border: 1px solid rgba(212, 175, 55, 0.45);
       border-radius: 10px;
-      padding: 7px 10px;
+      padding: 5px 8px;
       z-index: 25;
-      max-width: calc(100% - 32px);
+      max-width: calc(100% - 16px);
+      overflow-x: auto;
     }
     .hud-btn {
       background: rgba(30, 41, 59, 0.92);
       color: #f8fafc;
       border: 1px solid #3b4c66;
-      padding: 6px 10px;
+      padding: 5px 8px;
       border-radius: 6px;
-      font-size: 0.79rem;
+      font-size: 0.74rem;
       font-weight: 600;
       cursor: pointer;
+      white-space: nowrap;
     }
     .hud-btn:hover { border-color: #d4af37; }
     .hud-btn.active {
@@ -277,9 +279,10 @@
     }
     .hud-sep {
       width: 1px;
-      height: 18px;
+      height: 16px;
       background: rgba(148, 163, 184, 0.25);
       margin: 0 2px;
+      flex-shrink: 0;
     }
 
     #loader-overlay {
@@ -475,7 +478,6 @@
     let userZoomScale = 1.0;
     const explodeItems = [];
 
-    // 'explode' | 'guided' | 'free'
     let workspaceMode = 'explode';
     let interactionMode = 'orbit';
 
@@ -579,155 +581,19 @@
     };
 
     const CATALOG = [
-      {
-        cycle: 1,
-        key: 'barrel_unit',
-        order: 10,
-        pattern: /barrel|tambour|barillet|federhaus/i,
-        exclude: /bridge|pont|br[uü]cke/i,
-        fr: 'Barillet complet (Tambour, Arbre & Ressort)',
-        en: 'Movement barrel complete',
-        de: 'Federhaus vollständig',
-        role: 'Accumulateur d’énergie mécanique (autonomie théorique : 46 heures).',
-        lube: 'Huile épaisse Moebius HP-1300 aux pivots d’arbre ; graisse haute pression sur la paroi.'
-      },
-      {
-        cycle: 1,
-        key: 'center_wheel_unit',
-        order: 20,
-        pattern: /center|centre|minutenrad/i,
-        exclude: /bridge|pont|cannon|chauss/i,
-        fr: 'Roue de centre',
-        en: 'Centre wheel',
-        de: 'Minutenrad',
-        role: 'Premier mobile du rouage entraîné par le barillet (1 tour / heure).',
-        lube: 'Huile épaisse Moebius HP-1300 aux deux pivots.'
-      },
-      {
-        cycle: 1,
-        key: 'third_wheel_unit',
-        order: 30,
-        pattern: /third|moyenne|kleinbodenrad/i,
-        exclude: /bridge|pont|fourth|second/i,
-        fr: 'Roue moyenne',
-        en: 'Third wheel',
-        de: 'Kleinbodenrad',
-        role: 'Mobile intermédiaire transmettant le couple vers la roue de seconde.',
-        lube: 'Huile fine Moebius 9010 aux pivots.'
-      },
-      {
-        cycle: 1,
-        key: 'fourth_wheel_unit',
-        order: 40,
-        pattern: /fourth|second\s*wheel|seconde|sekundenrad/i,
-        exclude: /bridge|pont|third|moyenne/i,
-        fr: 'Roue de seconde',
-        en: 'Second wheel',
-        de: 'Sekundenrad',
-        role: 'Effectue 1 tour par minute (60 s) et porte la petite seconde à 6 h.',
-        lube: 'Huile fine Moebius 9010 aux pivots.'
-      },
-      {
-        cycle: 1,
-        key: 'escape_wheel_unit',
-        order: 50,
-        pattern: /escape|echappement|hemmungsrad/i,
-        exclude: /bridge|pont|fork|ancre/i,
-        fr: "Roue d'échappement",
-        en: 'Escape wheel',
-        de: 'Hemmungsrad',
-        role: 'Dernier mobile du train ; distribue les impulsions aux levées de l’ancre.',
-        lube: 'Huile fine Moebius 9010 aux pivots ; épilame Fixodrop recommandé.'
-      },
-      {
-        cycle: 2,
-        key: 'train_bridge_unit',
-        order: 60,
-        pattern: /train.*bridge|gear.*bridge|pont.*rouage|r[aä]derwerkbr/i,
-        fr: 'Pont de rouage empierré (+ vis)',
-        en: 'Train wheel bridge, jewelled',
-        de: 'Räderwerkbrücke mit Steinen',
-        role: 'Maintient l’alignement axial du train de rouage.',
-        lube: 'Huile épaisse HP-1300 sur centre ; huile fine 9010 sur moyenne et seconde.'
-      },
-      {
-        cycle: 2,
-        key: 'barrel_bridge_unit',
-        order: 70,
-        pattern: /barrel.*bridge|pont.*barillet|federhausbr/i,
-        fr: 'Pont de barillet empierré (+ vis)',
-        en: 'Barrel bridge, jewelled',
-        de: 'Federhausbrücke mit Steinen',
-        role: 'Ferme le barillet et supporte les organes d’armage.',
-        lube: 'Huile épaisse Moebius HP-1300 au palier supérieur d’arbre.'
-      },
-      {
-        cycle: 2,
-        key: 'crown_wheel_unit',
-        order: 80,
-        pattern: /crown|couronne|kronrad/i,
-        fr: 'Roue de couronne & Bague (+ vis gauche)',
-        en: 'Crown wheel & ring',
-        de: 'Kronrad & Kronradring',
-        role: 'Transmet la rotation du pignon de remontoir au rochet (vis à pas gauche).',
-        lube: 'Huile épaisse Moebius HP-1300 SC sur la bague et la portée.'
-      },
-      {
-        cycle: 2,
-        key: 'ratchet_wheel_unit',
-        order: 90,
-        pattern: /ratchet|rochet|sperrrad/i,
-        fr: 'Rochet (+ vis)',
-        en: 'Ratchet wheel',
-        de: 'Sperrrad',
-        role: 'Solidaire du carré d’arbre de barillet pour l’armage du ressort.',
-        lube: 'Huile épaisse Moebius HP-1300 sous la portée.'
-      },
-      {
-        cycle: 3,
-        key: 'pallet_fork_unit',
-        order: 100,
-        pattern: /pallet|anchor|ancre|anker/i,
-        exclude: /bridge|pont|br[uü]cke/i,
-        fr: 'Ancre suisse & Levées rubis',
-        en: 'Pallet fork',
-        de: 'Anker',
-        role: 'Verrouille la roue d’échappement et entretient les oscillations du balancier (levée : 44°).',
-        lube: 'Huile spéciale Moebius 9415 sur les levées en rubis (pivots à sec).'
-      },
-      {
-        cycle: 3,
-        key: 'pallet_bridge_unit',
-        order: 110,
-        pattern: /pallet.*bridge|escapement.*bridge|pont.*ancre|ankerbr/i,
-        fr: "Pont d'ancre empierré (+ vis)",
-        en: 'Pallet bridge, jewelled',
-        de: 'Ankerbrücke mit Steinen',
-        role: 'Sécurise l’axe de l’ancre.',
-        lube: 'À sec sur les pivots d’ancre.'
-      },
-      {
-        cycle: 3,
-        key: 'balance_unit',
-        order: 120,
-        pattern: /balance|balancier|unruh|hairspring|spiral|incabloc|etachron|stud|regulator|raquette/i,
-        fr: 'Ensemble Balancier-Spiral & Pont ETACHRON (+ vis)',
-        en: 'Timed balance & bridge assembled',
-        de: 'Unruh & Unruhbrücke komplett',
-        role: 'Organe régulateur à 18’000 A/h (2,5 Hz) avec antichoc INCABLOC.',
-        lube: 'Huile fine Moebius 9010 dans les contre-pivots INCABLOC ; spiral à sec.'
-      },
-      {
-        cycle: 3,
-        key: 'stem_system_unit',
-        order: 130,
-        pattern: /winding|stem|tige|aufzug|setting|tirette|yoke|bascule|clutch|coulant|click|cliquet|minute\s*wheel|hour\s*wheel|cannon|chauss/i,
-        fr: 'Tige de remontoir & Organes de commande',
-        en: 'Winding stem & setting mechanism',
-        de: 'Aufzugwelle & Zeigerstellmechanismus',
-        role: 'Assure le remontage (Pos. 1) et la mise à l’heure (Pos. 2).',
-        lube: 'Graisse horlogère Moebius 9504 et huile épaisse HP-1300.'
-      }
+      { cycle: 1, key: 'barrel_unit', order: 10, pattern: /barrel|tambour|barillet|federhaus/i, exclude: /bridge|pont|br[uü]cke/i, fr: 'Barillet complet (Tambour, Arbre & Ressort)', en: 'Movement barrel complete', de: 'Federhaus vollständig', role: 'Accumulateur d’énergie mécanique (autonomie théorique : 46 heures).', lube: 'Huile épaisse Moebius HP-1300 aux pivots d’arbre ; graisse haute pression sur la paroi.' },
+      { cycle: 1, key: 'center_wheel_unit', order: 20, pattern: /center|centre|minutenrad/i, exclude: /bridge|pont|cannon|chauss/i, fr: 'Roue de centre', en: 'Centre wheel', de: 'Minutenrad', role: 'Premier mobile du rouage entraîné par le barillet (1 tour / heure).', lube: 'Huile épaisse Moebius HP-1300 aux deux pivots.' },
+      { cycle: 1, key: 'third_wheel_unit', order: 30, pattern: /third|moyenne|kleinbodenrad/i, exclude: /bridge|pont|fourth|second/i, fr: 'Roue moyenne', en: 'Third wheel', de: 'Kleinbodenrad', role: 'Mobile intermédiaire transmettant le couple vers la roue de seconde.', lube: 'Huile fine Moebius 9010 aux pivots.' },
+      { cycle: 1, key: 'fourth_wheel_unit', order: 40, pattern: /fourth|second\s*wheel|seconde|sekundenrad/i, exclude: /bridge|pont|third|moyenne/i, fr: 'Roue de seconde', en: 'Second wheel', de: 'Sekundenrad', role: 'Effectue 1 tour par minute (60 s) et porte la petite seconde à 6 h.', lube: 'Huile fine Moebius 9010 aux pivots.' },
+      { cycle: 1, key: 'escape_wheel_unit', order: 50, pattern: /escape|echappement|hemmungsrad/i, exclude: /bridge|pont|fork|ancre/i, fr: "Roue d'échappement", en: 'Escape wheel', de: 'Hemmungsrad', role: 'Dernier mobile du train ; distribue les impulsions aux levées de l’ancre.', lube: 'Huile fine Moebius 9010 aux pivots ; épilame Fixodrop recommandé.' },
+      { cycle: 2, key: 'train_bridge_unit', order: 60, pattern: /train.*bridge|gear.*bridge|pont.*rouage|r[aä]derwerkbr/i, fr: 'Pont de rouage empierré (+ vis)', en: 'Train wheel bridge, jewelled', de: 'Räderwerkbrücke mit Steinen', role: 'Maintient l’alignement axial du train de rouage.', lube: 'Huile épaisse HP-1300 sur centre ; huile fine 9010 sur moyenne et seconde.' },
+      { cycle: 2, key: 'barrel_bridge_unit', order: 70, pattern: /barrel.*bridge|pont.*barillet|federhausbr/i, fr: 'Pont de barillet empierré (+ vis)', en: 'Barrel bridge, jewelled', de: 'Federhausbrücke mit Steinen', role: 'Ferme le barillet et supporte les organes d’armage.', lube: 'Huile épaisse Moebius HP-1300 au palier supérieur d’arbre.' },
+      { cycle: 2, key: 'crown_wheel_unit', order: 80, pattern: /crown|couronne|kronrad/i, fr: 'Roue de couronne & Bague (+ vis gauche)', en: 'Crown wheel & ring', de: 'Kronrad & Kronradring', role: 'Transmet la rotation du pignon de remontoir au rochet (vis à pas gauche).', lube: 'Huile épaisse Moebius HP-1300 SC sur la bague et la portée.' },
+      { cycle: 2, key: 'ratchet_wheel_unit', order: 90, pattern: /ratchet|rochet|sperrrad/i, fr: 'Rochet (+ vis)', en: 'Ratchet wheel', de: 'Sperrrad', role: 'Solidaire du carré d’arbre de barillet pour l’armage du ressort.', lube: 'Huile épaisse Moebius HP-1300 sous la portée.' },
+      { cycle: 3, key: 'pallet_fork_unit', order: 100, pattern: /pallet|anchor|ancre|anker/i, exclude: /bridge|pont|br[uü]cke/i, fr: 'Ancre suisse & Levées rubis', en: 'Pallet fork', de: 'Anker', role: 'Verrouille la roue d’échappement et entretient les oscillations du balancier (levée : 44°).', lube: 'Huile spéciale Moebius 9415 sur les levées en rubis (pivots à sec).' },
+      { cycle: 3, key: 'pallet_bridge_unit', order: 110, pattern: /pallet.*bridge|escapement.*bridge|pont.*ancre|ankerbr/i, fr: "Pont d'ancre empierré (+ vis)", en: 'Pallet bridge, jewelled', de: 'Ankerbrücke mit Steinen', role: 'Sécurise l’axe de l’ancre.', lube: 'À sec sur les pivots d’ancre.' },
+      { cycle: 3, key: 'balance_unit', order: 120, pattern: /balance|balancier|unruh|hairspring|spiral|incabloc|etachron|stud|regulator|raquette/i, fr: 'Ensemble Balancier-Spiral & Pont ETACHRON (+ vis)', en: 'Timed balance & bridge assembled', de: 'Unruh & Unruhbrücke komplett', role: 'Organe régulateur à 18’000 A/h (2,5 Hz) avec antichoc INCABLOC.', lube: 'Huile fine Moebius 9010 dans les contre-pivots INCABLOC ; spiral à sec.' },
+      { cycle: 3, key: 'stem_system_unit', order: 130, pattern: /winding|stem|tige|aufzug|setting|tirette|yoke|bascule|clutch|coulant|click|cliquet|minute\s*wheel|hour\s*wheel|cannon|chauss/i, fr: 'Tige de remontoir & Organes de commande', en: 'Winding stem & setting mechanism', de: 'Aufzugwelle & Zeigerstellmechanismus', role: 'Assure le remontage (Pos. 1) et la mise à l’heure (Pos. 2).', lube: 'Graisse horlogère Moebius 9504 et huile épaisse HP-1300.' }
     ];
 
     const SCREW_RE = /screw|\bvis\b|schraube|boulon|pin\b|goupille|stift|jewel|ruby|rubis|washer|rondelle/i;
@@ -778,7 +644,6 @@
       return mesh;
     }
 
-    // Viti posizionate all'esterno del proprio ponte/gruppo lungo l'asse del panino
     function getHorizontalStep(lbl) {
       if (lbl.includes('5125')) return 0.48;
       if (lbl.includes('5105')) return 0.58;
@@ -789,894 +654,4 @@
 
       if (lbl.includes('100 main plate') || lbl.includes('100_main_plate')) return -0.78;
       if (lbl.includes('105m barrel bridge') || lbl.includes('105m_barrel_bridge')) return 0.42;
-      if (lbl.includes('180 movement barrel') || lbl.includes('180_movement_barrel')) return -0.22;
-
-      if (
-        lbl.includes('250 hour') || lbl.includes('250_hour') ||
-        lbl.includes('240 driver') || lbl.includes('240_driver') ||
-        lbl.includes('260 minute') || lbl.includes('260_minute') ||
-        lbl.includes('401 winding stem') || lbl.includes('401_winding_stem') ||
-        lbl.includes('407 winding') || lbl.includes('407_winding') ||
-        lbl.includes('410 sliding') || lbl.includes('410_sliding') ||
-        lbl.includes('435 yoke') || lbl.includes('435_yoke') ||
-        lbl.includes('440 yoke') || lbl.includes('440_yoke') ||
-        lbl.includes('443m setting') || lbl.includes('443m_setting') ||
-        lbl.includes('445m setting') || lbl.includes('445m_setting') ||
-        lbl.includes('450 setting') || lbl.includes('450_setting') ||
-        lbl.includes('453 intermediate') || lbl.includes('453_intermediate')
-      ) {
-        return -0.45;
-      }
-
-      if (
-        lbl.includes('201 centre') || lbl.includes('201_centre') ||
-        lbl.includes('210 third') || lbl.includes('210_third') ||
-        lbl.includes('220 second') || lbl.includes('220_second')
-      ) {
-        return 0.02;
-      }
-
-      if (
-        lbl.includes('705 escape') || lbl.includes('705_escape') ||
-        lbl.includes('710 pallet') || lbl.includes('710_pallet') ||
-        lbl.includes('721 balance') || lbl.includes('721_balance') ||
-        lbl.includes('incabloc')
-      ) {
-        return 0.18;
-      }
-
-      if (lbl.includes('125 pallet bridge') || lbl.includes('125_pallet_bridge')) return 0.34;
-      if (lbl.includes('110 train wheel bridge') || lbl.includes('110_train_wheel_bridge')) return 0.48;
-      if (
-        lbl.includes('121 balancing bridge') || lbl.includes('121_balancing_bridge') ||
-        lbl.includes('303 two') || lbl.includes('303_two')
-      ) {
-        return 0.64;
-      }
-
-      if (
-        lbl.includes('415 ratchet') || lbl.includes('415_ratchet') ||
-        lbl.includes('420 crown') || lbl.includes('420_crown') ||
-        lbl.includes('422 crown') || lbl.includes('422_crown') ||
-        lbl.includes('425 click') || lbl.includes('425_click')
-      ) {
-        return 0.56;
-      }
-
-      if (lbl.includes('screw')) return 0.66;
-      return 0.08;
-    }
-
-    function applyExplodeState(rawT) {
-      const easedT = rawT * rawT * (3 - 2 * rawT);
-      explodeValEl.textContent = `${Math.round(rawT * 100)}%`;
-
-      for (const item of explodeItems) {
-        item.obj.position.copy(item.origPos).addScaledVector(item.deltaVec, easedT);
-      }
-
-      if (displayGroup) {
-        displayGroup.rotation.set(
-          BASE_ROT.x + EXPLODE_ROT_DELTA.x * easedT,
-          BASE_ROT.y + EXPLODE_ROT_DELTA.y * easedT,
-          BASE_ROT.z + EXPLODE_ROT_DELTA.z * easedT
-        );
-      }
-
-      const targetDist = Math.max(0.15, EXPLODE_CAM_DIST * (1 + 0.35 * easedT) * userZoomScale);
-      const dir = camera.position.clone().sub(controls.target).normalize();
-      if (dir.lengthSq() < 0.0001) dir.copy(EXPLODE_CAM_DIR);
-      camera.position.copy(controls.target).addScaledVector(dir, targetDist);
-    }
-
-    explodeSlider.addEventListener('input', () => {
-      if (workspaceMode !== 'explode') {
-        switchWorkspaceMode('explode');
-      }
-      applyExplodeState(parseFloat(explodeSlider.value));
-    });
-
-    function showBanner(text, type = 'normal', autoHideMs = 0) {
-      clearTimeout(bannerTimer);
-      grabTooltipEl.textContent = text;
-      grabTooltipEl.className = 'visible' + (type === 'error' ? ' error' : type === 'success' ? ' success' : '');
-      if (autoHideMs > 0) {
-        bannerTimer = setTimeout(() => {
-          grabTooltipEl.className = '';
-        }, autoHideMs);
-      }
-    }
-
-    function hideBanner() {
-      clearTimeout(bannerTimer);
-      grabTooltipEl.className = '';
-    }
-
-    function showTemporaryWrongPieceError(wrongName, expectedName) {
-      clearTimeout(errorStripTimer);
-      const errMsg = `❌ Mauvaise pièce : « ${wrongName} ». Prenez d'abord : « ${expectedName} ».`;
-      statusStripEl.classList.add('error-strip');
-      stepInstructionEl.textContent = errMsg;
-      showBanner(errMsg, 'error', 3000);
-
-      errorStripTimer = setTimeout(() => {
-        statusStripEl.classList.remove('error-strip');
-        updateStatusUI();
-      }, 3000);
-    }
-
-    function matchCatalog(rawName) {
-      for (const entry of CATALOG) {
-        if (entry.pattern.test(rawName) && !(entry.exclude && entry.exclude.test(rawName))) {
-          return entry;
-        }
-      }
-      return null;
-    }
-
-    function getActiveCycleItems() {
-      return mountableItems.filter((it) => it.meta.cycle === currentCycle);
-    }
-
-    function getNextPendingItem() {
-      return getActiveCycleItems().find((it) => !it.mounted)
-        || mountableItems.find((it) => !it.mounted)
-        || null;
-    }
-
-    function setItemVisible(item, visible) {
-      item.meshes.forEach((m) => { m.visible = visible; });
-      item.hitbox.visible = visible && !item.mounted && workspaceMode !== 'explode';
-    }
-
-    function setItemHighlight(item, hex, intensity) {
-      if (!item) return;
-      item.meshes.forEach((mesh) => {
-        if (!mesh.material || !('emissive' in mesh.material)) return;
-        if (!mesh.userData.clonedMat) {
-          mesh.material = mesh.material.clone();
-          mesh.userData.clonedMat = true;
-        }
-        mesh.material.emissive.setHex(hex);
-        mesh.material.emissiveIntensity = intensity;
-      });
-    }
-
-    function updateStatusUI() {
-      clearTimeout(errorStripTimer);
-      statusStripEl.classList.remove('error-strip');
-
-      const mountedCount = mountableItems.filter((it) => it.mounted).length;
-      const total = mountableItems.length;
-      progressPillEl.textContent = `${mountedCount} / ${total} montés`;
-
-      if (workspaceMode === 'explode') {
-        cycleBadgeEl.textContent = 'Vue Éclatée "Panino"';
-        stepBadgeEl.textContent = 'ETA 6498-1';
-        stepInstructionEl.textContent = 'Glissez le curseur « Vue Éclatée » (0–100%) ; rubis d\'ancre/impulsion bloqués et vis extraites.';
-        targetMarker.visible = false;
-        return;
-      }
-
-      const guided = workspaceMode === 'guided';
-      cycleBadgeEl.textContent = CYCLE_TITLES[currentCycle] || `Cycle ${currentCycle}/${maxCycle}`;
-      const next = getNextPendingItem();
-      if (!next) {
-        cycleBadgeEl.textContent = 'Assemblage complet';
-        stepBadgeEl.textContent = 'Terminé';
-        stepInstructionEl.textContent = '🎉 Bravo ! Les 3 cycles sont terminés et toutes les vis sont aimantées.';
-        targetMarker.visible = false;
-        return;
-      }
-
-      const stepNum = mountedCount + 1;
-      stepBadgeEl.textContent = `Étape ${stepNum}/${total}`;
-      stepInstructionEl.textContent = guided
-        ? `Prenez sur le plateau : ${next.meta.fr}`
-        : `Mode libre (Lot ${currentCycle}) : prenez n'importe quelle pièce visible sur le plateau`;
-
-      getActiveCycleItems().forEach((it) => {
-        if (it.mounted || it === draggedItem || it === hoveredItem) return;
-        const highlight = guided && it === next;
-        setItemHighlight(it, highlight ? 0xd4af37 : 0x000000, highlight ? 0.35 : 0);
-      });
-    }
-
-    function moveItemVisualCenterTo(item, targetWorldCenter) {
-      const box = new THREE.Box3();
-      item.meshes.forEach((m) => {
-        m.updateMatrixWorld(true);
-        box.expandByObject(m);
-      });
-      const currentWorldCenter = box.getCenter(new THREE.Vector3());
-      const worldDelta = targetWorldCenter.clone().sub(currentWorldCenter);
-
-      item.meshes.forEach((mesh) => {
-        if (mesh.parent) {
-          const pQuat = new THREE.Quaternion();
-          mesh.parent.getWorldQuaternion(pQuat);
-          const pScale = new THREE.Vector3();
-          mesh.parent.getWorldScale(pScale);
-
-          const localDelta = worldDelta.clone().applyQuaternion(pQuat.invert());
-          localDelta.x /= pScale.x || 1;
-          localDelta.y /= pScale.y || 1;
-          localDelta.z /= pScale.z || 1;
-          mesh.position.add(localDelta);
-        } else {
-          mesh.position.add(worldDelta);
-        }
-        mesh.updateMatrixWorld(true);
-      });
-    }
-
-    function animateItemToPositions(entries, durationMs = 280, onDone = null) {
-      animations.push({
-        entries: entries.map((e) => ({
-          mesh: e.mesh,
-          start: e.mesh.position.clone(),
-          end: e.targetLocalPos.clone()
-        })),
-        startTime: performance.now(),
-        duration: durationMs,
-        onDone
-      });
-    }
-
-    function triggerMagneticScrews(item) {
-      if (!item.screws || item.screws.length === 0) return;
-      item.screws.forEach((sc, idx) => {
-        sc.mesh.visible = true;
-        const dropStart = sc.assembledLocalPos.clone().add(new THREE.Vector3(0, 0.45 + idx * 0.08, 0));
-        sc.mesh.position.copy(dropStart);
-        setTimeout(() => {
-          animateItemToPositions([{ mesh: sc.mesh, targetLocalPos: sc.assembledLocalPos }], 280);
-        }, idx * 65);
-      });
-    }
-
-    function activateCycleTray(cycleNumber, announce = false) {
-      currentCycle = cycleNumber;
-      hoveredItem = null;
-      hoverPillEl.classList.remove('visible');
-
-      mountableItems.forEach((it) => {
-        if (!it.mounted) {
-          setItemVisible(it, it.meta.cycle === currentCycle);
-        }
-      });
-
-      const batch = getActiveCycleItems().filter((it) => !it.mounted);
-      if (batch.length === 0) {
-        updateStatusUI();
-        return;
-      }
-
-      const cols = 2;
-      const rows = Math.ceil(batch.length / cols);
-      const spacingX = 1.12;
-      const spacingZ = 1.02;
-      const trayWidth = cols * spacingX + 0.55;
-      const trayDepth = rows * spacingZ + 0.55;
-      const trayCenterX = -1.82;
-
-      trayMesh.geometry.dispose();
-      trayMesh.geometry = new THREE.PlaneGeometry(trayWidth, trayDepth);
-      trayMesh.position.set(trayCenterX, TRAY_Y, 0);
-
-      trayBorder.geometry.dispose();
-      trayBorder.geometry = new THREE.EdgesGeometry(trayMesh.geometry);
-      trayBorder.position.set(trayCenterX, TRAY_Y + 0.002, 0);
-
-      const startX = trayCenterX - ((cols - 1) * spacingX) / 2;
-      const startZ = -((rows - 1) * spacingZ) / 2;
-
-      batch.forEach((item, idx) => {
-        const col = idx % cols;
-        const row = Math.floor(idx / cols);
-        const slotX = startX + col * spacingX;
-        const slotZ = startZ + row * spacingZ;
-        const targetCenter = new THREE.Vector3(slotX, TRAY_Y + 0.02 + item.halfHeight, slotZ);
-
-        moveItemVisualCenterTo(item, targetCenter);
-        item.trayLocalPositions = item.meshes.map((m) => m.position.clone());
-        item.trayWorldCenter = targetCenter.clone();
-
-        item.hitbox.position.set(slotX, TRAY_Y + 0.10, slotZ);
-        item.hitbox.visible = workspaceMode !== 'explode';
-      });
-
-      if (announce) {
-        showBanner(`📦 ${CYCLE_TITLES[currentCycle]} prêt sur l'établi !`, 'success', 2600);
-      }
-      updateStatusUI();
-    }
-
-    function completeItemAssembly(item) {
-      if (item.mounted) return;
-      item.mounted = true;
-      item.hitbox.visible = false;
-      setItemHighlight(item, 0x27ae60, 0.45);
-
-      const targets = item.meshes.map((m, idx) => ({
-        mesh: m,
-        targetLocalPos: item.assembledLocalPositions[idx]
-      }));
-
-      animateItemToPositions(targets, 240, () => {
-        setItemHighlight(item, 0x000000, 0);
-        triggerMagneticScrews(item);
-
-        const remainingInCycle = getActiveCycleItems().filter((it) => !it.mounted);
-        if (remainingInCycle.length === 0 && currentCycle < maxCycle) {
-          setTimeout(() => {
-            activateCycleTray(currentCycle + 1, true);
-          }, 550);
-        }
-      });
-
-      showBanner(`✅ Bien joué : « ${item.meta.fr} » installé !`, 'success', 2200);
-
-      cardNameEl.textContent = item.meta.fr;
-      cardMultilangEl.textContent = `EN : ${item.meta.en}  •  DE : ${item.meta.de}`;
-      cardRoleEl.textContent = item.meta.role;
-      cardLubeEl.textContent = item.meta.lube;
-
-      updateStatusUI();
-    }
-
-    function switchWorkspaceMode(nextMode) {
-      workspaceMode = nextMode;
-      hideBanner();
-      hoveredItem = null;
-      hoverPillEl.classList.remove('visible');
-
-      btnViewExplode.classList.toggle('active', workspaceMode === 'explode');
-      btnGuided.classList.toggle('active', workspaceMode === 'guided');
-      btnFree.classList.toggle('active', workspaceMode === 'free');
-
-      explodeDockEl.classList.toggle('hidden', workspaceMode !== 'explode');
-      trayGroup.visible = workspaceMode !== 'explode';
-      stage.classList.toggle('assembly-bg', workspaceMode !== 'explode');
-
-      if (!modelRoot || !displayGroup) return;
-
-      if (workspaceMode === 'explode') {
-        scene.background = new THREE.Color(0x141619);
-        displayGroup.visible = true;
-        modelRoot.traverse((c) => { if (c.isMesh) c.visible = true; });
-        hitboxes.forEach((hb) => { hb.visible = false; });
-
-        userZoomScale = 1.0;
-        controls.target.set(0, 0, 0);
-        applyExplodeState(parseFloat(explodeSlider.value) || 0);
-        setInteractionMode('orbit');
-      } else {
-        scene.background = new THREE.Color(0xffffff);
-        displayGroup.rotation.set(0, 0, 0);
-        displayGroup.visible = true;
-        modelRoot.traverse((c) => { if (c.isMesh) c.visible = true; });
-
-        // Ripristina le posizionamento d'assemblage per il plateau
-        explodeItems.forEach((it) => it.obj.position.copy(it.origPos));
-        mountableItems.forEach((it) => {
-          if (it.mounted) {
-            it.meshes.forEach((m, idx) => m.position.copy(it.assembledLocalPositions[idx]));
-            it.meshes.forEach((m) => { m.visible = true; });
-            it.hitbox.visible = false;
-          } else {
-            const inCycle = it.meta.cycle === currentCycle;
-            it.meshes.forEach((m) => { m.visible = inCycle; });
-            it.hitbox.visible = inCycle;
-          }
-        });
-        magneticScrews.forEach((sc) => {
-          const parentItem = mountableItems.find((it) => it.screws.includes(sc));
-          sc.mesh.visible = parentItem ? parentItem.mounted : true;
-        });
-
-        camera.position.copy(ASSEMBLY_CAM_POS);
-        controls.target.copy(ASSEMBLY_CAM_TARGET);
-        setInteractionMode('grab');
-      }
-
-      controls.update();
-      updateStatusUI();
-    }
-
-    function resetAllCycles() {
-      hideBanner();
-      explodeSlider.value = '0';
-      explodeValEl.textContent = '0%';
-      userZoomScale = 1.0;
-
-      explodeItems.forEach((it) => it.obj.position.copy(it.origPos));
-      mountableItems.forEach((it) => {
-        it.mounted = false;
-        setItemHighlight(it, 0x000000, 0);
-      });
-      magneticScrews.forEach((sc) => {
-        sc.mesh.visible = false;
-      });
-      currentCycle = 1;
-      activateCycleTray(1, false);
-      switchWorkspaceMode('explode');
-    }
-
-    btnViewExplode.addEventListener('click', () => switchWorkspaceMode('explode'));
-    btnGuided.addEventListener('click', () => switchWorkspaceMode('guided'));
-    btnFree.addEventListener('click', () => switchWorkspaceMode('free'));
-
-    const loaderEl = document.getElementById('loader-overlay');
-    const loaderTextEl = document.getElementById('loader-text');
-    const gltfLoader = new GLTFLoader();
-
-    function loadModelWithFallback(urls, idx = 0) {
-      if (idx >= urls.length) {
-        loaderTextEl.textContent = 'Erreur de chargement du modèle 3D ETA 6498-1.';
-        return;
-      }
-
-      gltfLoader.load(
-        urls[idx],
-        (gltf) => {
-          modelRoot = gltf.scene;
-          modelRoot.updateMatrixWorld(true);
-
-          const coreBox = new THREE.Box3();
-          const fullBox = new THREE.Box3();
-          const groupedByKey = new Map();
-          const orphanMeshes = [];
-          let meshCount = 0;
-
-          modelRoot.traverse((child) => {
-            if (!child.isMesh) return;
-            meshCount++;
-            fullBox.expandByObject(child);
-
-            const lbl = getHierarchyLabel(child);
-            if (!lbl.includes('401 winding stem') && !lbl.includes('401_winding_stem')) {
-              coreBox.expandByObject(child);
-            }
-
-            if (child.material) {
-              const mats = Array.isArray(child.material) ? child.material : [child.material];
-              mats.forEach((m) => {
-                if (!m) return;
-                m.side = THREE.DoubleSide;
-                if ('envMapIntensity' in m) m.envMapIntensity = 1.6;
-                m.needsUpdate = true;
-              });
-            }
-
-            let fullName = '';
-            let cur = child;
-            while (cur && cur !== modelRoot) {
-              if (cur.name) fullName += ' ' + cur.name;
-              cur = cur.parent;
-            }
-            fullName = fullName.trim();
-
-            const wBox = new THREE.Box3().setFromObject(child);
-            const wCenter = wBox.getCenter(new THREE.Vector3());
-            const wSize = wBox.getSize(new THREE.Vector3());
-            const diag = wSize.length();
-
-            if (BASE_RE.test(fullName) || diag > 1.85) return;
-
-            if (SCREW_RE.test(fullName) || diag < 0.28) {
-              magneticScrews.push({
-                mesh: child,
-                assembledLocalPos: child.position.clone(),
-                worldCenter: wCenter.clone()
-              });
-              return;
-            }
-
-            const entry = matchCatalog(fullName);
-            if (entry) {
-              if (!groupedByKey.has(entry.key)) {
-                groupedByKey.set(entry.key, { meta: entry, meshes: [] });
-              }
-              groupedByKey.get(entry.key).meshes.push(child);
-            } else {
-              orphanMeshes.push({ mesh: child, wCenter });
-            }
-          });
-
-          orphanMeshes.forEach((orp) => {
-            let bestGroup = null;
-            let bestDist = Infinity;
-            groupedByKey.forEach((grp) => {
-              const gBox = new THREE.Box3();
-              grp.meshes.forEach((m) => gBox.expandByObject(m));
-              const d = orp.wCenter.distanceTo(gBox.getCenter(new THREE.Vector3()));
-              if (d < bestDist) {
-                bestDist = d;
-                bestGroup = grp;
-              }
-            });
-            if (bestGroup) {
-              bestGroup.meshes.push(orp.mesh);
-            } else {
-              magneticScrews.push({
-                mesh: orp.mesh,
-                assembledLocalPos: orp.mesh.position.clone(),
-                worldCenter: orp.wCenter.clone()
-              });
-            }
-          });
-
-          const refBox = coreBox.isEmpty() ? fullBox : coreBox;
-          const size = new THREE.Vector3();
-          const center = new THREE.Vector3();
-          refBox.getSize(size);
-          refBox.getCenter(center);
-
-          const stackAxis = (size.x <= size.y && size.x <= size.z) ? 'x'
-                          : (size.y <= size.x && size.y <= size.z) ? 'y' : 'z';
-          const localStackVec = new THREE.Vector3(
-            stackAxis === 'x' ? 1 : 0,
-            stackAxis === 'y' ? 1 : 0,
-            stackAxis === 'z' ? 1 : 0
-          );
-
-          const maxDim = Math.max(size.x, size.y, size.z) || 1;
-          const normScale = 2.35 / maxDim;
-
-          modelRoot.scale.setScalar(normScale);
-          modelRoot.position.copy(center).multiplyScalar(-normScale);
-
-          displayGroup = new THREE.Group();
-          displayGroup.add(modelRoot);
-          displayGroup.rotation.order = 'YXZ';
-          displayGroup.rotation.set(BASE_ROT.x, BASE_ROT.y, BASE_ROT.z);
-
-          scene.add(displayGroup);
-          scene.updateMatrixWorld(true);
-
-          const worldSandwichAxis = localStackVec
-            .clone()
-            .transformDirection(modelRoot.matrixWorld)
-            .normalize();
-          const worldOrigin = new THREE.Vector3(0, 0, 0);
-          const registeredNodes = new Set();
-
-          modelRoot.traverse((child) => {
-            if (!child.isMesh) return;
-            const targetNode = getBlenderObjectNode(child);
-            if (registeredNodes.has(targetNode)) return;
-            registeredNodes.add(targetNode);
-
-            const lbl = getHierarchyLabel(targetNode).replace(/_/g, ' ');
-            const step = getHorizontalStep(lbl);
-            const sandwichShift = step * HORIZONTAL_SPREAD;
-
-            const targetWorld = worldSandwichAxis.clone().multiplyScalar(sandwichShift);
-            const localOrigin = targetNode.parent ? targetNode.parent.worldToLocal(worldOrigin.clone()) : worldOrigin.clone();
-            const localTarget = targetNode.parent ? targetNode.parent.worldToLocal(targetWorld.clone()) : targetWorld.clone();
-            const localDelta = localTarget.sub(localOrigin);
-
-            explodeItems.push({
-              obj: targetNode,
-              origPos: targetNode.position.clone(),
-              deltaVec: localDelta
-            });
-          });
-
-          // Prepara gli elementi per la modalità Assemblage
-          const hitGeo = new THREE.CylinderGeometry(0.36, 0.36, 0.30, 16);
-          const hitMat = new THREE.MeshBasicMaterial({ visible: false });
-
-          groupedByKey.forEach((grp) => {
-            const groupBox = new THREE.Box3();
-            grp.meshes.forEach((m) => groupBox.expandByObject(m));
-            const groupCenter = groupBox.getCenter(new THREE.Vector3());
-            const groupSize = groupBox.getSize(new THREE.Vector3());
-
-            const hitbox = new THREE.Mesh(hitGeo, hitMat);
-            hitbox.visible = false;
-            scene.add(hitbox);
-
-            const item = {
-              meshes: grp.meshes,
-              hitbox,
-              assembledLocalPositions: grp.meshes.map((m) => m.position.clone()),
-              assembledWorldCenter: groupCenter.clone(),
-              halfHeight: Math.max(0.02, groupSize.y * 0.5),
-              meta: grp.meta,
-              screws: [],
-              mounted: false
-            };
-
-            hitbox.userData.item = item;
-            hitboxes.push(hitbox);
-            mountableItems.push(item);
-          });
-
-          mountableItems.sort((a, b) => a.meta.order - b.meta.order);
-          maxCycle = mountableItems.reduce((mx, it) => Math.max(mx, it.meta.cycle), 1);
-
-          magneticScrews.forEach((sc) => {
-            let bestItem = null;
-            let bestDist = Infinity;
-            mountableItems.forEach((it) => {
-              const d = sc.worldCenter.distanceTo(it.assembledWorldCenter);
-              const weight = /bridge|pont|crown|couronne|ratchet|rochet/i.test(it.meta.en) ? 0.55 : 1.0;
-              if (d * weight < bestDist) {
-                bestDist = d * weight;
-                bestItem = it;
-              }
-            });
-            if (bestItem) {
-              bestItem.screws.push(sc);
-            }
-          });
-
-          progressPillEl.textContent = `0 / ${mountableItems.length} montés`;
-          loaderEl.style.opacity = '0';
-          setTimeout(() => loaderEl.remove(), 300);
-        },
-        (xhr) => {
-          if (xhr.total > 0) {
-            loaderTextEl.textContent = `Chargement : ${Math.round((xhr.loaded / xhr.total) * 100)}%`;
-          }
-        },
-        () => loadModelWithFallback(urls, idx + 1)
-      );
-    }
-
-    loadModelWithFallback(CANDIDATE_MODEL_URLS, 0);
-
-    const raycaster = new THREE.Raycaster();
-    const pointer = new THREE.Vector2();
-    const dragPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -(TRAY_Y + 0.28));
-    const dragIntersect = new THREE.Vector3();
-
-    function updatePointerCoords(ev) {
-      const rect = renderer.domElement.getBoundingClientRect();
-      pointer.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
-      pointer.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
-    }
-
-    function pickTrayItem(ev) {
-      updatePointerCoords(ev);
-      raycaster.setFromCamera(pointer, camera);
-
-      const activeHitboxes = hitboxes.filter((hb) => hb.visible && hb.userData.item && !hb.userData.item.mounted);
-      const hbHits = raycaster.intersectObjects(activeHitboxes, false);
-      if (hbHits.length > 0 && hbHits[0].object.userData.item) {
-        return hbHits[0].object.userData.item;
-      }
-
-      const pendingMeshes = [];
-      getActiveCycleItems().forEach((it) => {
-        if (!it.mounted) pendingMeshes.push(...it.meshes);
-      });
-      const meshHits = raycaster.intersectObjects(pendingMeshes, false);
-      if (meshHits.length > 0) {
-        return mountableItems.find((it) => !it.mounted && it.meshes.includes(meshHits[0].object)) || null;
-      }
-
-      if (raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), -TRAY_Y), dragIntersect)) {
-        let nearest = null;
-        let minD = 0.42;
-        getActiveCycleItems().forEach((it) => {
-          if (it.mounted) return;
-          const d = Math.hypot(dragIntersect.x - it.trayWorldCenter.x, dragIntersect.z - it.trayWorldCenter.z);
-          if (d < minD) {
-            minD = d;
-            nearest = it;
-          }
-        });
-        if (nearest) return nearest;
-      }
-
-      return null;
-    }
-
-    renderer.domElement.addEventListener('pointermove', (ev) => {
-      if (workspaceMode === 'explode') return;
-
-      if (draggedItem) {
-        updatePointerCoords(ev);
-        raycaster.setFromCamera(pointer, camera);
-
-        if (raycaster.ray.intersectPlane(dragPlane, dragIntersect)) {
-          moveItemVisualCenterTo(draggedItem, dragIntersect);
-          tweezersGroup.position.set(dragIntersect.x + 0.06, dragIntersect.y + 0.03, dragIntersect.z);
-
-          const distToSlot = Math.hypot(
-            dragIntersect.x - draggedItem.assembledWorldCenter.x,
-            dragIntersect.z - draggedItem.assembledWorldCenter.z
-          );
-          if (distToSlot < 0.65) {
-            targetRingMat.color.setHex(0x27ae60);
-            targetMarker.scale.setScalar(1.22);
-          } else {
-            targetRingMat.color.setHex(0xd4af37);
-            targetMarker.scale.setScalar(1.0);
-          }
-        }
-        return;
-      }
-
-      if (interactionMode !== 'grab') {
-        hoverPillEl.classList.remove('visible');
-        return;
-      }
-
-      const over = pickTrayItem(ev);
-      if (over !== hoveredItem) {
-        if (hoveredItem && !hoveredItem.mounted) {
-          const isNext = workspaceMode === 'guided' && hoveredItem === getNextPendingItem();
-          setItemHighlight(hoveredItem, isNext ? 0xd4af37 : 0x000000, isNext ? 0.35 : 0);
-        }
-        hoveredItem = over;
-        if (hoveredItem) {
-          setItemHighlight(hoveredItem, 0x38bdf8, 0.55);
-          stage.classList.add('hover-piece');
-          hoverPillEl.textContent = `🔍 ${hoveredItem.meta.fr}`;
-          hoverPillEl.classList.add('visible');
-        } else {
-          stage.classList.remove('hover-piece');
-          hoverPillEl.classList.remove('visible');
-        }
-      }
-    });
-
-    renderer.domElement.addEventListener('pointerdown', (ev) => {
-      if (workspaceMode === 'explode' || ev.button !== 0 || interactionMode !== 'grab' || mountableItems.length === 0) return;
-
-      const hitItem = pickTrayItem(ev);
-      if (!hitItem) return;
-
-      const nextExpected = getNextPendingItem();
-      if (workspaceMode === 'guided' && nextExpected && hitItem !== nextExpected) {
-        setItemHighlight(hitItem, 0xef4444, 0.85);
-        setTimeout(() => {
-          if (!hitItem.mounted) setItemHighlight(hitItem, 0x000000, 0);
-        }, 800);
-
-        showTemporaryWrongPieceError(hitItem.meta.fr, nextExpected.meta.fr);
-        return;
-      }
-
-      draggedItem = hitItem;
-      hoverPillEl.classList.remove('visible');
-      stage.classList.add('grabbing');
-      setItemHighlight(draggedItem, 0xd4af37, 0.7);
-
-      targetMarker.position.set(
-        draggedItem.assembledWorldCenter.x,
-        draggedItem.assembledWorldCenter.y + 0.04,
-        draggedItem.assembledWorldCenter.z
-      );
-      targetMarker.visible = true;
-
-      tweezersGroup.visible = true;
-      showBanner(`🤏 ${draggedItem.meta.fr} — Déposez sur la cible dorée`, 'normal');
-    });
-
-    window.addEventListener('pointerup', () => {
-      if (!draggedItem) return;
-
-      const boxNow = new THREE.Box3();
-      draggedItem.meshes.forEach((m) => boxNow.expandByObject(m));
-      const centerNow = boxNow.getCenter(new THREE.Vector3());
-      const dist = Math.hypot(
-        centerNow.x - draggedItem.assembledWorldCenter.x,
-        centerNow.z - draggedItem.assembledWorldCenter.z
-      );
-
-      tweezersGroup.visible = false;
-      targetMarker.visible = false;
-      stage.classList.remove('grabbing');
-
-      const itemToCheck = draggedItem;
-      draggedItem = null;
-
-      if (dist < 0.75) {
-        completeItemAssembly(itemToCheck);
-      } else {
-        hideBanner();
-        setItemHighlight(itemToCheck, 0x000000, 0);
-        const backTargets = itemToCheck.meshes.map((m, idx) => ({
-          mesh: m,
-          targetLocalPos: itemToCheck.trayLocalPositions[idx]
-        }));
-        animateItemToPositions(backTargets, 240, updateStatusUI);
-      }
-    });
-
-    document.getElementById('btn-auto-place').addEventListener('click', () => {
-      if (workspaceMode === 'explode') switchWorkspaceMode('guided');
-      const next = getNextPendingItem();
-      if (next) completeItemAssembly(next);
-    });
-
-    document.getElementById('btn-reset-all').addEventListener('click', () => {
-      resetAllCycles();
-      cardNameEl.textContent = 'Calibre ETA 6498-1 — Vue Éclatée "Panino"';
-      cardMultilangEl.textContent = 'Ø 36,60 mm • 18\'000 A/h (2,5 Hz) • 17 Rubis';
-      cardRoleEl.textContent = 'Ouverture par strates le long de l\'axe d\'empilement, avec rubis d\'ancre/impulsion solidaires de leur composant.';
-      cardLubeEl.textContent = 'Vis extraites vers l\'extérieur des ponts correspondants ; huile fine Moebius 9010, huile épaisse HP-1300 et graisse 9504.';
-    });
-
-    function zoomCam(factor) {
-      if (workspaceMode === 'explode') {
-        userZoomScale = THREE.MathUtils.clamp(userZoomScale * factor, 0.06, 3.5);
-        const rawT = parseFloat(explodeSlider.value) || 0;
-        const easedT = rawT * rawT * (3 - 2 * rawT);
-        const targetDist = Math.max(0.15, EXPLODE_CAM_DIST * (1 + 0.35 * easedT) * userZoomScale);
-        const dir = camera.position.clone().sub(controls.target).normalize();
-        camera.position.copy(controls.target).addScaledVector(dir, targetDist);
-        controls.update();
-      } else {
-        const offset = camera.position.clone().sub(controls.target);
-        offset.setLength(THREE.MathUtils.clamp(offset.length() * factor, 0.3, 14.0));
-        camera.position.copy(controls.target).add(offset);
-        controls.update();
-      }
-    }
-
-    document.getElementById('hud-zoom-in').addEventListener('click', () => zoomCam(0.75));
-    document.getElementById('hud-zoom-out').addEventListener('click', () => zoomCam(1.22));
-    document.getElementById('hud-reset-cam').addEventListener('click', () => {
-      if (workspaceMode === 'explode') {
-        userZoomScale = 1.0;
-        controls.target.set(0, 0, 0);
-        applyExplodeState(parseFloat(explodeSlider.value) || 0);
-        setInteractionMode('orbit');
-      } else {
-        camera.position.copy(ASSEMBLY_CAM_POS);
-        controls.target.copy(ASSEMBLY_CAM_TARGET);
-        setInteractionMode('grab');
-      }
-      controls.update();
-    });
-
-    const fsBtn = document.getElementById('hud-fullscreen');
-    fsBtn.addEventListener('click', () => {
-      if (!document.fullscreenElement) {
-        stage.requestFullscreen?.();
-      } else {
-        document.exitFullscreen?.();
-      }
-    });
-
-    function onResize() {
-      const w = stage.clientWidth || window.innerWidth;
-      const h = stage.clientHeight || window.innerHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-      fsBtn.textContent = document.fullscreenElement === stage ? '✕ Quitter' : '⛶ Plein Écran';
-    }
-
-    document.addEventListener('fullscreenchange', onResize);
-    window.addEventListener('resize', onResize);
-
-    function animate(now) {
-      requestAnimationFrame(animate);
-
-      for (let i = animations.length - 1; i >= 0; i--) {
-        const a = animations[i];
-        const t = Math.min(1, (now - a.startTime) / a.duration);
-        const ease = 1 - Math.pow(1 - t, 3);
-        a.entries.forEach((ent) => {
-          ent.mesh.position.lerpVectors(ent.start, ent.end, ease);
-        });
-        if (t >= 1) {
-          animations.splice(i, 1);
-          if (a.onDone) a.onDone();
-        }
-      }
-
-      controls.update();
-      renderer.render(scene, camera);
-    }
-    requestAnimationFrame(animate);
-  </script>
-</body>
-</html>
+      if (lbl.includes('180 movement barrel') || lbl.includes('180_movement_barrel')) return -0.22
